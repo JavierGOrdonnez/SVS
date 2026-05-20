@@ -61,11 +61,11 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 
 | id | status | task | cites |
 |---|---|---|---|
-| T1 | ~ | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno annual reports 2003–2024 | V1,V2,V8 |
+| T1 | x | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno 2003–2024; rows 1–22,90,91,104,105 complete; 2024=47 verified | V1,V2,V8 |
 | T2 | . | Populate `violence_spain.csv` — all female homicide: INE MNP (Movimiento Natural de la Población) 2000–2023 | V1,V2,V8 |
-| T3 | . | Populate `violence_spain.csv` — sexual crimes: Ministerio del Interior estadísticas anuales 2000–2024 | V1,V2,V7 |
+| T3 | ~ | Populate `violence_spain.csv` — sexual crimes MIR: 2022–2024 verified (rows 46–56,82–89); 2017–2021 medium; 2000–2016 unverified. BLOCKER: two incompatible violaciones series unresolved (B6) | V1,V2,V7 |
 | T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
-| T5 | . | Populate `violence_spain.csv` — victimisation rates from Macroencuesta 2011, 2015, 2019 (lifetime & annual prevalence) | V1,V3,V11 |
+| T5 | ~ | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11 |
 | T6 | . | Populate `population_spain.csv` — INE female population by 5-yr age group & year 2000–2025 | V6,V10 |
 | T7 | . | Compute age-specific annual incidence rates → `data/processed/rates.csv` | V3,V6 |
 | T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
@@ -84,4 +84,10 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 
 | id | date | cause | fix |
 |---|---|---|---|
-| — | — | — | — |
+| B1 | 2026-05-20 | Haiku 2024 femicide count = 58; verified = 47 (−19%) | V2,V5 |
+| B2 | 2026-05-20 | Haiku 2024 total sexual crimes = 21159; verified = 22846 (−7.4%) | V2,V5 |
+| B3 | 2026-05-20 | Haiku 2024 agresiones sin penetración = 15953; verified = ~13673 (−14%) | V2,V5 |
+| B4 | 2026-05-20 | Haiku 2023 total sexual crimes = 19981; verified = 21825 (−8.4%) | V2,V5 |
+| B5 | 2026-05-20 | Haiku "62× cifra oculta" = invalid: divides annual denuncias by lifetime prevalence (incompatible units) | V11 |
+| B6 | 2026-05-20 | Two incompatible violaciones series (MIR Anuario 3700–5453 vs Geo VG 1118–1520 for same years) — root cause unresolved | V3,V6 |
+| B7 | 2026-05-20 | My arithmetic critique of INE Condenados 2024 was wrong: 90 violaciones is subcategory of 1389 not additive; Haiku figures confirmed correct | V2 |

@@ -36,7 +36,24 @@ primary publications.
 
 ---
 
-## 2. Confirmed fabrications
+## 2. Confirmed wrong values (verified against primary sources, May 2026)
+
+| Metric | Haiku value | Verified value | Source | Error |
+|---|---|---|---|---|
+| 2024 femicide (partner/ex) | 58 | **47** | Delegación del Gobierno ficha Feb 2025 | −11 (−19%) |
+| 2024 total sexual crimes | 21,159 | **22,846** | MIR Informe 2024 (Dec 2025) | −1,687 (−7.4%) |
+| 2024 agresiones sin penetración | 15,953 | **~13,673** (59.85%) | MIR Informe 2024 | −2,280 (−14.3%) |
+| 2024 violaciones | 5,206 | **~5,223** (22.86%) | MIR Informe 2024 | −17 (−0.3%) — very close |
+| 2023 total sexual crimes | 19,981 | **21,825** | MIR Informe 2023 (Jul 2024) | −1,844 (−8.4%) |
+| 2023 violaciones | 4,875 | **~4,365** (~20%) | MIR Informe 2023 | −510 (if 20% is exact) |
+
+**INE Condenados 2024 arithmetic note was MY ERROR** in the audit: the 90 "violaciones" is a subcategory of the 1,389 "agresiones sexuales" (not additive). The subcategories sum correctly: 1,151+1,097+1,389+1,593 = **5,230 ✓**. Haiku's INE figures appear accurate.
+
+**51% foreign femicide victims in 2024** — confirmed. Rate ratio foreign/Spanish = 8.32/1.68 = 4.95×, consistent with Haiku's "4.9×" claim.
+
+---
+
+## 2b. Confirmed fabrications
 
 ### 2a. Arithmetic error in INE Condenados 2024 subcategories
 The model presents subcategories for adult convictions 2024:
