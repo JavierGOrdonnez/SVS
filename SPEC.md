@@ -62,7 +62,7 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | id | status | task | cites |
 |---|---|---|---|
 | T1 | x | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno 2003–2024; rows 1–22,90,91,104,105 complete; 2024=47 verified | V1,V2,V8 |
-| T2 | . | Populate `violence_spain.csv` — all female homicide: INE MNP (Movimiento Natural de la Población) 2000–2023 | V1,V2,V8 |
+| T2 | ~ | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). PENDING: INE ECM annual series 2000–2022 (table t=7947), MIR Anuario tables with sex breakdown. New source file: `data/sources/homicidio_espana.md` | V1,V2,V8 |
 | T3 | ~ | Populate `violence_spain.csv` — sexual crimes MIR: 2022–2024 verified (rows 46–56,82–89); 2017–2021 medium; 2000–2016 unverified. BLOCKER: two incompatible violaciones series unresolved (B6) | V1,V2,V7 |
 | T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
 | T5 | ~ | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11 |

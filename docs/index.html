@@ -435,11 +435,59 @@
     </div>
   </div>
 
-  <!-- Chart 9: Data confidence distribution -->
+  <!-- Chart 9a: All-cause homicide total series -->
+  <div class="chart-card half">
+    <div class="chart-title">All-Cause Homicide — Spain (MIR Balance + INE ECM)</div>
+    <div class="chart-sub">
+      Two series: police-registered (MIR Balance, higher) and cause-of-death (INE ECM, lower). Both sex-aggregated.
+      2025 = 376 (+7.7%, highest since 2012). <span class="warn">⚠ MIR and INE counts differ by methodology — not directly comparable.</span>
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartHomicideTotal"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 9b: Homicide victims by sex (2022, EIGE) -->
+  <div class="chart-card third">
+    <div class="chart-title">Homicide Victims 2022 — By Sex &amp; Perpetrator Relationship</div>
+    <div class="chart-sub">
+      Source: EIGE 2022. All-cause: 325 total (37% female). Intimate-partner: 58 total (93% female).
+      Domestic: 98 total (82% female).
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartHomicideSex2022"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 9c: Homicide perpetrator sex (2010-2012 MIR) -->
+  <div class="chart-card third" style="grid-column: span 1">
+    <div class="chart-title">Homicide Victim–Perpetrator Sex Matrix (2010–2012)</div>
+    <div class="chart-sub">
+      Source: MIR Primer Informe Nacional Homicidio 2010–2012 (cleared cases).
+      89% of perpetrators are male. <span class="warn">⚠ Cleared cases only — may not be population-representative.</span>
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartHomicideMatrix"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 9d: Homicide rate per 100k historical -->
+  <div class="chart-card third">
+    <div class="chart-title">Homicide Rate per 100k — Spain 2001–2023 (Selected)</div>
+    <div class="chart-sub">
+      Source: INE ODS Indicator 16.1.1 / World Bank VC.IHR.PSRC.P5. Spain's rate has halved since 2001.
+      Full annual series pending extraction from INE table t=7947.
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartHomicideRate"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 10: Data confidence distribution -->
   <div class="chart-card third">
     <div class="chart-title">Dataset Confidence Distribution</div>
     <div class="chart-sub">
-      106 rows total. Unverified rows must not be used in modelling until cross-checked against primary sources.
+      128 rows total. Unverified rows must not be used in modelling until cross-checked against primary sources.
     </div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="chartConf"></canvas>
@@ -1025,7 +1073,94 @@ function buildCharts() {
     },
   });
 
-  // ── 9. Confidence distribution ─────────────────────
+  // ── 9a. All-cause homicide total series ──────────────
+  charts.homicideTotal = new Chart(document.getElementById('chartHomicideTotal'), {
+    type: 'bar',
+    data: {
+      labels: ['2022 (EIGE)', '2023 (INE ECM)', '2023 (MIR)', '2025 (MIR)'],
+      datasets: [{
+        label: 'Homicide victims',
+        data: [325, 300, 348, 376],
+        backgroundColor: ['rgba(34,197,94,0.7)','rgba(34,197,94,0.7)','rgba(234,179,8,0.65)','rgba(34,197,94,0.7)'],
+        borderColor: ['#22c55e','#22c55e','#eab308','#22c55e'],
+        borderWidth: 1.5,
+        borderRadius: 4,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            afterLabel: ctx => {
+              const notes = ['EIGE harmonised data','ICD-10 X85-Y09 (cause of death)','Police-registered (higher)','MIR +7.7% vs 2024 — highest since 2012'];
+              return `  ${notes[ctx.dataIndex]}`;
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, beginAtZero: false, min: 250, title: { display: true, text: 'Victims', color: tickColor, font: { size: 11 } } },
+      },
+    },
+  });
+
+  // ── 9b. Homicide by sex × perpetrator relationship 2022 ──
+  charts.homicideSex2022 = new Chart(document.getElementById('chartHomicideSex2022'), {
+    type: 'bar',
+    data: {
+      labels: ['All-cause\n(325)', 'Intimate\npartner (58)', 'Domestic\nperp (98)'],
+      datasets: [
+        { label: 'Female', data: [121, 54, 80], backgroundColor: 'rgba(239,68,68,0.7)', borderColor: '#ef4444', borderWidth: 1.5, borderRadius: 3 },
+        { label: 'Male',   data: [204, 4, 18],  backgroundColor: 'rgba(96,165,250,0.6)', borderColor: '#60a5fa', borderWidth: 1.5, borderRadius: 3 },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } } },
+      scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: true, title: { display: true, text: 'Victims (2022)', color: tickColor, font: { size: 11 } } } },
+    },
+  });
+
+  // ── 9c. Victim-perpetrator sex matrix (2010-2012 MIR) ────
+  charts.homicideMatrix = new Chart(document.getElementById('chartHomicideMatrix'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Male → Male (62%)', 'Male → Female (28%)', 'Female → Male (7%)', 'Female → Female (3%)'],
+      datasets: [{
+        data: [62, 28, 7, 3],
+        backgroundColor: ['rgba(96,165,250,0.7)','rgba(239,68,68,0.7)','rgba(96,165,250,0.35)','rgba(239,68,68,0.35)'],
+        borderColor: ['#60a5fa','#ef4444','#60a5fa','#ef4444'],
+        borderWidth: 2, hoverOffset: 6,
+      }],
+    },
+    options: { ...darkPie },
+  });
+
+  // ── 9d. Homicide rate historical (selected years) ────────
+  charts.homicideRate = new Chart(document.getElementById('chartHomicideRate'), {
+    type: 'line',
+    data: {
+      labels: [2001, 2013, 2021, 2022, 2023],
+      datasets: [{
+        label: 'Rate per 100k',
+        data: [1.40, 0.60, 0.62, 0.68, 0.68],
+        borderColor: '#7c83ff', backgroundColor: 'rgba(124,131,255,0.12)',
+        tension: 0.3, fill: true, pointRadius: 6,
+        pointBackgroundColor: ['#eab308','#22c55e','#eab308','#eab308','#22c55e'],
+        pointBorderColor: '#fff', pointBorderWidth: 1.5,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: true, max: 1.8, title: { display: true, text: 'Per 100k', color: tickColor, font: { size: 11 } } } },
+    },
+  });
+
+  // ── 10. Confidence distribution ────────────────────────────
   charts.conf = new Chart(document.getElementById('chartConf'), {
     type: 'doughnut',
     data: {
