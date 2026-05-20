@@ -62,13 +62,14 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | id | status | task | cites |
 |---|---|---|---|
 | T1 | x | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno 2003–2024; rows 1–22,90,91,104,105 complete; 2024=47 verified | V1,V2,V8 |
-| T2 | ~ | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). PENDING: INE ECM annual series 2000–2022 (table t=7947), MIR Anuario tables with sex breakdown. New source file: `data/sources/homicidio_espana.md` | V1,V2,V8 |
+| T2 | ~ | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). INE ECM 2000–2024 full series now in `data/processed/mortality_spain_ine_ecm.csv` via T17. PENDING: MIR Anuario tables with sex breakdown. Source file: `data/sources/homicidio_espana.md` | V1,V2,V8 |
 | T3 | ~ | Populate `violence_spain.csv` — sexual crimes MIR: 2022–2024 verified (rows 46–56,82–89); 2017–2021 medium; 2000–2016 unverified. BLOCKER: two incompatible violaciones series unresolved (B6) | V1,V2,V7 |
 | T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
 | T5 | ~ | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11 |
 | T6 | . | Populate `population_spain.csv` — INE female population by 5-yr age group & year 2000–2025 | V6,V10 |
 | T7 | . | Compute age-specific annual incidence rates → `data/processed/rates.csv` | V3,V6 |
 | T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
+| T17 | x | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/parse_ine_mortality.py`, `src/summarize_mortality.py` | V1,V2,V6 |
 | T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
 | T10 | . | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
 | T11 | . | Collect covariate series: total immigration flow & stock by year, nationality, sex, age — INE/MITES | V10,C8 |
