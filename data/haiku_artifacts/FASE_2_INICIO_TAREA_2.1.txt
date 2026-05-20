@@ -1,0 +1,184 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    FASE 2 TAREA 2.1: INICIO EJECUCIÓN                        ║
+║           Descarga y Extracción Anuarios Estadísticos 2015-2019              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+FECHA INICIO: Mayo 2025
+OBJETO: Obtener series completas 2015-2019 con desgloses edad/nacionalidad
+FUENTE PRIMARIA: Ministerio del Interior - Anuarios Estadísticos
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TAREA 2.1: DESCARGAR E EXTRAER ANUARIOS 2015-2019
+
+Prioridad de años:
+1. 2019 (CRÍTICO - último pre-pandemia, pre-reforma)
+2. 2018 (Comparación pre-pandemia)
+3. 2017 (CGPJ comenzó desagregación)
+4. 2016, 2015 (Completar serie)
+
+URLs A VERIFICAR:
+═════════════════
+
+Ministerio Interior - Portal Estadístico de Criminalidad:
+https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html
+
+Búsqueda de descargas:
+- Anuario Estadístico 2019
+- Anuario Estadístico 2018
+- Anuario Estadístico 2017
+- Anuario Estadístico 2016
+- Anuario Estadístico 2015
+
+Formato esperado: PDF descargable
+
+═════════════════════════════════════════════════════════════════════════════════
+
+DATOS A EXTRAER DE CADA ANUARIO:
+
+POR TIPO DELITO:
+├─ Violaciones (cifra neta)
+├─ Agresiones sexuales CON penetración (si disponible separado)
+├─ Agresiones sexuales SIN penetración (si disponible separado)
+├─ Abuso sexual (pre-2022, probablemente no en violaciones aisladas)
+├─ Acoso sexual
+├─ Exhibicionismo
+├─ Provocación sexual
+├─ Pornografía de menores
+├─ Contacto con menor de 16 años por TIC
+├─ Corrupción de menores
+└─ Otros delitos libertad sexual
+
+DESGLOSE POR EDAD (víctimas):
+├─ 0-13 años (número y %)
+├─ 14-17 años (número y %)
+├─ 18-30 años (número y %)
+├─ 31-50 años (número y %)
+├─ 51+ años (número y %)
+└─ Edad desconocida
+
+DESGLOSE POR SEXO (víctimas):
+├─ Mujeres (número y %)
+├─ Hombres (número y %)
+└─ Sexo desconocido
+
+DESGLOSE POR NACIONALIDAD (víctimas):
+├─ Españolas/os (número y %)
+├─ Extranjeras/os (número y %)
+│  ├─ Marruecos
+│  ├─ Colombia
+│  ├─ Rumanía
+│  ├─ República Dominicana
+│  └─ Otros países
+└─ Nacionalidad desconocida
+
+DESGLOSE POR NACIONALIDAD (agresores):
+├─ Españoles (número y %)
+├─ Extranjeros (número y %)
+│  ├─ Marruecos
+│  ├─ Colombia
+│  └─ Otros países
+└─ Nacionalidad desconocida
+
+RELACIÓN VÍCTIMA-AGRESOR (si disponible):
+├─ Desconocido/Extraño
+├─ Pareja/Expareja
+├─ Familia
+├─ Conocido
+└─ Otro
+
+DISTRIBUCIÓN TERRITORIAL:
+├─ Por Comunidad Autónoma
+├─ Tasas por 10.000 habitantes
+└─ Hechos esclarecidos por CCAA
+
+═════════════════════════════════════════════════════════════════════════════════
+
+METODOLOGÍA DE EXTRACCIÓN:
+
+1. BUSCAR DOCUMENTO
+   - Portal Ministerio Interior
+   - Descargar PDF Anuario [AÑO]
+   
+2. IDENTIFICAR TABLAS
+   - Búsqueda: "delitos libertad sexual" / "agresión sexual" / "violación"
+   - Verificar: ¿Tabla por tipo delito? ¿Por edad? ¿Por nacionalidad?
+   
+3. EXTRAER CIFRAS NETAS
+   - PRIORIDAD 1: Cifra total anual por tipo delito
+   - PRIORIDAD 2: Desgloses por edad (si en tabla separada)
+   - PRIORIDAD 3: Desgloses por nacionalidad (si en tabla separada)
+   
+4. DOCUMENTAR EXACTAMENTE
+   - Número exacto (NO redondeos)
+   - Página del Anuario donde aparece
+   - Si es estimado/interpolado vs dato directo
+   - Si hay notas sobre metodología
+   
+5. MARCAR VACÍO
+   - Si dato NO aparece en Anuario = [VACÍO]
+   - SI aparece pero está agregado (ej: "0-17 años" en vez de "0-13" y "14-17") = [INTEGRADO]
+   - Si aparece bajo metodología diferente = [DIFERENTE CRITERIO - especificar]
+
+6. VALIDAR SERIES
+   - Comparar año N con año N-1 para detectar saltos anómalos
+   - Si incremento >20% año a año = investigar si cambio legal o metodológico
+
+═════════════════════════════════════════════════════════════════════════════════
+
+CRONOGRAMA TAREA 2.1:
+
+Día 1-2: Descargar Anuarios 2019, 2018, 2017 (6-8 horas)
+Día 3: Extraer datos 2019 en detalle (4 horas)
+Día 4: Extraer datos 2018-2017 (4 horas)
+Día 5: Extraer datos 2016-2015 (3 horas)
+Día 6: Validación y compilación en documento de trabajo (2 horas)
+
+TOTAL TAREA 2.1: 6-8 horas como estimado inicial
+
+═════════════════════════════════════════════════════════════════════════════════
+
+REFERENCIAS DESDE FASE 1:
+
+Series conocidas para validar:
+├─ 2022: 4.270 violaciones (Anuario 2022 oficial)
+├─ 2022: 11.426 agresiones sin penetración
+└─ Esperado 2019: ~3.500-3.700 violaciones (pre-pandemia)
+
+Cambios legales a tener en cuenta:
+├─ 2015: Reforma CP (supresión faltas) - PUEDE CAUSAR SALTO
+├─ 2017: CGPJ comienza desagregación sistemática - MEJORA CALIDAD DATOS
+└─ 2020: Pandemia COVID - Datos anomalía esperada
+
+═════════════════════════════════════════════════════════════════════════════════
+
+SIGUIENTE ACCIÓN INMEDIATA:
+
+1. Acceder a https://estadisticasdecriminalidad.ses.mir.es
+2. Buscar "Anuario Estadístico 2019" para descargar
+3. Comenzar extracción de cifras 2019
+4. Documentar en FASE_2_EXTRACCION_ANUARIOS_2015_2019.txt
+
+═════════════════════════════════════════════════════════════════════════════════
+
+INDICADORES DE PROGRESO TAREA 2.1:
+
+□ Anuario 2019 descargado
+□ Anuario 2018 descargado
+□ Anuario 2017 descargado
+□ Anuario 2016 descargado
+□ Anuario 2015 descargado
+□ Cifras netas 2019 extraídas
+□ Cifras netas 2018 extraídas
+□ Cifras netas 2017 extraídas
+□ Cifras netas 2016 extraídas
+□ Cifras netas 2015 extraídas
+□ Desgloses edad compilados
+□ Desgloses nacionalidad compilados
+□ Validación series completada
+□ Documento de trabajo finalizado
+
+═════════════════════════════════════════════════════════════════════════════════
+
+INICIO TAREA 2.1: BUSCAR ANUARIOS
+

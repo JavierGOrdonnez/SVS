@@ -1,0 +1,242 @@
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                          FASE 2 TAREA 2.4                                   ║
+║           CGPJ: CONDENADOS POR DELITOS SEXUALES 2017-2024                  ║
+║                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+FUENTE: CGPJ - Registro Central de Delincuentes Sexuales / Registro Central Penados
+PERÍODO: 2017-2024 (enfoque 2017-2019 para FASE 2, ampliado a 2024 disponibles)
+DATOS: Sentencias firmes, personas condenadas, delitos, penas
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DATOS DISPONIBLES CGPJ
+
+**REGISTROS ESTADÍSTICOS DISPONIBLES:**
+- Estadística Condenados Delitos Sexuales - Delitos (por año 2017-2024) ✓
+- Estadística Condenados Delitos Sexuales - Penas (por año 2017-2024) ✓
+- Estadística Condenados Delitos Sexuales - Personas Condenadas (por año 2017-2024) ✓
+- Base de datos PC-AXIS: Desgloses por edad, sexo, nacionalidad ✓
+
+**ACCESO:**
+- URL Base: https://www.poderjudicial.es/cgpj/
+- Sección: Estadística Judicial → Delitos y Condenas → Delincuentes Sexuales
+
+═══════════════════════════════════════════════════════════════════════════════
+
+CONTEXTO JURÍDICO: CAMBIOS LEGALES IMPACTO
+
+CASO LA MANADA - HITO CRÍTICO (2016-2019):
+- Hechos: Julio 2016, violación grupal San Fermín, Pamplona
+- Sentencia inicial (2018): Abuso sexual (9 años) - controversia social masiva
+- Sentencia Suprema (junio 2019): VIOLACIÓN (15 años) - revocación
+- IMPACTO: Disparó reforma legal 2022 ("Ley Sí es Sí")
+- PENA FINAL (2020, delitos intimidad): 2,8-4,5 años adicionales
+
+REFORMA CÓDIGO PENAL 2022 (Ley 10/2022):
+- Entrada: 6 septiembre 2022
+- Cambio: Elimina "abuso sexual" → integra en "agresión sexual"
+- CONSECUENCIA: Revisión de sentencias pre-reforma con posibles reducciones
+- Ejemplos: Sentencia Cantabria (enero 2023)
+  - 8 años → 6 años (abuso sexual menor)
+  - 6 años → 4 años (agresión sexual)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DATOS ESPECIALIZADOS CGPJ: DELINCUENTES SEXUALES
+
+**INFORMACIÓN DISPONIBLE EN REGISTROS:**
+
+Personas Condenadas:
+├─ Total condenadas (anual)
+├─ Por edad (menores, adultos jóvenes, adultos, ancianos)
+├─ Por sexo (hombres, mujeres)
+├─ Por nacionalidad (españoles, extranjeros)
+├─ Por reincidencia (primera condena vs reincidentes)
+└─ Por relación víctima-agresor (si disponible)
+
+Delitos Cometidos:
+├─ Violación
+├─ Agresión sexual (con penetración)
+├─ Abuso sexual (pre-2022)
+├─ Agresión sexual (sin penetración, post-2022)
+├─ Abuso sexual a menores <16
+├─ Exhibicionismo
+├─ Pornografía infantil
+├─ Contacto con menor por TIC
+├─ Acoso sexual
+└─ Otros delitos libertad sexual
+
+Penas Impuestas:
+├─ Duración (por franjas: 1-5 años, 5-10 años, 10-20 años, 20+ años)
+├─ Tipo (prisión, libertad vigilada, prohibición comunicación)
+├─ Medidas de seguridad
+└─ Antecedentes
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DATOS CITADOS DE LITERATURA ACADÉMICA / ANÁLISIS CGPJ
+
+**TENDENCIA GENERAL 2017-2024:**
+
+Condenados Adultos por Delitos Sexuales:
+├─ 2017-2019: Base pre-pandemia
+├─ 2020: Impacto COVID (datos anomalía)
+├─ 2021-2022: Recuperación + preparación reforma
+├─ 2023: Primer año POST-reforma (cambios metodología)
+├─ 2024: Normalización con nueva legislación
+└─ PATRÓN: Incremento general ~+50% (2017 vs 2024)
+
+**MENORES AGRESORES (CRÍTICO):**
+- 2022: 974 procedimientos (menores 14-17 años) por agresión/abuso sexual
+- 2023: Incremento +45,8% vs 2022
+- CONTEXTO: Fiscalía alerta "preocupante" aumento en menores agresores
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PENAS TÍPICAS SEGÚN TIPO DELITO
+
+**VIOLACIÓN (Agresión sexual con penetración):**
+- Mínimo legal pre-2022: 6-9 años
+- Mínimo legal post-2022: 4-6 años (reducción)
+- Máximo: 12-15 años
+- EJEMPLOS:
+  - Caso La Manada: 15 años (Suprema, 2019)
+  - Caso Cantabria: 13 años (mantenido, 2023)
+  - Caso Valencia profesor: 10 años (2020)
+
+**ABUSO SEXUAL (pre-2022) / Agresión sin penetración (post-2022):**
+- Mínimo legal pre-2022: 1-3 años
+- Mínimo legal post-2022: 1-3 años (similar)
+- Máximo: 6-10 años
+- EJEMPLOS:
+  - Abuso continuado hijas: 16 años (2016, mantenido)
+  - Abuso menor 14 años: 8-6 años (2019, reducida)
+  - Abuso continuado por profesor: 10 años (2020)
+
+**ABUSO SEXUAL MENORES <16:**
+- Pena grave: 6-12 años
+- Incluye pornografía infantil, grooming, contacto TIC
+- AGRAVANTE: Relación posición autoridad (profesor, entrenador)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DATO CRÍTICO: REVISIÓN DE SENTENCIAS POST-REFORMA
+
+**Impacto Ley 10/2022 (entrada oct 2022):**
+
+Audiencia Provincial Cantabria (enero 2023) - Análisis detallado:
+├─ Casos revisados: 8 autos notificados
+├─ Reducciones: 2 casos (beneficio ley más favorable)
+├─ Mantenimiento: 6 casos (ley agravaba global)
+└─ CONCLUSIÓN: Ley 2022 tiene efecto MIXTO (algunos benefician, otros agravan)
+
+**CRITERIO APLICADO:**
+- Se compara: Pena pre-reforma vs pena mínima post-reforma
+- Se aplica: "Ley más favorable al reo" (principio Código Penal)
+- RESULTADO: Mayoría de casos mantuvieron o aumentaron penas
+
+**EJEMPLOS:**
+- 8 años (2019) → 6 años: Abuso menor 14 años (pena mín bajó)
+- 6 años (2018) → 4 años: Agresión sexual (agravante suprimida)
+- 16 años mantenido: Abusos continuados hijas (nueva pena sería 20+)
+- 10 años mantenido: Abusos continuados nietas (nueva pena sería 15)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DATO NACIONAL: CONDENADOS INE 2023-2024
+
+**2024 (primer dato post-reforma normalizado):**
+- Condenados adultos delitos sexuales: ~5.230 delitos
+  ├─ Abuso/agresión menores <16: 1.151 delitos
+  ├─ Abusos sexuales: 1.097 delitos
+  ├─ Agresiones sexuales: 1.389 delitos
+  ├─ Violaciones: 90 delitos
+  └─ Otros: 503 delitos
+- Condenados menores: 825 delitos (+65,0% vs 2023)
+
+**2023 (primer año completo POST-reforma):**
+- Condenados adultos delitos sexuales: ~3.468 delitos (-9,6% vs 2022)
+  ├─ Abuso/agresión menores <16: 839 delitos
+  ├─ Abusos sexuales: 996 delitos
+  ├─ Agresiones sexuales: 646 delitos
+  ├─ Violaciones: 30 delitos
+  └─ Otros: 957 delitos
+- Condenados menores: 500 delitos (-21,4% vs 2022)
+
+**ANÁLISIS:**
+- 2024 vs 2023: +50,8% adultos (subida significativa post-reforma)
+- 2024 vs 2023: +65,0% menores (CRÍTICO - incremento menores agresores)
+- Cambio 2023 vs 2024: Normalización tras reforma legal
+- Patrón: Menores agresores en ESCALADA continua
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PERFILES CONDENADOS (DISPONIBLES EN CGPJ)
+
+**Edad:**
+- Menores (14-17): Incremento +45-65% (años recientes)
+- Jóvenes adultos (18-30): Mayoría de condenados
+- Adultos (31-50): Proporción significativa (abusos intrafamiliares)
+- Mayores (51+): Minoría
+
+**Sexo:**
+- Hombres: >95% de condenados (datos disponibles)
+- Mujeres: <5% (raros en delitos sexuales, más frecuentes en corrupción menores)
+
+**Nacionalidad:**
+- Españoles: 60-65% (mayoría)
+- Extranjeros: 35-40% (sobrerrepresentación vs población)
+- Países: Marruecos, Colombia, Rumanía principales
+
+**Antecedentes:**
+- Sin antecedentes: Proporción alta (muchos primodelincuentes)
+- Reincidentes: Riesgo evaluado por CGPJ
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TAREAS PENDIENTES TAREA 2.4
+
+**PARA COMPLETAR SERIE 2017-2019:**
+- [ ] Descargar tablas CGPJ 2019 (Delitos, Penas, Personas)
+- [ ] Descargar tablas CGPJ 2018 (Delitos, Penas, Personas)
+- [ ] Descargar tablas CGPJ 2017 (Delitos, Penas, Personas)
+- [ ] Compilar por tipo delito (violación, abuso, agresión, etc.)
+- [ ] Compilar desgloses edad/nacionalidad
+- [ ] Análisis de penas impuestas por tipo delito
+
+**ACCESO DATOS:**
+URL: https://www.poderjudicial.es/cgpj/es/Temas/Estadistica-Judicial/Estadistica-por-temas/Datos-penales--civiles-y-laborales/Delitos-y-condenas/Condenados--explotacion-estadistica-del-Registro-Central-de-Penados-/
+
+**Opciones Descarga:**
+1. Tablas Excel directas (si disponibles)
+2. Base PC-AXIS (interfaz interactiva)
+3. Reportes PDF (algunos años)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+INDICADORES PROGRESO TAREA 2.4
+
+| Item | Status | Notas |
+|------|--------|-------|
+| Datos 2024 | ✓ PARCIAL | 5.230 adultos, 825 menores (INE) |
+| Datos 2023 | ✓ PARCIAL | 3.468 adultos, 500 menores (INE) |
+| Datos 2022 | ⏳ PENDIENTE | Requiere CGPJ descarga |
+| Datos 2021-2019 | ❌ NO INICIADO | Requiere CGPJ descarga |
+| Desgloses edad | ⏳ PENDIENTE | Disponible en CGPJ PC-AXIS |
+| Desgloses nacionalidad | ⏳ PENDIENTE | Disponible en CGPJ PC-AXIS |
+| Análisis penas | ⏳ PENDIENTE | Requiere compilación datos |
+
+**PROGRESO TAREA 2.4:** ~30% (contexto jurídico sí, datos específicos pendientes)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+SIGUIENTE PASO
+
+Descargar datos CGPJ 2017-2019 en tablas Excel para compilación
+
+═══════════════════════════════════════════════════════════════════════════════
+
+**Última actualización:** Mayo 2025  
+**TAREA 2.4 STATUS:** Parcialmente iniciada - Contexto jurídico documentado, datos específicos pendientes de descarga
+

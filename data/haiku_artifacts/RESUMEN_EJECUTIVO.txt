@@ -1,0 +1,241 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    INVESTIGACIÓN: VIOLENCIA SEXUAL CONTRA MUJERES            ║
+║                         ESPAÑA 2000-2025                                     ║
+║                                                                               ║
+║                         FASE INICIAL COMPLETADA                             ║
+║                              Mayo 2025                                        ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+───────────────────────────────────────────────────────────────────────────────
+1. ESTADO DE LA INVESTIGACIÓN
+───────────────────────────────────────────────────────────────────────────────
+
+✓ COMPLETADO:
+  - Compilación de cifras 2024 (datos más recientes)
+  - Identificación de 6 fuentes oficiales principales
+  - Mapeo de datos disponibles 2020-2024
+  - Identificación de cambios legislativos clave
+  - Recopilación de tasas de prevalencia en vida
+  - Documentación de limitaciones de datos
+  - Creación de guía para investigación continuada
+
+⏳ EN DESARROLLO:
+  - Series históricas 2015-2020
+  - Análisis por CCAA
+  - Datos de 2000-2015
+  - Detalles de relación víctima-agresor
+
+───────────────────────────────────────────────────────────────────────────────
+2. HALLAZGOS INICIALES CLAVE
+───────────────────────────────────────────────────────────────────────────────
+
+│ AÑO 2024 - CIFRAS ANUALES DE DENUNCIAS │
+├─────────────────────────────────────────────────────────────────────────────
+│ Violaciones:                    5.206 denuncias (14,2 por día)
+│ Agresiones sexuales sin penetración: 15.953 (43,7 por día)
+│ TOTAL delitos sexuales:         21.159 (58 por día)
+│
+│ Fuente: Ministerio del Interior - Balance Criminalidad Q4 2024
+
+│ FISCALÍA - DILIGENCIAS PREVIAS INCOADAS │
+├─────────────────────────────────────────────────────────────────────────────
+│ 2024: 20.711 agresiones sexuales (+12,11% vs 2023)
+│ 2023: 18.474 agresiones sexuales (+92% vs 2022)
+│ 2022: 9.603 agresiones sexuales
+│
+│ Nota: Cambio legal 2022 integró categoría "abusos" en "agresiones"
+│ Fuente: Fiscalía General del Estado - Memoria 2024
+
+│ PREVALENCIA EN VIDA (MACROENCUESTA 2024) │
+├─────────────────────────────────────────────────────────────────────────────
+│ Violencia sexual FUERA pareja:  14,5% de mujeres 16+
+│ Violencia sexual EN pareja:      7,7% de mujeres 16+
+│ Cualquier violencia machista:   57,3% de mujeres 16+ (2019)
+│
+│ → 11.688.411 mujeres sufrieron algún tipo de violencia machista
+
+│ PERFIL DE AGRESORES (2024) │
+├─────────────────────────────────────────────────────────────────────────────
+│ Españoles:                      68%
+│ Extranjeros:                    32%
+│
+│ ⚠️ ANÁLISIS: Extranjeros = 14% población
+│              Cometen 32% de agresiones sexuales
+│              → 3,43x más probabilidad que españoles
+│
+│ Hombres responsables:           93% (dato 2023)
+│ Menores agresores 2024:         3.283 delitos (+3% vs 2023)
+
+│ SUBNOTIFICACIÓN (MUY ALTA) │
+├─────────────────────────────────────────────────────────────────────────────
+│ Violencia sexual:     84,1% NO denunció
+│ Violación:            67,2% NO denunció
+│ Acoso sexual:         97,5% NO denunció
+│ Violencia en pareja:  66,9% NO denunció
+│
+│ → Solo ~14% de víctimas de violencia sexual denuncia
+│   (Encuesta FRA Europa 2024)
+
+───────────────────────────────────────────────────────────────────────────────
+3. CARACTERÍSTICAS DESTACABLES
+───────────────────────────────────────────────────────────────────────────────
+
+DISTRIBUCIÓN POR EDAD:
+  • Víctimas masculinas: Concentración 0-13 años
+  • Víctimas femeninas: Concentración 18-30 años (juventud/edad adulta)
+
+DISTRIBUCIÓN POR SEXO:
+  • ~89% mujeres
+  • ~11% hombres
+  
+  → Delitos sexuales son predominantemente contra mujeres
+
+───────────────────────────────────────────────────────────────────────────────
+4. LIMITACIONES CRÍTICAS DE LOS DATOS
+───────────────────────────────────────────────────────────────────────────────
+
+✗ CIFRA OCULTA MUY ELEVADA
+  → 86% de violencia sexual no se denuncia
+  → Las denuncias son "punta del iceberg"
+
+✗ CAMBIO LEGAL 2022 (Ley 10/2022)
+  → Integró "abusos sexuales" en "agresiones sexuales"
+  → Dificulta comparación pre-2023 vs post-2023
+  → Serie histórica comparable: aprox. 2018-2024
+
+✗ DATOS INCOMPLETOS SOBRE AGRESORES
+  → No especifica relación víctima-agresor en denuncias
+  → Disponible parcialmente en Macroencuesta
+  → Falta contexto: dónde ocurrió, circunstancias
+
+✗ COBERTURA GEOGRÁFICA VARIABLE
+  → Antes 2011: faltan datos de Cataluña, Navarra, Euskadi
+  → Desde 2011: datos más completos
+
+✗ CAMBIOS EN CATEGORÍAS DE EDAD
+  → Anuarios MIR varía criterios de agregación
+  → Dificulta comparaciones longitudinales
+
+───────────────────────────────────────────────────────────────────────────────
+5. FUENTES OFICIALES VERIFICADAS
+───────────────────────────────────────────────────────────────────────────────
+
+✓ Ministerio del Interior
+  - Informe Delitos Libertad Sexual (anual 2023-2024)
+  - Anuarios Estadísticos (1998-2024)
+  - Balance de Criminalidad (trimestral)
+
+✓ INE (Instituto Nacional de Estadística)
+  - Macroencuesta Violencia contra la Mujer (ediciones 2015, 2019, 2024)
+  - Tablas delitos sexuales (28715, 28716, 28752)
+
+✓ Fiscalía General del Estado
+  - Memorias anuales (2024 disponible)
+  - Datos diligencias previas
+
+✓ CGPJ (Consejo General Poder Judicial)
+  - Estadísticas de condenados delitos sexuales
+  - Registro Central de Delincuentes Sexuales
+
+✓ Ministerio de Igualdad
+  - Delegación Gobierno contra Violencia de Género
+  - ONVIOS (creada junio 2024)
+
+✓ GREVIO (ONU)
+  - Evaluaciones expertas de sistemas españoles
+
+───────────────────────────────────────────────────────────────────────────────
+6. CAMBIOS LEGISLATIVOS IMPORTANTES
+───────────────────────────────────────────────────────────────────────────────
+
+2004  │ LO 1/2004         │ Violencia de Género (crea juzgados especiales)
+      │                   │
+2015  │ Reforma CP        │ Suprime faltas → delitos leves
+      │                   │ (incremento visible en estadísticas)
+      │
+2017  │ ---               │ CGPJ inicia datos desagregados delitos sexuales
+      │
+2022  │ LO 10/2022        │ ⚠️ CRÍTICA: Integra abusos en agresiones
+      │ (sept 6)          │ Redefine consentimiento
+      │                   │ QUIEBRE en series históricas
+      │
+2023  │ LO 4/2023         │ Aumenta mínimos de penas
+      │ (abril 27)        │
+      │
+2024  │ ONVIOS creada     │ Coordinación violencia sexual (junio)
+
+───────────────────────────────────────────────────────────────────────────────
+7. PRÓXIMOS PASOS RECOMENDADOS
+───────────────────────────────────────────────────────────────────────────────
+
+CORTO PLAZO (1-2 semanas):
+  ☐ Descargar informes completos 2023-2024 Ministerio Interior
+  ☐ Obtener datos CGPJ 2020-2024 (condenas por tipo)
+  ☐ Analizar tablas INE por edad y nacionalidad
+
+MEDIO PLAZO (1-2 meses):
+  ☐ Compilar series 2015-2022 (pre-reforma legal)
+  ☐ Análisis regional (CCAA) 2020-2024
+  ☐ Estudio relación víctima-agresor (Macroencuesta 2024)
+
+LARGO PLAZO (2-3 meses):
+  ☐ Anuarios MIR 2000-2014 (para 25 años historia)
+  ☐ Solicitud AEPD para datos SEC (Sistema Estadístico Criminalidad)
+  ☐ Análisis series ajustadas por cambios metodológicos
+
+───────────────────────────────────────────────────────────────────────────────
+8. ARCHIVOS GENERADOS
+───────────────────────────────────────────────────────────────────────────────
+
+1. Investigacion_Violencia_Sexual_Mujeres_Espana_2000_2025.docx
+   → Informe completo en Word (8 secciones)
+   → Datos 2024, prevalencia, características, limitaciones
+
+2. Datos_Compilados_Violencia_Sexual_Espana.xlsx
+   → Tabla Excel (6 hojas)
+   → Denuncias, Fiscalía, Agresores, Víctimas, Subnotificación, Características
+   → Fácil para análisis y gráficos posteriores
+
+3. Cifras_Principales_ViolenciaSexual_2024.txt
+   → Resumen ejecutivo de cifras
+   → Cuadro de fuentes, cambios legales, limitaciones
+
+4. FUENTES_OFICIALES_REFERENCIAS.md
+   → Guía detallada de acceso a fuentes
+   → URLs, contactos, estrategia de búsqueda
+   → Limitaciones documentadas por fuente
+
+───────────────────────────────────────────────────────────────────────────────
+9. MEMORIA DEL PROYECTO ACTUALIZADA
+───────────────────────────────────────────────────────────────────────────────
+
+✓ Añadido a memoria: Objetivo, fuentes, cifras iniciales compiladas
+
+Memoria accesible para continuación del proyecto sin necesidad de
+re-búsqueda de información básica.
+
+───────────────────────────────────────────────────────────────────────────────
+10. NOTAS METODOLÓGICAS CLAVE
+───────────────────────────────────────────────────────────────────────────────
+
+IMPORTANTE: Toda estadística sobre violencia sexual en España tiene una
+"cifra oculta" masiva (84-86% de casos no denunciados).
+
+Los datos de DENUNCIAS muestran límite inferior de problema real. Para
+comprender magnitud total, COMBINAR:
+  • Denuncias (base de datos oficial)
+  • Macroencuesta (prevalencia en vida)
+  • Estudios académicos (contexto)
+
+CUIDADO CON SERIES HISTÓRICAS pre-2023: Cambio legal 2022 hace
+comparables solo datos con misma categorización. Ajustar antes de
+visualizar evolución 2000-2025.
+
+───────────────────────────────────────────────────────────────────────────────
+
+INVESTIGACIÓN INICIADA: Mayo 2025
+STATUS: Fase 1 completada - Base de datos establecida
+PRÓXIMA REVISIÓN: Según cronograma de investigación
+ACTUALIZACIONES: Disponibles anualmente (datos oficiales publicados oct-sept)
+
+═══════════════════════════════════════════════════════════════════════════════

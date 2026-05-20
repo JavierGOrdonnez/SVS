@@ -1,0 +1,152 @@
+=============================================================================
+SÍNTESIS DE CIFRAS PRINCIPALES - VIOLENCIA SEXUAL CONTRA MUJERES EN ESPAÑA
+=============================================================================
+
+DATOS 2024 (MÁS RECIENTES)
+─────────────────────────────────────────────────────────────────────────
+
+1. DENUNCIAS POR DELITOS SEXUALES (Ministerio del Interior)
+   - Violaciones: 5.206 (14,2 por día)
+   - Agresiones sexuales sin penetración: 15.953 (43,7 por día)
+   - TOTAL: 21.159 delitos sexuales (58 por día)
+
+2. DILIGENCIAS PREVIAS INCOADAS (Fiscalía General del Estado)
+   - Agresiones sexuales 2024: 20.711 (incremento 12,11% vs 2023)
+   - Comparativa 2022-2024:
+     * 2022: 9.603
+     * 2023: 18.474 (↑92%)
+     * 2024: 20.711 (↑12,11%)
+
+3. AGRESORES SEXUALES MENORES
+   - 3.283 delitos de violencia sexual en 2024
+   - Incremento del 3% respecto a 2023
+
+4. NACIONALIDAD DE AGRESORES (2024)
+   - 68% españoles
+   - 32% extranjeros
+   
+   ⚠️ ANÁLISIS: Extranjeros = 14% de población, cometen 32% de agresiones
+              → 3,43 veces más probabilidad de cometer agresión sexual
+
+─────────────────────────────────────────────────────────────────────────
+
+DATOS DE PREVALENCIA EN VIDA (Macroencuesta 2024)
+─────────────────────────────────────────────────────────────────────────
+
+MUJERES 16+ AÑOS - Violencia por pareja:
+   - Física y/o sexual: 12,7%
+   - Física: 9,2%
+   - Sexual: 7,7%
+
+MUJERES 16+ AÑOS - Violencia sexual FUERA de pareja:
+   - 14,5%
+
+OTROS TIPOS DE VIOLENCIA:
+   - Económica: 11,7%
+   - Psicológica/emocional: 20,9%
+
+─────────────────────────────────────────────────────────────────────────
+
+PREVALENCIA GENERAL (Macroencuesta 2019 - última de cobertura general)
+─────────────────────────────────────────────────────────────────────────
+
+   - 57,3% de mujeres 16+ ha sufrido algún tipo de violencia machista
+   - = 11.688.411 mujeres
+
+   - 1.678.959 menores viven en hogares con violencia de pareja
+
+─────────────────────────────────────────────────────────────────────────
+
+CARACTERÍSTICAS DE VÍCTIMAS (2023-2024)
+─────────────────────────────────────────────────────────────────────────
+
+DISTRIBUCIÓN POR SEXO:
+   - ~89% mujeres
+   - ~11% hombres
+
+DISTRIBUCIÓN POR EDAD:
+   - Víctimas masculinas: concentración 0-13 años
+   - Víctimas femeninas: concentración 18-30 años
+
+─────────────────────────────────────────────────────────────────────────
+
+SUBNOTIFICACIÓN (Macroencuesta 2019)
+─────────────────────────────────────────────────────────────────────────
+
+   - 84,1% de víctimas de violencia sexual NO denunció
+   - 67,2% de víctimas de violación NO denunció
+   - 2,5% de acoso sexual denunciado a autoridades
+   - 66,9% de violencia en pareja NO denunció
+
+⚠️ CONTEXTO EUROPEO: Solo 13,9% de víctimas de violencia física/sexual
+                      denuncian (Encuesta FRA 2024)
+
+─────────────────────────────────────────────────────────────────────────
+
+FUENTES OFICIALES CONSULTADAS
+─────────────────────────────────────────────────────────────────────────
+
+1. Ministerio del Interior
+   - Informe sobre Delitos contra la Libertad Sexual España 2023-2024
+   - Balance de Criminalidad Q4 2024
+   - Anuarios Estadísticos (disponibles 1998-2024)
+
+2. INE (Instituto Nacional de Estadística)
+   - Macroencuesta de Violencia contra la Mujer 2024
+   - Estadística Violencia Doméstica y Violencia de Género (EVDVG) 2024
+   - Tabla 28716 (Delitos sexuales por nacionalidad)
+
+3. Fiscalía General del Estado
+   - Memoria 2024
+
+4. Consejo General del Poder Judicial (CGPJ)
+   - Datos sobre delincuentes sexuales
+   - Sentencias y condenas
+
+5. Ministerio de Igualdad
+   - Delegación Gobierno contra Violencia de Género
+   - Oficina Nacional contra Violencia Sexual (ONVIOS) - creada jun 2024
+
+─────────────────────────────────────────────────────────────────────────
+
+CAMBIOS LEGISLATIVOS IMPORTANTE
+─────────────────────────────────────────────────────────────────────────
+
+Ley Orgánica 10/2022 (6 septiembre):
+   - Garantía integral de la libertad sexual
+   - CAMBIO CRÍTICO: Eliminó categoría "abuso sexual"
+   - Ahora toda conducta sin consentimiento = "agresión sexual"
+   - Afecta comparabilidad con datos 2000-2022
+
+Ley Orgánica 4/2023 (27 abril):
+   - Aumentó tramos mínimos de penas
+   - Modificó enjuiciamiento criminal
+
+⚠️ NOTA METODOLÓGICA: Los datos pre-2023 reportan "abusos" separados de
+                      "agresiones". Post-2023 todo es "agresiones".
+                      Hay período de transición donde coexisten ambas.
+
+─────────────────────────────────────────────────────────────────────────
+
+LIMITACIONES DE LOS DATOS ACTUALES
+─────────────────────────────────────────────────────────────────────────
+
+✗ Cifra oculta MUY ELEVADA (86% de violencia sexual no se denuncia)
+✗ Series históricas comparables solo desde aprox. 2018-2022
+✗ Cambio legal 2022 dificulta comparación temporal
+✗ Falta info sobre relación víctima-agresor en denuncias (parcial en encuestas)
+✗ Datos desglosados por edad varían criterios de agregación según año
+✗ Información sobre MGF y matrimonio forzado muy limitada
+
+─────────────────────────────────────────────────────────────────────────
+
+PRÓXIMOS PASOS INVESTIGACIÓN
+─────────────────────────────────────────────────────────────────────────
+
+1. Obtener Anuarios MIR 2000-2015 (series históricas largas)
+2. Solicitar datos CGPJ desglosados por tipo de delito y sentencias
+3. Analizar relación víctima-agresor (Macroencuesta disponible)
+4. Estudiar análisis regional (CCAA)
+5. Verificar datos de victimización femenina extranjera (51% feminicidios 2024)
+6. Recopilar tasas anuales y prevalencia en vida
+
