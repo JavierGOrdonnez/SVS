@@ -1,0 +1,87 @@
+# SPEC.md — SVS (Spain Violence Statistics)
+
+---
+
+## §G — Goal
+
+Compute annual, 5-year & lifetime cumulative probability of rape/sexual-assault/femicide/homicide/non-sexual-violence for woman born 2000 ∈ Spain, holding 2025 conditions fixed. Extend: estimate partial effects of covariates (far-right vote share, immigration volume & composition) using 2000–2025 historical series.
+
+---
+
+## §C — Constraints
+
+C1: All claimed statistics ! cite exact source + table/figure + year of publication.  
+C2: Reported-crime data ≠ actual incidence; dark-figure correction ! attempted via survey cross-validation.  
+C3: Definition of each offence ! documented per year — Spanish penal code changed materially in 2022 (LO 10/2022 "Solo sí es sí") & 2023 reform; pre/post comparability ⊥ assumed without explicit bridge.  
+C4: "Femicide" in official data = intimate-partner/ex-partner homicide only (Delegación del Gobierno registry) ≠ all female homicides ≠ academic broad definition.  
+C5: Macroencuesta (victimisation survey) ! used to bound dark figure; conducted irregularly (2011, 2015, 2019); interpolation between waves ? unreliable.  
+C6: Age-specific rates ! used wherever available; aggregate rates ∈ fallback only.  
+C7: ∀ probability estimates → competing-risks life-table, not naive annual-rate multiplication (events not independent across years).  
+C8: Covariate regression = associative, ⊥ causal.  
+C9: Prior AI model (Haiku) likely hallucinated point estimates without source verification → ∀ numbers from that conversation ! re-verified against primary sources before use.  
+C10: Population denominator ! female population of Spain from INE Padrón; age-stratified where possible.  
+C11: Ethnicity/nationality breakdowns sparse in official data; include when available, flag absence.  
+C12: ∀ CSV rows ! have `confidence` ∈ {high, medium, low, unverified} — unverified rows ⊥ used in final estimates until confirmed.
+
+---
+
+## §I — Interfaces
+
+```
+file: data/raw/violence_spain.csv       → append-only raw data log
+file: data/raw/population_spain.csv     → INE female population by age/year
+file: data/processed/rates.csv          → derived incidence rates (generated)
+file: data/processed/lifetable.csv      → cumulative probability output (generated)
+file: data/processed/covariate_data.csv → political & immigration series (generated)
+cmd:  `python src/pipeline.py`          → raw → processed
+cmd:  `python src/lifetable.py`         → rates → cumulative probs
+cmd:  `python src/regression.py`        → covariate analysis
+out:  reports/                          → final write-ups & charts
+```
+
+---
+
+## §V — Invariants
+
+V1: ∀ row ∈ violence_spain.csv → `row_id`, `violence_type`, `year`, `value`, `unit`, `source_name`, `source_table`, `confidence` ! non-empty.  
+V2: `confidence=high` → source is primary govt/official publication, value directly readable (not computed by prior AI).  
+V3: `confidence=medium` → source is primary but value requires minor computation (e.g. rate from count + population) or source is reputable secondary.  
+V4: `confidence=low` → source ambiguous, secondary, or value inferred.  
+V5: `confidence=unverified` → value originates from prior AI conversation; ⊥ used in modelling until cross-checked.  
+V6: ∀ rate computation → denominator ! stated (female population, female 15-49, etc.).  
+V7: Definition-break years (2022 LO 10/2022, 2023 reform) ! flagged in `notes` for sexual-offence rows.  
+V8: Femicide rows ! distinguish registry: `Delegación_Gobierno` (partner/ex only) vs `INE_MNP` (all female homicide) vs `CGPJ` (judicial).  
+V9: ∀ probability estimates → methodology section in report ! describe competing-risks model & assumptions.  
+V10: Covariate series ! cover same 2000–2025 range as violence series; gaps flagged.  
+V11: Dark-figure multipliers ! sourced from macroencuesta or published academic estimates; ⊥ invented.
+
+---
+
+## §T — Tasks
+
+| id | status | task | cites |
+|---|---|---|---|
+| T1 | ~ | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno annual reports 2003–2024 | V1,V2,V8 |
+| T2 | . | Populate `violence_spain.csv` — all female homicide: INE MNP (Movimiento Natural de la Población) 2000–2023 | V1,V2,V8 |
+| T3 | . | Populate `violence_spain.csv` — sexual crimes: Ministerio del Interior estadísticas anuales 2000–2024 | V1,V2,V7 |
+| T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
+| T5 | . | Populate `violence_spain.csv` — victimisation rates from Macroencuesta 2011, 2015, 2019 (lifetime & annual prevalence) | V1,V3,V11 |
+| T6 | . | Populate `population_spain.csv` — INE female population by 5-yr age group & year 2000–2025 | V6,V10 |
+| T7 | . | Compute age-specific annual incidence rates → `data/processed/rates.csv` | V3,V6 |
+| T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
+| T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
+| T10 | . | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
+| T11 | . | Collect covariate series: total immigration flow & stock by year, nationality, sex, age — INE/MITES | V10,C8 |
+| T12 | . | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
+| T13 | . | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
+| T14 | . | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
+| T15 | . | Write `reports/methodology.md` — definitions, legal changes, dark-figure approach, model spec | V9,C3,C4 |
+| T16 | . | Write `reports/results.md` — probability estimates + CIs + scenario table | V9 |
+
+---
+
+## §B — Bugs
+
+| id | date | cause | fix |
+|---|---|---|---|
+| — | — | — | — |
