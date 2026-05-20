@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Violence Statistics Spain — SVS Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: #2e3347;
+    --text: #e8eaf6;
+    --text2: #9ba3bf;
+    --accent: #7c83ff;
+    --high: #22c55e;
+    --medium: #eab308;
+    --low: #f97316;
+    --unverified: #ef4444;
+    --card-radius: 12px;
+    --gap: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  header {
+    background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 24px;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  header p.subtitle {
+    color: var(--text2);
+    margin-top: 6px;
+    font-size: 0.95rem;
+    max-width: 680px;
+  }
+
+  .headline-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .hcard {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 14px 18px;
+  }
+
+  .hcard .val {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .hcard .label {
+    font-size: 0.78rem;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .hcard .delta {
+    font-size: 0.78rem;
+    color: var(--high);
+    margin-top: 2px;
+  }
+
+  .hcard .delta.down { color: #60a5fa; }
+
+  /* ── FILTER BAR ──────────────────────────────────────── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .filter-bar span {
+    font-size: 0.82rem;
+    color: var(--text2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .conf-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+
+  .conf-btn.high   { border-color: var(--high);   color: var(--high); }
+  .conf-btn.medium { border-color: var(--medium);  color: var(--medium); }
+  .conf-btn.low    { border-color: var(--low);     color: var(--low); }
+  .conf-btn.unverified { border-color: var(--unverified); color: var(--unverified); }
+
+  .conf-btn.active.high   { background: var(--high);   color: #000; }
+  .conf-btn.active.medium { background: var(--medium);  color: #000; }
+  .conf-btn.active.low    { background: var(--low);     color: #000; }
+  .conf-btn.active.unverified { background: var(--unverified); color: #fff; }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  /* ── MAIN GRID ───────────────────────────────────────── */
+  main {
+    padding: 28px 40px 40px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gap);
+  }
+
+  .chart-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 20px 20px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-card.full  { grid-column: span 12; }
+  .chart-card.half  { grid-column: span 6; }
+  .chart-card.third { grid-column: span 4; }
+
+  .chart-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .chart-sub {
+    font-size: 0.76rem;
+    color: var(--text2);
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .chart-sub .warn {
+    color: var(--low);
+    font-weight: 600;
+  }
+
+  .chart-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  canvas { display: block; width: 100% !important; }
+
+  /* ── CAVEAT SECTION ──────────────────────────────────── */
+  .caveats {
+    margin: 0 40px 40px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--card-radius);
+    padding: 18px 22px;
+  }
+
+  .caveats h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .caveats ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 6px 24px;
+  }
+
+  .caveats li {
+    font-size: 0.8rem;
+    color: var(--text2);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .caveats li::before {
+    content: '⚠';
+    position: absolute;
+    left: 0;
+    color: var(--low);
+    font-size: 0.7rem;
+  }
+
+  /* ── CONFIDENCE LEGEND ───────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.74rem;
+    color: var(--text2);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 900px) {
+    header { padding: 20px; }
+    main { padding: 16px; gap: 14px; }
+    .chart-card.half, .chart-card.third { grid-column: span 12; }
+    .filter-bar { padding: 12px 20px; }
+    .caveats { margin: 0 16px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <h1>Violence Against Women in Spain — Data Dashboard</h1>
+  <p class="subtitle">
+    Visualising reported violence, femicide, sexual crime, and victimisation survey data 2003–2024.
+    Based on official sources: Delegación del Gobierno, Ministerio del Interior, INE, Macroencuesta.
+  </p>
+
+  <div class="headline-cards">
+    <div class="hcard">
+      <div class="val">47</div>
+      <div class="label">Femicides (intimate partner) 2024</div>
+      <div class="delta down">↓ Lowest since registry began (2003)</div>
+    </div>
+    <div class="hcard">
+      <div class="val">22,846</div>
+      <div class="label">Total sexual crimes reported 2024</div>
+      <div class="delta">↑ +4.7% vs 2023, +66% vs 2018</div>
+    </div>
+    <div class="hcard">
+      <div class="val">5,223</div>
+      <div class="label">Rape (agresión con penetración) 2024</div>
+      <div class="delta">↑ +41% vs 2022 (series break at LO 10/2022)</div>
+    </div>
+    <div class="hcard">
+      <div class="val">36.2%</div>
+      <div class="label">Women reporting sexual harassment (lifetime, 2024)</div>
+      <div class="delta" style="color: var(--text2);">Macroencuesta 2024</div>
+    </div>
+    <div class="hcard">
+      <div class="val">3.1%</div>
+      <div class="label">Women reporting rape by any perpetrator (lifetime, 2024)</div>
+      <div class="delta" style="color: var(--text2);">Macroencuesta 2024 — new module</div>
+    </div>
+    <div class="hcard">
+      <div class="val">8%</div>
+      <div class="label">Estimated denuncia rate for sexual violence</div>
+      <div class="delta" style="color: var(--text2);">Macroencuesta 2019 — ~92% unreported</div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ FILTER BAR ═══════════════ -->
+<div class="filter-bar">
+  <span>Show confidence:</span>
+  <button class="conf-btn high active"   onclick="toggleConf('high')"       ><div class="dot"></div> High</button>
+  <button class="conf-btn medium active" onclick="toggleConf('medium')"     ><div class="dot"></div> Medium</button>
+  <button class="conf-btn low active"    onclick="toggleConf('low')"        ><div class="dot"></div> Low</button>
+  <button class="conf-btn unverified"    onclick="toggleConf('unverified')" ><div class="dot"></div> Unverified</button>
+</div>
+
+<!-- ═══════════════ CHARTS ═══════════════ -->
+<main>
+
+  <!-- Chart 1: Femicide timeline -->
+  <div class="chart-card full">
+    <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
+    <div class="chart-sub">
+      Official count from Delegación del Gobierno registry. Scope: partner and ex-partner homicides only (LO 1/2004).
+      2000–2002 not in Delegación registry (INE MNP series available but not yet verified).
+      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against primary PDF fichas.</span>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> High confidence</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium confidence</div>
+    </div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartFemicide"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 2: Sexual crimes total -->
+  <div class="chart-card half">
+    <div class="chart-title">Total Sexual Crimes Reported — MIR 2018–2024</div>
+    <div class="chart-sub">
+      Delitos contra la libertad sexual. <span class="warn">⚠ 2022 definitional break: LO 10/2022 (Solo sí es sí)
+      merged "abuso sexual" into "agresión sexual" — figures pre/post 2022 are NOT directly comparable.</span>
+      2022 value is derived estimate (medium confidence).
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartSexCrimesTotal"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 3: Rape series -->
+  <div class="chart-card half">
+    <div class="chart-title">Rape (Agresión con Penetración) Reported — MIR 2017–2024</div>
+    <div class="chart-sub">
+      <span class="warn">⚠ BLOCKER B6: Two incompatible series exist in MIR data for the same years
+      (~5,000/yr Anuario headline vs ~1,200/yr Informe subcategory). Root cause unresolved.
+      These are the Anuario figures.</span> 2020–2021 low-confidence (COVID disruption).
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div> Low</div>
+    </div>
+    <div class="chart-wrap" style="height:240px">
+      <canvas id="chartRape"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 4: Macroencuesta prevalence -->
+  <div class="chart-card full">
+    <div class="chart-title">Macroencuesta de Violencia contra la Mujer — Lifetime Prevalence by Wave</div>
+    <div class="chart-sub">
+      Victimisation survey of women 15+/16+ resident in Spain. Waves: 2015, 2019, 2024.
+      <span class="warn">⚠ 2024 methodology changed ("proceso estadístico de mejora") — NOT directly comparable to 2019.
+      Pre-2015 waves used different question wording. Survey captures actual prevalence; police data captures reported crimes.</span>
+    </div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartMacro"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 5: 2024 victim/perpetrator profile -->
+  <div class="chart-card third">
+    <div class="chart-title">Sexual Crime Victims 2024 — By Sex</div>
+    <div class="chart-sub">Source: MIR Informe 2024. n = 22,778 total victims.</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartVictimSex"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card third">
+    <div class="chart-title">Sexual Crime Victims 2024 — By Age Group</div>
+    <div class="chart-sub">41.2% of all victims are minors (under 18). Source: MIR Informe 2024.</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartVictimAge"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card third">
+    <div class="chart-title">Sexual Crime Perpetrators 2024 — By Sex</div>
+    <div class="chart-sub">93.1% of perpetrators are male. Source: MIR Informe 2024.</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartPerpSex"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 6: Femicide nationality -->
+  <div class="chart-card third">
+    <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
+    <div class="chart-sub">
+      51% foreign victims; foreign women face 4.95× higher rate per 100k vs Spanish women.
+      Source: Delegación del Gobierno 2024.
+    </div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartFemNat"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 7: Condenados -->
+  <div class="chart-card third">
+    <div class="chart-title">INE Condenados — Sexual Crime Convictions 2023–2024</div>
+    <div class="chart-sub">
+      Adults (+50.8% in 2024) and minors (+65.0%). 95.6% of convicted minors are male.
+      <span class="warn">⚠ 2023 adults low confidence (derived).</span>
+    </div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartCondenados"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 8: Domestic violence denuncias -->
+  <div class="chart-card third">
+    <div class="chart-title">Domestic Violence Denuncias (CGPJ) 2019–2022</div>
+    <div class="chart-sub">
+      Complaints registered at Juzgados de Violencia sobre la Mujer (LO 1/2004 scope — partner/ex only).
+      COVID suppression visible in 2020. 2023–2024 not yet verified.
+    </div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartDomViol"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 9: Data confidence distribution -->
+  <div class="chart-card third">
+    <div class="chart-title">Dataset Confidence Distribution</div>
+    <div class="chart-sub">
+      106 rows total. Unverified rows must not be used in modelling until cross-checked against primary sources.
+    </div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartConf"></canvas>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════ CAVEATS ═══════════════ -->
+<div class="caveats">
+  <h3>Critical Data Caveats</h3>
+  <ul>
+    <li><strong>Series break 2022:</strong> LO 10/2022 (6 Sept 2022) merged "abuso sexual" into "agresión sexual" — pre/post figures are incompatible.</li>
+    <li><strong>Series break pre-2012:</strong> MIR data excluded Cataluña, País Vasco, Navarra (~25–30% population) — multiply by ~1.3–1.5 for national estimates.</li>
+    <li><strong>Unresolved B6:</strong> Two incompatible rape series in MIR data (Anuario ~5,000/yr vs Informe subcategory ~1,200/yr). Root cause unresolved — blocks rate computation.</li>
+    <li><strong>Survey ≠ Police data:</strong> Macroencuesta captures actual prevalence; police data captures reported crimes. Do not use lifetime cumulative / annual reported as a "dark figure multiplier".</li>
+    <li><strong>Reporting rate:</strong> ~8% of sexual violence outside partner is reported to police (Macroencuesta 2019). ~92% unreported.</li>
+    <li><strong>Femicide scope:</strong> Delegación del Gobierno counts partner/ex-partner homicides only. Total female homicides are higher (INE MNP series).</li>
+    <li><strong>Fiscalía counts proceedings</strong> (diligencias previas), not crimes. One crime can generate multiple proceedings — figures are higher than MIR police counts.</li>
+    <li><strong>2024 Macroencuesta:</strong> Methodology changed — NOT directly comparable to 2019. Some observed changes may reflect measurement change, not real change.</li>
+    <li><strong>Foreign victim rate:</strong> 4.95× femicide rate ratio (foreign vs Spanish) reflects relative rates per 100k, not absolute numbers. Denominator = female population by nationality (Padrón).</li>
+    <li><strong>Haiku model note:</strong> Values from a prior Haiku AI conversation were critically audited. Key corrected figures: femicide 2024 (58→47), total sexual crimes 2024 (21,159→22,846), 2023 total (19,981→21,825).</li>
+  </ul>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════ */
+const CONF_COLORS = {
+  high:       '#22c55e',
+  medium:     '#eab308',
+  low:        '#f97316',
+  unverified: '#ef4444',
+};
+
+const CONF_ALPHA = {
+  high:       'rgba(34,197,94,0.7)',
+  medium:     'rgba(234,179,8,0.7)',
+  low:        'rgba(249,115,22,0.7)',
+  unverified: 'rgba(239,68,68,0.7)',
+};
+
+// Active confidence levels
+const activeConf = { high: true, medium: true, low: true, unverified: false };
+
+// ── Femicide ────────────────────────────────────────
+const femicideData = [
+  { year: 2003, value: 71, conf: 'high'   },
+  { year: 2004, value: 72, conf: 'medium' },
+  { year: 2005, value: 57, conf: 'medium' },
+  { year: 2006, value: 69, conf: 'medium' },
+  { year: 2007, value: 71, conf: 'medium' },
+  { year: 2008, value: 76, conf: 'medium' },
+  { year: 2009, value: 56, conf: 'medium' },
+  { year: 2010, value: 73, conf: 'medium' },
+  { year: 2011, value: 61, conf: 'medium' },
+  { year: 2012, value: 52, conf: 'medium' },
+  { year: 2013, value: 54, conf: 'medium' },
+  { year: 2014, value: 54, conf: 'medium' },
+  { year: 2015, value: 60, conf: 'medium' },
+  { year: 2016, value: 49, conf: 'medium' },
+  { year: 2017, value: 51, conf: 'medium' },
+  { year: 2018, value: 47, conf: 'medium' },
+  { year: 2019, value: 55, conf: 'medium' },
+  { year: 2020, value: 44, conf: 'medium' },
+  { year: 2021, value: 43, conf: 'medium' },
+  { year: 2022, value: 49, conf: 'medium' },
+  { year: 2023, value: 57, conf: 'high'   },
+  { year: 2024, value: 47, conf: 'high'   },
+];
+
+// ── Sexual crimes total ──────────────────────────────
+const sexCrimesData = [
+  { year: 2018, value: 13782, conf: 'medium' },
+  { year: 2022, value: 19059, conf: 'medium' },
+  { year: 2023, value: 21825, conf: 'high'   },
+  { year: 2024, value: 22846, conf: 'high'   },
+];
+
+// ── Rape (agresión con penetración) ─────────────────
+const rapeData = [
+  { year: 2017, value: 3716, conf: 'medium' },
+  { year: 2018, value: 4141, conf: 'medium' },
+  { year: 2019, value: 5453, conf: 'medium' },
+  { year: 2020, value: 1593, conf: 'low'    },
+  { year: 2021, value: 2143, conf: 'low'    },
+  { year: 2022, value: 4270, conf: 'medium' },
+  { year: 2024, value: 5223, conf: 'medium' },
+];
+
+// ── Macroencuesta ────────────────────────────────────
+const macroData = {
+  labels: ['2015', '2019', '2024'],
+  datasets: [
+    {
+      label: 'Sexual violence by partner (lifetime)',
+      data: [8.4, 9.2, 7.7],
+      backgroundColor: 'rgba(124,131,255,0.75)',
+      borderColor: '#7c83ff',
+      borderWidth: 1.5,
+    },
+    {
+      label: 'Sexual violence outside partner (lifetime)',
+      data: [12.5, 13.7, 14.5],
+      backgroundColor: 'rgba(34,197,94,0.55)',
+      borderColor: '#22c55e',
+      borderWidth: 1.5,
+    },
+    {
+      label: 'Physical+sexual by partner (lifetime)',
+      data: [13.8, 14.2, 12.7],
+      backgroundColor: 'rgba(234,179,8,0.55)',
+      borderColor: '#eab308',
+      borderWidth: 1.5,
+    },
+  ],
+};
+
+// ── Domestic violence denuncias ──────────────────────
+const dvData = [
+  { year: 2019, value: 166961 },
+  { year: 2020, value: 152777 },
+  { year: 2021, value: 164221 },
+  { year: 2022, value: 168168 },
+];
+
+// ── Condenados ───────────────────────────────────────
+const condenadosData = {
+  adults: [ { year: 2023, value: 3468, conf: 'low' }, { year: 2024, value: 5230, conf: 'high' } ],
+  minors: [ { year: 2024, value: 825,  conf: 'high' } ],
+};
+
+/* ═══════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════ */
+const gridColor = 'rgba(255,255,255,0.06)';
+const tickColor = '#6b7280';
+const labelColor = '#9ba3bf';
+
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#22263a',
+      borderColor: '#2e3347',
+      borderWidth: 1,
+      titleColor: '#fff',
+      bodyColor: '#9ba3bf',
+      padding: 10,
+    },
+  },
+  scales: {
+    x: {
+      grid: { color: gridColor },
+      ticks: { color: tickColor, font: { size: 11 } },
+    },
+    y: {
+      grid: { color: gridColor },
+      ticks: { color: tickColor, font: { size: 11 } },
+    },
+  },
+};
+
+function makeBarColor(conf) {
+  return CONF_ALPHA[conf] || 'rgba(124,131,255,0.6)';
+}
+
+function makeBorderColor(conf) {
+  return CONF_COLORS[conf] || '#7c83ff';
+}
+
+function filterByConf(data) {
+  return data.map(d => activeConf[d.conf] ? d.value : null);
+}
+
+/* ═══════════════════════════════════════════════════
+   CHART INSTANCES
+═══════════════════════════════════════════════════ */
+let charts = {};
+
+function buildCharts() {
+  if (charts.femicide) Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+
+  const darkPie = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
+      },
+      tooltip: {
+        backgroundColor: '#22263a',
+        borderColor: '#2e3347',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#9ba3bf',
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`,
+        },
+      },
+    },
+  };
+
+  // ── 1. Femicide ────────────────────────────────────
+  charts.femicide = new Chart(document.getElementById('chartFemicide'), {
+    type: 'bar',
+    data: {
+      labels: femicideData.map(d => d.year),
+      datasets: [{
+        label: 'Femicides',
+        data: filterByConf(femicideData),
+        backgroundColor: femicideData.map(d => activeConf[d.conf] ? makeBarColor(d.conf) : 'transparent'),
+        borderColor:     femicideData.map(d => activeConf[d.conf] ? makeBorderColor(d.conf) : 'transparent'),
+        borderWidth: 1.5,
+        borderRadius: 3,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+        annotation: {
+          annotations: {
+            line2024: {
+              type: 'line',
+              xMin: '2024', xMax: '2024',
+              borderColor: 'rgba(124,131,255,0.4)',
+              borderWidth: 1,
+              borderDash: [4, 4],
+              label: {
+                display: true,
+                content: '2024: 47 (record low)',
+                color: '#9ba3bf',
+                font: { size: 10 },
+                position: 'start',
+                backgroundColor: 'rgba(34,38,58,0.85)',
+              },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: 'Homicides', color: tickColor, font: { size: 11 } },
+          beginAtZero: false,
+          min: 30,
+        },
+      },
+    },
+  });
+
+  // ── 2. Sexual crimes total ─────────────────────────
+  charts.sexCrimes = new Chart(document.getElementById('chartSexCrimesTotal'), {
+    type: 'line',
+    data: {
+      labels: sexCrimesData.map(d => d.year),
+      datasets: [{
+        label: 'Total sexual crimes',
+        data: filterByConf(sexCrimesData),
+        borderColor: '#7c83ff',
+        backgroundColor: 'rgba(124,131,255,0.12)',
+        tension: 0.3,
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: sexCrimesData.map(d => makeBorderColor(d.conf)),
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: {
+          annotations: {
+            lo2022: {
+              type: 'line',
+              xMin: 1, xMax: 1,
+              borderColor: 'rgba(249,115,22,0.7)',
+              borderWidth: 2,
+              borderDash: [6, 4],
+              label: {
+                display: true,
+                content: 'LO 10/2022 break',
+                color: '#f97316',
+                font: { size: 10 },
+                position: 'start',
+                backgroundColor: 'rgba(34,38,58,0.9)',
+              },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: 'Cases', color: tickColor, font: { size: 11 } },
+          beginAtZero: false,
+        },
+      },
+    },
+  });
+
+  // ── 3. Rape series ─────────────────────────────────
+  charts.rape = new Chart(document.getElementById('chartRape'), {
+    type: 'bar',
+    data: {
+      labels: rapeData.map(d => d.year),
+      datasets: [{
+        label: 'Rape (agresión con penetración)',
+        data: filterByConf(rapeData),
+        backgroundColor: rapeData.map(d => activeConf[d.conf] ? makeBarColor(d.conf) : 'transparent'),
+        borderColor:     rapeData.map(d => activeConf[d.conf] ? makeBorderColor(d.conf) : 'transparent'),
+        borderWidth: 1.5,
+        borderRadius: 3,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: {
+          annotations: {
+            lo2022: {
+              type: 'line',
+              xMin: 4.5, xMax: 4.5,
+              borderColor: 'rgba(249,115,22,0.7)',
+              borderWidth: 2,
+              borderDash: [5, 4],
+              label: {
+                display: true,
+                content: 'LO 10/2022',
+                color: '#f97316',
+                font: { size: 10 },
+                position: 'start',
+                backgroundColor: 'rgba(34,38,58,0.9)',
+              },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: 'Cases', color: tickColor, font: { size: 11 } },
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  // ── 4. Macroencuesta ───────────────────────────────
+  charts.macro = new Chart(document.getElementById('chartMacro'), {
+    type: 'bar',
+    data: {
+      labels: macroData.labels,
+      datasets: macroData.datasets,
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { color: labelColor, font: { size: 11 }, padding: 16, boxWidth: 14 },
+        },
+        annotation: {
+          annotations: {
+            incomparable2024: {
+              type: 'box',
+              xMin: 1.5, xMax: 2.5,
+              backgroundColor: 'rgba(249,115,22,0.06)',
+              borderColor: 'rgba(249,115,22,0.3)',
+              borderWidth: 1,
+              label: {
+                display: true,
+                content: '⚠ Methodology change',
+                color: '#f97316',
+                font: { size: 10 },
+                position: { x: 'center', y: 'start' },
+              },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: '% women (lifetime)', color: tickColor, font: { size: 11 } },
+          beginAtZero: true,
+          max: 18,
+        },
+      },
+    },
+  });
+
+  // ── 5a. Victim sex pie ─────────────────────────────
+  charts.victimSex = new Chart(document.getElementById('chartVictimSex'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Female', 'Male'],
+      datasets: [{
+        data: [85.7, 14.3],
+        backgroundColor: ['rgba(124,131,255,0.75)', 'rgba(96,165,250,0.55)'],
+        borderColor: ['#7c83ff', '#60a5fa'],
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: { ...darkPie },
+  });
+
+  // ── 5b. Victim age pie ─────────────────────────────
+  charts.victimAge = new Chart(document.getElementById('chartVictimAge'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Minor (<18)', 'Adult (18+)'],
+      datasets: [{
+        data: [41.2, 58.8],
+        backgroundColor: ['rgba(234,179,8,0.75)', 'rgba(34,197,94,0.55)'],
+        borderColor: ['#eab308', '#22c55e'],
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: { ...darkPie },
+  });
+
+  // ── 5c. Perpetrator sex pie ────────────────────────
+  charts.perpSex = new Chart(document.getElementById('chartPerpSex'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Male', 'Female'],
+      datasets: [{
+        data: [93.13, 6.87],
+        backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(124,131,255,0.5)'],
+        borderColor: ['#ef4444', '#7c83ff'],
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: { ...darkPie },
+  });
+
+  // ── 6. Femicide nationality pie ────────────────────
+  charts.femNat = new Chart(document.getElementById('chartFemNat'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Foreign nationals', 'Spanish nationals'],
+      datasets: [{
+        data: [51, 49],
+        backgroundColor: ['rgba(249,115,22,0.7)', 'rgba(34,197,94,0.6)'],
+        borderColor: ['#f97316', '#22c55e'],
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: {
+      ...darkPie,
+      plugins: {
+        ...darkPie.plugins,
+        tooltip: {
+          ...darkPie.plugins.tooltip,
+          callbacks: {
+            afterLabel: ctx => {
+              if (ctx.dataIndex === 0) return '  Rate: 4.95× higher than Spanish women';
+              return '';
+            },
+          },
+        },
+      },
+    },
+  });
+
+  // ── 7. Condenados ──────────────────────────────────
+  charts.condenados = new Chart(document.getElementById('chartCondenados'), {
+    type: 'bar',
+    data: {
+      labels: ['2023', '2024'],
+      datasets: [
+        {
+          label: 'Adults convicted',
+          data: [3468, 5230],
+          backgroundColor: ['rgba(249,115,22,0.55)', 'rgba(34,197,94,0.7)'],
+          borderColor: ['#f97316', '#22c55e'],
+          borderWidth: 1.5,
+          borderRadius: 4,
+        },
+        {
+          label: 'Minors convicted',
+          data: [null, 825],
+          backgroundColor: ['transparent', 'rgba(234,179,8,0.65)'],
+          borderColor: ['transparent', '#eab308'],
+          borderWidth: 1.5,
+          borderRadius: 4,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: 'Convictions', color: tickColor, font: { size: 11 } },
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  // ── 8. Domestic violence denuncias ─────────────────
+  charts.domViol = new Chart(document.getElementById('chartDomViol'), {
+    type: 'line',
+    data: {
+      labels: dvData.map(d => d.year),
+      datasets: [{
+        label: 'Denuncias VG',
+        data: dvData.map(d => d.value),
+        borderColor: '#7c83ff',
+        backgroundColor: 'rgba(124,131,255,0.12)',
+        tension: 0.3,
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: ['#22c55e', '#f97316', '#22c55e', '#22c55e'],
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: {
+          annotations: {
+            covid: {
+              type: 'line',
+              xMin: 1, xMax: 1,
+              borderColor: 'rgba(239,68,68,0.5)',
+              borderWidth: 2,
+              borderDash: [5, 4],
+              label: {
+                display: true,
+                content: 'COVID lockdown',
+                color: '#ef4444',
+                font: { size: 10 },
+                position: 'start',
+                backgroundColor: 'rgba(34,38,58,0.9)',
+              },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          title: { display: true, text: 'Denuncias', color: tickColor, font: { size: 11 } },
+          beginAtZero: false,
+          min: 140000,
+        },
+      },
+    },
+  });
+
+  // ── 9. Confidence distribution ─────────────────────
+  charts.conf = new Chart(document.getElementById('chartConf'), {
+    type: 'doughnut',
+    data: {
+      labels: ['High (26)', 'Medium (59)', 'Low (14)', 'Unverified (5)', 'Empty (2)'],
+      datasets: [{
+        data: [26, 59, 14, 5, 2],
+        backgroundColor: [
+          'rgba(34,197,94,0.75)',
+          'rgba(234,179,8,0.7)',
+          'rgba(249,115,22,0.7)',
+          'rgba(239,68,68,0.7)',
+          'rgba(107,114,128,0.5)',
+        ],
+        borderColor: ['#22c55e','#eab308','#f97316','#ef4444','#6b7280'],
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: {
+      ...darkPie,
+      plugins: {
+        ...darkPie.plugins,
+        tooltip: {
+          ...darkPie.plugins.tooltip,
+          callbacks: {
+            label: ctx => ` ${ctx.label}`,
+          },
+        },
+      },
+    },
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER TOGGLE
+═══════════════════════════════════════════════════ */
+function toggleConf(level) {
+  activeConf[level] = !activeConf[level];
+  const btn = document.querySelector(`.conf-btn.${level}`);
+  btn.classList.toggle('active', activeConf[level]);
+  buildCharts();
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+Chart.defaults.color = labelColor;
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+buildCharts();
+</script>
+</body>
+</html>
