@@ -71,7 +71,7 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
 | T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
 | T10 | . | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
-| T11 | . | Collect covariate series: total immigration flow & stock by year, nationality, sex, age — INE/MITES | V10,C8 |
+| T11 | ~ | Populate `data/raw/migration_spain.csv` — flows 2000-2024 (INE EVR/EM/EMCR via Eurostat cross-check), foreign-nationality stock 2000-2025 (Padrón/ECP), top-3 origin nationalities & sex-split 2021-2024, SS-affiliation occupation proxy. PENDING: 1 Jan 2023 stock (Padrón/ECP bridge), top 4-10 nationalities, age-group breakdown, annual MISSM by Régimen 2000-2024. See `data/sources/migracion_espana.md` | V10,C8 |
 | T12 | . | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
 | T13 | . | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
 | T14 | . | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
