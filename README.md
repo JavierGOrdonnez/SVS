@@ -1,4 +1,4 @@
-# SVS — Spain Violence Statistics
+# SVS — Sexual Violence in Spain
 
 **Core question:** Given a woman born in 2000, living in Spain in 2025 — what is her probability of being raped, sexually assaulted, femicided, murdered, or suffering non-sexual violence in the next year, next 5 years, and over her remaining lifetime? Calculated assuming 2025 conditions persist.
 
