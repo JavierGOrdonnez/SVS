@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Violence Statistics Spain — SVS Dashboard</title>
+<title>SVS — Spain Violence &amp; Migration Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <style>
@@ -15,10 +15,13 @@
     --text: #e8eaf6;
     --text2: #9ba3bf;
     --accent: #7c83ff;
-    --high: #22c55e;
-    --medium: #eab308;
-    --low: #f97316;
-    --unverified: #ef4444;
+    --accent2: #60a5fa;
+    --accent3: #a78bfa;
+    --neutral: #6b7280;
+    /* 3-tier confidence palette (NO green — green reads as positive) */
+    --verified: #3b82f6;     /* blue — human-verified by user */
+    --nonverified: #eab308;  /* yellow — has source, not yet verified */
+    --unsourced: #ef4444;    /* red — no primary source */
     --card-radius: 12px;
     --gap: 20px;
   }
@@ -32,81 +35,87 @@
     line-height: 1.5;
   }
 
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
   /* ── HEADER ─────────────────────────────────────────── */
   header {
     background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
     border-bottom: 1px solid var(--border);
-    padding: 32px 40px 24px;
+    padding: 28px 40px 20px;
   }
+  header h1 { font-size: 1.7rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  header p.subtitle { color: var(--text2); margin-top: 6px; font-size: 0.92rem; max-width: 760px; }
 
-  header h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.02em;
+  /* ── TAB NAV ────────────────────────────────────────── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
   }
-
-  header p.subtitle {
+  .tab {
+    padding: 12px 22px;
+    background: transparent;
+    border: none;
     color: var(--text2);
-    margin-top: 6px;
-    font-size: 0.95rem;
-    max-width: 680px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab .count {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--bg3);
+    font-size: 0.72rem;
+    color: var(--text2);
   }
 
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── HEADLINE CARDS ─────────────────────────────────── */
   .headline-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px;
-    margin-top: 24px;
+    padding: 22px 40px 8px;
   }
-
   .hcard {
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: var(--card-radius);
     padding: 14px 18px;
   }
+  .hcard .val { font-size: 1.85rem; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .hcard .label { font-size: 0.78rem; color: var(--text2); margin-top: 4px; }
+  .hcard .delta { font-size: 0.78rem; color: var(--accent2); margin-top: 2px; }
+  .hcard .delta.warn { color: var(--nonverified); }
 
-  .hcard .val {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1.1;
-  }
-
-  .hcard .label {
-    font-size: 0.78rem;
-    color: var(--text2);
-    margin-top: 4px;
-  }
-
-  .hcard .delta {
-    font-size: 0.78rem;
-    color: var(--high);
-    margin-top: 2px;
-  }
-
-  .hcard .delta.down { color: #60a5fa; }
-
-  /* ── FILTER BAR ──────────────────────────────────────── */
+  /* ── FILTER BAR ─────────────────────────────────────── */
   .filter-bar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 40px;
+    gap: 10px;
+    padding: 12px 40px;
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
-
-  .filter-bar span {
-    font-size: 0.82rem;
+  .filter-bar .label-tag {
+    font-size: 0.78rem;
     color: var(--text2);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-
   .conf-btn {
     display: flex;
     align-items: center;
@@ -120,68 +129,35 @@
     font-weight: 600;
     transition: all 0.15s;
   }
-
-  .conf-btn.high   { border-color: var(--high);   color: var(--high); }
-  .conf-btn.medium { border-color: var(--medium);  color: var(--medium); }
-  .conf-btn.low    { border-color: var(--low);     color: var(--low); }
-  .conf-btn.unverified { border-color: var(--unverified); color: var(--unverified); }
-
-  .conf-btn.active.high   { background: var(--high);   color: #000; }
-  .conf-btn.active.medium { background: var(--medium);  color: #000; }
-  .conf-btn.active.low    { background: var(--low);     color: #000; }
-  .conf-btn.active.unverified { background: var(--unverified); color: #fff; }
-
+  .conf-btn.verified    { border-color: var(--verified);    color: var(--verified); }
+  .conf-btn.nonverified { border-color: var(--nonverified); color: var(--nonverified); }
+  .conf-btn.unsourced   { border-color: var(--unsourced);   color: var(--unsourced); }
+  .conf-btn.active.verified    { background: var(--verified);    color: #fff; }
+  .conf-btn.active.nonverified { background: var(--nonverified); color: #000; }
+  .conf-btn.active.unsourced   { background: var(--unsourced);   color: #fff; }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
-  /* ── MAIN GRID ───────────────────────────────────────── */
-  main {
-    padding: 28px 40px 40px;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--gap);
-  }
-
+  /* ── MAIN GRID ──────────────────────────────────────── */
+  main { padding: 24px 40px 40px; display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); }
   .chart-card {
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: var(--card-radius);
-    padding: 20px 20px 16px;
+    padding: 18px 18px 14px;
     display: flex;
     flex-direction: column;
   }
-
   .chart-card.full  { grid-column: span 12; }
   .chart-card.half  { grid-column: span 6; }
   .chart-card.third { grid-column: span 4; }
+  .chart-title { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .chart-sub { font-size: 0.76rem; color: var(--text2); margin-bottom: 12px; line-height: 1.4; }
+  .chart-sub .warn { color: var(--nonverified); font-weight: 600; }
+  .chart-sub .hint { color: var(--text2); font-style: italic; }
+  .chart-wrap { position: relative; flex: 1; min-height: 0; }
+  canvas { display: block; width: 100% !important; cursor: pointer; }
 
-  .chart-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 4px;
-  }
-
-  .chart-sub {
-    font-size: 0.76rem;
-    color: var(--text2);
-    margin-bottom: 14px;
-    line-height: 1.4;
-  }
-
-  .chart-sub .warn {
-    color: var(--low);
-    font-weight: 600;
-  }
-
-  .chart-wrap {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-  }
-
-  canvas { display: block; width: 100% !important; }
-
-  /* ── CAVEAT SECTION ──────────────────────────────────── */
+  /* ── CAVEATS ────────────────────────────────────────── */
   .caveats {
     margin: 0 40px 40px;
     background: var(--bg2);
@@ -190,7 +166,6 @@
     border-radius: var(--card-radius);
     padding: 18px 22px;
   }
-
   .caveats h3 {
     font-size: 0.85rem;
     font-weight: 700;
@@ -199,62 +174,164 @@
     letter-spacing: 0.06em;
     margin-bottom: 10px;
   }
-
   .caveats ul {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 6px 24px;
   }
-
   .caveats li {
     font-size: 0.8rem;
     color: var(--text2);
     padding-left: 14px;
     position: relative;
   }
-
   .caveats li::before {
     content: '⚠';
     position: absolute;
     left: 0;
-    color: var(--low);
+    color: var(--nonverified);
     font-size: 0.7rem;
   }
 
-  /* ── CONFIDENCE LEGEND ───────────────────────────────── */
-  .legend {
+  /* ── SOURCES TAB ────────────────────────────────────── */
+  .sources-controls {
     display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-
-  .legend-item {
-    display: flex;
+    gap: 12px;
     align-items: center;
-    gap: 5px;
-    font-size: 0.74rem;
+    flex-wrap: wrap;
+    padding: 16px 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .sources-controls input[type=text] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--text);
+    font-size: 0.86rem;
+    min-width: 260px;
+  }
+  .sources-controls input[type=text]:focus { outline: none; border-color: var(--accent); }
+  .sources-controls select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--text);
+    font-size: 0.86rem;
+  }
+  .sources-controls .clear-verify {
+    margin-left: auto;
+    padding: 6px 14px;
+    background: var(--unsourced);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sources-controls .clear-verify:hover { filter: brightness(1.1); }
+
+  .sources-section {
+    padding: 18px 40px 24px;
+  }
+  .sources-section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  table.src-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  table.src-table th, table.src-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.src-table thead th {
     color: var(--text2);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
   }
-
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
+  table.src-table tbody tr:hover { background: var(--bg2); }
+  table.src-table tbody tr.flash {
+    animation: flash 1.8s ease-out;
   }
+  @keyframes flash {
+    0%   { background: rgba(59,130,246,0.45); }
+    50%  { background: rgba(59,130,246,0.25); }
+    100% { background: transparent; }
+  }
+  table.src-table .rid {
+    color: var(--text2);
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.74rem;
+  }
+  table.src-table .val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+  }
+  table.src-table .notes {
+    color: var(--text2);
+    font-size: 0.75rem;
+    max-width: 300px;
+  }
+  .conf-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .conf-pill.verified    { background: var(--verified);    color: #fff; }
+  .conf-pill.nonverified { background: var(--nonverified); color: #000; }
+  .conf-pill.unsourced   { background: var(--unsourced);   color: #fff; }
 
-  /* ── RESPONSIVE ──────────────────────────────────────── */
+  .verify-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border: 1px solid var(--verified);
+    border-radius: 14px;
+    color: var(--verified);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 600;
+    transition: all 0.12s;
+  }
+  .verify-toggle.on { background: var(--verified); color: #fff; }
+  .verify-toggle:hover { filter: brightness(1.1); }
+
+  /* ── RESPONSIVE ─────────────────────────────────────── */
   @media (max-width: 900px) {
-    header { padding: 20px; }
-    main { padding: 16px; gap: 14px; }
+    header, .tabs, .filter-bar, .headline-cards, main, .sources-section, .sources-controls { padding-left: 16px; padding-right: 16px; }
+    main { padding-top: 16px; padding-bottom: 24px; gap: 14px; }
     .chart-card.half, .chart-card.third { grid-column: span 12; }
-    .filter-bar { padding: 12px 20px; }
     .caveats { margin: 0 16px 24px; }
   }
-
   @media (max-width: 600px) {
-    header h1 { font-size: 1.3rem; }
+    header h1 { font-size: 1.25rem; }
+    .tab { padding: 10px 14px; font-size: 0.85rem; }
   }
 </style>
 </head>
@@ -262,27 +339,53 @@
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header>
-  <h1>Violence Against Women in Spain — Data Dashboard</h1>
+  <h1>SVS — Spain Violence &amp; Migration Dashboard</h1>
   <p class="subtitle">
-    Visualising reported violence, femicide, sexual crime, and victimisation survey data 2003–2024.
-    Based on official sources: Delegación del Gobierno, Ministerio del Interior, INE, Macroencuesta.
+    Sexual &amp; gender-based violence in Spain 2003–2025, plus immigration covariate series 2000–2025.
+    Sources: Delegación del Gobierno, Ministerio del Interior, INE (EMCR / Padrón / ECP), MISSM, Eurostat.
+    All chart points are clickable and link to the underlying source row in the <strong>Sources</strong> tab.
   </p>
+</header>
+
+<!-- ═══════════════ TABS ═══════════════ -->
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-tab="violence">Violence statistics</button>
+  <button class="tab" data-tab="migration">Migration data</button>
+  <button class="tab" data-tab="sources">Sources <span class="count" id="srcCount"></span></button>
+</nav>
+
+<!-- ═══════════════ FILTER BAR ═══════════════ -->
+<div class="filter-bar" id="filterBar">
+  <span class="label-tag">Show:</span>
+  <button class="conf-btn verified active"    data-conf="verified"   ><div class="dot"></div> Verified</button>
+  <button class="conf-btn nonverified active" data-conf="nonverified"><div class="dot"></div> Non-verified</button>
+  <button class="conf-btn unsourced"          data-conf="unsourced"  ><div class="dot"></div> Unsourced</button>
+  <span class="label-tag" style="margin-left:14px">Confidence model:</span>
+  <span style="font-size:0.78rem;color:var(--text2)">
+    <em>Verified</em> = personally cross-checked by you (toggle in Sources tab).
+    <em>Non-verified</em> = published source on file but not human-checked.
+    <em>Unsourced</em> = no primary source / inherited from prior AI conversation.
+  </span>
+</div>
+
+<!-- ═══════════════ VIOLENCE TAB ═══════════════ -->
+<section class="tab-panel active" id="tab-violence">
 
   <div class="headline-cards">
     <div class="hcard">
       <div class="val">47</div>
       <div class="label">Femicides (intimate partner) 2024</div>
-      <div class="delta down">↓ Lowest since registry began (2003)</div>
+      <div class="delta">↓ Lowest since registry began (2003)</div>
     </div>
     <div class="hcard">
       <div class="val">22,846</div>
       <div class="label">Total sexual crimes reported 2024</div>
-      <div class="delta">↑ +4.7% vs 2023, +66% vs 2018</div>
+      <div class="delta warn">↑ +4.7% vs 2023, +66% vs 2018</div>
     </div>
     <div class="hcard">
       <div class="val">5,223</div>
       <div class="label">Rape (agresión con penetración) 2024</div>
-      <div class="delta">↑ +41% vs 2022 (series break at LO 10/2022)</div>
+      <div class="delta warn">↑ +41% vs 2022 (series break at LO 10/2022)</div>
     </div>
     <div class="hcard">
       <div class="val">36.2%</div>
@@ -300,916 +403,1151 @@
       <div class="delta" style="color: var(--text2);">Macroencuesta 2019 — ~92% unreported</div>
     </div>
   </div>
-</header>
 
-<!-- ═══════════════ FILTER BAR ═══════════════ -->
-<div class="filter-bar">
-  <span>Show confidence:</span>
-  <button class="conf-btn high active"   onclick="toggleConf('high')"       ><div class="dot"></div> High</button>
-  <button class="conf-btn medium active" onclick="toggleConf('medium')"     ><div class="dot"></div> Medium</button>
-  <button class="conf-btn low active"    onclick="toggleConf('low')"        ><div class="dot"></div> Low</button>
-  <button class="conf-btn unverified"    onclick="toggleConf('unverified')" ><div class="dot"></div> Unverified</button>
-</div>
-
-<!-- ═══════════════ CHARTS ═══════════════ -->
-<main>
-
-  <!-- Chart 1: Femicide timeline -->
-  <div class="chart-card full">
-    <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
-    <div class="chart-sub">
-      Official count from Delegación del Gobierno registry. Scope: partner and ex-partner homicides only (LO 1/2004).
-      2000–2002 not in Delegación registry (INE MNP series available but not yet verified).
-      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against primary PDF fichas.</span>
+  <main>
+    <div class="chart-card full">
+      <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
+      <div class="chart-sub">
+        Delegación del Gobierno registry. Partner/ex-partner homicides only (LO 1/2004).
+        2000–2002 not in registry. <span class="hint">Click any bar to open the source row.</span>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartFemicide"></canvas></div>
     </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> High confidence</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium confidence</div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Total Sexual Crimes Reported — MIR</div>
+      <div class="chart-sub">
+        Delitos contra la libertad sexual. <span class="warn">⚠ 2022 break: LO 10/2022 ("Solo sí es sí")
+        merged "abuso sexual" into "agresión sexual" — pre/post not directly comparable.</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartSexCrimesTotal"></canvas></div>
     </div>
-    <div class="chart-wrap" style="height:260px">
-      <canvas id="chartFemicide"></canvas>
+
+    <div class="chart-card half">
+      <div class="chart-title">Rape (Agresión con Penetración) Reported — MIR</div>
+      <div class="chart-sub">
+        <span class="warn">⚠ Blocker B6: two incompatible MIR series for the same years
+        (Anuario ~5,000/yr vs Informe subcategory ~1,200/yr).</span> 2020–2021 low confidence (COVID).
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartRape"></canvas></div>
+    </div>
+
+    <div class="chart-card full">
+      <div class="chart-title">Macroencuesta — Lifetime Prevalence by Wave</div>
+      <div class="chart-sub">
+        Victimisation survey of women 15+. Waves: 2015, 2019, 2024.
+        <span class="warn">⚠ 2024 methodology changed — NOT directly comparable to 2019.</span>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartMacro"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Sexual Crime Victims 2024 — By Sex</div>
+      <div class="chart-sub">Source: MIR Informe 2024. n = 22,778 total victims.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartVictimSex"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Sexual Crime Victims 2024 — By Age Group</div>
+      <div class="chart-sub">41.2% of all victims are minors (under 18). Source: MIR Informe 2024.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartVictimAge"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Sexual Crime Perpetrators 2024 — By Sex</div>
+      <div class="chart-sub">93.1% of perpetrators are male. Source: MIR Informe 2024.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartPerpSex"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
+      <div class="chart-sub">51% foreign victims; rate per 100k 4.95× higher for foreign women. Delegación del Gobierno 2024.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartFemNat"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">INE Condenados — Sexual Crime Convictions 2023–2024</div>
+      <div class="chart-sub">Adults +50.8%; minors +65.0% in 2024. 95.6% of convicted minors are male.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartCondenados"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Domestic Violence Denuncias (CGPJ) 2019–2022</div>
+      <div class="chart-sub">Complaints at Juzgados VG (partner/ex scope). COVID dip 2020 visible.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartDomViol"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">All-Cause Homicide — Spain</div>
+      <div class="chart-sub">
+        MIR Balance (higher) vs INE ECM (cause of death, lower). 2025 = 376 (+7.7%, highest since 2012).
+        <span class="warn">⚠ Methodology differs — not directly comparable.</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartHomicideTotal"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Homicide Victims 2022 — Sex × Perpetrator</div>
+      <div class="chart-sub">Source: EIGE 2022. All-cause 325 (37% female). Intimate partner: 58 (93% female).</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartHomicideSex2022"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Victim–Perpetrator Sex Matrix (2010–2012)</div>
+      <div class="chart-sub">MIR Primer Informe (cleared cases). 89% of perpetrators are male.</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartHomicideMatrix"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Homicide Rate per 100k — Spain (selected years)</div>
+      <div class="chart-sub">INE ODS 16.1.1 / World Bank. Rate has halved since 2001.</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartHomicideRate"></canvas></div>
+    </div>
+
+    <div class="chart-card third">
+      <div class="chart-title">Violence Dataset Confidence Distribution</div>
+      <div class="chart-sub">Rebuilds live from your verifications. 128 rows.</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chartConfViolence"></canvas></div>
+    </div>
+  </main>
+
+  <div class="caveats">
+    <h3>Critical Data Caveats</h3>
+    <ul>
+      <li><strong>Series break 2022:</strong> LO 10/2022 (Solo sí es sí) merged "abuso sexual" into "agresión sexual" — pre/post figures are incompatible.</li>
+      <li><strong>Pre-2012 MIR:</strong> Excluded Cataluña, País Vasco, Navarra (~25–30% population) — multiply by ~1.3–1.5 for national estimates.</li>
+      <li><strong>Blocker B6:</strong> Two incompatible rape series in MIR data (Anuario ~5,000 vs Informe subcategory ~1,200). Root cause unresolved — blocks rate computation.</li>
+      <li><strong>Survey ≠ Police:</strong> Macroencuesta captures actual prevalence; police data captures reported crimes. Don't combine as a "dark figure multiplier".</li>
+      <li><strong>Reporting rate:</strong> ~8% of sexual violence outside partner is reported (Macroencuesta 2019).</li>
+      <li><strong>Femicide scope:</strong> Delegación counts partner/ex-partner only. Total female homicides are higher (INE MNP).</li>
+      <li><strong>2024 Macroencuesta:</strong> Methodology change — observed differences may reflect measurement, not real change.</li>
+      <li><strong>Foreign victim rate:</strong> 4.95× femicide rate ratio reflects rates per 100k, not absolute counts.</li>
+      <li><strong>Haiku audit:</strong> Prior-AI values were cross-checked: femicide 2024 (58→47), total sexual crimes 2024 (21,159→22,846), 2023 total (19,981→21,825).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════ MIGRATION TAB ═══════════════ -->
+<section class="tab-panel" id="tab-migration">
+
+  <div class="headline-cards">
+    <div class="hcard">
+      <div class="val">1,288,562</div>
+      <div class="label">Immigrants arriving from abroad 2024</div>
+      <div class="delta">↑ +3.0% vs 2023 — all-time high</div>
+    </div>
+    <div class="hcard">
+      <div class="val">626,268</div>
+      <div class="label">Net migration balance 2024</div>
+      <div class="delta">−16,028 vs 2023</div>
+    </div>
+    <div class="hcard">
+      <div class="val">6,911,971</div>
+      <div class="label">Foreign-nationality stock 1 Jan 2025</div>
+      <div class="delta">14.1% of total population</div>
+    </div>
+    <div class="hcard">
+      <div class="val">88.8%</div>
+      <div class="label">Share of 2024 intake with foreign nationality</div>
+      <div class="delta">11.2% returning Spaniards</div>
+    </div>
+    <div class="hcard">
+      <div class="val">Colombia</div>
+      <div class="label">Top origin nationality 2024 intake</div>
+      <div class="delta">168,122 arrivals · Morocco 133,130 · Venezuela 103,225</div>
+    </div>
+    <div class="hcard">
+      <div class="val">25–29</div>
+      <div class="label">Peak age group of 2024 intake</div>
+      <div class="delta">171,911 persons (13.3% of inflow)</div>
     </div>
   </div>
 
-  <!-- Chart 2: Sexual crimes total -->
-  <div class="chart-card half">
-    <div class="chart-title">Total Sexual Crimes Reported — MIR 2018–2024</div>
-    <div class="chart-sub">
-      Delitos contra la libertad sexual. <span class="warn">⚠ 2022 definitional break: LO 10/2022 (Solo sí es sí)
-      merged "abuso sexual" into "agresión sexual" — figures pre/post 2022 are NOT directly comparable.</span>
-      2022 value is derived estimate (medium confidence).
+  <main>
+    <div class="chart-card full">
+      <div class="chart-title">Annual Immigration Intake into Spain — 2000–2024</div>
+      <div class="chart-sub">
+        Inmigraciones procedentes del extranjero, both nationalities combined.
+        Methodology stages: <strong>EVR</strong> (2000–2007), <strong>EM</strong> (2008–2020), <strong>EMCR-revised</strong> (2021–2024).
+        <span class="warn">⚠ 2008 break: EVR → EM. 2021 EMCR-revised supersedes legacy EM figure (528,856 → 887,960).</span>
+        Cross-checked against Eurostat <code>migr_imm1ctz</code>.
+      </div>
+      <div class="chart-wrap" style="height:280px"><canvas id="migIntake"></canvas></div>
     </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartSexCrimesTotal"></canvas>
+
+    <div class="chart-card full">
+      <div class="chart-title">Foreign-Nationality Stock at 1 January — 2000–2025</div>
+      <div class="chart-sub">
+        INE Padrón Continuo (2000–2022) → ECP (2023–2025). <span class="warn">⚠ 2021 methodology break (Padrón → ECP).</span>
+        Peak 2011 (5.75M), post-crisis trough 2017 (4.57M), all-time high 2025 (6.91M).
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="migStock"></canvas></div>
     </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Intake by Sex — 2008–2024</div>
+      <div class="chart-sub">
+        EM legacy (2008–2020) + EMCR-revised (2021–2024). Women led 2009–2018, men since 2019 except 2022.
+        <span class="warn">⚠ Vintage break at 2021 — revised series ~68% larger than legacy.</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="migSex"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Intake by Nationality Status — 2023 &amp; 2024</div>
+      <div class="chart-sub">Foreign-nationality immigrants vs Spanish nationals returning from abroad.</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="migNatStatus"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Top 10 Origin Nationalities — 2024 Intake (foreigners only)</div>
+      <div class="chart-sub">From INE EMCR table 69688. Colombia leads for the third year running.</div>
+      <div class="chart-wrap" style="height:340px"><canvas id="migTop10In"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Top 10 Foreign Nationalities by Stock — 1 January 2025</div>
+      <div class="chart-sub">From INE ECP table 56936. Morocco, Colombia, Romania &gt;600k each.</div>
+      <div class="chart-wrap" style="height:340px"><canvas id="migTop10St"></canvas></div>
+    </div>
+
+    <div class="chart-card full">
+      <div class="chart-title">2024 Intake by Age Group (granular, 5-yr bands)</div>
+      <div class="chart-sub">From INE EMCR table 69687. Single-year ages aggregated to 5-yr bands — sum = 1,288,562 verifies against the published total. Peak at 25–29.</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="migAge"></canvas></div>
+    </div>
+
+    <div class="chart-card full">
+      <div class="chart-title">Annual Intake by Broad Age Band — 2008–2024 (stacked)</div>
+      <div class="chart-sub">
+        Five broad bands: 0–14, 15–29, 30–44, 45–64, 65+. EM legacy (2008–2020) + EMCR-revised (2021–2024).
+        <span class="warn">⚠ 2021–2024 65+ band undercounts by ~1,000/yr (90+ not in source for 69687 single-year cut).</span>
+      </div>
+      <div class="chart-wrap" style="height:320px"><canvas id="migAgeAnnual"></canvas></div>
+    </div>
+
+    <div class="chart-card full">
+      <div class="chart-title">Top Origin Nationalities — Annual Intake 2008–2024 (top 3 per year)</div>
+      <div class="chart-sub">
+        Shows the top-3 origin nationality each year (rank 1 strongest colour). Rumanía dominant 2008–2015, Marruecos 2016–2018, Colombia 2019–2020 + 2022–2024.
+        <span class="warn">⚠ 2021 vintage break: EM-legacy and EMCR-revised differ.</span> 2023 &amp; 2024 are from EMCR-revised press releases (only top-3 published).
+      </div>
+      <div class="chart-wrap" style="height:340px"><canvas id="migTopNat"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Foreign Workers Affiliated to Social Security — selected snapshots</div>
+      <div class="chart-sub">
+        MISSM affiliation data (proxy for occupation). <span class="warn">⚠ Full annual series by Régimen (General / RETA / Agrario / Hogar / Mar) not retrievable from this environment — OPI catalogue WAF-blocked.</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="migSS"></canvas></div>
+    </div>
+
+    <div class="chart-card half">
+      <div class="chart-title">Migration Dataset Confidence Distribution</div>
+      <div class="chart-sub">Rebuilds live from your verifications. 390 rows.</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartConfMig"></canvas></div>
+    </div>
+  </main>
+
+  <div class="caveats">
+    <h3>Migration Data Caveats</h3>
+    <ul>
+      <li><strong>EVR → EM break (2008):</strong> Methodology source changes; pre-2008 not strictly comparable to 2008+.</li>
+      <li><strong>EM → EMCR revision (2021):</strong> 2021 figure rises from 528,856 → 887,960 after revision. Treat as a methodology step.</li>
+      <li><strong>Padrón → ECP (2021):</strong> Stock methodology changes 1 Jan 2021. Provisional vs definitivo vintages differ.</li>
+      <li><strong>Brexit (2020):</strong> UK citizens reclassified from EU to non-EU in flow tables from January 2020.</li>
+      <li><strong>"Country of origin" ≠ "country of nationality" ≠ "country of birth":</strong> Three distinct variables in INE tables — match the question to the right variable.</li>
+      <li><strong>No occupation data in EMCR:</strong> MISSM affiliation is a proxy and only captures workers with Social Security coverage (excludes informal sector and short-stay arrivals).</li>
+      <li><strong>Foreign-born ≠ foreign-national:</strong> The stock series for "foreign-born" includes naturalised Spanish citizens; counts diverge over time as naturalisations accumulate.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════ SOURCES TAB ═══════════════ -->
+<section class="tab-panel" id="tab-sources">
+
+  <div class="sources-controls">
+    <input type="text" id="srcSearch" placeholder="Filter by series, year, source, notes…">
+    <select id="srcConfFilter">
+      <option value="">All confidences</option>
+      <option value="verified">Verified only</option>
+      <option value="nonverified">Non-verified only</option>
+      <option value="unsourced">Unsourced only</option>
+    </select>
+    <select id="srcKindFilter">
+      <option value="">All datasets</option>
+      <option value="violence">Violence only</option>
+      <option value="migration">Migration only</option>
+    </select>
+    <button class="clear-verify" id="clearVerifyBtn" title="Reset all your row verifications">Reset verifications</button>
   </div>
 
-  <!-- Chart 3: Rape series -->
-  <div class="chart-card half">
-    <div class="chart-title">Rape (Agresión con Penetración) Reported — MIR 2017–2024</div>
-    <div class="chart-sub">
-      <span class="warn">⚠ BLOCKER B6: Two incompatible series exist in MIR data for the same years
-      (~5,000/yr Anuario headline vs ~1,200/yr Informe subcategory). Root cause unresolved.
-      These are the Anuario figures.</span> 2020–2021 low-confidence (COVID disruption).
-    </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div> Low</div>
-    </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartRape"></canvas>
-    </div>
+  <div class="sources-section">
+    <h2>Violence Statistics — <span id="vCount"></span> rows</h2>
+    <table class="src-table" id="srcTableViolence">
+      <thead><tr>
+        <th>#</th><th>Series</th><th>Year</th><th>Value</th><th>Unit</th>
+        <th>Sex</th><th>Age</th><th>Nat</th>
+        <th>Source</th><th>Confidence</th><th>Verify</th><th class="notes">Notes</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-  <!-- Chart 4: Macroencuesta prevalence -->
-  <div class="chart-card full">
-    <div class="chart-title">Macroencuesta de Violencia contra la Mujer — Lifetime Prevalence by Wave</div>
-    <div class="chart-sub">
-      Victimisation survey of women 15+/16+ resident in Spain. Waves: 2015, 2019, 2024.
-      <span class="warn">⚠ 2024 methodology changed ("proceso estadístico de mejora") — NOT directly comparable to 2019.
-      Pre-2015 waves used different question wording. Survey captures actual prevalence; police data captures reported crimes.</span>
-    </div>
-    <div class="chart-wrap" style="height:260px">
-      <canvas id="chartMacro"></canvas>
-    </div>
+  <div class="sources-section">
+    <h2>Migration Data — <span id="mCount"></span> rows</h2>
+    <table class="src-table" id="srcTableMigration">
+      <thead><tr>
+        <th>#</th><th>Series</th><th>Year</th><th>Value</th><th>Unit</th>
+        <th>Sex</th><th>Age</th><th>Nat</th><th>Origin</th>
+        <th>Source</th><th>Confidence</th><th>Verify</th><th class="notes">Notes</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
-
-  <!-- Chart 5: 2024 victim/perpetrator profile -->
-  <div class="chart-card third">
-    <div class="chart-title">Sexual Crime Victims 2024 — By Sex</div>
-    <div class="chart-sub">Source: MIR Informe 2024. n = 22,778 total victims.</div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartVictimSex"></canvas>
-    </div>
-  </div>
-
-  <div class="chart-card third">
-    <div class="chart-title">Sexual Crime Victims 2024 — By Age Group</div>
-    <div class="chart-sub">41.2% of all victims are minors (under 18). Source: MIR Informe 2024.</div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartVictimAge"></canvas>
-    </div>
-  </div>
-
-  <div class="chart-card third">
-    <div class="chart-title">Sexual Crime Perpetrators 2024 — By Sex</div>
-    <div class="chart-sub">93.1% of perpetrators are male. Source: MIR Informe 2024.</div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartPerpSex"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 6: Femicide nationality -->
-  <div class="chart-card third">
-    <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
-    <div class="chart-sub">
-      51% foreign victims; foreign women face 4.95× higher rate per 100k vs Spanish women.
-      Source: Delegación del Gobierno 2024.
-    </div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartFemNat"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 7: Condenados -->
-  <div class="chart-card third">
-    <div class="chart-title">INE Condenados — Sexual Crime Convictions 2023–2024</div>
-    <div class="chart-sub">
-      Adults (+50.8% in 2024) and minors (+65.0%). 95.6% of convicted minors are male.
-      <span class="warn">⚠ 2023 adults low confidence (derived).</span>
-    </div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartCondenados"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 8: Domestic violence denuncias -->
-  <div class="chart-card third">
-    <div class="chart-title">Domestic Violence Denuncias (CGPJ) 2019–2022</div>
-    <div class="chart-sub">
-      Complaints registered at Juzgados de Violencia sobre la Mujer (LO 1/2004 scope — partner/ex only).
-      COVID suppression visible in 2020. 2023–2024 not yet verified.
-    </div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartDomViol"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 9a: All-cause homicide total series -->
-  <div class="chart-card half">
-    <div class="chart-title">All-Cause Homicide — Spain (MIR Balance + INE ECM)</div>
-    <div class="chart-sub">
-      Two series: police-registered (MIR Balance, higher) and cause-of-death (INE ECM, lower). Both sex-aggregated.
-      2025 = 376 (+7.7%, highest since 2012). <span class="warn">⚠ MIR and INE counts differ by methodology — not directly comparable.</span>
-    </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartHomicideTotal"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 9b: Homicide victims by sex (2022, EIGE) -->
-  <div class="chart-card third">
-    <div class="chart-title">Homicide Victims 2022 — By Sex &amp; Perpetrator Relationship</div>
-    <div class="chart-sub">
-      Source: EIGE 2022. All-cause: 325 total (37% female). Intimate-partner: 58 total (93% female).
-      Domestic: 98 total (82% female).
-    </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartHomicideSex2022"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 9c: Homicide perpetrator sex (2010-2012 MIR) -->
-  <div class="chart-card third" style="grid-column: span 1">
-    <div class="chart-title">Homicide Victim–Perpetrator Sex Matrix (2010–2012)</div>
-    <div class="chart-sub">
-      Source: MIR Primer Informe Nacional Homicidio 2010–2012 (cleared cases).
-      89% of perpetrators are male. <span class="warn">⚠ Cleared cases only — may not be population-representative.</span>
-    </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartHomicideMatrix"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 9d: Homicide rate per 100k historical -->
-  <div class="chart-card third">
-    <div class="chart-title">Homicide Rate per 100k — Spain 2001–2023 (Selected)</div>
-    <div class="chart-sub">
-      Source: INE ODS Indicator 16.1.1 / World Bank VC.IHR.PSRC.P5. Spain's rate has halved since 2001.
-      Full annual series pending extraction from INE table t=7947.
-    </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="chartHomicideRate"></canvas>
-    </div>
-  </div>
-
-  <!-- Chart 10: Data confidence distribution -->
-  <div class="chart-card third">
-    <div class="chart-title">Dataset Confidence Distribution</div>
-    <div class="chart-sub">
-      128 rows total. Unverified rows must not be used in modelling until cross-checked against primary sources.
-    </div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartConf"></canvas>
-    </div>
-  </div>
-
-</main>
-
-<!-- ═══════════════ CAVEATS ═══════════════ -->
-<div class="caveats">
-  <h3>Critical Data Caveats</h3>
-  <ul>
-    <li><strong>Series break 2022:</strong> LO 10/2022 (6 Sept 2022) merged "abuso sexual" into "agresión sexual" — pre/post figures are incompatible.</li>
-    <li><strong>Series break pre-2012:</strong> MIR data excluded Cataluña, País Vasco, Navarra (~25–30% population) — multiply by ~1.3–1.5 for national estimates.</li>
-    <li><strong>Unresolved B6:</strong> Two incompatible rape series in MIR data (Anuario ~5,000/yr vs Informe subcategory ~1,200/yr). Root cause unresolved — blocks rate computation.</li>
-    <li><strong>Survey ≠ Police data:</strong> Macroencuesta captures actual prevalence; police data captures reported crimes. Do not use lifetime cumulative / annual reported as a "dark figure multiplier".</li>
-    <li><strong>Reporting rate:</strong> ~8% of sexual violence outside partner is reported to police (Macroencuesta 2019). ~92% unreported.</li>
-    <li><strong>Femicide scope:</strong> Delegación del Gobierno counts partner/ex-partner homicides only. Total female homicides are higher (INE MNP series).</li>
-    <li><strong>Fiscalía counts proceedings</strong> (diligencias previas), not crimes. One crime can generate multiple proceedings — figures are higher than MIR police counts.</li>
-    <li><strong>2024 Macroencuesta:</strong> Methodology changed — NOT directly comparable to 2019. Some observed changes may reflect measurement change, not real change.</li>
-    <li><strong>Foreign victim rate:</strong> 4.95× femicide rate ratio (foreign vs Spanish) reflects relative rates per 100k, not absolute numbers. Denominator = female population by nationality (Padrón).</li>
-    <li><strong>Haiku model note:</strong> Values from a prior Haiku AI conversation were critically audited. Key corrected figures: femicide 2024 (58→47), total sexual crimes 2024 (21,159→22,846), 2023 total (19,981→21,825).</li>
-  </ul>
-</div>
+</section>
 
 <script>
 /* ═══════════════════════════════════════════════════
-   DATA
+   EMBEDDED DATA
 ═══════════════════════════════════════════════════ */
-const CONF_COLORS = {
-  high:       '#22c55e',
-  medium:     '#eab308',
-  low:        '#f97316',
-  unverified: '#ef4444',
-};
-
-const CONF_ALPHA = {
-  high:       'rgba(34,197,94,0.7)',
-  medium:     'rgba(234,179,8,0.7)',
-  low:        'rgba(249,115,22,0.7)',
-  unverified: 'rgba(239,68,68,0.7)',
-};
-
-// Active confidence levels
-const activeConf = { high: true, medium: true, low: true, unverified: false };
-
-// ── Femicide ────────────────────────────────────────
-const femicideData = [
-  { year: 2003, value: 71, conf: 'high'   },
-  { year: 2004, value: 72, conf: 'medium' },
-  { year: 2005, value: 57, conf: 'medium' },
-  { year: 2006, value: 69, conf: 'medium' },
-  { year: 2007, value: 71, conf: 'medium' },
-  { year: 2008, value: 76, conf: 'medium' },
-  { year: 2009, value: 56, conf: 'medium' },
-  { year: 2010, value: 73, conf: 'medium' },
-  { year: 2011, value: 61, conf: 'medium' },
-  { year: 2012, value: 52, conf: 'medium' },
-  { year: 2013, value: 54, conf: 'medium' },
-  { year: 2014, value: 54, conf: 'medium' },
-  { year: 2015, value: 60, conf: 'medium' },
-  { year: 2016, value: 49, conf: 'medium' },
-  { year: 2017, value: 51, conf: 'medium' },
-  { year: 2018, value: 47, conf: 'medium' },
-  { year: 2019, value: 55, conf: 'medium' },
-  { year: 2020, value: 44, conf: 'medium' },
-  { year: 2021, value: 43, conf: 'medium' },
-  { year: 2022, value: 49, conf: 'medium' },
-  { year: 2023, value: 57, conf: 'high'   },
-  { year: 2024, value: 47, conf: 'high'   },
-];
-
-// ── Sexual crimes total ──────────────────────────────
-const sexCrimesData = [
-  { year: 2018, value: 13782, conf: 'medium' },
-  { year: 2022, value: 19059, conf: 'medium' },
-  { year: 2023, value: 21825, conf: 'high'   },
-  { year: 2024, value: 22846, conf: 'high'   },
-];
-
-// ── Rape (agresión con penetración) ─────────────────
-const rapeData = [
-  { year: 2017, value: 3716, conf: 'medium' },
-  { year: 2018, value: 4141, conf: 'medium' },
-  { year: 2019, value: 5453, conf: 'medium' },
-  { year: 2020, value: 1593, conf: 'low'    },
-  { year: 2021, value: 2143, conf: 'low'    },
-  { year: 2022, value: 4270, conf: 'medium' },
-  { year: 2024, value: 5223, conf: 'medium' },
-];
-
-// ── Macroencuesta ────────────────────────────────────
-const macroData = {
-  labels: ['2015', '2019', '2024'],
-  datasets: [
-    {
-      label: 'Sexual violence by partner (lifetime)',
-      data: [8.4, 9.2, 7.7],
-      backgroundColor: 'rgba(124,131,255,0.75)',
-      borderColor: '#7c83ff',
-      borderWidth: 1.5,
-    },
-    {
-      label: 'Sexual violence outside partner (lifetime)',
-      data: [12.5, 13.7, 14.5],
-      backgroundColor: 'rgba(34,197,94,0.55)',
-      borderColor: '#22c55e',
-      borderWidth: 1.5,
-    },
-    {
-      label: 'Physical+sexual by partner (lifetime)',
-      data: [13.8, 14.2, 12.7],
-      backgroundColor: 'rgba(234,179,8,0.55)',
-      borderColor: '#eab308',
-      borderWidth: 1.5,
-    },
-  ],
-};
-
-// ── Domestic violence denuncias ──────────────────────
-const dvData = [
-  { year: 2019, value: 166961 },
-  { year: 2020, value: 152777 },
-  { year: 2021, value: 164221 },
-  { year: 2022, value: 168168 },
-];
-
-// ── Condenados ───────────────────────────────────────
-const condenadosData = {
-  adults: [ { year: 2023, value: 3468, conf: 'low' }, { year: 2024, value: 5230, conf: 'high' } ],
-  minors: [ { year: 2024, value: 825,  conf: 'high' } ],
-};
+</script>
+<script src="data.js"></script>
+<script>
 
 /* ═══════════════════════════════════════════════════
-   HELPERS
+   CONFIDENCE MODEL
+═══════════════════════════════════════════════════ */
+// 3-tier: verified (user-set, blue) · nonverified (yellow) · unsourced (red)
+// Mapping from raw CSV confidence:
+//   - 'unverified' → 'unsourced' (no primary source / Haiku inheritance)
+//   - 'high'|'medium'|'low' → 'nonverified' (has source, awaiting human cross-check)
+// Verified status is set per-row by the user via the Sources tab and persisted in localStorage.
+
+const VERIFY_KEY = 'svs_verified_v1';
+const VERIFIED = JSON.parse(localStorage.getItem(VERIFY_KEY) || '{"violence":[],"migration":[]}');
+
+function isVerified(src, rowId) {
+  return VERIFIED[src] && VERIFIED[src].includes(rowId);
+}
+function toggleVerified(src, rowId) {
+  if (!VERIFIED[src]) VERIFIED[src] = [];
+  const i = VERIFIED[src].indexOf(rowId);
+  if (i === -1) VERIFIED[src].push(rowId); else VERIFIED[src].splice(i, 1);
+  localStorage.setItem(VERIFY_KEY, JSON.stringify(VERIFIED));
+}
+function effectiveConf(src, rowId, rawConf) {
+  if (isVerified(src, rowId)) return 'verified';
+  if (rawConf === 'unverified' || !rawConf) return 'unsourced';
+  return 'nonverified';
+}
+
+const CONF_COLOR  = { verified: '#3b82f6', nonverified: '#eab308', unsourced: '#ef4444' };
+const CONF_ALPHA  = { verified: 'rgba(59,130,246,0.65)', nonverified: 'rgba(234,179,8,0.65)', unsourced: 'rgba(239,68,68,0.6)' };
+
+// Active filter state (mirrors the filter bar)
+const activeConf = { verified: true, nonverified: true, unsourced: false };
+
+/* ═══════════════════════════════════════════════════
+   ROW LOOKUP
+═══════════════════════════════════════════════════ */
+const V_BY_ID = Object.fromEntries(VIOLENCE_ROWS.map(r => [r.row_id, r]));
+const M_BY_ID = Object.fromEntries(MIGRATION_ROWS.map(r => [r.row_id, r]));
+
+function rowConf(src, rowId) {
+  const tbl = src === 'violence' ? V_BY_ID : M_BY_ID;
+  const r = tbl[rowId];
+  if (!r) return 'unsourced';
+  return effectiveConf(src, rowId, r.conf);
+}
+
+/* ═══════════════════════════════════════════════════
+   TAB NAVIGATION
+═══════════════════════════════════════════════════ */
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+  // Hide filter bar on Sources tab (it has its own controls)
+  document.getElementById('filterBar').style.display = (name === 'sources') ? 'none' : '';
+  history.replaceState(null, '', '#' + name);
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+
+function goToSource(src, rowId) {
+  showTab('sources');
+  setTimeout(() => {
+    const row = document.getElementById('src-' + src + '-' + rowId);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash');
+    }
+  }, 50);
+}
+
+/* ═══════════════════════════════════════════════════
+   GENERIC CHART HELPERS
 ═══════════════════════════════════════════════════ */
 const gridColor = 'rgba(255,255,255,0.06)';
 const tickColor = '#6b7280';
 const labelColor = '#9ba3bf';
 
-const baseOpts = {
+function rowsToPoints(src, rowIds) {
+  // returns { labels[], values[], colors[], borders[], rowIds[], srcs[] } with filtering applied
+  const labels = [], values = [], colors = [], borders = [], outIds = [], srcs = [];
+  for (const id of rowIds) {
+    const tbl = src === 'violence' ? V_BY_ID : M_BY_ID;
+    const r = tbl[id];
+    if (!r) continue;
+    const c = effectiveConf(src, id, r.conf);
+    labels.push(r.year);
+    values.push(activeConf[c] ? Number(r.value || NaN) : null);
+    colors.push(CONF_ALPHA[c]); borders.push(CONF_COLOR[c]);
+    outIds.push(id); srcs.push(src);
+  }
+  return { labels, values, colors, borders, rowIds: outIds, srcs };
+}
+
+function makeChartClick(chart, event, elements) {
+  if (!elements.length) return;
+  const el = elements[0];
+  const ds = chart.data.datasets[el.datasetIndex];
+  const rowId = ds.rowIds && ds.rowIds[el.index];
+  const src = ds.dataSrc;
+  if (rowId !== undefined && src) goToSource(src, rowId);
+}
+
+function baseOpts(extra = {}) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    onClick: function(event, elements) { makeChartClick(this, event, elements); },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#22263a', borderColor: '#2e3347', borderWidth: 1,
+        titleColor: '#fff', bodyColor: '#9ba3bf', padding: 10,
+        callbacks: {
+          afterBody: (items) => {
+            const it = items[0];
+            const ds = it.chart.data.datasets[it.datasetIndex];
+            const id = ds.rowIds && ds.rowIds[it.dataIndex];
+            const src = ds.dataSrc;
+            if (id && src) {
+              const tbl = src === 'violence' ? V_BY_ID : M_BY_ID;
+              const r = tbl[id];
+              const conf = effectiveConf(src, id, r.conf);
+              return [`  Source: ${r.src_name || '—'}`, `  Row #${id} (${conf}) — click to open`];
+            }
+            return null;
+          },
+        },
+      },
+      ...(extra.plugins || {}),
+    },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } } },
+      ...(extra.scales || {}),
+    },
+  };
+}
+
+const darkPie = {
   responsive: true,
   maintainAspectRatio: false,
+  onClick: function(event, elements) { makeChartClick(this, event, elements); },
   plugins: {
-    legend: { display: false },
+    legend: { position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } },
     tooltip: {
-      backgroundColor: '#22263a',
-      borderColor: '#2e3347',
-      borderWidth: 1,
-      titleColor: '#fff',
-      bodyColor: '#9ba3bf',
-      padding: 10,
-    },
-  },
-  scales: {
-    x: {
-      grid: { color: gridColor },
-      ticks: { color: tickColor, font: { size: 11 } },
-    },
-    y: {
-      grid: { color: gridColor },
-      ticks: { color: tickColor, font: { size: 11 } },
+      backgroundColor: '#22263a', borderColor: '#2e3347', borderWidth: 1,
+      titleColor: '#fff', bodyColor: '#9ba3bf',
+      callbacks: {
+        afterBody: (items) => {
+          const it = items[0];
+          const ds = it.chart.data.datasets[it.datasetIndex];
+          const id = ds.rowIds && ds.rowIds[it.dataIndex];
+          const src = ds.dataSrc;
+          if (id && src) return [`  Row #${id} — click to open source`];
+          return null;
+        },
+      },
     },
   },
 };
 
-function makeBarColor(conf) {
-  return CONF_ALPHA[conf] || 'rgba(124,131,255,0.6)';
-}
-
-function makeBorderColor(conf) {
-  return CONF_COLORS[conf] || '#7c83ff';
-}
-
-function filterByConf(data) {
-  return data.map(d => activeConf[d.conf] ? d.value : null);
-}
-
 /* ═══════════════════════════════════════════════════
-   CHART INSTANCES
+   CHART REGISTRY (so we can rebuild on filter / verify change)
 ═══════════════════════════════════════════════════ */
 let charts = {};
+function destroyAll() { Object.values(charts).forEach(c => c && c.destroy && c.destroy()); charts = {}; }
 
-function buildCharts() {
-  if (charts.femicide) Object.values(charts).forEach(c => c.destroy());
-  charts = {};
+/* ═══════════════════════════════════════════════════
+   VIOLENCE CHART BUILDERS
+═══════════════════════════════════════════════════ */
+// row_id mappings for each violence series (built by inspecting violence_spain.csv)
+const FEM_IDS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]; // 2003-2024
+const SEXC_TOTAL_IDS = [53,84,83,82,127]; // 2018, 2022, 2023, 2024, 2025
+const RAPE_IDS = [54,52,51,56,55,49,48,46,128]; // 2017,2018,2019,2020,2021,2022,2023,2024,2025
+const DV_IDS = [33,34,35,36]; // 2019-2022
+const MACRO_OUT_IDS  = [58,57]; // 2015, 2019 (outside partner)
+const MACRO_BY_IDS   = [60,59,94]; // 2015, 2019, 2024 (by partner)
+const MACRO_PHYS_IDS = [65,64,97]; // 2015, 2019, 2024 (physical+sexual by partner)
+const CONDEN_ID_2023 = 77;  // adults 2023
+const CONDEN_ID_2024 = 100; // adults 2024
+const CONDEN_MIN_2024 = 79; // minors 2024 (approx — actual id from row analysis)
+const HOM_TOTAL_IDS = [107,114,116,117]; // 2022 EIGE, 2023 INE ECM, 2023 MIR, 2025 MIR
 
-  const darkPie = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
-      },
-      tooltip: {
-        backgroundColor: '#22263a',
-        borderColor: '#2e3347',
-        borderWidth: 1,
-        titleColor: '#fff',
-        bodyColor: '#9ba3bf',
-        callbacks: {
-          label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`,
-        },
-      },
-    },
-  };
-
-  // ── 1. Femicide ────────────────────────────────────
+function buildViolenceCharts() {
+  // 1. Femicide
+  const fem = rowsToPoints('violence', FEM_IDS);
   charts.femicide = new Chart(document.getElementById('chartFemicide'), {
     type: 'bar',
-    data: {
-      labels: femicideData.map(d => d.year),
-      datasets: [{
-        label: 'Femicides',
-        data: filterByConf(femicideData),
-        backgroundColor: femicideData.map(d => activeConf[d.conf] ? makeBarColor(d.conf) : 'transparent'),
-        borderColor:     femicideData.map(d => activeConf[d.conf] ? makeBorderColor(d.conf) : 'transparent'),
-        borderWidth: 1.5,
-        borderRadius: 3,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: { display: false },
-        annotation: {
-          annotations: {
-            line2024: {
-              type: 'line',
-              xMin: '2024', xMax: '2024',
-              borderColor: 'rgba(124,131,255,0.4)',
-              borderWidth: 1,
-              borderDash: [4, 4],
-              label: {
-                display: true,
-                content: '2024: 47 (record low)',
-                color: '#9ba3bf',
-                font: { size: 10 },
-                position: 'start',
-                backgroundColor: 'rgba(34,38,58,0.85)',
-              },
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: 'Homicides', color: tickColor, font: { size: 11 } },
-          beginAtZero: false,
-          min: 30,
-        },
-      },
-    },
+    data: { labels: fem.labels, datasets: [{
+      label: 'Femicides', data: fem.values,
+      backgroundColor: fem.colors, borderColor: fem.borders,
+      borderWidth: 1.5, borderRadius: 3,
+      rowIds: fem.rowIds, dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: false, min: 30, title: { display: true, text: 'Homicides', color: tickColor } } } }),
   });
 
-  // ── 2. Sexual crimes total ─────────────────────────
+  // 2. Sexual crimes total
+  const sxt = rowsToPoints('violence', SEXC_TOTAL_IDS);
   charts.sexCrimes = new Chart(document.getElementById('chartSexCrimesTotal'), {
     type: 'line',
-    data: {
-      labels: sexCrimesData.map(d => d.year),
-      datasets: [{
-        label: 'Total sexual crimes',
-        data: filterByConf(sexCrimesData),
-        borderColor: '#7c83ff',
-        backgroundColor: 'rgba(124,131,255,0.12)',
-        tension: 0.3,
-        fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: sexCrimesData.map(d => makeBorderColor(d.conf)),
-        pointBorderColor: '#fff',
-        pointBorderWidth: 1.5,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        annotation: {
-          annotations: {
-            lo2022: {
-              type: 'line',
-              xMin: 1, xMax: 1,
-              borderColor: 'rgba(249,115,22,0.7)',
-              borderWidth: 2,
-              borderDash: [6, 4],
-              label: {
-                display: true,
-                content: 'LO 10/2022 break',
-                color: '#f97316',
-                font: { size: 10 },
-                position: 'start',
-                backgroundColor: 'rgba(34,38,58,0.9)',
-              },
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: 'Cases', color: tickColor, font: { size: 11 } },
-          beginAtZero: false,
-        },
-      },
-    },
+    data: { labels: sxt.labels, datasets: [{
+      label: 'Total sexual crimes', data: sxt.values,
+      borderColor: 'var(--accent)', backgroundColor: 'rgba(124,131,255,0.12)',
+      tension: 0.3, fill: true, pointRadius: 6,
+      pointBackgroundColor: sxt.borders, pointBorderColor: '#fff', pointBorderWidth: 1.5,
+      rowIds: sxt.rowIds, dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: false, title: { display: true, text: 'Cases', color: tickColor } } } }),
   });
 
-  // ── 3. Rape series ─────────────────────────────────
+  // 3. Rape
+  const rape = rowsToPoints('violence', RAPE_IDS);
   charts.rape = new Chart(document.getElementById('chartRape'), {
     type: 'bar',
-    data: {
-      labels: rapeData.map(d => d.year),
-      datasets: [{
-        label: 'Rape (agresión con penetración)',
-        data: filterByConf(rapeData),
-        backgroundColor: rapeData.map(d => activeConf[d.conf] ? makeBarColor(d.conf) : 'transparent'),
-        borderColor:     rapeData.map(d => activeConf[d.conf] ? makeBorderColor(d.conf) : 'transparent'),
-        borderWidth: 1.5,
-        borderRadius: 3,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        annotation: {
-          annotations: {
-            lo2022: {
-              type: 'line',
-              xMin: 4.5, xMax: 4.5,
-              borderColor: 'rgba(249,115,22,0.7)',
-              borderWidth: 2,
-              borderDash: [5, 4],
-              label: {
-                display: true,
-                content: 'LO 10/2022',
-                color: '#f97316',
-                font: { size: 10 },
-                position: 'start',
-                backgroundColor: 'rgba(34,38,58,0.9)',
-              },
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: 'Cases', color: tickColor, font: { size: 11 } },
-          beginAtZero: true,
-        },
-      },
-    },
+    data: { labels: rape.labels, datasets: [{
+      label: 'Rape', data: rape.values,
+      backgroundColor: rape.colors, borderColor: rape.borders,
+      borderWidth: 1.5, borderRadius: 3,
+      rowIds: rape.rowIds, dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Cases', color: tickColor } } } }),
   });
 
-  // ── 4. Macroencuesta ───────────────────────────────
+  // 4. Macroencuesta (multi-series bar)
+  const out = rowsToPoints('violence', MACRO_OUT_IDS);
+  const by  = rowsToPoints('violence', MACRO_BY_IDS);
+  const phs = rowsToPoints('violence', MACRO_PHYS_IDS);
   charts.macro = new Chart(document.getElementById('chartMacro'), {
     type: 'bar',
     data: {
-      labels: macroData.labels,
-      datasets: macroData.datasets,
+      labels: ['2015', '2019', '2024'],
+      datasets: [
+        { label: 'Sexual by partner (lifetime)', data: [by.values[0], by.values[1], by.values[2]], backgroundColor: 'rgba(124,131,255,0.75)', borderColor: 'var(--accent)', borderWidth: 1.5, rowIds: by.rowIds, dataSrc: 'violence' },
+        { label: 'Sexual outside partner (lifetime)', data: [out.values[0], out.values[1], null], backgroundColor: 'rgba(167,139,250,0.6)', borderColor: '#a78bfa', borderWidth: 1.5, rowIds: out.rowIds, dataSrc: 'violence' },
+        { label: 'Physical+sexual by partner', data: [phs.values[0], phs.values[1], phs.values[2]], backgroundColor: 'rgba(234,179,8,0.55)', borderColor: '#eab308', borderWidth: 1.5, rowIds: phs.rowIds, dataSrc: 'violence' },
+      ],
     },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: { color: labelColor, font: { size: 11 }, padding: 16, boxWidth: 14 },
-        },
-        annotation: {
-          annotations: {
-            incomparable2024: {
-              type: 'box',
-              xMin: 1.5, xMax: 2.5,
-              backgroundColor: 'rgba(249,115,22,0.06)',
-              borderColor: 'rgba(249,115,22,0.3)',
-              borderWidth: 1,
-              label: {
-                display: true,
-                content: '⚠ Methodology change',
-                color: '#f97316',
-                font: { size: 10 },
-                position: { x: 'center', y: 'start' },
-              },
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: '% women (lifetime)', color: tickColor, font: { size: 11 } },
-          beginAtZero: true,
-          max: 18,
-        },
-      },
-    },
+    options: baseOpts({
+      plugins: { legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 14, boxWidth: 12 } } },
+      scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, max: 18, title: { display: true, text: '% women (lifetime)', color: tickColor } } },
+    }),
   });
 
-  // ── 5a. Victim sex pie ─────────────────────────────
+  // 5a. Victim sex
   charts.victimSex = new Chart(document.getElementById('chartVictimSex'), {
     type: 'doughnut',
-    data: {
-      labels: ['Female', 'Male'],
-      datasets: [{
-        data: [85.7, 14.3],
-        backgroundColor: ['rgba(124,131,255,0.75)', 'rgba(96,165,250,0.55)'],
-        borderColor: ['#7c83ff', '#60a5fa'],
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: { ...darkPie },
+    data: { labels: ['Female','Male'], datasets: [{
+      data: [85.7, 14.3],
+      backgroundColor: ['rgba(124,131,255,0.75)','rgba(96,165,250,0.55)'],
+      borderColor: ['#7c83ff','#60a5fa'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 
-  // ── 5b. Victim age pie ─────────────────────────────
+  // 5b. Victim age (replaced green with lavender)
   charts.victimAge = new Chart(document.getElementById('chartVictimAge'), {
     type: 'doughnut',
-    data: {
-      labels: ['Minor (<18)', 'Adult (18+)'],
-      datasets: [{
-        data: [41.2, 58.8],
-        backgroundColor: ['rgba(234,179,8,0.75)', 'rgba(34,197,94,0.55)'],
-        borderColor: ['#eab308', '#22c55e'],
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: { ...darkPie },
+    data: { labels: ['Minor (<18)','Adult (18+)'], datasets: [{
+      data: [41.2, 58.8],
+      backgroundColor: ['rgba(234,179,8,0.75)','rgba(167,139,250,0.6)'],
+      borderColor: ['#eab308','#a78bfa'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 
-  // ── 5c. Perpetrator sex pie ────────────────────────
+  // 5c. Perpetrator sex
   charts.perpSex = new Chart(document.getElementById('chartPerpSex'), {
     type: 'doughnut',
-    data: {
-      labels: ['Male', 'Female'],
-      datasets: [{
-        data: [93.13, 6.87],
-        backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(124,131,255,0.5)'],
-        borderColor: ['#ef4444', '#7c83ff'],
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: { ...darkPie },
+    data: { labels: ['Male','Female'], datasets: [{
+      data: [93.13, 6.87],
+      backgroundColor: ['rgba(239,68,68,0.7)','rgba(124,131,255,0.5)'],
+      borderColor: ['#ef4444','#7c83ff'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 
-  // ── 6. Femicide nationality pie ────────────────────
+  // 6. Femicide nationality (replaced green with lavender)
   charts.femNat = new Chart(document.getElementById('chartFemNat'), {
     type: 'doughnut',
-    data: {
-      labels: ['Foreign nationals', 'Spanish nationals'],
-      datasets: [{
-        data: [51, 49],
-        backgroundColor: ['rgba(249,115,22,0.7)', 'rgba(34,197,94,0.6)'],
-        borderColor: ['#f97316', '#22c55e'],
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: {
-      ...darkPie,
-      plugins: {
-        ...darkPie.plugins,
-        tooltip: {
-          ...darkPie.plugins.tooltip,
-          callbacks: {
-            afterLabel: ctx => {
-              if (ctx.dataIndex === 0) return '  Rate: 4.95× higher than Spanish women';
-              return '';
-            },
-          },
-        },
-      },
-    },
+    data: { labels: ['Foreign nationals','Spanish nationals'], datasets: [{
+      data: [51, 49],
+      backgroundColor: ['rgba(249,115,22,0.7)','rgba(167,139,250,0.6)'],
+      borderColor: ['#f97316','#a78bfa'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 
-  // ── 7. Condenados ──────────────────────────────────
+  // 7. Condenados
+  const cond23 = rowsToPoints('violence', [CONDEN_ID_2023]);
+  const cond24 = rowsToPoints('violence', [CONDEN_ID_2024]);
   charts.condenados = new Chart(document.getElementById('chartCondenados'), {
     type: 'bar',
     data: {
-      labels: ['2023', '2024'],
-      datasets: [
-        {
-          label: 'Adults convicted',
-          data: [3468, 5230],
-          backgroundColor: ['rgba(249,115,22,0.55)', 'rgba(34,197,94,0.7)'],
-          borderColor: ['#f97316', '#22c55e'],
-          borderWidth: 1.5,
-          borderRadius: 4,
-        },
-        {
-          label: 'Minors convicted',
-          data: [null, 825],
-          backgroundColor: ['transparent', 'rgba(234,179,8,0.65)'],
-          borderColor: ['transparent', '#eab308'],
-          borderWidth: 1.5,
-          borderRadius: 4,
-        },
-      ],
+      labels: ['2023','2024'],
+      datasets: [{
+        label: 'Adults convicted',
+        data: [cond23.values[0], cond24.values[0]],
+        backgroundColor: [cond23.colors[0] || 'rgba(234,179,8,0.55)', cond24.colors[0] || 'rgba(59,130,246,0.6)'],
+        borderColor: [cond23.borders[0] || '#eab308', cond24.borders[0] || '#3b82f6'],
+        borderWidth: 1.5, borderRadius: 4,
+        rowIds: [CONDEN_ID_2023, CONDEN_ID_2024], dataSrc: 'violence',
+      }],
     },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: 'Convictions', color: tickColor, font: { size: 11 } },
-          beginAtZero: true,
-        },
-      },
-    },
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Convictions', color: tickColor } } } }),
   });
 
-  // ── 8. Domestic violence denuncias ─────────────────
+  // 8. Domestic violence denuncias
+  const dv = rowsToPoints('violence', DV_IDS);
   charts.domViol = new Chart(document.getElementById('chartDomViol'), {
     type: 'line',
-    data: {
-      labels: dvData.map(d => d.year),
-      datasets: [{
-        label: 'Denuncias VG',
-        data: dvData.map(d => d.value),
-        borderColor: '#7c83ff',
-        backgroundColor: 'rgba(124,131,255,0.12)',
-        tension: 0.3,
-        fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: ['#22c55e', '#f97316', '#22c55e', '#22c55e'],
-        pointBorderColor: '#fff',
-        pointBorderWidth: 1.5,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        annotation: {
-          annotations: {
-            covid: {
-              type: 'line',
-              xMin: 1, xMax: 1,
-              borderColor: 'rgba(239,68,68,0.5)',
-              borderWidth: 2,
-              borderDash: [5, 4],
-              label: {
-                display: true,
-                content: 'COVID lockdown',
-                color: '#ef4444',
-                font: { size: 10 },
-                position: 'start',
-                backgroundColor: 'rgba(34,38,58,0.9)',
-              },
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          title: { display: true, text: 'Denuncias', color: tickColor, font: { size: 11 } },
-          beginAtZero: false,
-          min: 140000,
-        },
-      },
-    },
+    data: { labels: dv.labels, datasets: [{
+      label: 'Denuncias VG', data: dv.values,
+      borderColor: '#7c83ff', backgroundColor: 'rgba(124,131,255,0.12)',
+      tension: 0.3, fill: true, pointRadius: 6,
+      pointBackgroundColor: dv.borders, pointBorderColor: '#fff', pointBorderWidth: 1.5,
+      rowIds: dv.rowIds, dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: false, min: 140000, title: { display: true, text: 'Denuncias', color: tickColor } } } }),
   });
 
-  // ── 9a. All-cause homicide total series ──────────────
+  // 9a. Homicide total — static composite
+  const hom = rowsToPoints('violence', HOM_TOTAL_IDS);
   charts.homicideTotal = new Chart(document.getElementById('chartHomicideTotal'), {
     type: 'bar',
-    data: {
-      labels: ['2022 (EIGE)', '2023 (INE ECM)', '2023 (MIR)', '2025 (MIR)'],
-      datasets: [{
-        label: 'Homicide victims',
-        data: [325, 300, 348, 376],
-        backgroundColor: ['rgba(34,197,94,0.7)','rgba(34,197,94,0.7)','rgba(234,179,8,0.65)','rgba(34,197,94,0.7)'],
-        borderColor: ['#22c55e','#22c55e','#eab308','#22c55e'],
-        borderWidth: 1.5,
-        borderRadius: 4,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
-            afterLabel: ctx => {
-              const notes = ['EIGE harmonised data','ICD-10 X85-Y09 (cause of death)','Police-registered (higher)','MIR +7.7% vs 2024 — highest since 2012'];
-              return `  ${notes[ctx.dataIndex]}`;
-            },
-          },
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: false, min: 250, title: { display: true, text: 'Victims', color: tickColor, font: { size: 11 } } },
-      },
-    },
+    data: { labels: ['2022 EIGE','2023 INE ECM','2023 MIR','2025 MIR'], datasets: [{
+      label: 'Homicide victims', data: [325, 300, 348, 376],
+      backgroundColor: hom.colors.length === 4 ? hom.colors : ['rgba(59,130,246,0.6)','rgba(59,130,246,0.6)','rgba(234,179,8,0.55)','rgba(59,130,246,0.6)'],
+      borderColor: hom.borders.length === 4 ? hom.borders : ['#3b82f6','#3b82f6','#eab308','#3b82f6'],
+      borderWidth: 1.5, borderRadius: 4,
+      rowIds: HOM_TOTAL_IDS, dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: false, min: 250, title: { display: true, text: 'Victims', color: tickColor } } } }),
   });
 
-  // ── 9b. Homicide by sex × perpetrator relationship 2022 ──
+  // 9b. Homicide by sex 2022
   charts.homicideSex2022 = new Chart(document.getElementById('chartHomicideSex2022'), {
     type: 'bar',
-    data: {
-      labels: ['All-cause\n(325)', 'Intimate\npartner (58)', 'Domestic\nperp (98)'],
-      datasets: [
-        { label: 'Female', data: [121, 54, 80], backgroundColor: 'rgba(239,68,68,0.7)', borderColor: '#ef4444', borderWidth: 1.5, borderRadius: 3 },
-        { label: 'Male',   data: [204, 4, 18],  backgroundColor: 'rgba(96,165,250,0.6)', borderColor: '#60a5fa', borderWidth: 1.5, borderRadius: 3 },
-      ],
-    },
-    options: {
-      ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } } },
-      scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: true, title: { display: true, text: 'Victims (2022)', color: tickColor, font: { size: 11 } } } },
-    },
+    data: { labels: ['All-cause (325)','Intimate partner (58)','Domestic perp (98)'], datasets: [
+      { label: 'Female', data: [121,54,80], backgroundColor: 'rgba(239,68,68,0.7)', borderColor: '#ef4444', borderWidth: 1.5, borderRadius: 3 },
+      { label: 'Male',   data: [204,4,18],  backgroundColor: 'rgba(96,165,250,0.6)', borderColor: '#60a5fa', borderWidth: 1.5, borderRadius: 3 },
+    ]},
+    options: baseOpts({
+      plugins: { legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } } },
+      scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Victims (2022)', color: tickColor } } },
+    }),
   });
 
-  // ── 9c. Victim-perpetrator sex matrix (2010-2012 MIR) ────
+  // 9c. Victim-perp matrix
   charts.homicideMatrix = new Chart(document.getElementById('chartHomicideMatrix'), {
     type: 'doughnut',
-    data: {
-      labels: ['Male → Male (62%)', 'Male → Female (28%)', 'Female → Male (7%)', 'Female → Female (3%)'],
-      datasets: [{
-        data: [62, 28, 7, 3],
-        backgroundColor: ['rgba(96,165,250,0.7)','rgba(239,68,68,0.7)','rgba(96,165,250,0.35)','rgba(239,68,68,0.35)'],
-        borderColor: ['#60a5fa','#ef4444','#60a5fa','#ef4444'],
-        borderWidth: 2, hoverOffset: 6,
-      }],
-    },
-    options: { ...darkPie },
+    data: { labels: ['Male → Male (62%)','Male → Female (28%)','Female → Male (7%)','Female → Female (3%)'], datasets: [{
+      data: [62,28,7,3],
+      backgroundColor: ['rgba(96,165,250,0.7)','rgba(239,68,68,0.7)','rgba(96,165,250,0.35)','rgba(239,68,68,0.35)'],
+      borderColor: ['#60a5fa','#ef4444','#60a5fa','#ef4444'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 
-  // ── 9d. Homicide rate historical (selected years) ────────
+  // 9d. Homicide rate historical (yellow + blue for verified, replacing green)
   charts.homicideRate = new Chart(document.getElementById('chartHomicideRate'), {
     type: 'line',
-    data: {
-      labels: [2001, 2013, 2021, 2022, 2023],
-      datasets: [{
-        label: 'Rate per 100k',
-        data: [1.40, 0.60, 0.62, 0.68, 0.68],
-        borderColor: '#7c83ff', backgroundColor: 'rgba(124,131,255,0.12)',
-        tension: 0.3, fill: true, pointRadius: 6,
-        pointBackgroundColor: ['#eab308','#22c55e','#eab308','#eab308','#22c55e'],
-        pointBorderColor: '#fff', pointBorderWidth: 1.5,
-      }],
-    },
-    options: {
-      ...baseOpts,
-      scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: true, max: 1.8, title: { display: true, text: 'Per 100k', color: tickColor, font: { size: 11 } } } },
-    },
+    data: { labels: [2001,2013,2021,2022,2023], datasets: [{
+      label: 'Rate per 100k', data: [1.40,0.60,0.62,0.68,0.68],
+      borderColor: '#7c83ff', backgroundColor: 'rgba(124,131,255,0.12)',
+      tension: 0.3, fill: true, pointRadius: 6,
+      pointBackgroundColor: ['#eab308','#eab308','#eab308','#eab308','#eab308'],
+      pointBorderColor: '#fff', pointBorderWidth: 1.5,
+      rowIds: [121,120,119,null,118], dataSrc: 'violence',
+    }]},
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, max: 1.8, title: { display: true, text: 'Per 100k', color: tickColor } } } }),
   });
 
-  // ── 10. Confidence distribution ────────────────────────────
-  charts.conf = new Chart(document.getElementById('chartConf'), {
+  // 10. Confidence distribution (violence)
+  const vDist = { verified: 0, nonverified: 0, unsourced: 0 };
+  VIOLENCE_ROWS.forEach(r => { vDist[effectiveConf('violence', r.row_id, r.conf)]++; });
+  charts.confViolence = new Chart(document.getElementById('chartConfViolence'), {
     type: 'doughnut',
-    data: {
-      labels: ['High (26)', 'Medium (59)', 'Low (14)', 'Unverified (5)', 'Empty (2)'],
-      datasets: [{
-        data: [26, 59, 14, 5, 2],
-        backgroundColor: [
-          'rgba(34,197,94,0.75)',
-          'rgba(234,179,8,0.7)',
-          'rgba(249,115,22,0.7)',
-          'rgba(239,68,68,0.7)',
-          'rgba(107,114,128,0.5)',
-        ],
-        borderColor: ['#22c55e','#eab308','#f97316','#ef4444','#6b7280'],
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: {
-      ...darkPie,
-      plugins: {
-        ...darkPie.plugins,
-        tooltip: {
-          ...darkPie.plugins.tooltip,
-          callbacks: {
-            label: ctx => ` ${ctx.label}`,
-          },
-        },
-      },
-    },
+    data: { labels: [`Verified (${vDist.verified})`, `Non-verified (${vDist.nonverified})`, `Unsourced (${vDist.unsourced})`], datasets: [{
+      data: [vDist.verified, vDist.nonverified, vDist.unsourced],
+      backgroundColor: ['rgba(59,130,246,0.75)','rgba(234,179,8,0.7)','rgba(239,68,68,0.7)'],
+      borderColor: ['#3b82f6','#eab308','#ef4444'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
   });
 }
 
 /* ═══════════════════════════════════════════════════
-   FILTER TOGGLE
+   MIGRATION CHART BUILDERS
 ═══════════════════════════════════════════════════ */
-function toggleConf(level) {
-  activeConf[level] = !activeConf[level];
-  const btn = document.querySelector(`.conf-btn.${level}`);
-  btn.classList.toggle('active', activeConf[level]);
-  buildCharts();
+const MIG_INTAKE_IDS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]; // 2000-2024
+const MIG_STOCK_IDS  = [48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73]; // 2000-2025
+const MIG_SEX_YEARS = [2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const MIG_SEX_MEN_IDS    = [130,132,134,136,138,140,142,144,146,148,150,152,154,36,38,40,42];
+const MIG_SEX_WOMEN_IDS  = [131,133,135,137,139,141,143,145,147,149,151,153,155,37,39,41,43];
+// Broad-band annual age series 2008-2024 (5 bands per year, rows 156-240)
+const MIG_AGE_YEARS = [2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const MIG_AGE_BANDS = ['0-14','15-29','30-44','45-64','65+'];
+// Top-3 origin nationalities annual 2008-2022 (15 years × top-3 of 10), rows 241-390
+// Top-3 per year are the first 3 of each block of 10
+const MIG_TOPNAT_YEARS = [2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const MIG_NAT_FOREIGN_IDS = [26,28]; // 2023, 2024 foreign
+const MIG_NAT_SPANISH_IDS = [27,29]; // 2023, 2024 spanish
+const MIG_TOP10_INTAKE_IDS = [33,34,35,89,90,91,92,93,94,95]; // 2024 top10 nat
+const MIG_TOP10_STOCK_IDS  = [74,75,76,100,101,102,103,104,105,106]; // 2025 top10 nat
+const MIG_AGE_IDS = [109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127]; // 2024 age groups
+const MIG_SS_IDS = [83,84,85,86,87,88,128,129];
+
+function buildMigrationCharts() {
+  // M1. Annual intake
+  const intake = rowsToPoints('migration', MIG_INTAKE_IDS);
+  charts.migIntake = new Chart(document.getElementById('migIntake'), {
+    type: 'bar',
+    data: { labels: intake.labels, datasets: [{
+      label: 'Annual intake', data: intake.values,
+      backgroundColor: intake.colors, borderColor: intake.borders,
+      borderWidth: 1.5, borderRadius: 3,
+      rowIds: intake.rowIds, dataSrc: 'migration',
+    }]},
+    options: baseOpts({
+      plugins: {
+        annotation: { annotations: {
+          em: { type: 'line', xMin: 7.5, xMax: 7.5, borderColor: 'rgba(124,131,255,0.55)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'EVR → EM', position: 'start', color: '#7c83ff', font: { size: 10 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+          emcr: { type: 'line', xMin: 20.5, xMax: 20.5, borderColor: 'rgba(167,139,250,0.55)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'EM → EMCR-rev', position: 'start', color: '#a78bfa', font: { size: 10 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+        }},
+      },
+      scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons', color: tickColor } } },
+    }),
+  });
+
+  // M2. Stock
+  const stock = rowsToPoints('migration', MIG_STOCK_IDS);
+  charts.migStock = new Chart(document.getElementById('migStock'), {
+    type: 'line',
+    data: { labels: stock.labels, datasets: [{
+      label: 'Foreign stock', data: stock.values,
+      borderColor: '#7c83ff', backgroundColor: 'rgba(124,131,255,0.18)',
+      tension: 0.25, fill: true, pointRadius: 5,
+      pointBackgroundColor: stock.borders, pointBorderColor: '#fff', pointBorderWidth: 1.5,
+      rowIds: stock.rowIds, dataSrc: 'migration',
+    }]},
+    options: baseOpts({
+      plugins: {
+        annotation: { annotations: {
+          ecp: { type: 'line', xMin: 21.5, xMax: 21.5, borderColor: 'rgba(167,139,250,0.5)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'Padrón → ECP', position: 'start', color: '#a78bfa', font: { size: 10 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+        }},
+      },
+      scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: false, title: { display: true, text: 'Persons resident', color: tickColor } } },
+    }),
+  });
+
+  // M3. Sex by year (grouped bar, 2008-2024)
+  const men   = rowsToPoints('migration', MIG_SEX_MEN_IDS);
+  const women = rowsToPoints('migration', MIG_SEX_WOMEN_IDS);
+  charts.migSex = new Chart(document.getElementById('migSex'), {
+    type: 'bar',
+    data: { labels: MIG_SEX_YEARS.map(String), datasets: [
+      { label: 'Men',   data: men.values,   backgroundColor: 'rgba(96,165,250,0.7)', borderColor: '#60a5fa', borderWidth: 1.5, borderRadius: 2, rowIds: men.rowIds, dataSrc: 'migration' },
+      { label: 'Women', data: women.values, backgroundColor: 'rgba(167,139,250,0.7)', borderColor: '#a78bfa', borderWidth: 1.5, borderRadius: 2, rowIds: women.rowIds, dataSrc: 'migration' },
+    ]},
+    options: baseOpts({
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 14, boxWidth: 12 } },
+        annotation: { annotations: {
+          emcr: { type: 'line', xMin: 12.5, xMax: 12.5, borderColor: 'rgba(167,139,250,0.6)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'EM → EMCR-rev', position: 'start', color: '#a78bfa', font: { size: 9 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+        }},
+      },
+      scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons', color: tickColor } } },
+    }),
+  });
+
+  // M4. Nationality status (stacked bar)
+  const foreign = rowsToPoints('migration', MIG_NAT_FOREIGN_IDS);
+  const spanish = rowsToPoints('migration', MIG_NAT_SPANISH_IDS);
+  charts.migNatStatus = new Chart(document.getElementById('migNatStatus'), {
+    type: 'bar',
+    data: { labels: ['2023','2024'], datasets: [
+      { label: 'Foreign nationality', data: foreign.values, backgroundColor: 'rgba(234,179,8,0.7)', borderColor: '#eab308', borderWidth: 1.5, rowIds: foreign.rowIds, dataSrc: 'migration' },
+      { label: 'Returning Spaniards', data: spanish.values, backgroundColor: 'rgba(124,131,255,0.7)', borderColor: '#7c83ff', borderWidth: 1.5, rowIds: spanish.rowIds, dataSrc: 'migration' },
+    ]},
+    options: baseOpts({
+      plugins: { legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 14, boxWidth: 12 } } },
+      scales: { x: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor } }, y: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons', color: tickColor } } },
+    }),
+  });
+
+  // M5. Top 10 intake 2024 (horizontal bar)
+  const top10In = MIG_TOP10_INTAKE_IDS.map(id => M_BY_ID[id]).filter(Boolean);
+  top10In.sort((a,b) => Number(b.value) - Number(a.value));
+  const NAT_LABELS = { CO:'Colombia', MA:'Marruecos', VE:'Venezuela', PE:'Perú', IT:'Italia', RO:'Rumanía', AR:'Argentina', UA:'Ucrania', HN:'Honduras', PY:'Paraguay', GB:'Reino Unido', CN:'China' };
+  charts.migTop10In = new Chart(document.getElementById('migTop10In'), {
+    type: 'bar',
+    data: {
+      labels: top10In.map(r => NAT_LABELS[r.origin] || r.origin),
+      datasets: [{
+        label: '2024 arrivals',
+        data: top10In.map(r => activeConf[effectiveConf('migration', r.row_id, r.conf)] ? Number(r.value) : null),
+        backgroundColor: top10In.map(r => CONF_ALPHA[effectiveConf('migration', r.row_id, r.conf)]),
+        borderColor: top10In.map(r => CONF_COLOR[effectiveConf('migration', r.row_id, r.conf)]),
+        borderWidth: 1.5, borderRadius: 3,
+        rowIds: top10In.map(r => r.row_id), dataSrc: 'migration',
+      }],
+    },
+    options: baseOpts({ indexAxis: 'y', scales: { x: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Arrivals', color: tickColor } }, y: { grid: { color: gridColor }, ticks: { color: tickColor } } } }),
+  });
+
+  // M6. Top 10 stock 2025 (horizontal bar)
+  const top10St = MIG_TOP10_STOCK_IDS.map(id => M_BY_ID[id]).filter(Boolean);
+  top10St.sort((a,b) => Number(b.value) - Number(a.value));
+  charts.migTop10St = new Chart(document.getElementById('migTop10St'), {
+    type: 'bar',
+    data: {
+      labels: top10St.map(r => NAT_LABELS[r.origin] || r.origin),
+      datasets: [{
+        label: '1 Jan 2025 stock',
+        data: top10St.map(r => activeConf[effectiveConf('migration', r.row_id, r.conf)] ? Number(r.value) : null),
+        backgroundColor: top10St.map(r => CONF_ALPHA[effectiveConf('migration', r.row_id, r.conf)]),
+        borderColor: top10St.map(r => CONF_COLOR[effectiveConf('migration', r.row_id, r.conf)]),
+        borderWidth: 1.5, borderRadius: 3,
+        rowIds: top10St.map(r => r.row_id), dataSrc: 'migration',
+      }],
+    },
+    options: baseOpts({ indexAxis: 'y', scales: { x: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons resident', color: tickColor } }, y: { grid: { color: gridColor }, ticks: { color: tickColor } } } }),
+  });
+
+  // M7. Age group 2024 (bar)
+  const ageRows = MIG_AGE_IDS.map(id => M_BY_ID[id]).filter(Boolean);
+  charts.migAge = new Chart(document.getElementById('migAge'), {
+    type: 'bar',
+    data: {
+      labels: ageRows.map(r => r.age),
+      datasets: [{
+        label: '2024 intake by age',
+        data: ageRows.map(r => activeConf[effectiveConf('migration', r.row_id, r.conf)] ? Number(r.value) : null),
+        backgroundColor: ageRows.map(r => CONF_ALPHA[effectiveConf('migration', r.row_id, r.conf)]),
+        borderColor: ageRows.map(r => CONF_COLOR[effectiveConf('migration', r.row_id, r.conf)]),
+        borderWidth: 1.5, borderRadius: 3,
+        rowIds: ageRows.map(r => r.row_id), dataSrc: 'migration',
+      }],
+    },
+    options: baseOpts({ scales: { y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons', color: tickColor } } } }),
+  });
+
+  // M7b. Annual broad age bands (stacked bar 2008-2024)
+  // Row IDs for age bands: 156-240 (17 years × 5 bands)
+  const bandColors = {
+    '0-14':  { bg: 'rgba(124,131,255,0.7)',  border: '#7c83ff' },
+    '15-29': { bg: 'rgba(96,165,250,0.7)',   border: '#60a5fa' },
+    '30-44': { bg: 'rgba(167,139,250,0.7)',  border: '#a78bfa' },
+    '45-64': { bg: 'rgba(234,179,8,0.65)',   border: '#eab308' },
+    '65+':   { bg: 'rgba(249,115,22,0.65)',  border: '#f97316' },
+  };
+  const bandDatasets = MIG_AGE_BANDS.map((band, bi) => {
+    const values = [], rowIds = [], colors = [], borders = [];
+    for (let yi = 0; yi < MIG_AGE_YEARS.length; yi++) {
+      const rid = 156 + yi * 5 + bi;
+      const r = M_BY_ID[rid];
+      const c = r ? effectiveConf('migration', rid, r.conf) : 'unsourced';
+      const visible = r && activeConf[c];
+      values.push(visible ? Number(r.value) : null);
+      rowIds.push(rid);
+      colors.push(bandColors[band].bg);
+      borders.push(bandColors[band].border);
+    }
+    return {
+      label: band, data: values,
+      backgroundColor: colors, borderColor: borders,
+      borderWidth: 1, stack: 'age',
+      rowIds, dataSrc: 'migration',
+    };
+  });
+  charts.migAgeAnnual = new Chart(document.getElementById('migAgeAnnual'), {
+    type: 'bar',
+    data: { labels: MIG_AGE_YEARS.map(String), datasets: bandDatasets },
+    options: baseOpts({
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } },
+        annotation: { annotations: {
+          emcr: { type: 'line', xMin: 12.5, xMax: 12.5, borderColor: 'rgba(167,139,250,0.6)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'EM → EMCR-rev', position: 'start', color: '#a78bfa', font: { size: 9 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+        }},
+      },
+      scales: { x: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor } }, y: { stacked: true, grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons (intake)', color: tickColor } } },
+    }),
+  });
+
+  // M7c. Annual top-3 origin nationalities 2008-2024
+  // Rows 241-390 hold top-10 per year for 2008-2022 (15 years × 10 = 150 rows)
+  // 2023 top-3 are at rows 30,31,32 and 2024 top-3 at rows 33,34,35 (already in CSV)
+  const TOPNAT_RANKS = [1, 2, 3];
+  const topNatRows = {};
+  // 2008-2022 from rows 241-390
+  for (let yi = 0; yi < 15; yi++) {
+    const year = 2008 + yi;
+    topNatRows[year] = [];
+    for (let rank = 0; rank < 3; rank++) {
+      const rid = 241 + yi * 10 + rank;
+      topNatRows[year].push(M_BY_ID[rid]);
+    }
+  }
+  // 2023, 2024 top-3 from earlier rows
+  topNatRows[2023] = [30, 31, 32].map(id => M_BY_ID[id]);
+  topNatRows[2024] = [33, 34, 35].map(id => M_BY_ID[id]);
+
+  const topnatYears = Object.keys(topNatRows).map(Number).sort();
+  const topnatLabels = topnatYears.map(String);
+  // Build 3 datasets (rank 1, 2, 3); each dataset has one value per year, label includes nationality
+  const rankColors = [
+    { bg: 'rgba(59,130,246,0.85)', border: '#3b82f6' },
+    { bg: 'rgba(96,165,250,0.7)',  border: '#60a5fa' },
+    { bg: 'rgba(167,139,250,0.6)', border: '#a78bfa' },
+  ];
+  const topnatDatasets = TOPNAT_RANKS.map((rank, ri) => {
+    const values = [], rowIds = [], origins = [];
+    for (const yr of topnatYears) {
+      const r = topNatRows[yr][ri];
+      const c = r ? effectiveConf('migration', r.row_id, r.conf) : 'unsourced';
+      const visible = r && activeConf[c];
+      values.push(visible ? Number(r.value) : null);
+      rowIds.push(r ? r.row_id : null);
+      origins.push(r ? (NAT_LABELS[r.origin] || r.origin) : '');
+    }
+    return {
+      label: `Rank ${rank}`, data: values,
+      backgroundColor: rankColors[ri].bg, borderColor: rankColors[ri].border,
+      borderWidth: 1.5, borderRadius: 2,
+      rowIds, dataSrc: 'migration',
+      origins,
+    };
+  });
+  charts.migTopNat = new Chart(document.getElementById('migTopNat'), {
+    type: 'bar',
+    data: { labels: topnatLabels, datasets: topnatDatasets },
+    options: baseOpts({
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 } },
+        tooltip: {
+          backgroundColor: '#22263a', borderColor: '#2e3347', borderWidth: 1,
+          titleColor: '#fff', bodyColor: '#9ba3bf', padding: 10,
+          callbacks: {
+            label: ctx => {
+              const ds = ctx.chart.data.datasets[ctx.datasetIndex];
+              const origin = ds.origins ? ds.origins[ctx.dataIndex] : '';
+              return ` ${ds.label}: ${origin} — ${ctx.parsed.y ? ctx.parsed.y.toLocaleString('en-US') : 'n/a'}`;
+            },
+            afterBody: items => {
+              const it = items[0];
+              const ds = it.chart.data.datasets[it.datasetIndex];
+              const id = ds.rowIds && ds.rowIds[it.dataIndex];
+              if (id) return [`  Row #${id} — click to open source`];
+              return null;
+            },
+          },
+        },
+        annotation: { annotations: {
+          emcr: { type: 'line', xMin: 12.5, xMax: 12.5, borderColor: 'rgba(167,139,250,0.6)', borderWidth: 1.5, borderDash: [5,4],
+                label: { display: true, content: 'EMCR-rev', position: 'start', color: '#a78bfa', font: { size: 9 }, backgroundColor: 'rgba(34,38,58,0.9)' } },
+        }},
+      },
+      scales: { x: { grid: { color: gridColor }, ticks: { color: tickColor } }, y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Arrivals', color: tickColor } } },
+    }),
+  });
+
+  // M8. SS affiliation snapshots
+  const ssRows = MIG_SS_IDS.map(id => M_BY_ID[id]).filter(Boolean);
+  charts.migSS = new Chart(document.getElementById('migSS'), {
+    type: 'bar',
+    data: {
+      labels: ssRows.map(r => `${r.year}\n${r.src_pub.slice(0,30).replace('Afiliación de extranjeros','')}`),
+      datasets: [{
+        label: 'Foreign affiliates',
+        data: ssRows.map(r => activeConf[effectiveConf('migration', r.row_id, r.conf)] ? Number(r.value) : null),
+        backgroundColor: ssRows.map(r => CONF_ALPHA[effectiveConf('migration', r.row_id, r.conf)]),
+        borderColor: ssRows.map(r => CONF_COLOR[effectiveConf('migration', r.row_id, r.conf)]),
+        borderWidth: 1.5, borderRadius: 3,
+        rowIds: ssRows.map(r => r.row_id), dataSrc: 'migration',
+      }],
+    },
+    options: baseOpts({ scales: { x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 9 }, maxRotation: 0, autoSkip: false } }, y: { grid: { color: gridColor }, ticks: { color: tickColor }, beginAtZero: true, title: { display: true, text: 'Persons', color: tickColor } } } }),
+  });
+
+  // Confidence distribution (migration)
+  const mDist = { verified: 0, nonverified: 0, unsourced: 0 };
+  MIGRATION_ROWS.forEach(r => { mDist[effectiveConf('migration', r.row_id, r.conf)]++; });
+  charts.confMig = new Chart(document.getElementById('chartConfMig'), {
+    type: 'doughnut',
+    data: { labels: [`Verified (${mDist.verified})`, `Non-verified (${mDist.nonverified})`, `Unsourced (${mDist.unsourced})`], datasets: [{
+      data: [mDist.verified, mDist.nonverified, mDist.unsourced],
+      backgroundColor: ['rgba(59,130,246,0.75)','rgba(234,179,8,0.7)','rgba(239,68,68,0.7)'],
+      borderColor: ['#3b82f6','#eab308','#ef4444'], borderWidth: 2, hoverOffset: 6,
+    }]},
+    options: darkPie,
+  });
 }
+
+/* ═══════════════════════════════════════════════════
+   SOURCES TABLE
+═══════════════════════════════════════════════════ */
+function renderSources() {
+  const vBody = document.querySelector('#srcTableViolence tbody');
+  const mBody = document.querySelector('#srcTableMigration tbody');
+  vBody.innerHTML = ''; mBody.innerHTML = '';
+
+  const search = (document.getElementById('srcSearch').value || '').toLowerCase();
+  const confFilter = document.getElementById('srcConfFilter').value;
+  const kindFilter = document.getElementById('srcKindFilter').value;
+
+  function rowHTML(src, r) {
+    const conf = effectiveConf(src, r.row_id, r.conf);
+    if (confFilter && conf !== confFilter) return null;
+    if (search) {
+      const blob = [r.kind, r.year, r.value, r.src_name, r.src_pub, r.notes, r.unit, r.sex, r.age, r.nat, r.origin || ''].join(' ').toLowerCase();
+      if (!blob.includes(search)) return null;
+    }
+    const verified = isVerified(src, r.row_id);
+    const srcLink = r.src_url ? `<a href="${r.src_url}" target="_blank" rel="noopener">${r.src_name || 'link'}</a>` : (r.src_name || '—');
+    const cells = src === 'violence'
+      ? [
+          `<td class="rid">#${r.row_id}</td>`,
+          `<td>${escapeHtml(r.kind)}</td>`,
+          `<td>${r.year}</td>`,
+          `<td class="val">${formatVal(r.value)}</td>`,
+          `<td>${escapeHtml(r.unit)}</td>`,
+          `<td>${escapeHtml(r.sex)}</td>`,
+          `<td>${escapeHtml(r.age)}</td>`,
+          `<td>${escapeHtml(r.nat)}</td>`,
+          `<td>${srcLink}<br><small style="color:var(--text2)">${escapeHtml(r.src_pub || '')}</small></td>`,
+          `<td><span class="conf-pill ${conf}">${conf}</span></td>`,
+          `<td><button class="verify-toggle ${verified?'on':''}" data-src="violence" data-id="${r.row_id}">${verified?'✓ Verified':'Verify'}</button></td>`,
+          `<td class="notes">${escapeHtml(r.notes || '')}</td>`,
+        ]
+      : [
+          `<td class="rid">#${r.row_id}</td>`,
+          `<td>${escapeHtml(r.kind)}</td>`,
+          `<td>${r.year}</td>`,
+          `<td class="val">${formatVal(r.value)}</td>`,
+          `<td>${escapeHtml(r.unit)}</td>`,
+          `<td>${escapeHtml(r.sex)}</td>`,
+          `<td>${escapeHtml(r.age)}</td>`,
+          `<td>${escapeHtml(r.nat)}</td>`,
+          `<td>${escapeHtml(r.origin || '')}</td>`,
+          `<td>${srcLink}<br><small style="color:var(--text2)">${escapeHtml(r.src_pub || '')}</small></td>`,
+          `<td><span class="conf-pill ${conf}">${conf}</span></td>`,
+          `<td><button class="verify-toggle ${verified?'on':''}" data-src="migration" data-id="${r.row_id}">${verified?'✓ Verified':'Verify'}</button></td>`,
+          `<td class="notes">${escapeHtml(r.notes || '')}</td>`,
+        ];
+    return `<tr id="src-${src}-${r.row_id}">${cells.join('')}</tr>`;
+  }
+
+  let vShown = 0, mShown = 0;
+  if (!kindFilter || kindFilter === 'violence') {
+    const html = VIOLENCE_ROWS.map(r => rowHTML('violence', r)).filter(Boolean);
+    vBody.innerHTML = html.join('');
+    vShown = html.length;
+  }
+  if (!kindFilter || kindFilter === 'migration') {
+    const html = MIGRATION_ROWS.map(r => rowHTML('migration', r)).filter(Boolean);
+    mBody.innerHTML = html.join('');
+    mShown = html.length;
+  }
+  document.getElementById('vCount').textContent = `${vShown}${vShown!==VIOLENCE_ROWS.length?' of '+VIOLENCE_ROWS.length:''}`;
+  document.getElementById('mCount').textContent = `${mShown}${mShown!==MIGRATION_ROWS.length?' of '+MIGRATION_ROWS.length:''}`;
+  document.getElementById('srcCount').textContent = VIOLENCE_ROWS.length + MIGRATION_ROWS.length;
+
+  // attach verify toggle handlers
+  document.querySelectorAll('.verify-toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const src = btn.dataset.src;
+      const id = Number(btn.dataset.id);
+      toggleVerified(src, id);
+      renderSources();
+      rebuildAll();
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function formatVal(v) {
+  if (v === '' || v == null) return '<span style="color:var(--unsourced)">—</span>';
+  const n = Number(v);
+  if (!isNaN(n) && n >= 1000) return n.toLocaleString('en-US');
+  return v;
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER BAR + REBUILD
+═══════════════════════════════════════════════════ */
+function rebuildAll() {
+  destroyAll();
+  buildViolenceCharts();
+  buildMigrationCharts();
+}
+document.querySelectorAll('.conf-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const level = btn.dataset.conf;
+    activeConf[level] = !activeConf[level];
+    btn.classList.toggle('active', activeConf[level]);
+    rebuildAll();
+  });
+});
+
+/* ═══════════════════════════════════════════════════
+   SOURCES CONTROLS
+═══════════════════════════════════════════════════ */
+document.getElementById('srcSearch').addEventListener('input', renderSources);
+document.getElementById('srcConfFilter').addEventListener('change', renderSources);
+document.getElementById('srcKindFilter').addEventListener('change', renderSources);
+document.getElementById('clearVerifyBtn').addEventListener('click', () => {
+  if (!confirm('Reset all your row verifications? This cannot be undone.')) return;
+  localStorage.removeItem(VERIFY_KEY);
+  VERIFIED.violence = []; VERIFIED.migration = [];
+  renderSources();
+  rebuildAll();
+});
 
 /* ═══════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════ */
 Chart.defaults.color = labelColor;
 Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
-buildCharts();
+
+renderSources();
+rebuildAll();
+
+// Honour URL hash on load (e.g. #migration)
+const initialTab = (location.hash || '').replace('#','');
+if (['violence','migration','sources'].includes(initialTab)) showTab(initialTab);
 </script>
 </body>
 </html>
