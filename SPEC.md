@@ -66,8 +66,8 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | T3 | ~ | Populate `violence_spain.csv` — sexual crimes MIR: 2022–2024 verified (rows 46–56,82–89); 2017–2021 medium; 2000–2016 unverified. BLOCKER: two incompatible violaciones series unresolved (B6) | V1,V2,V7 |
 | T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
 | T5 | ~ | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11 |
-| T6 | . | Populate `population_spain.csv` — INE female population by 5-yr age group & year 2000–2025 | V6,V10 |
-| T7 | . | Compute age-specific annual incidence rates → `data/processed/rates.csv` | V3,V6 |
+| T6 | x | Female (& male, total) population by 5-yr age group & year 2000–2025 (mid-year July 1) from INE table 56934 (Estimaciones de Población Actual) → `data/processed/population_spain_midyear_5yr.csv`. Source: 56934 also gives Jan/Apr/Jul/Oct 1971–2025 in `population_spain_estimates.csv`. Cross-check 2024 female: bin sum 24,881,624 = INE all-ages exact match. Script: `src/parse_ine_population.py` | V6,V10 |
+| T7 | x | Age-specific annual incidence rates per 100k → `data/processed/mortality_rates.csv` (198k rows, full deaths × pop join). Plus subsets: `mortality_rates_key.csv` (key causes), `mortality_rates_all_cause_by_age.csv` (concise). Script: `src/compute_mortality_rates.py` | V3,V6 |
 | T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
 | T17 | x | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/parse_ine_mortality.py`, `src/summarize_mortality.py` | V1,V2,V6 |
 | T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
