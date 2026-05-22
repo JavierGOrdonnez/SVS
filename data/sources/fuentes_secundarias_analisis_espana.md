@@ -184,18 +184,17 @@
 
 ### 11. "¿Son ahora los jóvenes españoles más violentos? Un análisis de los datos oficiales sobre homicidios y agresiones sexuales" (Fernández Molina, 2024)
 
+⚠️ **ESTADO: NO VERIFICADO — artículo no accedido. Las entradas anteriores sobre fuentes primarias y hallazgos NO deben usarse hasta que se lea el texto directamente.**
+
 - **Autora:** Esther Fernández Molina (Universidad de Castilla-La Mancha)
 - **Año:** 2024
 - **Revista:** InDret. Revista para el Análisis del Derecho, 24(1), pp. 279–301
-- **URLs:**
+- **URLs (pendiente de acceso):**
   - https://indret.com/son-ahora-los-jovenes-espanoles-mas-violentos/
   - Dialnet: https://dialnet.unirioja.es/servlet/articulo?codigo=9385095
-- **Fuentes primarias utilizadas:** Anuarios estadísticos MIR (series largas), INE, Memorias de la Fiscalía General del Estado
-- **Hallazgos clave:**
-  - Construye series temporales largas para homicidios y agresiones sexuales (2000–2023)
-  - El aumento de agresiones sexuales por menores se produce tras >10 años de descensos
-  - Cuestiona interpretaciones alarmistas sin contexto histórico
-- **Relevancia:** Una de las pocas fuentes que construye series temporales largas comparadas para agresiones sexuales, con metodología transparente.
+- **Fuentes primarias utilizadas:** PENDIENTE — no verificado
+- **Hallazgos clave:** PENDIENTE — no verificado
+- **Relevancia potencial:** Podría contener series temporales largas 2000–2023 para agresiones sexuales; verificar accediendo al PDF directamente.
 
 ---
 
@@ -489,7 +488,7 @@
 | 8 | CGPJ estadística judicial | Sí (anual) | No | Sí | −10,4% condenas 2023 |
 | 9 | Ballesteros/Blanco 2021 | Sí (1987–2018) | Sí (metodológica) | No | Serie MIR 1987–2018 |
 | 10 | Varona/Larrauri 2024 | Parcial | Sí | Sí | Agenda investigación |
-| 11 | Fernández Molina 2024 | Sí (2000–2023) | No | Sí | Series temporales |
+| 11 | Fernández Molina 2024 | **NO VERIFICADO** | **NO VERIFICADO** | **NO VERIFICADO** | **NO VERIFICADO** |
 | 12 | Esquinas Valverde 2025 | Sí (2008–2024) | No | Parcial | Tendencias generales |
 | 13 | Marín de Espinosa 2023 | Parcial | No | Sí (central) | −1.127 condenas |
 | 14 | Pastor-Gosálbez et al. 2021 | Sí (2004–2019) | No | No | Tendencias 15 años |
