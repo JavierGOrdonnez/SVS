@@ -89,5 +89,5 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | B3 | 2026-05-20 | Haiku 2024 agresiones sin penetración = 15953; verified = ~13673 (−14%) | V2,V5 |
 | B4 | 2026-05-20 | Haiku 2023 total sexual crimes = 19981; verified = 21825 (−8.4%) | V2,V5 |
 | B5 | 2026-05-20 | Haiku "62× cifra oculta" = invalid: divides annual denuncias by lifetime prevalence (incompatible units) | V11 |
-| B6 | 2026-05-20 | Two incompatible violaciones series (MIR Anuario 3700–5453 vs Geo VG 1118–1520 for same years) — root cause unresolved | V3,V6 |
+| B6 | 2026-05-20 | Three incompatible violaciones series exist, not two. Serie A = MIR Anuario (3716–5453, includes Art.179 agresión + Art.181 abuso with penetration). Serie B = MIR Informe/Portal (2136–1873 for 2017–2019, Art.179 only — this is what Geo VS uses). Serie C = unknown series (1118–1520, origin unconfirmed; may be pre-2012 partial-territory data or a further subcategory). PARTIAL RESOLUTION: A vs B explained by legal category aggregation. Origin of C still unresolved. See fuentes_secundarias_analisis_espana.md §20. | V3,V6 |
 | B7 | 2026-05-20 | My arithmetic critique of INE Condenados 2024 was wrong: 90 violaciones is subcategory of 1389 not additive; Haiku figures confirmed correct | V2 |

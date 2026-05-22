@@ -314,23 +314,98 @@
 
 ---
 
-### 20. Geo Violencia Sexual — Series Epidemiológicas (2013–2024)
+### 20. Geo Violencia Sexual — Series Epidemiológicas (2010–2024)
+
+⚠️ **ACCESO:** Las cuatro URLs devuelven HTTP 403 (no accedidas directamente). Los datos siguientes proceden de búsquedas web en contenido indexado de las páginas, cruzado con artículos de fact-checking de Newtral que citan y verifican los mismos datos. **Tratar como confidence=low hasta acceso directo.**
 
 - **Institución:** Observatorio Geo Violencia Sexual (entidad independiente)
 - **Años:** Serie de publicaciones desde 2018 con datos desde 2010
-- **URLs:**
+- **URLs (pendiente acceso directo):**
   - Epidemiología general: https://geoviolenciasexual.com/3-radiografia-de-la-violencia-sexual-las-cifras/
   - Violación grupal: https://geoviolenciasexual.com/epidemiologia-de-la-violacion-grupal-en-espana/
   - Violencia contra menores: https://geoviolenciasexual.com/violencia-sexual-contra-menores-en-espana-datos-y-tendencias/
   - Agresiones múltiples 2016–2024: https://geoviolenciasexual.com/analisis-de-casos-de-agresiones-sexuales-multiples-en-espana-2016-2024-segun-fuentes-hemerograficas/
-- **Fuentes primarias utilizadas:** Anuarios MIR y Portal Estadístico de Criminalidad, Macroencuestas, CGPJ, fuentes hemerográficas propias
-- **Hallazgos clave:**
-  - **2013–2022: delitos sexuales conocidos +113%** (8.923 → 19.013)
-  - **Violaciones conocidas 2013–2022: +153%** (1.684 → 4.270)
-  - Menores: 50,8% de víctimas en 2020 vs. 37,9% en 2010
-  - Análisis epidemiológico de 364 agresiones múltiples (2016–2024)
-- **Relevancia:** Fuente independiente más completa para series temporales de datos policiales 2010–2024. Sus figuras (1.684 violaciones en 2013) corresponden a la serie "subcategoría" del MIR — ver discrepancia B6 en SPEC.
-- **Caveat:** Las cifras de "violaciones" que cita (1.684 para 2013; 4.270 para 2022) corresponden a la definición estrecha pre-LO 10/2022, no al total de delitos sexuales con penetración del Anuario.
+- **Fuentes primarias que utiliza:** "Informe sobre Delitos contra la Libertad e Indemnidad Sexual en España" (MIR, serie anual) y Portal Estadístico de Criminalidad — NO el Anuario Estadístico del MIR; Macroencuestas; CGPJ; base hemerográfica propia vía Feminicidio.net
+- **Cross-referencia de verificación:** Newtral, "Las violaciones han crecido un 129% entre 2017 y 2023, no un 253%" (5 sep 2024) — https://www.newtral.es/agresiones-sexuales-penetracion-violaciones-crecen-253-datos-2017-2023/20240905/ — explica explícitamente la metodología de series y la ruptura de LO 10/2022.
+
+#### Resolución parcial de B6 (SPEC)
+
+Se identifican **tres series distintas** para "violaciones", no dos como documenta B6:
+
+| Serie | 2017 | 2018 | 2019 | Fuente |
+|-------|------|------|------|--------|
+| **A** MIR Anuario (broad) | 3.716 | 4.141 | 5.453 | Anuario Estadístico — incluye Art. 179 CP (agresión con penetración) + Art. 181 CP (abuso con penetración, víctima incapaz/menor) |
+| **B** MIR Informe/Portal | 2.136 | 2.744 | 1.873 | Informe sobre Delitos / Portal Estadístico — solo Art. 179 CP (agresión sexual con penetración con violencia o intimidación) |
+| **C** Serie desconocida | 1.118 | 1.407 | 1.520 | Origen sin confirmar — posiblemente subterritorio (excluye Mossos/Ertzaintza/P.Foral) o subcategoría más estrecha |
+
+Geo VS usa la **Serie B** (Informe/Portal). La Serie A (Anuario) es más amplia porque agrega abuso + agresión con penetración. La Serie C (1.118–1.520, recogida en SPEC B6 como "Geo VG") podría corresponder a datos anteriores a 2011 con cobertura territorial incompleta, o a una subcategoría aún más estrecha no identificada. **B6 permanece parcialmente abierto**: el origen exacto de la Serie C necesita confirmación directa.
+
+⚠️ **Anomalía 2019 sin explicar (Serie B):** La Serie B muestra 1.873 violaciones en 2019 vs. 2.744 en 2018 (−31,7%). No hay COVID; no hay reforma legal en ese año. Posible artefacto de clasificación en la edición 2019 del Informe de Delitos. Marcar con bandera en el CSV.
+
+#### Series cuantitativas (confidence=low — reconstruidas de contenido indexado)
+
+**Delitos contra la libertad sexual totales (hechos conocidos):**
+
+| Año | Total |
+|-----|-------|
+| 2013 | 8.923 |
+| 2018 | 13.782 |
+| 2019 | ~15.319 |
+| 2020 | ~12.500 |
+| 2021 | ~16.100 |
+| 2022 | 19.013 |
+| 2023 | 21.825 |
+
+**Agresión sexual con penetración (Serie B — Informe/Portal):**
+
+| Año | Violaciones (Serie B) |
+|-----|----------------------|
+| 2013 | 1.684 |
+| 2017 | 2.136 |
+| 2018 | 2.744 |
+| 2019 | 1.873 ⚠️ anomalía |
+| 2020 | 1.606 (año COVID) |
+| 2021 | 2.143 |
+| 2022 | 2.870 (Informe, ene–oct 2022) / 4.270 (Anuario, unificado año completo) |
+| 2023 | 4.890 |
+| 2024 | 5.206 |
+
+**Menores como % de víctimas (todos los delitos sexuales):**
+
+| Año | % menores |
+|-----|-----------|
+| 2010 | 37,9% |
+| 2020 | 50,8% |
+| 2022 | 44,5% |
+| 2023 | ~42% |
+
+**Agresiones sexuales múltiples (≥2 agresores, datos MIR Informe):**
+
+| Año | Total agresiones múltiples |
+|-----|---------------------------|
+| 2016 | 371 |
+| 2021 | 573 |
+| 2024 | 552 (de las cuales 194 con penetración) |
+| 2018–2024 total | 3.737 (1.275 con penetración; 2.462 sin penetración) |
+
+- Pico en 2022; descenso en 2023 y 2024
+- Las agresiones con penetración = 5,6% del total de violaciones en 2018 → 3,9% en 2024
+
+**Análisis hemerográfico (muestra de prensa, NO datos policiales):**
+- 364 casos de agresión sexual múltiple documentados en prensa, 2016–2024
+- 68% con penetración (~248 casos); pico en agosto (54 casos = 15% del total)
+- Concentración geográfica: Cataluña (63), C. Valenciana (62), Andalucía (53)
+- 28%+ de perpetradores son menores de edad; 32% de víctimas son menores
+- Esta serie captura ~7–10% de los casos del registro oficial (sesgo de cobertura mediática)
+
+#### Perfil de víctimas (2022, datos MIR vía Geo VS)
+- 85,5% de todas las víctimas de delitos sexuales son mujeres
+- 89,8% de víctimas de violación son mujeres
+- 78,5% de víctimas menores son niñas; 90,1% de violaciones a menores, niñas
+- 94,5% de perpetradores son hombres
+
+#### Tasa de denuncia citada por Geo VS
+11,1% (Macroencuesta 2019 + EEVG 2022) — ligeramente superior al 8% de denuncia directa (Macroencuesta), porque incluye denuncias hechas por terceros.
 
 ---
 
