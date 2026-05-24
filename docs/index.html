@@ -222,6 +222,23 @@
     font-size: 0.7rem;
   }
 
+  /* ── SOURCE LINKS ────────────────────────────────────── */
+  .chart-sub a, .caveats a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .chart-sub a:hover, .caveats a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+    background: rgba(124,131,255,0.1);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
   /* ── CONFIDENCE LEGEND ───────────────────────────────── */
   .legend {
     display: flex;
@@ -318,9 +335,9 @@
   <div class="chart-card full">
     <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
     <div class="chart-sub">
-      Official count from Delegación del Gobierno registry. Scope: partner and ex-partner homicides only (LO 1/2004).
-      2000–2002 not in Delegación registry (INE MNP series available but not yet verified).
-      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against primary PDF fichas.</span>
+      Official count from <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno registry</a>. Scope: partner and ex-partner homicides only (LO 1/2004).
+      2000–2002 not in Delegación registry (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=7947" target="_blank">INE MNP series</a> available but not yet verified).
+      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">primary PDF fichas</a>.</span>
     </div>
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> High confidence</div>
@@ -333,9 +350,9 @@
 
   <!-- Chart 2: Sexual crimes total -->
   <div class="chart-card half">
-    <div class="chart-title">Total Sexual Crimes Reported — MIR 2018–2024</div>
+    <div class="chart-title">Total Sexual Crimes Reported — <a href="https://www.interior.gob.es/opencms/es/archivos-y-documentacion/documentacion-y-publicaciones/publicaciones/publicaciones-descargables/publicaciones-periodicas-anuarios-y-revistas/informe-sobre-delitos-contra-la-libertad-e-indemnidad-sexual-en-espana/" target="_blank">MIR</a> 2018–2024</div>
     <div class="chart-sub">
-      Delitos contra la libertad sexual. <span class="warn">⚠ 2022 definitional break: LO 10/2022 (Solo sí es sí)
+      Delitos contra la libertad sexual. <span class="warn">⚠ 2022 definitional break: <a href="https://www.boe.es/diario_oficial/pdf/BOE-A-2022-14630.pdf" target="_blank">LO 10/2022 (Solo sí es sí)</a>
       merged "abuso sexual" into "agresión sexual" — figures pre/post 2022 are NOT directly comparable.</span>
       2022 value is derived estimate (medium confidence).
     </div>
@@ -346,10 +363,10 @@
 
   <!-- Chart 3: Rape series -->
   <div class="chart-card half">
-    <div class="chart-title">Rape (Agresión con Penetración) Reported — MIR 2017–2024</div>
+    <div class="chart-title">Rape (Agresión con Penetración) Reported — <a href="https://www.interior.gob.es/opencms/es/archivos-y-documentacion/documentacion-y-publicaciones/publicaciones/publicaciones-descargables/publicaciones-periodicas-anuarios-y-revistas/anuario-estadistico-del-ministerio-del-interior/" target="_blank">MIR Anuario</a> 2017–2024</div>
     <div class="chart-sub">
       <span class="warn">⚠ BLOCKER B6: Two incompatible series exist in MIR data for the same years
-      (~5,000/yr Anuario headline vs ~1,200/yr Informe subcategory). Root cause unresolved.
+      (~5,000/yr <a href="https://www.interior.gob.es/opencms/es/archivos-y-documentacion/documentacion-y-publicaciones/publicaciones/publicaciones-descargables/publicaciones-periodicas-anuarios-y-revistas/anuario-estadistico-del-ministerio-del-interior/" target="_blank">Anuario headline</a> vs ~1,200/yr <a href="https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/Informe_DelitosSexuales24_v111225_ACC.pdf" target="_blank">Informe subcategory</a>). Root cause unresolved.
       These are the Anuario figures.</span> 2020–2021 low-confidence (COVID disruption).
     </div>
     <div class="legend">
@@ -363,9 +380,9 @@
 
   <!-- Chart 4: Macroencuesta prevalence -->
   <div class="chart-card full">
-    <div class="chart-title">Macroencuesta de Violencia contra la Mujer — Lifetime Prevalence by Wave</div>
+    <div class="chart-title"><a href="https://violenciagenero.igualdad.gob.es/violenciaEncifras/macroencuesta2024/" target="_blank">Macroencuesta de Violencia contra la Mujer</a> — Lifetime Prevalence by Wave</div>
     <div class="chart-sub">
-      Victimisation survey of women 15+/16+ resident in Spain. Waves: 2015, 2019, 2024.
+      Victimisation survey of women 15+/16+ resident in Spain. Waves: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/estudios/colecciones/libro-22-macroencuesta/" target="_blank">2015</a>, <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/macroencuesta2015/Macroencuesta2019/home.htm" target="_blank">2019</a>, <a href="https://violenciagenero.igualdad.gob.es/violenciaEncifras/macroencuesta2024/" target="_blank">2024</a>.
       <span class="warn">⚠ 2024 methodology changed ("proceso estadístico de mejora") — NOT directly comparable to 2019.
       Pre-2015 waves used different question wording. Survey captures actual prevalence; police data captures reported crimes.</span>
     </div>
@@ -377,7 +394,7 @@
   <!-- Chart 5: 2024 victim/perpetrator profile -->
   <div class="chart-card third">
     <div class="chart-title">Sexual Crime Victims 2024 — By Sex</div>
-    <div class="chart-sub">Source: MIR Informe 2024. n = 22,778 total victims.</div>
+    <div class="chart-sub">Source: <a href="https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/Informe_DelitosSexuales24_v111225_ACC.pdf" target="_blank">MIR Informe 2024</a>. n = 22,778 total victims.</div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="chartVictimSex"></canvas>
     </div>
@@ -385,7 +402,7 @@
 
   <div class="chart-card third">
     <div class="chart-title">Sexual Crime Victims 2024 — By Age Group</div>
-    <div class="chart-sub">41.2% of all victims are minors (under 18). Source: MIR Informe 2024.</div>
+    <div class="chart-sub">41.2% of all victims are minors (under 18). Source: <a href="https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/Informe_DelitosSexuales24_v111225_ACC.pdf" target="_blank">MIR Informe 2024</a>.</div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="chartVictimAge"></canvas>
     </div>
@@ -393,7 +410,7 @@
 
   <div class="chart-card third">
     <div class="chart-title">Sexual Crime Perpetrators 2024 — By Sex</div>
-    <div class="chart-sub">93.1% of perpetrators are male. Source: MIR Informe 2024.</div>
+    <div class="chart-sub">93.1% of perpetrators are male. Source: <a href="https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/Informe_DelitosSexuales24_v111225_ACC.pdf" target="_blank">MIR Informe 2024</a>.</div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="chartPerpSex"></canvas>
     </div>
@@ -404,7 +421,7 @@
     <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
     <div class="chart-sub">
       51% foreign victims; foreign women face 4.95× higher rate per 100k vs Spanish women.
-      Source: Delegación del Gobierno 2024.
+      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a>.
     </div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="chartFemNat"></canvas>

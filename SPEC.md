@@ -91,3 +91,21 @@ V11: Dark-figure multipliers ! sourced from macroencuesta or published academic 
 | B5 | 2026-05-20 | Haiku "62× cifra oculta" = invalid: divides annual denuncias by lifetime prevalence (incompatible units) | V11 |
 | B6 | 2026-05-20 | Three incompatible violaciones series exist, not two. Serie A = MIR Anuario (3716–5453, includes Art.179 agresión + Art.181 abuso with penetration). Serie B = MIR Informe/Portal (2136–1873 for 2017–2019, Art.179 only — this is what Geo VS uses). Serie C = unknown series (1118–1520, origin unconfirmed; may be pre-2012 partial-territory data or a further subcategory). PARTIAL RESOLUTION: A vs B explained by legal category aggregation. Origin of C still unresolved. See fuentes_secundarias_analisis_espana.md §20. | V3,V6 |
 | B7 | 2026-05-20 | My arithmetic critique of INE Condenados 2024 was wrong: 90 violaciones is subcategory of 1389 not additive; Haiku figures confirmed correct | V2 |
+
+---
+
+## §M — Merges Pending Manual Verification
+
+**Branch 1: `claude/spain-migration-data-PsIYr`**  
+Status: Ready for merge once data verified.  
+Scope: Completes T11 — migration covariate series (390 rows, 2000–2025).  
+Data: `data/raw/migration_spain.csv` (flows, stock by origin, sex, age bands) + dashboard tab.  
+Source: `data/sources/migracion_espana.md` — link each row to INE/MITES table + section.  
+Pending: MISSM by Régimen 2000-2024, foreign-born stock 2003-2024, 90+ age band 2021-2024.
+
+**Branch 2: `claude/spain-mortality-analysis-nYODb`**  
+Status: Ready for merge once data verified.  
+Scope: Completes T6, T7, T17 — population denominators & age-specific mortality rates.  
+Data: `data/processed/population_spain_midyear_5yr.csv` (2000–2025 by age/sex), `data/processed/mortality_spain_ine_ecm.csv` (198k rows, 2000–2024 by age × sex × cause), derived rate CSVs.  
+Source: `data/sources/ine_causas_muerte.md`, `data/sources/ine_poblacion_estimaciones.md` — INE ECM table 7947, Padrón table 56934.  
+Verification: Cross-check 2024 female population sum (reported: 24,881,624 = INE exact match); spot-check age-specific rates against published INE reports.
