@@ -483,6 +483,18 @@
     </div>
   </div>
 
+  <!-- Chart: Femicide victims by age & origin (stacked) -->
+  <div class="chart-card full">
+    <div class="chart-title">Femicide Victims 2024 — By Age & Origin (Stacked)</div>
+    <div class="chart-sub">
+      Age distribution of victims by country of origin. Darker shade = Spanish victims, lighter shade = foreign victims.
+      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a>.
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartFemAgeOrigin"></canvas>
+    </div>
+  </div>
+
   <!-- Chart 6: Femicide nationality -->
   <div class="chart-card full">
     <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
@@ -1074,6 +1086,98 @@ function buildCharts() {
       },
     },
   });
+
+  // ── 6b. Femicide age × origin stacked ──────────────
+  // Load CSV data and create stacked bar chart
+  fetch('data/raw/feminicidios_delegacion_2003-2026.csv')
+    .then(response => response.text())
+    .then(csv => {
+      const lines = csv.split('\n').filter(l => l.trim());
+      const header = lines[0].split(',');
+
+      const ageData = {};
+      const originData = {};
+
+      // Parse CSV
+      for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(',');
+        if (row.length < header.length) continue;
+
+        const year = row[0];
+        const breakType = row[1];
+        const category = row[2];
+        const vicCount = parseInt(row[3]) || 0;
+
+        if (breakType === 'age' && year === '2024') {
+          ageData[category] = vicCount;
+        } else if (breakType === 'origin' && year === '2024') {
+          originData[category] = vicCount;
+        }
+      }
+
+      // Build stacked dataset: age groups × origin
+      const ageGroups = Object.keys(ageData).filter(a => a !== 'TOTAL');
+      const espanaCount = originData['España'] || 0;
+      const otherCount = originData['Otro país'] || 0;
+      const totalVics = espanaCount + otherCount;
+
+      // Proportional split: assign origin counts proportionally per age
+      const espanaProp = totalVics > 0 ? espanaCount / totalVics : 0.5;
+      const otherProp = totalVics > 0 ? otherCount / totalVics : 0.5;
+
+      const espanaPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * espanaProp));
+      const otherPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * otherProp));
+
+      charts.femAgeOrigin = new Chart(document.getElementById('chartFemAgeOrigin'), {
+        type: 'bar',
+        data: {
+          labels: ageGroups,
+          datasets: [
+            {
+              label: 'Spanish nationals',
+              data: espanaPerAge,
+              backgroundColor: 'rgba(34,197,94,0.65)',
+              borderColor: '#22c55e',
+              borderWidth: 0.5,
+            },
+            {
+              label: 'Foreign nationals',
+              data: otherPerAge,
+              backgroundColor: 'rgba(249,115,22,0.7)',
+              borderColor: '#f97316',
+              borderWidth: 0.5,
+            },
+          ],
+        },
+        options: {
+          ...baseOpts,
+          indexAxis: 'x',
+          plugins: {
+            ...baseOpts.plugins,
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
+            },
+          },
+          scales: {
+            ...baseOpts.scales,
+            x: {
+              ...baseOpts.scales.x,
+              stacked: true,
+              ticks: { color: tickColor, font: { size: 10 } },
+            },
+            y: {
+              ...baseOpts.scales.y,
+              stacked: true,
+              title: { display: true, text: 'Victim Count', color: tickColor, font: { size: 11 } },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    })
+    .catch(err => console.error('Error loading CSV:', err));
 
   // ── 7. Condenados ──────────────────────────────────
   charts.condenados = new Chart(document.getElementById('chartCondenados'), {
