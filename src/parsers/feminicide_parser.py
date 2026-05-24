@@ -101,44 +101,34 @@ def extract_table_2_2_age(text: str) -> List[Dict]:
     """Extract Table 2.2: Age distribution of victims and perpetrators."""
     data = []
 
-    pattern = r'Tabla 2\.2.*?(?=Tabla\s|$)'
-    match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+    match = re.search(
+        r'Tabla 2\.2.*?Grupo de edad\s+(.*?)\s+Mujeres víctimas mortales.*?Número\s+([\d\s]+?)\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)\s+%\s+([\d.\s]+?)(?=Tabla|$)',
+        text,
+        re.DOTALL
+    )
     if not match:
         return data
 
-    table_text = match.group(0)
-    lines = table_text.split('\n')
+    age_text = match.group(1).strip()
+    victim_nums_text = match.group(2).strip()
+    perp_nums_text = match.group(3).strip()
+    victim_pcts_text = match.group(4).strip()
+    perp_pcts_text = match.group(5).strip()
 
-    current_age_group = None
-    for line in lines:
-        line = line.strip()
+    ages = [a.strip() for a in age_text.split('\n') if a.strip()]
+    victim_nums = [int(v) for v in victim_nums_text.split() if v.strip().isdigit()]
+    perp_nums = [int(p) for p in perp_nums_text.split() if p.strip().isdigit()]
+    victim_pcts = [float(v) for v in victim_pcts_text.split() if v.strip()]
+    perp_pcts = [float(p) for p in perp_pcts_text.split() if p.strip()]
 
-        if not line or 'Tabla' in line or 'Grupo de edad' in line:
-            continue
-
-        # Age group header (e.g., "De 18 a 20 años")
-        if 'años' in line.lower() and not any(c.isdigit() for c in line[:10]):
-            current_age_group = line
-            continue
-
-        # Data line: number + percentage pairs
-        match = re.match(
-            r"^([<\d\s\-a-záéíóú]+?)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+([\d.]+)$",
-            line
-        )
-        if match:
-            age_group = match.group(1).strip()
-            victims_n = int(match.group(2))
-            victims_pct = float(match.group(3))
-            perpetrators_n = int(match.group(4))
-            perpetrators_pct = float(match.group(5))
-
+    for i, age in enumerate(ages):
+        if i < len(victim_nums) and i < len(perp_nums) and i < len(victim_pcts) and i < len(perp_pcts):
             data.append({
-                'age_group': age_group,
-                'victims_count': victims_n,
-                'victims_pct': victims_pct,
-                'perpetrators_count': perpetrators_n,
-                'perpetrators_pct': perpetrators_pct,
+                'age_group': age,
+                'victims_count': victim_nums[i],
+                'victims_pct': victim_pcts[i],
+                'perpetrators_count': perp_nums[i],
+                'perpetrators_pct': perp_pcts[i],
                 'table': 2.2,
             })
 
@@ -146,39 +136,37 @@ def extract_table_2_2_age(text: str) -> List[Dict]:
 
 
 def extract_table_2_3_origin(text: str) -> List[Dict]:
-    """Extract Table 2.3: Country of birth."""
+    """Extract Table 2.3: Country of birth (victims & perpetrators)."""
     data = []
 
-    pattern = r'Tabla 2\.3.*?(?=Tabla\s|$)'
-    match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+    match = re.search(
+        r'Tabla 2\.3.*?País de nacimiento\s+(.*?)\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)\s+Presuntos agresores\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)(?=Tabla|$)',
+        text,
+        re.DOTALL
+    )
     if not match:
         return data
 
-    table_text = match.group(0)
-    lines = table_text.split('\n')
+    origin_text = match.group(1).strip()
+    victim_nums_text = match.group(2).strip()
+    victim_pcts_text = match.group(3).strip()
+    perp_nums_text = match.group(4).strip()
+    perp_pcts_text = match.group(5).strip()
 
-    for line in lines:
-        line = line.strip()
+    origins = [o.strip() for o in origin_text.split('\n') if o.strip()]
+    victim_nums = [int(v) for v in victim_nums_text.split() if v.strip().isdigit()]
+    victim_pcts = [float(v) for v in victim_pcts_text.split() if v.strip()]
+    perp_nums = [int(p) for p in perp_nums_text.split() if p.strip().isdigit()]
+    perp_pcts = [float(p) for p in perp_pcts_text.split() if p.strip()]
 
-        if not line or 'Tabla' in line or 'País' in line or 'Número' in line:
-            continue
-
-        # Parse: "Country NUMBER % (victims & perpetrators)"
-        match = re.match(
-            r"^([A-Za-zá-ú\s]+?)\s+(\d+)\s+([\d.]+)\s+(\d+)",
-            line
-        )
-        if match:
-            country = match.group(1).strip()
-            victims_n = int(match.group(2))
-            victims_pct = float(match.group(3))
-            perpetrators_n = int(match.group(4))
-
+    for i, origin in enumerate(origins):
+        if i < len(victim_nums) and i < len(perp_nums) and i < len(victim_pcts) and i < len(perp_pcts):
             data.append({
-                'origin': country,
-                'victims_count': victims_n,
-                'victims_pct': victims_pct,
-                'perpetrators_count': perpetrators_n,
+                'origin': origin,
+                'victims_count': victim_nums[i],
+                'victims_pct': victim_pcts[i],
+                'perpetrators_count': perp_nums[i],
+                'perpetrators_pct': perp_pcts[i],
                 'table': 2.3,
             })
 
