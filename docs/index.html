@@ -88,6 +88,47 @@
 
   .hcard .delta.down { color: #60a5fa; }
 
+  /* ── TABS ────────────────────────────────────────────── */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    align-items: stretch;
+  }
+
+  .tab-btn {
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text2);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
   /* ── FILTER BAR ──────────────────────────────────────── */
   .filter-bar {
     display: flex;
@@ -328,25 +369,17 @@
   <button class="conf-btn unverified"    onclick="toggleConf('unverified')" ><div class="dot"></div> Unverified</button>
 </div>
 
-<!-- ═══════════════ CHARTS ═══════════════ -->
-<main>
+<!-- ═══════════════ TAB NAVIGATION ═══════════════ -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('sexual-crimes')">Sexual Crimes & Surveys</button>
+  <button class="tab-btn" onclick="switchTab('feminicides')">Feminicides</button>
+  <button class="tab-btn" onclick="switchTab('others')">Others</button>
+</div>
 
-  <!-- Chart 1: Femicide timeline -->
-  <div class="chart-card full">
-    <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
-    <div class="chart-sub">
-      Official count from <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno registry</a>. Scope: partner and ex-partner homicides only (LO 1/2004).
-      2000–2002 not in Delegación registry (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=7947" target="_blank">INE MNP series</a> available but not yet verified).
-      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">primary PDF fichas</a>.</span>
-    </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> High confidence</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium confidence</div>
-    </div>
-    <div class="chart-wrap" style="height:260px">
-      <canvas id="chartFemicide"></canvas>
-    </div>
-  </div>
+<!-- ═══════════════ CHARTS ═══════════════ -->
+
+<!-- TAB 1: Sexual Crimes & Surveys -->
+<main id="tab-sexual-crimes" class="tab-content active">
 
   <!-- Chart 2: Sexual crimes total -->
   <div class="chart-card half">
@@ -416,18 +449,6 @@
     </div>
   </div>
 
-  <!-- Chart 6: Femicide nationality -->
-  <div class="chart-card third">
-    <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
-    <div class="chart-sub">
-      51% foreign victims; foreign women face 4.95× higher rate per 100k vs Spanish women.
-      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a>.
-    </div>
-    <div class="chart-wrap" style="height:220px">
-      <canvas id="chartFemNat"></canvas>
-    </div>
-  </div>
-
   <!-- Chart 7: Condenados -->
   <div class="chart-card third">
     <div class="chart-title">INE Condenados — Sexual Crime Convictions 2023–2024</div>
@@ -439,6 +460,45 @@
       <canvas id="chartCondenados"></canvas>
     </div>
   </div>
+
+</main>
+
+<!-- TAB 2: Feminicides -->
+<main id="tab-feminicides" class="tab-content">
+
+  <!-- Chart 1: Femicide timeline -->
+  <div class="chart-card full">
+    <div class="chart-title">Femicides (Intimate Partner) — Spain 2003–2024</div>
+    <div class="chart-sub">
+      Official count from <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno registry</a>. Scope: partner and ex-partner homicides only (LO 1/2004).
+      2000–2002 not in Delegación registry (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=7947" target="_blank">INE MNP series</a> available but not yet verified).
+      <span class="warn"> ⚠ 2004–2023 from secondary summary — verify against <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">primary PDF fichas</a>.</span>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> High confidence</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div> Medium confidence</div>
+    </div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartFemicide"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 6: Femicide nationality -->
+  <div class="chart-card full">
+    <div class="chart-title">Femicide Victims 2024 — By Nationality</div>
+    <div class="chart-sub">
+      51% foreign victims; foreign women face 4.95× higher rate per 100k vs Spanish women.
+      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a>.
+    </div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartFemNat"></canvas>
+    </div>
+  </div>
+
+</main>
+
+<!-- TAB 3: Others -->
+<main id="tab-others" class="tab-content">
 
   <!-- Chart 8: Domestic violence denuncias -->
   <div class="chart-card third">
@@ -531,6 +591,30 @@
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════ */
+function switchTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+
+  // Remove active class from all buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Show selected tab
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+
+  // Add active class to clicked button
+  event.target.classList.add('active');
+
+  // Rebuild charts for the active tab (ensures proper rendering)
+  setTimeout(() => buildCharts(), 100);
+}
+
 /* ═══════════════════════════════════════════════════
    DATA
 ═══════════════════════════════════════════════════ */
