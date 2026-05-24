@@ -237,7 +237,7 @@ def parse_pdf(pdf_path: str) -> Dict:
             ['pdftotext', str(pdf_path), '-'],
             capture_output=True,
             text=True,
-            timeout=10
+            timeout=30
         )
 
         if proc.returncode != 0:

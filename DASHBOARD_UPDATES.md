@@ -29,7 +29,7 @@ Links:
 - 🔗 [Primary PDF fichas](https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/)
 
 ### 2. Total Sexual Crimes Reported
-Links:
+Links:º
 - 🔗 [MIR](https://www.interior.gob.es/opencms/es/archivos-y-documentacion/documentacion-y-publicaciones/publicaciones/publicaciones-descargables/publicaciones-periodicas-anuarios-y-revistas/informe-sobre-delitos-contra-la-libertad-e-indemnidad-sexual-en-espana/)
 - 🔗 [LO 10/2022 (Solo sí es sí)](https://www.boe.es/diario_oficial/pdf/BOE-A-2022-14630.pdf) — law text explaining the 2022 break
 
