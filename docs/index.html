@@ -531,10 +531,10 @@
 
   <!-- Chart: Femicide victims by age & origin (stacked) -->
   <div class="chart-card full">
-    <div class="chart-title">Femicide Victims 2024 — By Age & Origin (Stacked)</div>
+    <div class="chart-title">Femicide Victims 2024 — By Age & Origin (Stacked) with Rate Overlay</div>
     <div class="chart-sub">
-      Age distribution of victims by country of origin. Darker shade = Spanish victims, lighter shade = foreign victims.
-      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a>.
+      Age distribution of victims (left Y-axis, bars) by country of origin. Rate per 100k (right Y-axis, line) computed from INE Padrón mid-year female population by origin.
+      Source: <a href="https://violenciagenero.igualdad.gob.es/violenciaencifras/victimasmortales/fichamujeres/" target="_blank">Delegación del Gobierno 2024</a> + <a href="https://www.ine.es/jaxiT3/Tabla.htm?t=56934" target="_blank">INE Padrón table 56934</a>.
     </div>
     <div class="chart-wrap" style="height:280px">
       <canvas id="chartFemAgeOrigin"></canvas>
@@ -1232,97 +1232,189 @@ function buildCharts() {
     },
   });
 
-  // ── 6b. Femicide age × origin stacked ──────────────
-  // Load CSV data and create stacked bar chart
-  fetch('data/raw/feminicidios_delegacion_2003-2026.csv')
-    .then(response => response.text())
-    .then(csv => {
-      const lines = csv.split('\n').filter(l => l.trim());
-      const header = lines[0].split(',');
+  // ── 6b. Femicide age × origin stacked + rate overlay ───
+  // Load CSV data and create stacked bar chart with rate line
+  Promise.all([
+    fetch('data/raw/feminicidios_delegacion_2003-2026.csv').then(r => r.text()),
+    fetch('data/processed/feminicide_rates_2024.csv').then(r => r.text()),
+  ]).then(([csvVics, csvRates]) => {
+    // Parse victim counts by age
+    const vicsLines = csvVics.split('\n').filter(l => l.trim());
+    const vicsHeader = vicsLines[0].split(',');
+    const ageData = {};
+    const originData = {};
 
-      const ageData = {};
-      const originData = {};
+    for (let i = 1; i < vicsLines.length; i++) {
+      const row = vicsLines[i].split(',');
+      if (row.length < vicsHeader.length) continue;
 
-      // Parse CSV
-      for (let i = 1; i < lines.length; i++) {
-        const row = lines[i].split(',');
-        if (row.length < header.length) continue;
+      const year = row[0];
+      const breakType = row[1];
+      const category = row[2];
+      const vicCount = parseInt(row[3]) || 0;
 
-        const year = row[0];
-        const breakType = row[1];
-        const category = row[2];
-        const vicCount = parseInt(row[3]) || 0;
-
-        if (breakType === 'age' && year === '2024') {
-          ageData[category] = vicCount;
-        } else if (breakType === 'origin' && year === '2024') {
-          originData[category] = vicCount;
-        }
+      if (breakType === 'age' && year === '2024') {
+        ageData[category] = vicCount;
+      } else if (breakType === 'origin' && year === '2024') {
+        originData[category] = vicCount;
       }
+    }
 
-      // Build stacked dataset: age groups × origin
-      const ageGroups = Object.keys(ageData).filter(a => a !== 'TOTAL');
-      const espanaCount = originData['España'] || 0;
-      const otherCount = originData['Otro país'] || 0;
-      const totalVics = espanaCount + otherCount;
+    // Parse rates by origin
+    const ratesLines = csvRates.split('\n').filter(l => l.trim());
+    const ratesHeader = ratesLines[0].split(',');
+    const ratesData = {};
 
-      // Proportional split: assign origin counts proportionally per age
-      const espanaProp = totalVics > 0 ? espanaCount / totalVics : 0.5;
-      const otherProp = totalVics > 0 ? otherCount / totalVics : 0.5;
+    for (let i = 1; i < ratesLines.length; i++) {
+      const row = ratesLines[i].split(',');
+      if (row.length < ratesHeader.length) continue;
 
-      const espanaPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * espanaProp));
-      const otherPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * otherProp));
+      const origin = row[1] ? row[1].trim() : '';
+      const rate = parseFloat(row[4]) || 0;
+      const ciLower = parseFloat(row[5]) || 0;
+      const ciUpper = parseFloat(row[6]) || 0;
 
-      charts.femAgeOrigin = new Chart(document.getElementById('chartFemAgeOrigin'), {
-        type: 'bar',
-        data: {
-          labels: ageGroups,
-          datasets: [
-            {
-              label: 'Spanish nationals',
-              data: espanaPerAge,
-              backgroundColor: 'rgba(34,197,94,0.65)',
-              borderColor: '#22c55e',
-              borderWidth: 0.5,
-            },
-            {
-              label: 'Foreign nationals',
-              data: otherPerAge,
-              backgroundColor: 'rgba(249,115,22,0.7)',
-              borderColor: '#f97316',
-              borderWidth: 0.5,
-            },
-          ],
-        },
-        options: {
-          ...baseOpts,
-          indexAxis: 'x',
-          plugins: {
-            ...baseOpts.plugins,
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
+      if (origin) {
+        ratesData[origin] = { rate, ciLower, ciUpper };
+      }
+    }
+
+    // Build stacked dataset: age groups × origin
+    const ageGroups = Object.keys(ageData).filter(a => a !== 'TOTAL');
+    const espanaCount = originData['España'] || 0;
+    const otherCount = originData['Otro país'] || 0;
+    const totalVics = espanaCount + otherCount;
+
+    // Proportional split: assign origin counts proportionally per age
+    const espanaProp = totalVics > 0 ? espanaCount / totalVics : 0.5;
+    const otherProp = totalVics > 0 ? otherCount / totalVics : 0.5;
+
+    const espanaPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * espanaProp));
+    const otherPerAge = ageGroups.map(age => Math.round((ageData[age] || 0) * otherProp));
+
+    // Extract rate + CIs for overlay
+    const espanaRate = ratesData['españa']?.rate || 0;
+    const espanaCI = ratesData['españa'] || { ciLower: 0, ciUpper: 0 };
+    const otherRate = ratesData['otro_pais']?.rate || 0;
+    const otherCI = ratesData['otro_pais'] || { ciLower: 0, ciUpper: 0 };
+
+    // Combined rate (total feminicides / total population)
+    const totalPopulation = (ratesData['españa']?.population || 0) + (ratesData['otro_pais']?.population || 0);
+    const combinedRate = totalPopulation > 0 ? ((totalVics / totalPopulation) * 100000) : 0;
+
+    charts.femAgeOrigin = new Chart(document.getElementById('chartFemAgeOrigin'), {
+      type: 'bar',
+      data: {
+        labels: ageGroups,
+        datasets: [
+          {
+            label: 'Spanish nationals',
+            data: espanaPerAge,
+            backgroundColor: 'rgba(34,197,94,0.65)',
+            borderColor: '#22c55e',
+            borderWidth: 0.5,
+            yAxisID: 'y',
+          },
+          {
+            label: 'Foreign nationals',
+            data: otherPerAge,
+            backgroundColor: 'rgba(249,115,22,0.7)',
+            borderColor: '#f97316',
+            borderWidth: 0.5,
+            yAxisID: 'y',
+          },
+          {
+            label: 'Combined rate (per 100k)',
+            type: 'line',
+            data: ageGroups.map(() => combinedRate),
+            borderColor: '#7c83ff',
+            backgroundColor: 'rgba(124,131,255,0.1)',
+            borderWidth: 2.5,
+            pointRadius: 4,
+            pointBackgroundColor: '#7c83ff',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1,
+            tension: 0.3,
+            yAxisID: 'y1',
+            fill: false,
+          },
+          {
+            label: '95% CI upper',
+            type: 'line',
+            data: ageGroups.map(() => espanaCI.ciUpper),
+            borderColor: 'rgba(124,131,255,0.3)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            pointRadius: 0,
+            yAxisID: 'y1',
+            fill: false,
+          },
+          {
+            label: '95% CI lower',
+            type: 'line',
+            data: ageGroups.map(() => Math.max(0, espanaCI.ciLower)),
+            borderColor: 'rgba(124,131,255,0.3)',
+            borderWidth: 1,
+            borderDash: [4, 4],
+            pointRadius: 0,
+            yAxisID: 'y1',
+            fill: '-1',
+            backgroundColor: 'rgba(124,131,255,0.06)',
+          },
+        ],
+      },
+      options: {
+        ...baseOpts,
+        indexAxis: 'x',
+        plugins: {
+          ...baseOpts.plugins,
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: { color: labelColor, font: { size: 11 }, padding: 12, boxWidth: 12 },
+          },
+          tooltip: {
+            ...baseOpts.plugins.tooltip,
+            callbacks: {
+              title: ctx => `Age: ${ctx[0].label}`,
+              label: ctx => {
+                if (ctx.datasetIndex <= 1) {
+                  return `${ctx.dataset.label}: ${ctx.parsed.y} victims`;
+                } else if (ctx.datasetIndex === 2) {
+                  return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}/100k`;
+                } else {
+                  return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}/100k`;
+                }
+              },
             },
           },
-          scales: {
-            ...baseOpts.scales,
-            x: {
-              ...baseOpts.scales.x,
-              stacked: true,
-              ticks: { color: tickColor, font: { size: 10 } },
-            },
-            y: {
-              ...baseOpts.scales.y,
-              stacked: true,
-              title: { display: true, text: 'Victim Count', color: tickColor, font: { size: 11 } },
-              beginAtZero: true,
-            },
+        },
+        scales: {
+          ...baseOpts.scales,
+          x: {
+            ...baseOpts.scales.x,
+            stacked: true,
+            ticks: { color: tickColor, font: { size: 10 } },
+          },
+          y: {
+            ...baseOpts.scales.y,
+            stacked: true,
+            position: 'left',
+            title: { display: true, text: 'Victim Count', color: tickColor, font: { size: 11 } },
+            beginAtZero: true,
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            title: { display: true, text: 'Rate per 100k', color: tickColor, font: { size: 11 } },
+            beginAtZero: true,
+            max: Math.max(espanaCI.ciUpper, otherCI.ciUpper) * 1.2,
+            grid: { drawOnChartArea: false },
           },
         },
-      });
-    })
-    .catch(err => console.error('Error loading CSV:', err));
+      },
+    });
+  }).catch(err => console.error('Error loading feminicide data:', err));
 
   // ── 7. Condenados ──────────────────────────────────
   charts.condenados = new Chart(document.getElementById('chartCondenados'), {
