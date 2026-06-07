@@ -81,7 +81,7 @@ V13: B6 discrepancy (violaciones series incompatibility) ! always documented in 
 | T17 | x | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/parse_ine_mortality.py`, `src/summarize_mortality.py` | V1,V2,V6 |
 | T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
 | T10 | . | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
-| T11 | . | Collect covariate series: total immigration flow & stock by year, nationality, sex, age — INE/MITES | V10,C8 |
+| T11 | ~ | Populate `data/raw/migration_spain.csv` (390 rows) — flows 2000-2024, foreign-nationality stock 2000-2025, top-10 origin nationalities for 2008-2024 intake & 2025 stock (sex-split sums match published totals exactly 2008-2024), broad age bands 2008-2024 + granular 5-yr bands 2024, SS-affiliation snapshots. Dashboard tab in `docs/index.html` renders all 390 rows with per-row Sources linkage. PENDING: annual MISSM by Régimen 2000-2024 (OPI WAF-blocked), foreign-born stock 2003-2024 (sparse), 2021-2024 90+ age band (~1k/yr gap from table 69687). See `data/sources/migracion_espana.md` | V10,C8 |
 | T12 | . | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
 | T13 | . | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
 | T14 | . | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
