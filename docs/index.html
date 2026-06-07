@@ -399,8 +399,9 @@
 
 <!-- ═══════════════ TAB BAR ═══════════════ -->
 <div class="tab-bar">
-  <button class="tab-btn active" data-tab="violence" onclick="switchTab('violence')">Violence &amp; Sexual Crime</button>
-  <button class="tab-btn"        data-tab="mortality" onclick="switchTab('mortality')">Mortality (INE ECM)</button>
+  <button class="tab-btn active" data-tab="violence" onclick="switchMainTab('violence')">Violence &amp; Sexual Crime</button>
+  <button class="tab-btn"        data-tab="mortality" onclick="switchMainTab('mortality')">Mortality (INE ECM)</button>
+  <button class="tab-btn"        data-tab="migration" onclick="switchMainTab('migration')">Migration (INE)</button>
 </div>
 
 <!-- ═══════════════ TAB: VIOLENCE ═══════════════ -->
@@ -417,9 +418,9 @@
 
 <!-- ═══════════════ TAB NAVIGATION ═══════════════ -->
 <div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('sexual-crimes')">Sexual Crimes & Surveys</button>
-  <button class="tab-btn" onclick="switchTab('feminicides')">Feminicides</button>
-  <button class="tab-btn" onclick="switchTab('others')">Others</button>
+  <button class="tab-btn active" onclick="switchSubTab('sexual-crimes')">Sexual Crimes & Surveys</button>
+  <button class="tab-btn" onclick="switchSubTab('feminicides')">Feminicides</button>
+  <button class="tab-btn" onclick="switchSubTab('others')">Others</button>
 </div>
 
 <!-- ═══════════════ CHARTS ═══════════════ -->
@@ -747,28 +748,153 @@
 
 </div><!-- /tab-mortality -->
 
+<!-- ═══════════════ TAB: MIGRATION ═══════════════ -->
+<div class="tab-panel" id="tab-migration">
+
+<main>
+
+  <!-- G1: annual inflow trend -->
+  <div class="chart-card full">
+    <div class="chart-title">Annual Immigration Inflow from Abroad — Spain 2000–2024</div>
+    <div class="chart-sub">
+      People arriving from abroad each year (all nationalities). Inflow roughly tripled from 2000
+      to the mid-2000s boom, fell sharply in the 2009–2013 recession years, and has climbed to
+      record levels (~1.29M) since 2022 post-pandemic recovery.
+      <strong>Source-series break in 2008</strong> (EVR → EMCR methodology change — pre/post not
+      directly comparable; flagged on the chart).
+      Source: INE EVR / EMCR (via Eurostat mirror migr_imm1ctz and INE press releases).
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartMigInflow"></canvas>
+    </div>
+  </div>
+
+  <!-- G2: origin composition over time -->
+  <div class="chart-card full">
+    <div class="chart-title">Immigration Inflow by Country of Origin — Top Origins, 2008–2024</div>
+    <div class="chart-sub">
+      Stacked counts for the 7 origin countries with the most consistent year-coverage in the
+      source tables (not an exhaustive top-10-per-year list — some gaps are real reporting gaps,
+      shown as breaks in the band). Morocco and Romania dominated the 2008–2016 period;
+      Colombia and Venezuela have surged since 2017–2019 (Venezuelan crisis, Colombian visa-waiver
+      changes). Source: INE EMCR tables 24290/24293/24295.
+    </div>
+    <div class="chart-wrap" style="height:320px">
+      <canvas id="chartMigOrigin"></canvas>
+    </div>
+  </div>
+
+  <!-- G3: sex split over time -->
+  <div class="chart-card half">
+    <div class="chart-title">Immigration Inflow by Sex — Spain 2008–2024</div>
+    <div class="chart-sub">
+      Annual arrivals split male / female. The flow is close to sex-balanced in most years,
+      with a male-leaning tilt emerging in the high-volume 2022–2024 years.
+      Source: INE EMCR table 24312.
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartMigSex"></canvas>
+    </div>
+  </div>
+
+  <!-- G4: age-band composition over time -->
+  <div class="chart-card half">
+    <div class="chart-title">Immigration Inflow by Broad Age Band — Spain 2008–2024</div>
+    <div class="chart-sub">
+      Stacked counts by age band. Working-age cohorts (15–44) consistently dominate the inflow —
+      this is a labour-migration profile, not a dependent-population profile.
+      Source: INE EMCR table 24312.
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartMigAgeBands"></canvas>
+    </div>
+  </div>
+
+  <!-- G5: detailed age profile, latest year -->
+  <div class="chart-card half">
+    <div class="chart-title"><span id="g5-year">2024</span> Immigration Inflow — Detailed Age Profile</div>
+    <div class="chart-sub">
+      5-year age bands for the latest year with this breakdown. Arrivals peak sharply at
+      ages 25–29 and stay high through the 30s — the classic labour-migration age curve —
+      then fall off steeply past 50.
+      Source: INE EMCR table 24312, 2024.
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartMigAgeProfile"></canvas>
+    </div>
+  </div>
+
+  <!-- G6: foreign population stock trend -->
+  <div class="chart-card half">
+    <div class="chart-title">Foreign Population Stock — Spain 2000–2025</div>
+    <div class="chart-sub">
+      Foreign-nationality residents (Padrón, annual) vs. foreign-born residents (sparser
+      snapshots — includes naturalised Spanish citizens, hence consistently higher).
+      Foreign-nationality stock peaked ~5.75M in 2010–2011, dipped through the recession-era
+      "return migration" years, and has climbed to a new high (~6.9M) by 2025.
+      Source: INE Padrón Continuo / ECP (tables 01001, 36825); foreign-born via secondary
+      citation of INE (medium confidence — see migracion_espana.md).
+    </div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartMigStock"></canvas>
+    </div>
+  </div>
+
+</main>
+
+<div class="caveats">
+  <h3>Migration Data Caveats</h3>
+  <ul>
+    <li><strong>2008 series break (EVR → EMCR).</strong> Pre-2008 flow figures come from the
+    Estadística de Variaciones Residenciales; from 2008 INE switched to the Estadística de
+    Migraciones y Cambios de Residencia. Definitions and coverage differ — do not read the
+    2007→2008 jump as a real one-year surge.</li>
+    <li><strong>2021 stock-series break (Padrón → ECP).</strong> The Padrón Continuo was replaced
+    by the Estadística Continua de Población in 2021 — small level-shift artefacts around
+    2020–2022 cannot be ruled out in the stock series.</li>
+    <li><strong>Brexit reclassification.</strong> UK nationals shift between "EU" and "non-EU"
+    groupings around 2020–2021 in some published tables — the United Kingdom origin series
+    in chart G2 may show a discontinuity unrelated to actual flow changes.</li>
+    <li><strong>"Top origins" selection.</strong> Chart G2 shows the 7 countries with the most
+    consistent year-coverage in our extracted rows, not a guaranteed top-7 for every year —
+    some smaller-but-fast-growing origins (e.g. Ukraine, Pakistan, Honduras) are not shown here
+    even in years where they ranked highly.</li>
+    <li><strong>Foreign-born vs. foreign-nationality.</strong> "Foreign-born" (chart G6, sparse
+    points) counts everyone born abroad including naturalised Spanish citizens — it is
+    structurally larger than, and not directly comparable to, the annual "foreign-nationality"
+    series. Both are shown for context, not for ratio computation.</li>
+    <li><strong>This tab is the population denominator, not the crime numerator.</strong> Pairing
+    this stock/flow data with crime-by-nationality figures to compute absolute migrant offending
+    rates is tracked separately (T26–T29 in SPEC.md) — see V14 for the framing requirement that
+    any relative-rate claim must be paired with its absolute base rate and population denominator.</li>
+  </ul>
+</div>
+
+</div><!-- /tab-migration -->
+
 <script>
 /* ═══════════════════════════════════════════════════
-   TAB SWITCHING
+   SUB-TAB SWITCHING (within the Violence panel:
+   sexual-crimes / feminicides / others)
 ═══════════════════════════════════════════════════ */
-function switchTab(tabName) {
-  // Hide all tabs
+function switchSubTab(tabName) {
+  // Hide all sub-tab contents
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.classList.remove('active');
   });
 
-  // Remove active class from all buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  // Remove active class from sub-tab buttons (scoped to their nav bar)
+  event.target.closest('.tab-nav').querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.remove('active');
   });
 
-  // Show selected tab
+  // Show selected sub-tab
   document.getElementById(`tab-${tabName}`).classList.add('active');
 
   // Add active class to clicked button
   event.target.classList.add('active');
 
-  // Rebuild charts for the active tab (ensures proper rendering)
+  // Rebuild charts for the active sub-tab (ensures proper rendering)
   setTimeout(() => buildCharts(), 100);
 }
 
@@ -1681,7 +1807,15 @@ const CHAPTER_NAMES = {
   'XX':   'XX — External causes',
 };
 
+/* ═══════════════════════════════════════════════════
+   MIGRATION DATA (generated by src/build_migration_dashboard_data.py)
+═══════════════════════════════════════════════════ */
+const MIGRATION = {"annual_inflow":{"years":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"values":[362468,414772,483260,470010,684561,719284,840844,958266,599074,392963,360704,371335,304054,280772,305454,342114,414746,532132,643684,750480,467918,887960,1258894,1250991,1288562],"sources":["INE_EVR","INE_EVR","INE_EVR","INE_EVR","INE_EVR","INE_EVR","INE_EVR","INE_EVR","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EM","INE_EMCR","INE_EMCR","INE_EMCR","INE_EMCR"]},"origin_composition":{"years":[2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"origins":["Colombia","Morocco","Romania","Italy","United Kingdom","Venezuela","Peru"],"series":{"Colombia":[36040,20409,13664,13161,9955,8688,8451,9368,22594,34106,53302,76816,51408,64535,172241,170722,168122],"Morocco":[71761,43178,30169,27978,22444,20516,19994,23831,29712,39841,60935,72866,44940,99460,113725,123468,133130],"Romania":[61262,44079,51915,50831,27273,22774,29721,28785,28629,31031,29102,27011,15737,47480,48011,45663,38104],"Italy":[null,11763,11196,11643,12016,12183,14890,18645,21667,28793,31280,33362,21330,42101,48797,48089,45812],"United Kingdom":[23758,17938,16173,15731,16375,14145,14230,14991,18549,21247,23962,29363,29518,33941,null,null,null],"Venezuela":[null,null,null,null,null,null,7199,10529,18507,31598,47147,58054,29667,37428,82474,88361,103225],"Peru":[27523,13664,null,null,null,null,null,null,null,13875,19339,28579,18117,26055,65230,66933,69567]}},"sex_split":{"years":[2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"male":[310262,192286,176828,180946,149750,139473,151949,169626,204209,260161,319082,376035,236402,467162,626804,641997,681606],"female":[288812,200677,183876,190389,154304,141299,153505,172488,210537,271971,324602,374445,231516,420798,632090,608994,606956]},"age_band_over_time":{"years":[2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"bands":["0-14","15-29","30-44","45-64","65+"],"series":{"0-14":[95199,65725,58155,57564,47221,46041,49325,55470,68194,83039,95407,111010,67935,116606,194404,178094,183181],"15-29":[246024,154869,137623,139465,111640,98998,106190,117472,141911,188364,227458,262390,157668,265865,384403,386185,410589],"30-44":[169087,104793,97133,100149,79945,73175,81146,93152,112882,146521,183148,217112,135822,259078,380592,380056,391449],"45-64":[71759,51961,52055,56429,48136,45663,50153,55817,67826,84707,103610,121797,81182,184793,234681,238647,236108],"65+":[17006,15616,15738,17729,17112,16893,18637,20202,23933,29501,34061,38171,25311,60502,63750,66913,66254]}},"age_profile_latest":{"year":2024,"ages":["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85-89","90+"],"values":[49817,64199,69165,93952,144726,171911,156127,129638,105684,83489,65062,49402,38155,29907,17897,10612,5461,2377,981]},"stock_trend":{"years":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"foreign_nationality":[923879,1370657,1977946,2664168,3034326,3730610,4144166,4519554,5268762,5648671,5747734,5751487,5736258,5546238,5023487,4729644,4618581,4572807,4734691,5036878,5434153,5440148,5542932,6089620,6502282,6911971],"foreign_born_years":[2002,2005,2010,2015,2020,2025],"foreign_born":[2334098,4107226,6280064,5883891,7014753,9379972]}};
+
+const ORIGIN_COLORS = ['#7c83ff', '#22c55e', '#eab308', '#f97316', '#ef4444', '#a855f7', '#06b6d4'];
+
 let mortalityCharts = {};
+let migrationCharts = {};
 
 function buildMortalityCharts() {
   if (mortalityCharts.allCause) Object.values(mortalityCharts).forEach(c => c.destroy());
@@ -1881,16 +2015,238 @@ function buildMortalityCharts() {
   });
 }
 
+function buildMigrationCharts() {
+  if (migrationCharts.inflow) Object.values(migrationCharts).forEach(c => c.destroy());
+  migrationCharts = {};
+
+  const g = MIGRATION;
+
+  // ── G1: annual inflow trend, with 2008 EVR→EMCR break marker ──
+  const ai = g.annual_inflow;
+  migrationCharts.inflow = new Chart(document.getElementById('chartMigInflow'), {
+    type: 'line',
+    data: {
+      labels: ai.years,
+      datasets: [
+        {
+          label: 'Immigrants from abroad',
+          data: ai.values,
+          borderColor: '#7c83ff',
+          backgroundColor: 'rgba(124,131,255,0.1)',
+          fill: true, tension: 0.25, pointRadius: 2, borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: 'top', labels: { color: labelColor, font: { size: 11 } } },
+        annotation: {
+          annotations: {
+            evrBreak: {
+              type: 'line', xMin: '2008', xMax: '2008',
+              borderColor: 'rgba(239,68,68,0.4)', borderWidth: 1, borderDash: [4, 4],
+              label: { display: true, content: 'EVR → EMCR methodology change', color: '#9ba3bf', font: { size: 10 },
+                position: 'start', backgroundColor: 'rgba(34,38,58,0.85)' },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, title: { display: true, text: 'People per year', color: tickColor, font: { size: 11 } } },
+      },
+    },
+  });
+
+  // ── G2: origin-country composition, stacked area ──
+  const oc = g.origin_composition;
+  migrationCharts.origin = new Chart(document.getElementById('chartMigOrigin'), {
+    type: 'line',
+    data: {
+      labels: oc.years,
+      datasets: oc.origins.map((name, i) => ({
+        label: name,
+        data: oc.series[name],
+        borderColor: ORIGIN_COLORS[i % ORIGIN_COLORS.length],
+        backgroundColor: ORIGIN_COLORS[i % ORIGIN_COLORS.length] + 'cc',
+        fill: true, tension: 0.2, pointRadius: 0, borderWidth: 1,
+        spanGaps: true,
+      })),
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 10 }, boxWidth: 12 } },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, stacked: true, title: { display: true, text: 'Immigrants per year (count)', color: tickColor, font: { size: 11 } } },
+        x: { ...baseOpts.scales.x, stacked: true },
+      },
+    },
+  });
+
+  // ── G3: sex split of inflow over time ──
+  const ss = g.sex_split;
+  migrationCharts.sex = new Chart(document.getElementById('chartMigSex'), {
+    type: 'line',
+    data: {
+      labels: ss.years,
+      datasets: [
+        {
+          label: 'Male',
+          data: ss.male,
+          borderColor: '#60a5fa',
+          backgroundColor: 'rgba(96,165,250,0.1)',
+          tension: 0.25, pointRadius: 3, borderWidth: 2,
+        },
+        {
+          label: 'Female',
+          data: ss.female,
+          borderColor: '#f472b6',
+          backgroundColor: 'rgba(244,114,182,0.1)',
+          tension: 0.25, pointRadius: 3, borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: 'top', labels: { color: labelColor, font: { size: 11 } } },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, title: { display: true, text: 'Immigrants per year (count)', color: tickColor, font: { size: 11 } } },
+      },
+    },
+  });
+
+  // ── G4: broad age-band composition over time, stacked ──
+  const ab = g.age_band_over_time;
+  migrationCharts.ageBands = new Chart(document.getElementById('chartMigAgeBands'), {
+    type: 'line',
+    data: {
+      labels: ab.years,
+      datasets: ab.bands.map((band, i) => ({
+        label: band,
+        data: ab.series[band],
+        borderColor: ORIGIN_COLORS[i % ORIGIN_COLORS.length],
+        backgroundColor: ORIGIN_COLORS[i % ORIGIN_COLORS.length] + 'cc',
+        fill: true, tension: 0.2, pointRadius: 0, borderWidth: 1,
+      })),
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: 'bottom', labels: { color: labelColor, font: { size: 10 }, boxWidth: 12 } },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, stacked: true, title: { display: true, text: 'Immigrants per year (count)', color: tickColor, font: { size: 11 } } },
+        x: { ...baseOpts.scales.x, stacked: true },
+      },
+    },
+  });
+
+  // ── G5: latest detailed age profile of inflow ──
+  const ap = g.age_profile_latest;
+  document.getElementById('g5-year').textContent = ap.year;
+  migrationCharts.ageProfile = new Chart(document.getElementById('chartMigAgeProfile'), {
+    type: 'bar',
+    data: {
+      labels: ap.ages,
+      datasets: [{
+        label: 'Immigrants in ' + ap.year,
+        data: ap.values,
+        backgroundColor: 'rgba(124,131,255,0.7)',
+        borderColor: '#7c83ff',
+        borderWidth: 1,
+        borderRadius: 3,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: false } },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, title: { display: true, text: 'Immigrants (count)', color: tickColor, font: { size: 10 } } },
+        x: { ...baseOpts.scales.x, ticks: { ...baseOpts.scales.x.ticks, autoSkip: false, maxRotation: 60, minRotation: 60, font: { size: 9 } } },
+      },
+    },
+  });
+
+  // ── G6: foreign-population stock trend (nationality vs born) ──
+  const st = g.stock_trend;
+  migrationCharts.stock = new Chart(document.getElementById('chartMigStock'), {
+    type: 'line',
+    data: {
+      labels: st.years,
+      datasets: [
+        {
+          label: 'Foreign nationality (Padrón/ECP)',
+          data: st.foreign_nationality,
+          borderColor: '#7c83ff',
+          backgroundColor: 'rgba(124,131,255,0.1)',
+          tension: 0.2, pointRadius: 2, borderWidth: 2,
+        },
+        {
+          label: 'Foreign-born (sparse snapshots)',
+          data: st.years.map(y => {
+            const idx = st.foreign_born_years.indexOf(y);
+            return idx >= 0 ? st.foreign_born[idx] : null;
+          }),
+          borderColor: '#22c55e',
+          backgroundColor: 'transparent',
+          borderDash: [5, 4],
+          spanGaps: true,
+          tension: 0.2, pointRadius: 4, borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: 'top', labels: { color: labelColor, font: { size: 11 } } },
+        annotation: {
+          annotations: {
+            padronBreak: {
+              type: 'line', xMin: '2021', xMax: '2021',
+              borderColor: 'rgba(239,68,68,0.4)', borderWidth: 1, borderDash: [4, 4],
+              label: { display: true, content: 'Padrón → ECP methodology change', color: '#9ba3bf', font: { size: 10 },
+                position: 'end', backgroundColor: 'rgba(34,38,58,0.85)' },
+            },
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, title: { display: true, text: 'People (count)', color: tickColor, font: { size: 11 } } },
+      },
+    },
+  });
+}
+
 /* ═══════════════════════════════════════════════════
-   TAB SWITCHER
+   MAIN TAB SWITCHER (Violence / Mortality / Migration)
 ═══════════════════════════════════════════════════ */
 let mortalityBuilt = false;
-function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+let migrationBuilt = false;
+function switchMainTab(name) {
+  document.querySelectorAll('.tab-bar > .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
   if (name === 'mortality' && !mortalityBuilt) {
     buildMortalityCharts();
     mortalityBuilt = true;
+  }
+  if (name === 'migration' && !migrationBuilt) {
+    buildMigrationCharts();
+    migrationBuilt = true;
   }
 }
 
