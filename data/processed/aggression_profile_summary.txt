@@ -1,0 +1,182 @@
+
+ANÁLISIS DEL PERFIL DE AGRESIÓN SEXUAL EN ESPAÑA
+Fuentes: Anuarios MIR + Macroencuestas 2015/2019/2024 + GEAV/MIR 2020 + ONVIOS 2024
+Datos: violence_spain.csv  |  Último año principal: 2024
+
+========================================================================
+  1. CASOS NO DENUNCIADOS (CIFRA OCULTA / TASA DE DENUNCIA)
+========================================================================
+
+  Con penetración (violación / agresión sexual con penetración)
+------------------------------------------------------------------------
+  Violación fuera de pareja — tasa denuncia            9.9%  →  90.1% NO denunciado  [GEAV/MIR 2020]
+  Violación dentro de pareja — tasa denuncia           11.3%  →  88.7% NO denunciado  [GEAV/MIR 2020]
+
+  Nota: GEAV/MIR 2020 (Andrés-Pueyo et al.) es el estudio más riguroso
+  disponible sobre cifra oculta para España. Confidence: medium.
+
+  Sin penetración (agresión sexual sin penetración)
+------------------------------------------------------------------------
+  ⚠  No existe estimación directa de tasa de denuncia para este subtipo.
+  Derivación a partir de fuentes disponibles:
+
+    • Violencia sexual fuera pareja (cualquier tipo, Macroencuesta 2019):
+      tasa denuncia = 8%  →  ~92.0% NO denunciada
+    • Esta cifra incluye AMBOS tipos (con y sin penetración).
+    • Dado que violación tiene tasa 9.9% y acoso tiene 2.5%,
+      las agresiones sin penetración se estiman entre 4–8% de denuncia,
+      es decir ~92–96% NO denunciadas.
+    • Confidence: LOW (derivado, no medido directamente).
+
+  Acoso sexual (referencia de cota inferior)
+------------------------------------------------------------------------
+  Acoso sexual — tasa denuncia                         ~2.5%  →  ~97.5% NO denunciado  [Macroencuesta 2019]
+
+  RESUMEN TABLA (tasa denuncia → % no denunciado):
+  ┌──────────────────────────────────────────┬─────────┬──────────────┐
+  │ Tipo                                     │ Denunc. │ No denunciado│
+  ├──────────────────────────────────────────┼─────────┼──────────────┤
+  │ Violación fuera de pareja                │    9.9%  │   ~   90.1%   │
+  │ Violación dentro de pareja               │   11.3%  │   ~   88.7%   │
+  │ Violencia sexual cualquier tipo (ME2019) │      8%  │   ~   92.0%   │
+  │ Agresión sin penetración (estimado)      │  ~4–8%  │  ~92–96%     │
+  │ Acoso sexual                             │ ~  2.5%  │   ~   97.5%   │
+  └──────────────────────────────────────────┴─────────┴──────────────┘
+
+========================================================================
+  2. AGRESOR CONOCIDO vs DESCONOCIDO
+========================================================================
+
+  Violación (violación, con penetración) — Macroencuesta 2019
+------------------------------------------------------------------------
+  Perpetrador conocido (pareja, familia, conocido)     81.2%  [Macroencuesta 2019]
+  Perpetrador desconocido (extraño)                    18.8%  [Macroencuesta 2019]
+  Nota: dato de prevalencia en vida, no anual; fuera y dentro de pareja combinado.
+
+  Agresiones sexuales grupales (≥2 agresores) — ONVIOS 2024
+------------------------------------------------------------------------
+  Víctima conocía a ≥1 agresor                         ~40%  [ONVIOS 2024]
+  Víctima no conocía a ningún agresor                  ~60%  [ONVIOS 2024]
+
+  Víctimas menores — agresores familiares
+------------------------------------------------------------------------
+  Agresor es familiar (ANAR, helpline 2019–2023)       50.3%  [ANAR 2024]
+  Agresor del entorno conocido (Save the Children, judicial) 80%  [Save the Children 2023]
+  Nota ANAR: muestra de contactos telefónicos, no representativa poblacionalmente.
+  Nota STC:  análisis de ~400 sentencias judiciales; casos que llegaron a juicio.
+
+  Agresión sin penetración — disponibilidad de datos
+------------------------------------------------------------------------
+  ⚠  No existe desglose conocido/desconocido específico para agresiones
+  sin penetración en los datos MIR ni en la Macroencuesta publicada.
+  El patrón general (81.2% conocido para violación) se considera
+  orientativo, pero no extrapolable directamente.
+
+========================================================================
+  3. CONTEXTO DE LA AGRESIÓN
+========================================================================
+
+  Contexto relacional (quién agrede a quién) — datos disponibles
+------------------------------------------------------------------------
+  Perpetradores masculinos (2024, MIR)                 93.1%  [MIR Informe 2024]
+  Víctimas femeninas (2024, MIR)                       85.7%  [MIR Informe 2024]
+  Víctimas menores de 18 años (2024, MIR)              41.2%  [MIR Informe 2024]
+
+  Macroencuesta 2019 — violencia como fenómeno estructural:
+    • 75% de la violencia física es REITERADA (no episódica)
+    • 97% de víctimas de violencia física/sexual también
+      sufren violencia psicológica simultáneamente
+    • El 81.2% de violaciones es por personas conocidas
+      (pareja, familia, conocidos) → patrón de proximidad
+
+  Contexto específico agresiones grupales — ONVIOS 2024 (2018–2023)
+------------------------------------------------------------------------
+    • Edad media de las víctimas: 18 años
+    • 63% de víctimas son menores de edad
+    • 28%+ de agresores son también menores
+    • 40% de víctimas conocía a ≥1 agresor
+    • Pico estacional: agosto (15% del total anual)
+    • Concentración geográfica: Cataluña, C. Valenciana, Andalucía
+
+  Contexto situacional / localización — disponibilidad de datos
+------------------------------------------------------------------------
+  ⚠  Los Anuarios MIR y la Macroencuesta 2019 NO publican desglose
+  de lugar de la agresión (domicilio / vía pública / fiesta / trabajo)
+  para la serie general de delitos sexuales.
+
+  Datos parciales disponibles pero NO en el dataset actual:
+    • ONVIOS 2024: análisis hemerográfico de prensa muestra patrón
+      estacional/geográfico para agresiones grupales
+    • ANAR 2024: contexto de agresión a menores (50.3% en entorno familiar)
+    • GEAV/MIR 2020: describe contexto de pareja vs no-pareja
+
+  Para obtener desglose por localización sería necesario acceder
+  directamente a los microdatos del Portal Estadístico de Criminalidad
+  del MIR o al informe ONVIOS 2024 completo.
+
+========================================================================
+  4. AGRESOR ÚNICO vs MÚLTIPLES AGRESORES (AGRESIONES GRUPALES)
+========================================================================
+
+  Cifras absolutas 2024 (MIR Informe / Geo Violencia Sexual)
+------------------------------------------------------------------------
+  Total delitos sexuales 2024                          22,846  [MIR Informe 2024]
+    Del cual violaciones (con penetración)             5,223  [MIR Informe 2024]
+
+  Agresiones grupales TOTAL (≥2 agresores)             552  [MIR/GeoVS 2024]
+    Con penetración                                    194  (35.1% de grupales)
+    Sin penetración                                    358  (64.9% de grupales)
+
+  Proporciones relativas 2024
+------------------------------------------------------------------------
+  Grupales como % de TODOS los delitos sexuales        2.4%  [DERIVADO]
+  Grupales con penetración como % de TODAS las violaciones 3.7%  [DERIVADO]
+  Grupales sin penetración como % de todas las agr. sin pen. 2.0%  [DERIVADO]
+
+  Tendencia 2016–2024
+------------------------------------------------------------------------
+  ┌──────┬────────────────────────────────┐
+  │ Año  │ Agresiones grupales (total)    │
+  ├──────┼────────────────────────────────┤
+  │ 2016 │    371  (base)              │
+  │ 2021 │    573  (+54.4% vs 2016)       │
+  │ 2022 │ [pico — valor no confirmado]   │
+  │ 2024 │    552  (-3.7% vs 2021)       │
+  └──────┴────────────────────────────────┘
+
+  Acumulado 2018–2024: 3,737 casos grupales
+    Con penetración: 1,275 (34.1%)
+    Sin penetración: 2,462 (65.9%)
+
+========================================================================
+  NOTAS METODOLÓGICAS Y LIMITACIONES
+========================================================================
+  1. RUPTURA DE SERIE 2022: La LO 10/2022 (Solo sí es sí, vigor 6 oct 2022)
+     redefinió 'abuso sexual' como 'agresión sexual'. Las cifras pre-2023
+     y post-2023 NO son directamente comparables sin tabla puente.
+
+  2. TASAS DE DENUNCIA: Los porcentajes de GEAV/MIR 2020 (9.9% / 11.3%)
+     se refieren específicamente a violación (con penetración).
+     La Macroencuesta 2019 (8%) cubre violencia sexual fuera de pareja
+     en sentido amplio (incluye sin penetración).
+
+  3. CONOCIDO/DESCONOCIDO: El 81.2% de la Macroencuesta 2019 es dato
+     de prevalencia EN VIDA, no anual. Incluye perpetradores de pareja.
+     No existe desglose equivalente para agresiones sin penetración.
+
+  4. AGRESIONES GRUPALES: Datos de MIR vía Geo Violencia Sexual
+     (confidence: LOW). El análisis hemerográfico cubre sólo ~7–10%
+     de los casos del registro oficial.
+
+  5. MENORES: Los datos de ANAR corresponden a contactos de helpline,
+     no a muestra poblacional. Los de Save the Children, a sentencias
+     judiciales (casos que llegaron a juicio).
+
+  6. AGRESIÓN SIN PENETRACIÓN — tasa de denuncia: No existe medición
+     directa. La cifra del 4–8% es una estimación por interpolación
+     entre la tasa general (8%) y la de acoso sexual (~2.5%).
+
+========================================================================
+  Generado por: src/analyze_aggression_profile.py
+  Fuente de datos: /home/user/SVS/data/raw/violence_spain.csv
+========================================================================
