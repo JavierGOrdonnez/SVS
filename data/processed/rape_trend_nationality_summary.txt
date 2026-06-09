@@ -195,34 +195,53 @@ Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta I
     - 81.2% por conocidos (no pareja): tasa implícita R_conocido
     - 18.8% por desconocidos:          tasa implícita R_desconocido
 
-  Si asumimos R_desconocido ≈ 25-30% (basado en FRA 2014: España por debajo
-  de la media europea de ~25-30% para violencia sexual con extraños):
+  ⚠ LIMITACIÓN: No existe ninguna fuente española que mida directamente
+  R_desconocido. El FRA 2014 (fuente §6) indica que España tiene tasas de
+  denuncia "por debajo de la media europea" — pero esa cifra (25-30%) se
+  refiere a la media europea general de violencia sexual con pareja, NO
+  a una tasa para violaciones por desconocidos en España. Aplicarla como
+  R_desconocido sería una extrapolación sin soporte directo.
 
-    0.812 × R_conocido + 0.188 × 0.27 = 0.099
-    R_conocido ≈ (0.099 - 0.051) / 0.812 ≈ 5.9%
+  Lo que sí podemos derivar con las fuentes disponibles:
 
-  RESULTADO: Los datos sugieren que:
-    • Violación por desconocido: ~25-30% de denuncia (más alta)
-    • Violación por conocido no-pareja: ~6% de denuncia (más baja)
-    • Violación por pareja: ~11.3% de denuncia (intermedia)
+  Si la mezcla (9.9%) se descompone y queremos acotar R_conocido, necesitamos
+  asumir un valor para R_desconocido. Los escenarios son:
+
+    Escenario A (R_desconocido = 20%):
+      0.812 × R_conocido + 0.188 × 0.20 = 0.099
+      R_conocido ≈ (0.099 - 0.038) / 0.812 ≈ 7.5%
+
+    Escenario B (R_desconocido = 30%):
+      0.812 × R_conocido + 0.188 × 0.30 = 0.099
+      R_conocido ≈ (0.099 - 0.056) / 0.812 ≈ 5.3%
+
+    Escenario C (R_desconocido = R_conocido, sin diferencia):
+      La tasa global = 9.9% para todas las relaciones
+
+  RESULTADO (estimación con incertidumbre alta):
+    • Violación por desconocido: probablemente > 9.9% (más alta que la media),
+      rango plausible 15-30% — pero sin dato directo español
+    • Violación por conocido no-pareja: probablemente < 9.9%, rango 5-8%
+    • Violación por pareja: 11.3% (medido directamente, GEAV/MIR 2020)
+
+  NOTA: La lógica de que "agresor desconocido → mayor denuncia" es consistente
+  con la literatura internacional (UNODC, Campbell et al.) pero NO está
+  directamente medida para España. Solo podemos decir que la dirección del
+  efecto es probable, no su magnitud.
 
   IMPLICACIÓN PARA EL ANÁLISIS DE NACIONALIDAD:
-  Si los extranjeros tienden a cometer más violaciones como desconocidos
-  (lo que es plausible dado que el 40% de agresiones grupales — patrón más
-  asociado a desconocidos — implican solo 40% conocidos), entonces:
+  Si los extranjeros tienden a cometer más agresiones como desconocidos
+  (patrón consistente con datos de agresiones grupales: 60% desconocidos),
+  y si las agresiones por desconocidos tienen mayor tasa de denuncia, entonces:
 
-    → Los datos policiales/judiciales SOBREREPRESENTAN a perpetradores
-      extranjeros porque sus agresiones se denuncian más.
-    → El 81.2% por conocidos (mayoritariamente españoles en contexto
-      íntimo) tiene solo ~6% de tasa de denuncia → queda casi todo oculto.
+    → Los datos policiales/judiciales podrían SOBREREPRESENTAR a perpetradores
+      extranjeros en relación con su peso real en las agresiones totales.
+    → El 81.2% por conocidos (mayoritariamente en contexto íntimo) tiene
+      tasa de denuncia baja → gran parte queda invisible en estadísticas.
 
-  Esta es la explicación más probable para la sobrerrepresentación extranjera
-  en estadísticas policiales: es un artefacto de la cifra oculta diferencial,
-  NO necesariamente una mayor tasa real de agresión.
-
-  CAUTELA: Todo esto es derivación analítica, no medición directa.
-  Sería necesario un estudio con microdatos de la Macroencuesta + datos
-  policiales enlazados para confirmarlo.
+  Esta hipótesis es plausible y consistente con los datos, pero no puede
+  cuantificarse con las fuentes disponibles en este repositorio.
+  Requeriría microdatos de Macroencuesta enlazados con datos policiales.
 
 
 ========================================================================
