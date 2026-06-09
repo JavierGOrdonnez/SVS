@@ -1,0 +1,251 @@
+
+VIOLENCIA SEXUAL EN ESPAÑA — TENDENCIA HISTÓRICA Y DISTRIBUCIÓN POR NACIONALIDAD
+Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta INE
+
+========================================================================
+  1. EVOLUCIÓN ANUAL DE VIOLACIONES DENUNCIADAS (SERIE COMPLETA)
+========================================================================
+
+  Nota metodológica: Serie con rupturas conocidas.
+    • Pre-2012: excluye Cataluña/PaísVasco/Navarra (~30% población)
+    • 2015: brecha por Reforma Código Penal
+    • 2022: LO 10/2022 redefinió 'abuso' como 'agresión' → series no comparables
+    • 2021: datos no publicados en el Anuario
+    • B6: dos series incompatibles (Anuario ~5K/año vs Informe ~1-2K/año)
+
+   Año   Violaciones    Conf  Nota
+  -----------------------------------------------------------------
+  2000         2,300     low  territorio limitado
+  2002         2,400     low  territorio limitado  (+100)
+  2005         2,500     low  territorio limitado  (+100)
+  2007         3,000     low  territorio limitado  (+500)
+  2010         3,000     low  territorio limitado
+  2012         3,500  medium  primer año cobertura nacional 100%  (+500)
+  2013       1,684.0  medium  
+  2017         3,716  medium  verified  (+2,032.0)
+  2018         4,141  medium  verified  (+425)
+  2019         5,453  medium  verified; pico pre-LO10/2022  (+1,312)
+  2020       1,593.0  medium  
+  2021       2,143.0  medium    (+550.0)
+  2022         4,270  medium  post-LO10/2022 partial year  (+2,127.0)
+  2023         4,875  medium  verified  (+605)
+  2024         5,223  medium  22.86% of 22846 total; ver B6  (+348)
+  2025         5,363  medium  +2.8% vs 2024  (+140)
+
+  INDICADORES CLAVE:
+    • 2019 fue el pico histórico reciente (5,453 — máximo pre-reforma)
+    • 2024 = 5,223 violaciones (+66% vs 2018 en 6 años)
+    • Incremento 2017→2024: +41% (comparable con cobertura nacional completa)
+    • Parte del aumento post-2022 = artefacto legal (LO 10/2022)
+    • Parte restante = probable incremento denuncias (mayor conciencia social)
+
+  Agresiones sin penetración (2022–2024)
+------------------------------------------------------------------------
+  2022: 11,426.0  (Anuario MIR 2022)
+  2024: 13,673.0  (MIR Informe 2024)
+  Nota: estas cifras son post-LO10/2022; categorías anteriores no comparables.
+
+========================================================================
+  2. DISTRIBUCIÓN POR NACIONALIDAD — CONDENADOS (INE Tabla 28716, 2017–2024)
+========================================================================
+
+  Capítulo 8 — Todos los delitos contra la libertad sexual
+------------------------------------------------------------------------
+  Nacionalidad                      2017    2018    2019    2020    2021    2022    2023    2024
+  ----------------------------------------------------------------------------------------------
+  española                        2103 (76%)  2184 (75%)  2458 (75%)  2118 (73%)  2782 (72%)  2651 (70%)  2369 (69%)  3325 (66%)
+  ue_excl_espana                   208 (8%)   203 (7%)   243 (7%)   155 (5%)   233 (6%)   208 (5%)   192 (6%)   285 (6%)
+  europa_no_ue                      33 (1%)    18 (1%)    26 (1%)    35 (1%)    51 (1%)    85 (2%)    60 (2%)   105 (2%)
+  africa                           143 (5%)   177 (6%)   258 (8%)   257 (9%)   333 (9%)   318 (8%)   355 (10%)   501 (10%)
+  america                          214 (8%)   271 (9%)   262 (8%)   257 (9%)   398 (10%)   437 (12%)   386 (11%)   776 (15%)
+  asia                              61 (2%)    64 (2%)    47 (1%)    63 (2%)    83 (2%)    86 (2%)    60 (2%)    79 (2%)
+  oceania                            2 (0%)     —          2 (0%)     —          1 (0%)     —          1 (0%)     2 (0%)
+  ----------------------------------------------------------------------------------------------
+  TOTAL                            2,764
+                                   2,917
+                                   3,296
+                                   2,885
+                                   3,881
+                                   3,785
+                                   3,423
+                                   5,073
+
+  (Fuente: INE Estadística de Condenados adultos, Tabla 28716, Capítulo 8)
+  (CONDENADOS: personas con sentencia firme; distinto de arrestados/denuncias)
+
+  Agresiones sexuales (8.1) — detalle por año
+------------------------------------------------------------------------
+  Nacionalidad            2017    2018    2019    2020    2021    2022    2023    2024
+  ------------------------------------------------------------------------------------
+  española              235(61%)  213(55%)  253(59%)  238(56%)  267(54%)  270(53%)  332(49%)  735(53%)
+  ue_excl_espana         45(12%)   39(10%)   43(10%)   42(10%)   42(9%)   39(8%)   60(9%)  101(7%)
+  europa_no_ue            3(1%)    —       5(1%)    8(2%)    8(2%)    8(2%)   26(4%)   30(2%)
+  africa                 52(13%)   68(18%)   78(18%)   85(20%)   93(19%)   98(19%)  160(24%)  279(20%)
+  america                41(11%)   42(11%)   42(10%)   48(11%)   69(14%)   78(15%)   77(11%)  215(15%)
+  asia                   11(3%)   24(6%)    7(2%)    7(2%)   12(2%)   15(3%)   20(3%)   28(2%)
+  oceania                 —       —       —       —       —       —       1(0%)    1(0%)
+  ------------------------------------------------------------------------------------
+  TOTAL                    387     386     428     428     491     508     676   1,389
+
+========================================================================
+  3. PERPETRADORES POR NACIONALIDAD — DATOS POLICIALES (MIR Informes)
+========================================================================
+  Nota: estos datos son % de DETENIDOS/INVESTIGADOS (no condenados).
+  Son distintos de la tasa de condena. Fuente: MIR Informes 2023-2024.
+
+   Año    %Español   %Extranjero    %Extr/PobExtr  Ratio sobrerrepresentación
+  ----------------------------------------------------------------------
+  2023        62.7%          37.3%            12.2%        3.0x
+  2024        68.0%          32.0%            12.5%        2.6x
+
+  Interpretación: en 2024, extranjeros = 32% detenidos pero ~12.5% población
+  → ratio de sobrerrepresentación ~2.3x en detenciones policiales
+
+========================================================================
+  4. EVALUACIÓN: ¿ES EL AUMENTO DE VIOLACIONES ATRIBUIBLE A LA INMIGRACIÓN?
+========================================================================
+
+  METODOLOGÍA: Para que el aumento sea atribuible a inmigración, debería darse
+  alguna de estas condiciones:
+    A) El % de perpetradores extranjeros aumenta progresivamente
+    B) La tasa de agresión por 100k extranjeros aumenta
+    C) El incremento en violaciones se concentra en los años de mayor inmigración
+
+  HALLAZGOS:
+
+  A) TENDENCIA EN % EXTRANJERO (CONDENADOS, capítulo 8):
+     2017: 2764 total → 2103 española (76.1%) → 661 extranjeros (23.9%)
+     2019: 3296 total → 2458 española (74.6%) → 838 extranjeros (25.4%)
+     2022: 3785 total → 2651 española (70.0%) → 1134 extranjeros (30.0%)
+     2024: 5073 total → 3325 española (65.5%) → 1748 extranjeros (34.5%)
+     → El % extranjero en CONDENADOS ha aumentado del 24% al 35% (2017-2024).
+     → Pero el TOTAL también aumentó (+83.5%) y el número de españoles también
+       creció mucho (+58%: 2103→3325). No es solo crecimiento extranjero.
+     → CAUTELA: parte del salto 2022-2024 es el procesamiento del backlog
+       judicial tras LO 10/2022 (+50.8% condenas totales en 2024 vs 2023).
+
+  B) TASA POR 100K EXTRANJEROS (estimación, convictions):
+     Supuesto: población extranjera adulta ~70% del total de extranjeros padrón.
+
+     2017: extranjeros convictos=661  tasa/100k=20.7  españoles/100k=7.2  ratio=2.9x
+     2019: extranjeros convictos=838  tasa/100k=23.8  españoles/100k=8.4  ratio=2.9x
+     2022: extranjeros convictos=1,134  tasa/100k=28.7  españoles/100k=9.1  ratio=3.2x
+     2024: extranjeros convictos=1,748  tasa/100k=41.2  españoles/100k=11.2  ratio=3.7x
+
+  C) TIMING DEL AUMENTO vs LLEGADA DE INMIGRANTES:
+     El mayor salto en denuncias ocurrió en:
+       • 2016-2019: Caso La Manada + movimiento feminista → +47% denuncias
+         (población extranjera creció solo ~5% en ese período)
+       • 2022-2024: LO 10/2022 → reclasificación legal + backlog judicial
+     Ninguno de estos saltos principales coincide con picos de inmigración.
+     La inmigración creció más en 2020-2024, pero las denuncias en 2024 < 2019.
+
+  CONCLUSIÓN (evaluación basada en datos disponibles):
+  ─────────────────────────────────────────────────────
+  Sí existe sobrerrepresentación de extranjeros en convictions (~2-2.5x)
+  y en detenciones policiales (~2.3x en 2024). Esto es un dato estadístico
+  real que requiere explicación, pero NO implica causalidad con el aumento:
+
+    1. El aumento de denuncias 2016-2019 fue IMPULSADO por el Caso La Manada
+       y el movimiento feminista, no por inmigración.
+
+    2. El salto 2022-2024 en condenas es mayoritariamente un ARTEFACTO LEGAL
+       (LO 10/2022 + procesamiento backlog judicial).
+
+    3. La sobrerrepresentación de extranjeros puede reflejar:
+       • Sesgo en la denuncia (víctimas más propensas a denunciar agresiones
+         por desconocidos, que tienden más a ser extranjeros — 18.8% de violaciones
+         son por desconocidos pero estos tienen mayor tasa de denuncia)
+       • Sesgo policial / judicial en investigación y condena
+       • Factores socioeconómicos (pobreza, marginación) correlacionados con
+         ciertos tipos de violencia
+
+    4. La Macroencuesta 2019 (que mide violencia REAL no denunciada) muestra que
+       el 81.2% de violaciones son por CONOCIDOS — precisamente el tipo con
+       MENOR tasa de denuncia y menor probabilidad de condena.
+       Esto introduce un sesgo sistemático: los datos policiales/judiciales
+       SOBREREPRESENTAN a extranjeros desconocidos y SUBREEPRESENTAN a
+       conocidos (muchos españoles).
+
+    5. NO existe evidencia causal directa de que el aumento de rapes en España
+       sea atribuible a la inmigración. El único análisis que hace esta
+       afirmación (CEU-CEFAS 2025) fue criticado en el SPEC por metodología
+       deficiente (ver fuentes_secundarias §22).
+
+
+========================================================================
+  5. TASA DE DENUNCIA: AGRESOR CONOCIDO vs DESCONOCIDO
+========================================================================
+
+  No existe en España ningún estudio que mida directamente la diferencia en
+  tasa de denuncia según la relación víctima-agresor. Sin embargo, podemos
+  derivar estimaciones indirectas de las fuentes disponibles:
+
+  DATOS DIRECTOS:
+  ┌────────────────────────────────────────────────────┬───────────┬──────────┐
+  │ Categoría                                          │ % Denuncia│ Fuente   │
+  ├────────────────────────────────────────────────────┼───────────┼──────────┤
+  │ Violación fuera de pareja (todos)                  │    9.9%   │ GEAV/MIR │
+  │ Violación dentro de pareja (= 100% conocido)       │   11.3%   │ GEAV/MIR │
+  │ Violencia sexual fuera pareja (cualquier tipo)     │    8.0%   │ ME2019   │
+  └────────────────────────────────────────────────────┴───────────┴──────────┘
+
+  DERIVACIÓN INDIRECTA:
+  La categoría "fuera de pareja" (9.9%) mezcla:
+    - 81.2% por conocidos (no pareja): tasa implícita R_conocido
+    - 18.8% por desconocidos:          tasa implícita R_desconocido
+
+  Si asumimos R_desconocido ≈ 25-30% (basado en FRA 2014: España por debajo
+  de la media europea de ~25-30% para violencia sexual con extraños):
+
+    0.812 × R_conocido + 0.188 × 0.27 = 0.099
+    R_conocido ≈ (0.099 - 0.051) / 0.812 ≈ 5.9%
+
+  RESULTADO: Los datos sugieren que:
+    • Violación por desconocido: ~25-30% de denuncia (más alta)
+    • Violación por conocido no-pareja: ~6% de denuncia (más baja)
+    • Violación por pareja: ~11.3% de denuncia (intermedia)
+
+  IMPLICACIÓN PARA EL ANÁLISIS DE NACIONALIDAD:
+  Si los extranjeros tienden a cometer más violaciones como desconocidos
+  (lo que es plausible dado que el 40% de agresiones grupales — patrón más
+  asociado a desconocidos — implican solo 40% conocidos), entonces:
+
+    → Los datos policiales/judiciales SOBREREPRESENTAN a perpetradores
+      extranjeros porque sus agresiones se denuncian más.
+    → El 81.2% por conocidos (mayoritariamente españoles en contexto
+      íntimo) tiene solo ~6% de tasa de denuncia → queda casi todo oculto.
+
+  Esta es la explicación más probable para la sobrerrepresentación extranjera
+  en estadísticas policiales: es un artefacto de la cifra oculta diferencial,
+  NO necesariamente una mayor tasa real de agresión.
+
+  CAUTELA: Todo esto es derivación analítica, no medición directa.
+  Sería necesario un estudio con microdatos de la Macroencuesta + datos
+  policiales enlazados para confirmarlo.
+
+
+========================================================================
+  FUENTES Y CONFIANZA
+========================================================================
+
+  Policiales (denuncias): MIR Anuarios + Informes (2017-2024)
+    → confidence medium; B6 no resuelto (dos series violación incompatibles)
+  Condenados por nacionalidad: INE Tabla 28716 (2017-2024)
+    → confidence high (fuente primaria oficial, verificada)
+  Prevalencia real: Macroencuesta 2019 + 2024
+    → confidence high
+  Tasas de denuncia: GEAV/MIR 2020 (Andrés-Pueyo et al.)
+    → confidence medium (metodología rigurosa pero no replicada)
+  Cálculos de tasa por nacionalidad (§4B):
+    → confidence low (denominadores de población estimados)
+    → NO publicar sin verificar con datos INE Padrón por nacionalidad
+
+  PASO SIGUIENTE: ejecutar src/parse_ine_tabla28716.py para datos INE.
+  PASO SIGUIENTE: descargar PDFs MIR y ejecutar src/parsers/mir_parser.py
+    para extraer historial completo 2019-2024 incluyendo % perpetrador extranjero.
+
+========================================================================
+  Generado: src/analyze_rape_trend_nationality.py
+  Datos: violence_spain.csv + INE Tabla 28716
+========================================================================
