@@ -31,11 +31,12 @@ def extract_headline_data(text: str) -> Dict:
 
     # Total 2003-2024
     total_match = re.search(
-        r'TOTAL MUJERES VÍCTIMAS MORTALES \d{4} - \d{4}: (\d+)',
+        r'TOTAL MUJERES VÍCTIMAS MORTALES (\d{4} - \d{4}): (\d+)',
         text
     )
     if total_match:
-        result['total_2003_2024'] = int(total_match.group(1))
+        result['period'] = total_match.group(1)
+        result['total_2003_2024'] = int(total_match.group(2))
 
     # Last case details
     last_case = re.search(
@@ -250,15 +251,16 @@ def parse_pdf(pdf_path: str) -> Dict:
         result['headline'] = extract_headline_data(text)
         result['year'] = result['headline'].get('year')
 
-        # Extract headline count (year-specific total)
-        headline_match = re.search(r'Tabla 2\.1.*?TOTAL\s+(\d+)\s+100', text, re.DOTALL)
-        if headline_match:
-            result['headline_count'] = int(headline_match.group(1))
-
         # Extract tables
         result['regional'] = extract_table_2_1_regional(text)
         result['age'] = extract_table_2_2_age(text)
         result['origin'] = extract_table_2_3_origin(text)
+
+        # Headline count (year-specific total) from Table 2.1's TOTAL row
+        for row in result['regional']:
+            if row['region'] == 'TOTAL':
+                result['headline_count'] = row['victims']
+                break
 
         # Run validation
         is_valid, errors = validate_extraction(result)
