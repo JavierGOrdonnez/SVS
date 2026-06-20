@@ -25,10 +25,25 @@ Three actors recur across every source below: (1) a **trigger event** — usuall
 ### 2.1 Ministerio del Interior — *Informe sobre la evolución de los delitos e incidentes de odio en España* (annual, 2013–2024)
 Publisher: Ministerio del Interior. Tracks police-recorded hate crimes/incidents by motivation (racism/xenophobia, sexual orientation/gender identity, antisemitism, aporophobia, disability, religion, ideology, etc.).
 
-- 2024: 1,955 known hate facts (−13.8% vs 2023, breaking the prior upward trend). Racism/xenophobia = 804 facts (largest category); sexual orientation/gender identity = 528.
-- 2023: hate crimes rose 21% vs 2022; racism/xenophobia 856 facts (largest single category that year).
-- Victim profile 2024: 59.9% male, 34.7% aged 26-40, 60.1% Spanish nationality / 39.9% foreign. **Perpetrator profile 2024: 81.9% male, 75.6% Spanish nationality** — i.e. roughly three in four people detained/investigated for a hate crime in Spain are Spanish nationals, not migrants (also reported ~79.7% Spanish for 2018, ~75% for 2024 in press summaries).
-- Online hate crimes: 215 facts in 2024, concentrated in sexual-orientation/identity and racism/xenophobia categories.
+**Year-by-year totals (hechos conocidos = known/recorded facts, all motivations combined):**
+
+| Year | Total hate facts | YoY change | Racism/xenophobia facts | Racism/xenophobia as % of total |
+|---|---|---|---|---|
+| 2014 | 843 | — | 248 (esclarecidos/cleared, not directly comparable to later "known facts" figures) | — |
+| 2021 | 1,802 | — | 639 | 35.5% |
+| 2022 | 1,869 | +3.7% | 755 | +18.1% YoY; 43.5% of total |
+| 2023 | 2,268 | +21.3% | 856 | 41.8% of total |
+| 2024 | 1,955 | −13.8% | 804 | −6% YoY; ~41% of total |
+
+**Caveat on the 2014/248 figure:** that number (and the "doubled from 248 to 465 between 2014-2021" framing used in some press coverage) refers to **hechos esclarecidos** (cases cleared/solved), a different metric from the "hechos conocidos" (total known facts) used for 2021-2024 in the table above — do not chain these two metrics into one continuous series without flagging the break, same logic as this project's own V7/B6-style series-incompatibility flags.
+
+**2024 detail:**
+- By crime type (all motivations): assaults/lesiones 385, threats 358, promotion of discrimination 217, degrading treatment 107, insults 106.
+- Clearance rate 71.9% (+4 pp vs 2023); 905 people arrested/investigated.
+- Victim profile: 59.9% male, 34.7% aged 26-40, 60.1% Spanish nationality / 39.9% foreign.
+- **Perpetrator profile: 81.9% male, 75.6% Spanish nationality** — roughly three in four people investigated/detained for a hate crime in Spain are Spanish nationals (consistent with ~79.7% Spanish reported for 2018) — i.e. the people committing hate crimes are overwhelmingly not migrants themselves.
+- Online hate crimes: 215 facts, concentrated in sexual-orientation/identity and racism/xenophobia categories.
+- New in 2024: Islamophobia reported as its own sub-category for the first time — 13 cases.
 
 | Resource | URL |
 |---|---|
@@ -42,10 +57,22 @@ Publisher: Ministerio del Interior. Tracks police-recorded hate crimes/incidents
 ### 2.2 OBERAXE (Observatorio Español del Racismo y la Xenofobia) — FARO monitoring system
 Publisher: Secretaría de Estado de Migraciones, Ministerio de Inclusión, Seguridad Social y Migraciones. Since Oct 2024, OBERAXE has run **monthly reports on hate speech volume in social networks**, using the FARO automated detection system.
 
-- April 2025 (post-Torre Pacheco): FARO identified **39,559 hate-speech messages**, a 20% increase vs March.
-- May 2026: 31,003 hate/discriminatory contents detected; ~65% removal rate by platforms after "trusted flagger" notification (TikTok/X/Instagram lead on removals).
-- November 2025 cumulative: >740,000 racist/xenophobic contents detected year-to-date.
-- **Special report, July 2025, on Torre Pacheco**: documents a surge of hate speech directly attributable to the riots, much of it built on disinformation (see §4).
+**Quarterly/monthly reportable hate-speech contents detected by FARO, 2025-2026 (precise figures):**
+
+| Period | Contents detected | Removal rate by platforms | Notes |
+|---|---|---|---|
+| Q1 2025 (Jan-Mar) | >171,000 | 34% (118 of 551 flagged-to-platforms removed) | baseline pre-Torre Pacheco |
+| Q2 2025 (Apr-Jun) | 184,096 | 34% | April alone = 39,559 (+20% vs March) |
+| **12 July 2025 (single day)** | **32,892** | — | peak day of the Torre Pacheco riots — comparable to ~10 days' worth of the Q1 daily average in 24 hours |
+| **July 2025 (full month)** | **~190,000** | — | exceeds the entire prior quarter (Apr-Jun) in one month |
+| **Q3 2025 (Jul-Sep)** | **331,817** | 45% (+11pp vs Q2) | "almost double" Q2 — the Torre Pacheco effect, per OBERAXE's own framing |
+| October 2025 | 52,958 | — | 60% of contents targeted people of North African origin specifically |
+| Cumulative Jan-Nov 2025 | >740,000 | — | running total reported by OBERAXE |
+| May 2026 | 31,003 | 65% | back near pre-Torre-Pacheco monthly baseline |
+
+**Platform removal rates, Q3 2025 (the Torre Pacheco quarter):** TikTok 96%, Instagram 62%, Facebook 43%, X/Twitter 10%, YouTube 7% — i.e. an 86-point gap between the most and least responsive major platform.
+
+- **Special report, July 2025, on Torre Pacheco**: documents the surge above as directly attributable to the riots, much of it built on disinformation (see §4).
 
 | Resource | URL |
 |---|---|
@@ -54,8 +81,15 @@ Publisher: Secretaría de Estado de Migraciones, Ministerio de Inclusión, Segur
 | April 2025 FARO data note | (see OBERAXE estudios index) https://www.inclusion.gob.es/en/web/oberaxe/estudios1 |
 | Nov 2025, 740k cumulative note | https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/inclusion/paginas/2025/171125-oberaxe-contenidos-racistas-xenofobos.aspx |
 | 2024 monthly-monitoring launch note | https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/inclusion/paginas/2024/071024-observatorio-racismo-redes-sociales.aspx |
+| Q3 2025 bulletin press note ("se duplica", incl. 12 July peak day + platform removal rates) | https://www.inclusion.gob.es/en/web/oberaxe/w/el-discurso-de-odio-en-redes-sociales-se-duplica-en-el-tercer-trimestre-de-2025-segun-el-sistema-faro-del-oberaxe |
+| Q3 2025 full bulletin PDF | https://www.inclusion.gob.es/documents/6602794/0/Bolet%C3%ADn+trimestral+Julio+-+Septiembre+2025.pdf |
+| Q2 2025 bulletin press note | https://www.inclusion.gob.es/en/web/oberaxe/w/el-oberaxe-publica-el-segundo-boletin-trimestral-de-2025-de-monitorizacion-del-discurso-de-odio-en-redes-sociales |
+| Q1 2025 bulletin press note | https://www.inclusion.gob.es/en/web/oberaxe/w/el-oberaxe-publica-el-primer-boletin-trimestral-de-monitorizacion-del-discurso-de-odio-en-redes-sociales |
+| "July > entire prior quarter" press note | https://www.inclusion.gob.es/en/w/el-oberaxe-detecta-en-julio-mas-mensajes-con-discurso-de-odio-en-redes-sociales-que-en-todo-el-trimestre-anterior |
+| October 2025 note (52,958; 60% anti-North-African) | https://www.lanacion.com.ar/agencias/oberaxe-detecta-52958-discursos-de-odio-en-redes-en-octubre-de-2025-y-el-60-atacan-a-personas-del-nid05122025/ |
+| May 2026 note (31,003; 65% removal) | https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/inclusion/Paginas/2026/180626-oberaxe-datos-mayo-2026.aspx |
 
-**Confidence:** medium-high for relative trends/volumes (consistent automated methodology since launch); the absolute count depends on FARO's classifier and is not independently audited in the public notes reviewed here.
+**Confidence:** high for the OBERAXE-reported figures themselves (officially published, internally consistent — Q1+Q2+Q3+Oct sums to within rounding of the reported >740,000 Jan-Nov cumulative); medium for cross-period comparability, since FARO's classification methodology/scope may have been refined between its Oct 2024 launch and later quarters (not independently audited in the sources reviewed).
 
 ### 2.3 CIS Barómetro — immigration as "main problem" perception
 - Sept 2024: 30.4% named immigration as Spain's main problem — first time it topped the series, displacing unemployment.
@@ -108,8 +142,23 @@ International NGO report (cited via Infobae, 2025-09-03) on the normalization of
 
 ## 4. Case studies: trigger → hate speech → aggression, Spain
 
+### 4.0 How the pre-internet cases spread without social media
+
+Ca n'Anglada (1999) and El Ejido (2000) predate Spanish mass internet/mobile use entirely (smartphone penetration: zero; SMS existed but was not used as an organizing tool in either case per the sources reviewed). The amplification step that Telegram/X perform today was instead carried by three pre-digital channels, all documented in the sources below:
+
+1. **Local/regional press and radio acting as the accelerant, not a neutral chronicler.** A Terrassa-based journalist (Oller, quoted in Público's retrospective) describes the Ca n'Anglada spiral explicitly as media-driven: "the more journalists arrived from all over the State, the more neighbours attended the demonstration" — he attributes the disproportionate national press presence partly to it being a slow summer news period. In El Ejido, the municipal station **Radio Ejido** amplified and defended the mayor's framing in real time, functioning as a local echo chamber analogous to a closed Telegram group.
+2. **A political figure's rhetoric substituting for an "influencer" call-to-mobilize.** El Ejido's PP mayor, **Juan Enciso**, made repeated public statements during the crisis dehumanizing the same migrant workforce the local greenhouse economy depended on — reported in slightly different wordings across sources, all to the same effect: *"a las ocho de la mañana todos los inmigrantes son pocos, a las ocho de la tarde sobran todos"* ("at 8am there aren't enough immigrants, at 8pm they're all surplus"). This functioned as the elite-legitimization signal that GPAHE's 2025 analysis (§3.3) says licenses "ordinary" people to act — the 2000 equivalent of a far-right account's mobilization post.
+3. **Physical, face-to-face assembly replacing the Telegram "cacería" call.** Both riots organized via word-of-mouth at fixed physical gathering points (town square in Ca n'Anglada; convoys of vehicles and gathering at the agricultural settlements/cortijos in El Ejido) rather than an online call — meaning mobilization was geographically constrained to the local population (plus some regional press-drawn observers), unlike Torre Pacheco 2025 where Telegram pulled in participants from other provinces within hours. This is the single biggest structural difference vs. the social-media-era cases: **reach and speed were bounded by physical proximity and broadcast-media cycles (hours/days) in 1999-2000, vs. instantaneous and nationwide in 2025.**
+
+| Resource | URL |
+|---|---|
+| Público — Ca n'Anglada retrospective, journalist Oller quote | https://www.publico.es/politica/ca-n-anglada-todavia-lucha-estigma-disturbios-racistas-1999.html |
+| El Plural — Enciso profile + Radio Ejido context | https://www.elplural.com/autonomias/andalucia/heroe-sucesos-racistas-ejido-banquillo-corrupcion_230986102 |
+| Confidencial Andaluz — Radio Ejido defending Enciso | https://confidencialandaluz.com/asi-defendia-radio-ejido-a-juan-enciso-meses-antes-de-entrar-en-prision/ |
+| IDUS/Universidad de Sevilla academic analysis | https://idus.us.es/server/api/core/bitstreams/e1f58c54-d00e-43a2-a45a-576474616067/content |
+
 ### 4.1 Ca n'Anglada, Terrassa — July 1999 (precedent)
-Stabbing of a Moroccan man + prior tension escalated into 5 days of xenophobic unrest: ~300 people in an "improvised demonstration" attacked cars/shops belonging to Maghrebi residents; ~1,000 attended a counter anti-racist rally. Widely cited as the first major xenophobic riot of this kind in democratic Spain, pre-dating El Ejido by ~7 months.
+Stabbing/brawl trigger (14 July 1999) → next-day neighbourhood protest that grew as press arrived → demonstration of **~2,000 of the neighbourhood's ~14,000 residents** → ended in assault on a young Moroccan man, stoning of Maghrebi homes, and an attempted assault on the local mosque; ~1,000 people attended a subsequent counter anti-racist rally. Widely cited as the first major xenophobic riot of this kind in democratic Spain, pre-dating El Ejido by ~7 months.
 
 | Resource | URL |
 |---|---|
