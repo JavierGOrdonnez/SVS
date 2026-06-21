@@ -14,39 +14,76 @@
 | Femicide | Intimate-partner and family homicides of women (official CGPJ/Ministerio registry) |
 | Homicide (other) | All other female homicide victims |
 | Non-sexual violence | Physical assaults recorded against women (domestic + non-domestic) |
+| Peligrosity | Per-capita perpetrator rate, bracket [convicted ↔ identified] per 100k men, by age × nationality × origin |
+| Victim–Aggressor | Relationship distribution + victim↔aggressor matrix for sexual assault |
 
-## Data sources (planned)
+## What we're computing
 
-- **Ministerio del Interior** — crime statistics (estadísticasdelcrimen)
-- **CGPJ** — femicide observatory annual reports
-- **Delegación del Gobierno contra la Violencia de Género** — macroencuesta de violencia contra la mujer
-- **INE** — population, mortality, and demographic tables
-- **Eurostat / CIS** — political and immigration indicators
+- **A. Victim risk profile:** 1yr/5yr/lifetime cumulative P for various violence types, reported and dark-figure-corrected.
+- **B. Historical trends:** 2000–2025 annual trends with definition-break annotations.
+- **C. Covariate effects:** Associative analysis of violence-rate ~ political & immigration variables.
+- **D. Peligrosity (umbrella):** Per-capita perpetrator rate, bracket [convicted ↔ identified] per 100k men, by age × nationality × origin.
+- **E. Victim–aggressor relationship structure:** Relationship distribution + victim↔aggressor matrix for sexual assault, used to adjust A & D.
+- **F. GBV non-sexual justice funnel:** Denuncias → diligencias → condenas + reporting rate (later expansion).
 
-## Methodology (planned)
+## Data Extraction and Composition
 
-1. Collect and clean annual time-series (2000–2025) for each violence type.
-2. Compute incidence rates per 100 000 women, age-standardised to the 2000-born cohort.
-3. Apply actuarial (competing-risks) life-table to convert annual rates → 5-year and lifetime cumulative probabilities.
-4. Fit multivariate regression / Bayesian structural time-series to estimate partial effects of covariates (far-right vote share, immigration volume/composition, etc.).
-5. Produce scenario projections: "what if covariate X changes by ±N%?"
+```mermaid
+flowchart LR
+  subgraph Sources
+    MIR[MIR Informe/Anuario<br/>sexual crime counts,<br/>victims age/sex, perps sex/nat]
+    CON[INE Condenados t.28716<br/>convictions by offence/sex/nat]
+    DEL[Delegacion<br/>femicide + relationship status]
+    CGPJ[CGPJ<br/>denuncias, protection orders]
+    FIS[Fiscalia<br/>diligencias previas]
+    MAC[Macroencuesta<br/>prevalence + reporting rate]
+    POP[INE Padron/ECP<br/>pop by sex/age/nationality]
+    ECM[INE ECM<br/>homicide by sex/age]
+    LIT[Secondary literature<br/>multipliers, victim-perp matrix]
+  end
 
-## Caveats
+  MIR --> RC[reported incidence]
+  ECM --> RC
+  MAC --> DF[dark-figure multiplier]
+  LIT --> DF
+  POP --> DEN[denominators]
 
-- Official crime statistics capture *reported* crimes; dark-figure estimation requires survey cross-validation.
-- Femicide definitions vary across sources and years; methodology notes document each reconciliation decision.
-- Correlation ≠ causation. Covariate analysis is descriptive / associative, not causal.
-- Lifetime probability estimates assume constant 2025 rates; actual future risk depends on social and policy changes.
+  RC --> RATE[incidence rate /100k]
+  DEN --> RATE
+  RATE --> CRATE[corrected rate]
+  DF --> CRATE
+  CRATE --> LT[competing-risks life table]
+  LT --> A[A. Victim risk<br/>1/5/lifetime P]
 
-## Repo layout (evolving)
+  MIR --> PERP[distinct perpetrators]
+  CON --> PERP
+  PERP --> PEL[D. Peligrosity<br/>bracket /100k men<br/>by age/nat/origin]
+  DEN --> PEL
 
+  MAC --> REL[E. Victim-aggressor<br/>relationship structure]
+  DEL --> REL
+  LIT --> REL
+  REL -. adjusts .-> A
+  REL -. adjusts .-> PEL
+
+  CGPJ --> FUN[F. GBV justice funnel]
+  FIS --> FUN
+  CON --> FUN
+  MAC --> FUN
+
+  RATE --> TR[B. Historical trends]
+  TR --> REG[C. Covariate regression]
+  POP --> REG
 ```
-data/        raw + cleaned data files
-notebooks/   exploratory analysis
-src/         data pipeline and modelling code
-reports/     outputs and write-ups
-```
+
+## Where to look
+
+- `SPEC.md`: Detailed specification, invariants, and task roadmap.
+- `reports/results.md`: Checklist of target quantities and their current status.
+- `reports/methodology.md`: Detailed per-source extraction table and composition DAG.
+- `data/sources/SOURCES_INDEX.md`: One-page index over living source documents.
+- `docs/index.html`: Interactive dashboard with rich visualizations.
 
 ## Status
 
-Early stage — data collection and pipeline setup in progress.
+3-tab dashboard live; Phase 1–2 (core probability pipeline) current focus; perpetrator-side (Peligrosity) = Phase 3.

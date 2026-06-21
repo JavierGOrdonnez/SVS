@@ -6,6 +6,15 @@
 
 Compute annual, 5-year & lifetime cumulative probability of rape/sexual-assault/femicide/homicide/non-sexual-violence for woman born 2000 ∈ Spain, holding 2025 conditions fixed. Extend: estimate partial effects of covariates (far-right vote share, immigration volume & composition) using 2000–2025 historical series.
 
+## Key Quantities & Insights
+- **A. Victim risk profile** — for rape / sexual-assault / femicide / other-homicide / non-sexual-violence + combined "any violence": incidence/100k (2025) → 1yr/5yr/lifetime cumulative P, both **reported** and **dark-figure-corrected** (T8, T9).
+- **B. Historical trends** 2000–2025 with definition-break annotations (largely in the dashboard already).
+- **C. Covariate effects** (associative) — violence-rate ~ far-right vote-share + immigration volume/composition; ±10/20% scenario table (T10, T12, T13).
+- **D. Peligrosity (umbrella)** — per-capita perpetrator rate, **bracket [convicted ↔ identified] per 100k men**, by age × nationality × origin (later socioeconomic). Always paired with absolute framing per V14. The migrant/nationality slice = T26–T29; new general engine = T30/T31.
+- **E. Victim–aggressor relationship structure** — relationship distribution + victim↔aggressor matrix (sexual assault, ±penetration); produces adjustment factors that feed back into A and D (T32, T33).
+- **F. Hate-speech & Migration correlation** — analyze hate-speech trends in Spain + correlates (media presence, polling/worry, xenophobic political party voting, migration-associated crime data) via watchdog reports & primary sources (T37–T40).
+16: - **G. GBV non-sexual justice funnel** (*later expansion*) — denuncias → diligencias → condenas + reporting rate, for physical/psychological GBV (T34).
+
 ---
 
 ## §C — Constraints
@@ -21,9 +30,10 @@ C8: Covariate regression = associative, ⊥ causal.
 C9: Prior AI model (Haiku) likely hallucinated point estimates without source verification → ∀ numbers from that conversation ! re-verified against primary sources before use.  
 C10: Population denominator ! female population of Spain from INE Padrón; age-stratified where possible.  
 C11: Ethnicity/nationality breakdowns sparse in official data; include when available, flag absence.  
-C12: ∀ CSV rows ! have `confidence` ∈ {high, medium, low, unverified} — unverified rows ⊥ used in final estimates until confirmed.
-C13: PDF extraction parsers ! assume stable table formats: Delegación del Gobierno 1-page format (2003–2026), MIR Informe standard tables (2022–2024), MIR Anuario chapter layout (2000–2021); format deviations ⊥ silently skipped; parser ! halt and report inconsistency.
-C14: Python parser stack requires pdfplumber (table extraction), pandas (aggregation + validation), openpyxl (fallback for Excel tables); validation failures ! block output (no partial extracts).
+C12: ∀ CSV rows ! have `confidence` ∈ {high, medium, low, unverified} — unverified rows ⊥ used in final estimates until confirmed.  
+C13: PDF extraction parsers ! assume stable table formats: Delegación del Gobierno 1-page format (2003–2026), MIR Informe standard tables (2022–2024), MIR Anuario chapter layout (2000–2021); format deviations ⊥ silently skipped; parser ! halt and report inconsistency.  
+C14: Python parser stack requires pdfplumber (table extraction), pandas (aggregation + validation), openpyxl (fallback for Excel tables); validation failures ! block output (no partial extracts).  
+C15: Literature-first: published studies/syntheses ! preferred where they exist, but ∀ secondary figure → primary source ! traced & documented; secondary value ⊥ cited as if primary. (extends C1; the 29-source catalogue in `fuentes_secundarias_analisis_espana.md` is the working set.)
 
 ---
 
@@ -58,21 +68,28 @@ html: docs/index.html (tab 1: sexual crimes + Macroencuesta; tab 2: feminicides;
 V1: ∀ row ∈ violence_spain.csv → `row_id`, `violence_type`, `year`, `value`, `unit`, `source_name`, `source_table`, `confidence` ! non-empty.  
 V2: `confidence=high` → source is primary govt/official publication, value directly readable (not computed by prior AI).  
 V3: `confidence=medium` → source is primary but value requires minor computation (e.g. rate from count + population) or source is reputable secondary.  
-V4: `confidence=low` → source ambiguous, secondary, or value inferred.  
+V4: `confidence=low` → source is ambiguous, secondary, or value inferred.  
 V5: `confidence=unverified` → value originates from prior AI conversation; ⊥ used in modelling until cross-checked.  
 V6: ∀ rate computation → denominator ! stated (female population, female 15-49, etc.).  
 V7: Definition-break years (2022 LO 10/2022, 2023 reform) ! flagged in `notes` for sexual-offence rows.  
 V8: Femicide rows ! distinguish registry: `Delegación_Gobierno` (partner/ex only) vs `INE_MNP` (all female homicide) vs `CGPJ` (judicial).  
 V9: ∀ probability estimates → methodology section in report ! describe competing-risks model & assumptions.  
 V10: Covariate series ! cover same 2000–2025 range as violence series; gaps flagged.  
-V11: Dark-figure multipliers ! sourced from macroencuesta or published academic estimates; ⊥ invented.
-V12: ∀ extracted dataset → parser ! validate: sum(category_breakdown) = reported_total, sum(age_groups) = reported_total, sum(region/origin/demographic breakdowns) reconcile to headline count; validation ⊥ pass until all cross-checks pass. Discrepancies ! logged with row ID + expected vs actual + PDF page reference.
+V11: Dark-figure multipliers ! sourced from macroencuesta or published academic estimates; ⊥ invented.  
+V12: ∀ extracted dataset → parser ! validate: sum(category_breakdown) = reported_total, sum(age_groups) = reported_total, sum(region/origin/demographic breakdowns) reconcile to headline count; validation ⊥ pass until all cross-checks pass. Discrepancies ! logged with row ID + expected vs actual + PDF page reference.  
 V13: B6 discrepancy (violaciones series incompatibility) ! always documented in source_document + notes: which legal articles included (Art.179 agresión con penetración only? + Art.181 abuso with penetration?), which MIR source (Anuario headline ~5,200/yr vs Informe subcategory ~1,200/yr), approximate multiplier if known. No silent reconciliation.  
-V14: ∀ subgroup-relative-rate claim (e.g. "X% of crimes/perpetrators are nationality N") → ! paired with (a) the absolute base rate = count(N) ÷ population(N) per 100k, and (b) the population denominator + its source/year. Relative framings ⊥ published standalone — they obscure that an elevated relative rate can still correspond to a tiny absolute share (e.g. 3% absolute incidence vs 1% is a 3x relative difference but both ⊥ "large"). Directly targets B8-class claims (Haiku "32% extranjeros → 3.43x more likely", row 74 "37.3% foreign perpetrators").
+V14: ∀ subgroup-relative-rate claim (e.g. "X% of crimes/perpetrators are nationality N") → ! paired with (a) the absolute base rate = count(N) ÷ population(N) per 100k, and (b) the population denominator + its source/year. Relative framings ⊥ published standalone — they obscure that an elevated relative rate can still correspond to a tiny absolute share (e.g. 3% absolute incidence vs 1% is a 3x relative difference but both ⊥ "large"). Directly targets B8-class claims (Haiku "32% extranjeros → 3.43x more likely", row 74 "37.3% foreign perpetrators").  
+V15: peligrosity ! reported as bracket [lower = convicted (INE Condenados), upper = identified (detenidos+investigados)] per 100k men of the slice; numerator = distinct persons (deduped), ⊥ crime-event counts (avoids one-perp-many-crimes inflation); denominator = male population of that slice (Padrón/ECP); subject to V14 relative/absolute pairing.  
+V16: any conversion between victimization rate and peligrosity ! account for one-aggressor→multiple-victims and repeat victimization via the §E relationship distribution; adjustment factor + source ! documented.  
+V17: GBV justice-funnel rates ! keep administrative sources distinct — MIR police denuncias ≠ CGPJ judicial ≠ Fiscalía diligencias ≠ INE condenas; counts ⊥ divided across incompatible sources without a documented bridge.
+V18: Hate-speech datasets ! prioritized from established watchdog organizations (e.g., RAXEN, SOS Racismo, CEAR) + primary Interior/Fiscalía sources; ∀ correlation with migration data/crime ! explicitly document definitions, causality limits (associative only), and data limitations (survey coverage/reporting bias). 
+- Primary source trace: CEAR report "Los delitos e incidentes de odio, especialmente aquellos relacionados con racismo y xenofobia, aumentaron un 23,6 % en 2025, la mayor cifra desde que hay registros del Ministerio de Interior" ! validated against Ministry of Interior annual hate-crime statistics.
+- Victimization/Perpetrator balance: Analysis ! encompass comparative crime rates by different migrant populations, and crimes suffered *by* those populations (including systemic discrimination, institutional harm, and police practices) — using watchdog reports (e.g., reports on police profiling/institutional racism) alongside official statistics.
 
 ---
 
 ## §T — Tasks
+
 
 | id | status | task | cites |
 |---|---|---|---|
@@ -91,7 +108,7 @@ V14: ∀ subgroup-relative-rate claim (e.g. "X% of crimes/perpetrators are natio
 | T12 | . | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
 | T13 | . | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
 | T14 | . | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
-| T15 | . | Write `reports/methodology.md` — definitions, legal changes, dark-figure approach, model spec | V9,C3,C4 |
+| T15 | . | Write `reports/methodology.md` — definitions, legal changes, dark-figure approach, model spec; per-source extraction table + composition DAG (mermaid) + peligrosity/relationship/funnel definitions | V9,C3,C4 |
 | T16 | . | Write `reports/results.md` — probability estimates + CIs + scenario table | V9 |
 | T17 | x | Restructure dashboard with tabbed interface — refactor `docs/index.html`: tab 1 = sexual crimes + Macroencuesta surveys, tab 2 = feminicides; maintain embedded source hyperlinks; add data-tab attribute to charts | I.*,V8 |
 | T18 | x | Download reference documents — fetch 4 additional synthesis reports from FURTHER_SOURCES.md (MIR 2022/2023/2024 methodological reports, CCOO analysis, group-violence report, MTAS 2015–2019 overview); organize by type in `data/sources/` | C1 |
@@ -106,7 +123,60 @@ V14: ∀ subgroup-relative-rate claim (e.g. "X% of crimes/perpetrators are natio
 | T27 | . | Extract perpetrator-nationality data (general crime) — MIR Balance de Criminalidad / Anuario "detenidos/investigados por nacionalidad" totals (broader than sexual violence only) → headline absolute-rate numerator, appended to `data/raw/migrant_crime_numerator.csv` | C1,V1,V2,V12,V14 |
 | T28 | . | Compute absolute migrant crime rates — `src/compute_migrant_crime_rates.py`: join numerator (T26/T27, crime counts by nationality) ÷ denominator (`migration_spain.csv` stock by nationality/origin/age/sex, supplement with INE table 36825 if finer joins needed) → per-100k rates with binomial/Poisson CIs, by nationality and by demographic slice (origin region × age × sex) → `data/processed/migrant_crime_rates.csv` | V6,V14,C10 |
 | T29 | . | Dashboard/report — present absolute migrant-crime-rate analysis pairing relative and absolute framings side-by-side (e.g. "37% of detentions ↔ N per 100k residents vs M per 100k for nationals — both small in absolute terms"); add dashboard section + `reports/migration_crime.md` write-up addressing the "migrants commit more crime" generalization directly with sourced absolute base rates by demographic slice | I.*,V14,C8 |
-| T-mig-tab | . | Rebuild migration dashboard tab on current `docs/index.html` architecture (T23/T24 restructured tabs since the migration branch was authored) — visualize annual influx trend (with 2008/2021 method-break flags), origin-country composition over time, age/sex pyramid of migrant stock, sourced from merged `migration_spain.csv` | I.*,V1,V6 |
+## §T — Tasks
+
+### Roadmap
+- **Phase 0 — housekeeping/now**: sync T11/T-mig-tab status; rewrite README + mermaid (change #5); create `reports/results.md` (change #2); expand §G/§C/§V (changes #1, #3).
+- **Phase 1 — finish core violence series** (unblocks life table): T2, T21, T22, T4, T5, T14, **T35** (literature synthesis → dark-figure & relationship priors).
+- **Phase 2 — core probability deliverable** *(current priority)*: T8, T9, T24, **T15** (now incl. extraction map + composition DAG), T16.
+- **Phase 3 — peligrosity & relationship**: **T30, T31** (peligrosity engine + bracket), **T32, T33** (relationship structure + adjustment); nationality slice = T26, T27, T28, T29.
+- **Phase 4 — covariate regression & projections**: T10, T12, T13.
+- **Phase 5 — later expansions**: **T34** (GBV non-sexual funnel), **T36** (docs composition/methodology diagram), peligrosity for other petty crimes.
+
+| id | status | task | cites |
+|---|---|---|---|
+| T1 | x | Populate `violence_spain.csv` — femicide (partner/ex): Delegación del Gobierno 2003–2024; rows 1–22,90,91,104,105 complete; 2024=47 verified | V1,V2,V8 |
+| T2 | ~ | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). INE ECM 2000–2024 full series now in `data/processed/mortality_spain_ine_ecm.csv` via T17. PENDING: MIR Anuario tables with sex breakdown. Source file: `data/sources/homicidio_espana.md` | V1,V2,V8 |
+| T3 | ~ | Populate `violence_spain.csv` — sexual crimes MIR: 2022–2024 verified (rows 46–56,82–89); 2017–2021 medium; 2000–2016 unverified. BLOCKER: two incompatible violaciones series unresolved (B6) | V1,V2,V7 |
+| T4 | . | Populate `violence_spain.csv` — non-sexual domestic violence denuncias: Ministerio del Interior / CGPJ 2000–2024 | V1,V2 |
+| T5 | ~ | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11 |
+| T6 | x | Female (& male, total) population by 5-yr age group & year 2000–2025 (mid-year July 1) from INE table 56934 (Estimaciones de Población Actual) → `data/processed/population_spain_midyear_5yr.csv`. Source: 56934 also gives Jan/Apr/Jul/Oct 1971–2025 in `population_spain_estimates.csv`. Cross-check 2024 female: bin sum 24,881,624 = INE all-ages exact match. Script: `src/parse_ine_population.py` | V6,V10 |
+| T7 | x | Age-specific annual incidence rates per 100k → `data/processed/mortality_rates.csv` (198k rows, full deaths × pop join). Plus subsets: `mortality_rates_key.csv` (key causes), `mortality_rates_all_cause_by_age.csv` (concise). Script: `src/compute_mortality_rates.py` | V3,V6 |
+| T8 | . | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9 |
+| T17 | x | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/parse_ine_mortality.py`, `src/summarize_mortality.py` | V1,V2,V6 |
+| T9 | . | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11 |
+| T10 | . | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
+| T11 | ~ | Populate `data/raw/migration_spain.csv` (390 rows) — flows 2000-2024, foreign-nationality stock 2000-2025, top-10 origin nationalities for 2008-2024 intake & 2025 stock (sex-split sums match published totals exactly 2008-2024), broad age bands 2008-2024 + granular 5-yr bands 2024, SS-affiliation snapshots. See `data/sources/migracion_espana.md` | V10,C8 |
+| T12 | . | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
+| T13 | . | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
+| T14 | . | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
+| T15 | . | Write `reports/methodology.md` — definitions, legal changes, dark-figure approach, model spec; per-source extraction table + composition DAG (mermaid) + peligrosity/relationship/funnel definitions | V9,C3,C4 |
+| T16 | . | Write `reports/results.md` — probability estimates + CIs + scenario table | V9 |
+| T17 | x | Restructure dashboard with tabbed interface — refactor `docs/index.html`: tab 1 = sexual crimes + Macroencuesta surveys, tab 2 = feminicides; maintain embedded source hyperlinks; add data-tab attribute to charts | I.*,V8 |
+| T18 | x | Download reference documents — fetch 4 additional synthesis reports from FURTHER_SOURCES.md (MIR 2022/2023/2024 methodological reports, CCOO analysis, group-violence report, MTAS 2015–2019 overview); organize by type in `data/sources/` | C1 |
+| T19 | x | Build feminicide PDF parser with integrated validation — parse Delegación del Gobierno "Estadística de víctimas mortales por violencia de pareja" PDFs (2003–2026); extract per-region, per-age (victim/perpetrator), country of origin (national/foreign), previous measures, relationship status; **validation gate**: sum(region) = total, sum(age_group) = total, region/age/origin breakdowns reconcile to headline count | C1,C13,V12 |
+| T20 | x | Structure feminicide dataset — output validated extracted data to `data/raw/feminicidios_delegacion_2003-2026.csv`; one row per year/region/age-band/origin combination; add columns: year, feminicides_count, region, age_victim, age_perpetrator, origin_victim, origin_perpetrator, previous_measures, relationship_status, source_pdf, confidence, notes | V1,V2,V6,V12 |
+| T21 | . | Build sexual violence MIR parser with integrated validation — parse "Informe sobre Delitos contra la Libertad e Indemnidad Sexual en España" (2022–2024 PDFs) + "Anuario Estadístico del Ministerio del Interior" (2000–2021 sexual crimes chapter); extract tables: total crimes by legal category (violaciones, agresiones, abusos per Art. 179/181/etc.), victims by age/sex, perpetrators by sex; **validation gate**: sum(categories) = total, sum(age_groups_by_sex) = total_by_sex, reconcile Art.179 vs broader definitions for B6 discrepancy documentation | C1,C13,C14,V7,V12,V13 |
+| T22 | . | Structure sexual violence dataset — output validated extracted data to `data/raw/sexual_crimes_mir_2000-2024.csv`; enrich existing `violence_spain.csv` rows 46–99 with full MIR extraction; columns: year, crime_category, count, victims_female, victims_male, victims_age_groups, perpetrators_sex, legal_article, source_document (full title + year), source_table, confidence, notes (flag 2022 LO 10/2022 breakpoint, B6 series metadata) | V1,V2,V7,C3,V13 |
+| T23 | x | Add rich visualizations for extracted data — feminicides tab: stacked bar chart (age groups x-axis, origin breakdown per bar: víctimas españa + víctimas otro país); no rate subtitles (rates deferred to T24). Extend other tabs with existing visualizations | I.*,V1,V6 |
+| T24 | ~ | Integrate INE population data — use `data/processed/population_spain_midyear_5yr.csv` (by age/sex) + estimate foreign-national population by origin/year; compute per-origin feminicide rates (2024 count ÷ population); add rate overlay to T23 visualization with 95% CIs | V6,C10 |
+| T25 | x | Restructure markdown docs — archive stale Haiku phase-log artifacts (`FASE_2_PLAN_2015_2020`, `FASE_3_PLAN_2000_2014`, `FASE_2_PROGRESO_TAREAS_2_1_2_3`, `FASE_2_TAREAS_2.7_2.8_CIERRE_FINAL`, `INFORME_PROGRESO_FASE1_COMPILACION`, `INFORME_PROGRESO_FASE2_TAREA2.1`, `INDICE_MAESTRO`) + `FURTHER_SOURCES.md` to `archive/`; merge `SEXUAL_VIOLENCE_VERIFICATION.md`+`QUICK_VERIFY_SEXUAL_VIOLENCE.md`+`MORTALITY_MIGRATION_VERIFICATION_GUIDE.md` → one `VERIFICATION_GUIDE.md`; add `data/sources/SOURCES_INDEX.md` (1-page index over the 10 living source docs: scope, confidence, known issues) | — |
+| T26 | . | Extract perpetrator-nationality data (sexual violence) — download MIR "Informe sobre Delitos contra la Libertad Sexual" annual PDFs 2019-2024 (only synthesis/group-violence PDFs downloaded so far per T18); extract detenidos/investigados-by-nationality tables (Spanish vs foreign, by offence category/age/sex); cross-check INE Condenados table 28716 ("Delitos sexuales por nacionalidad"); replace flagged row 74 (37.3% foreign, confidence=medium, "denominator matters") with verified figure + full breakdown → `data/raw/migrant_crime_numerator.csv` | C1,C13,V1,V2,V12,V14 |
+| T27 | . | Extract perpetrator-nationality data (general crime) — MIR Balance de Criminalidad / Anuario "detenidos/investigados por nacionalidad" totals (broader than sexual violence only) → headline absolute-rate numerator, appended to `data/raw/migrant_crime_numerator.csv` | C1,V1,V2,V12,V14 |
+| T28 | . | Compute absolute migrant crime rates — `src/compute_migrant_crime_rates.py`: join numerator (T26/T27, crime counts by nationality) ÷ denominator (`migration_spain.csv` stock by nationality/origin/age/sex, supplement with INE table 36825 if finer joins needed) → per-100k rates with binomial/Poisson CIs, by nationality and by demographic slice (origin region × age × sex) → `data/processed/migrant_crime_rates.csv` | V6,V14,C10 |
+| T29 | . | Dashboard/report — present absolute migrant-crime-rate analysis pairing relative and absolute framings side-by-side (e.g. "37% of detentions ↔ N per 100k residents vs M per 100k for nationals — both small in absolute terms"); add dashboard section + `reports/migration_crime.md` write-up addressing the "migrants commit more crime" generalization directly with sourced absolute base rates by demographic slice | I.*,V14,C8 |
+| T30 | . | Extract distinct-perpetrator counts (sexual) — MIR Informe detenidos+ investigados 2019–2024 (deduped where possible) + INE Condenados table 28716 by offence/sex/age/nationality → `data/raw/perpetrators_sexual.csv` (numerator for peligrosity bracket; generalizes T26). | C1,C13,V1,V12,V14,V15 |
+| T31 | . | Compute peligrosity → `src/compute_peligrosity.py`: distinct perps ÷ male population (Padrón/ECP) → bracket [convicted, identified] per 100k men, by age × nationality × origin, with CIs → `data/processed/peligrosity_rates.csv`; nationality slice ! reconcile with `migrant_crime_rates.csv` (T28). | V6,V14,V15,C10 |
+| T32 | . | Extract victim–aggressor relationship structure — Macroencuesta (partner / known / stranger; ±penetration), MIR victim-perp matrix (2010–2012 + any newer), Delegación `relationship_status` → `data/processed/relationship_structure.csv` + victims-per-aggressor & repeat-victimization factors. | C5,V16 |
+| T33 | . | Apply relationship adjustment — adjust §A victim risk & §D peligrosity using T32 factors; document each adjustment + source. | V16,V9 |
+| T34 | . | *(later)* GBV non-sexual justice funnel — extract denuncias (CGPJ/MIR), diligencias (Fiscalía Memorias), condenas (INE Condenados/CGPJ), protection orders; compute reporting rate (vs Macroencuesta physical/psychological prevalence), prosecution rate, conviction rate → `data/raw/gbv_funnel.csv` + `data/processed/gbv_funnel_rates.csv`. | C5,V11,V17 |
+| T35 | . | Literature-evidence synthesis — from `fuentes_secundarias_analisis_espana.md` (29 sources) + 4 reference PDFs, extract each study's headline metrics + trace to primary source → `data/sources/literature_evidence.md` table; supplies dark-figure multipliers, victim-perp matrices, relationship priors as cross-checks. | C1,C15,V11 |
+| T36 | . | *(later)* Add composition/methodology diagram to `docs/index.html` (dashboard rendering of the extraction→metric DAG). | I.* |
+| T37 | . | Collect hate-speech-watchdog datasets (RAXEN, SOS Racismo) & primary source data (Interior/Fiscalía/INE) on hate-crimes/incidents (racism/xenophobia 2025 spike). | V18 |
+| T38 | . | Map correlation series: migration rates (T11), public polling (CIS worry), xenophobic party voting shares (CIS/Interior). | V18,C8 |
+| T39 | . | Analyze media presence of hate-speech/xenophobia: literature review/content analysis (if available via watchdog reports). | V18 |
+| T40 | . | Write `reports/hate_speech_analysis.md` — synthesize hate-speech findings, correlate with migration/crime, address associations. | V18 |
+| T-mig-tab | x | Rebuild migration dashboard tab on current `docs/index.html` architecture (T17/T23 tabbed architecture) — charts G1 (inflow + 2008 break), G2 (origin composition), G3 (sex split), G4/G5 (age composition/profile), G6 (stock); delivered via `src/build_migration_dashboard_data.py` (commit `55cfa64`). | I.*,V1,V6 |
 
 ---
 
