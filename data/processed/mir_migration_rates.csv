@@ -1,0 +1,5 @@
+"year","total_pop","foreign_stock","foreign_pct_pop","sexual_crimes_total","crimes_yoy_pct","foreign_stock_yoy_pct","detained_total","detained_foreign_count","detained_spanish_count","detained_foreign_pct","detained_spanish_pct","rate_foreign_per100k_male","rate_spanish_per100k_male","rate_ratio_foreign_vs_spanish","confidence"
+"2018","46722980","4734691","10.13","13782","","","","","","","","","","","no_nationality_data"
+"2022","47615034","5542932","11.64","19059","38.29","17.07","","","","","","","","","no_nationality_data"
+"2023","48059777","6089620","12.67","21825","14.51","9.86","13767","5135","8632","37.3","62.7","172.09","41.97","4.1","medium"
+"2024","48592909","6502282","13.38","22846","4.68","6.78","14375","","","","","","","","no_nationality_data"
