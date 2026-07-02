@@ -1,310 +1,372 @@
-#!/usr/bin/env python3
+"""Delegación del Gobierno Feminicide Report Parser (T19/T20).
+
+Parses the annual "ficha" PDF series published by the Delegación del
+Gobierno contra la Violencia de Género (Ministerio de Igualdad):
+"Mujeres Víctimas Mortales por Violencia de Género en España a manos de
+sus parejas o exparejas", one PDF per year, 2003-present.
+
+Two source-format eras exist:
+  - 2006-present: numbered-table format (Tabla 2.1-2.4, 3.1-3.4). This
+    parser extracts headline totals plus Tables 2.1 (region), 2.2 (age),
+    2.3 (country of birth), 2.4 (relationship/cohabitation). Tables
+    3.1-3.4 (denuncias previas, medidas de alejamiento, quebrantamiento,
+    tentativa de suicidio) are present in the source but NOT YET parsed.
+  - 2003-2005: an older "ficha resumen" layout (DENUNCIA / MEDIDAS DE
+    PROTECCIÓN / QUEBRANTAMIENTO chart-style page) with a structurally
+    different, harder-to-parse table. Only year + source metadata are
+    extracted for these three years; all breakdowns are left null.
+
+Region/age/nationality/relationship *labels* are matched against fixed,
+order-stable vocabularies (confirmed identical ordering across every
+sampled year, 2011-2026) rather than split out of the source text, since
+category names run together on one line with no reliable per-item
+delimiter (e.g. "Andalucía Aragón Asturias, Principado de Balears,
+Illes..."); only the (unambiguous, whitespace-separated) numeric values
+are actually parsed out of the PDF text.
+
+Usage:
+    python src/parsers/feminicide_parser.py --pdf-dir data/sources/
+    python src/parsers/feminicide_parser.py --pdf data/sources/VMujeres_2024.pdf
+
+Output: one consolidated data/raw/feminicidios_delegacion_{min}-{max}.json,
+Pydantic-validated FeminicideDataset -> FeminicideReport (one per year).
+source_document/source_page/confidence/verified live once per report, not
+per category row (matches mir_parser.py's MIRReport shape).
 """
-Feminicide PDF Parser with Integrated Validation
 
-Extracts data from Delegación del Gobierno "Estadística de víctimas mortales
-por violencia de pareja" PDFs (2003–2026).
-
-Tables extracted:
-  - Table 2.1: Regional breakdown
-  - Table 2.2: Age distribution (victims + perpetrators)
-  - Table 2.3: Country of birth (victims + perpetrators)
-  - Table 2.4: Relationship type/duration
-  - Table 3.1-3.4: Institutional data & circumstances
-"""
-
+import argparse
 import re
 import sys
-import subprocess
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
 
-from utils import extract_text, cli_require_arg
+try:
+    from pydantic import BaseModel
+except ImportError:
+    sys.exit("Install: uv add pydantic")
+
+from utils import extract_text
+
+ROOT = Path(__file__).parent.parent.parent
+OUT_DIR = ROOT / "data" / "raw"
+
+# Fixed, order-stable vocabularies -- confirmed identical ordering in every
+# sampled year 2011-2026 (2019 and 2024 cross-checked in full).
+REGIONS = [
+    "Andalucía", "Aragón", "Asturias, Principado de", "Balears, Illes",
+    "Canarias", "Cantabria", "Castilla y León", "Castilla-La Mancha",
+    "Cataluña", "Comunitat Valenciana", "Extremadura", "Galicia",
+    "Madrid, Comunidad de", "Murcia, Región de",
+    "Navarra, Comunidad Foral de", "País Vasco", "Rioja, La", "Ceuta",
+    "Melilla",
+]
+AGE_BRACKETS = [
+    "13 a 14 años", "15 a 17 años", "18 a 20 años", "21 a 30 años",
+    "31 a 40 años", "41 a 50 años", "51 a 60 años", "61 a 70 años",
+    "71 a 84 años", "85 años o más",
+]
+ORIGINS = ["España", "Otro país"]
+RELATIONSHIP_TYPES = ["Pareja", "Expareja o pareja en fase de ruptura"]
+COHABITATION = ["Convivían", "No convivían", "No consta"]
 
 
-def extract_headline_data(text: str) -> Dict:
-    """Extract headline summary: year, total, update date, last case."""
-    result = {}
+# ──────────────────────────────────────────────────────────────
+# Output schema
+# ──────────────────────────────────────────────────────────────
 
-    # Year
-    year_match = re.search(r'Año (\d{4})', text)
-    if year_match:
-        result['year'] = int(year_match.group(1))
+class CategoryCount(BaseModel):
+    label: str
+    count: int | None = None
+    pct: float | None = None
 
-    # Total 2003-2024
-    total_match = re.search(
-        r'TOTAL MUJERES VÍCTIMAS MORTALES (\d{4} - \d{4}): (\d+)',
-        text
+
+class VictimPerpCategoryCount(BaseModel):
+    label: str
+    victim_count: int | None = None
+    victim_pct: float | None = None
+    perp_count: int | None = None
+    perp_pct: float | None = None
+
+
+class FeminicideReport(BaseModel):
+    year: int
+    total_victims: int | None = None
+    cumulative_total_since_2003: int | None = None
+    update_date: str | None = None
+    orphaned_children: int | None = None
+    investigation_note: str | None = None
+    regional: list[CategoryCount] = []
+    age: list[VictimPerpCategoryCount] = []
+    origin: list[VictimPerpCategoryCount] = []
+    relationship_type: list[CategoryCount] = []
+    cohabitation: list[CategoryCount] = []
+    source_document: str
+    source_page: int = 1
+    confidence: str = "high"
+    verified: bool = False
+    notes: str = ""
+
+
+class FeminicideDataset(BaseModel):
+    reports: list[FeminicideReport]
+
+
+# ──────────────────────────────────────────────────────────────
+# Number extraction helpers
+# ──────────────────────────────────────────────────────────────
+
+_NUM_RE = re.compile(r"-?\d+\.?\d*")
+
+
+def _numbers_after(label_pattern: str, text: str, limit: int | None = None) -> list[str]:
+    """Return every numeric token found after the first match of
+    `label_pattern` in `text` (up to `limit` tokens)."""
+    m = re.search(label_pattern, text)
+    if not m:
+        return []
+    nums = _NUM_RE.findall(text[m.end():])
+    return nums[:limit] if limit else nums
+
+
+def _slice_block(text: str, start_pattern: str, end_pattern: str | None) -> str | None:
+    m1 = re.search(start_pattern, text)
+    if not m1:
+        return None
+    start = m1.end()
+    if end_pattern:
+        m2 = re.search(end_pattern, text[start:])
+        end = start + m2.start() if m2 else len(text)
+    else:
+        end = len(text)
+    return text[start:end]
+
+
+def _extract_simple_table(block: str, vocab: list[str]) -> list[CategoryCount]:
+    """Table with a single 'Número'/'%' pair (no victim/perpetrator split)."""
+    n = len(vocab) + 1  # +1 for the leading TOTAL entry
+    nums = _numbers_after(r"Número", block, 2 * n)
+    if len(nums) < 2 * n:
+        return []
+    counts, pcts = nums[:n], nums[n:2 * n]
+    return [
+        CategoryCount(label=label, count=int(float(c)), pct=float(p))
+        for label, c, p in zip(vocab, counts[1:], pcts[1:])
+    ]
+
+
+def _extract_victim_perp_table(block: str, vocab: list[str]) -> list[VictimPerpCategoryCount]:
+    """Table with separate 'Mujeres víctimas mortales' and 'Presuntos
+    agresores' Número/% sub-blocks."""
+    n = len(vocab) + 1
+    perp_m = re.search(r"Presuntos agresores", block)
+    victim_block = block[:perp_m.start()] if perp_m else block
+    perp_block = block[perp_m.start():] if perp_m else ""
+
+    v_nums = _numbers_after(r"Número", victim_block, 2 * n)
+    p_nums = _numbers_after(r"Número", perp_block, 2 * n) if perp_block else []
+
+    if len(v_nums) < 2 * n:
+        return []
+    vc, vp = v_nums[:n], v_nums[n:2 * n]
+    pc, pp = (p_nums[:n], p_nums[n:2 * n]) if len(p_nums) >= 2 * n else ([None] * n, [None] * n)
+
+    out = []
+    for i, label in enumerate(vocab, start=1):
+        out.append(VictimPerpCategoryCount(
+            label=label,
+            victim_count=int(float(vc[i])),
+            victim_pct=float(vp[i]),
+            perp_count=int(float(pc[i])) if pc[i] is not None else None,
+            perp_pct=float(pp[i]) if pp[i] is not None else None,
+        ))
+    return out
+
+
+def _extract_relationship_table(block: str) -> tuple[list[CategoryCount], list[CategoryCount]]:
+    """Table 2.4: one Número/% pair holding TOTAL+2 relationship-type values
+    followed by TOTAL+3 cohabitation values, back to back."""
+    n_rel, n_cohab = len(RELATIONSHIP_TYPES) + 1, len(COHABITATION) + 1
+    total_n = n_rel + n_cohab
+    nums = _numbers_after(r"Número", block, 2 * total_n)
+    if len(nums) < 2 * total_n:
+        return [], []
+    counts, pcts = nums[:total_n], nums[total_n:2 * total_n]
+
+    rel_counts, rel_pcts = counts[:n_rel], pcts[:n_rel]
+    cohab_counts, cohab_pcts = counts[n_rel:], pcts[n_rel:]
+
+    relationship = [
+        CategoryCount(label=label, count=int(float(c)), pct=float(p))
+        for label, c, p in zip(RELATIONSHIP_TYPES, rel_counts[1:], rel_pcts[1:])
+    ]
+    cohabitation = [
+        CategoryCount(label=label, count=int(float(c)), pct=float(p))
+        for label, c, p in zip(COHABITATION, cohab_counts[1:], cohab_pcts[1:])
+    ]
+    return relationship, cohabitation
+
+
+# ──────────────────────────────────────────────────────────────
+# Per-format parsers
+# ──────────────────────────────────────────────────────────────
+
+def _parse_modern_format(text: str, year: int, pdf_name: str) -> FeminicideReport:
+    """2006-present numbered-table format."""
+    region_block = _slice_block(
+        text, r"Comunidad/ciudad autónoma", r"Grupo de edad")
+    age_block = _slice_block(
+        text, r"Grupo de edad", r"País de nacimiento")
+    origin_block = _slice_block(
+        text, r"País de nacimiento", r"Tipo de relación")
+    relationship_block = _slice_block(
+        text, r"Tipo de relación/convivencia", r"3\. Denuncias previas|Tabla 3\.1")
+
+    regional = _extract_simple_table(region_block, REGIONS) if region_block else []
+    age = _extract_victim_perp_table(age_block, AGE_BRACKETS) if age_block else []
+    origin = _extract_victim_perp_table(origin_block, ORIGINS) if origin_block else []
+    relationship_type, cohabitation = (
+        _extract_relationship_table(relationship_block) if relationship_block else ([], [])
     )
-    if total_match:
-        result['period'] = total_match.group(1)
-        result['total_2003_2024'] = int(total_match.group(2))
 
-    # Last case details
-    last_case = re.search(
-        r'Último caso\s+incorporado:.*?(\d+)\s+(de\s+\w+\s+de\s+)?(\d{4})',
-        text,
-        re.DOTALL
+    total_victims = None
+    if region_block:
+        total_nums = _numbers_after(r"Número", region_block, 1)
+        if total_nums:
+            total_victims = int(float(total_nums[0]))
+
+    cum_m = re.search(
+        r"TOTAL MUJERES VÍCTIMAS MORTALES \d{4} - \d{4}:\s*(\d+)", text)
+    cumulative_total = int(cum_m.group(1)) if cum_m else None
+
+    update_m = re.search(
+        r"Fecha de actualización de datos:\s*\n*\s*([^\n]+)", text)
+    update_date = update_m.group(1).strip() if update_m else None
+
+    orphans_m = re.search(
+        r"N\.º huérfanas/os menores de 18 años:\s*\n*\s*(-|\d+)", text)
+    orphaned_children = (
+        int(orphans_m.group(1)) if orphans_m and orphans_m.group(1) != "-" else None
     )
-    if last_case:
-        result['last_case_date'] = f"{last_case.group(1)}-{last_case.group(3)}"
 
-    # Orphaned children
-    orphans = re.search(
-        r'N\.º huérfanas/os\s+menores de 18 años:\s*(\d+)',
-        text
+    invest_m = re.search(
+        r"Casos en investigación:\s*\n*\s*([^\n]+)", text)
+    investigation_note = invest_m.group(1).strip() if invest_m else None
+
+    return FeminicideReport(
+        year=year,
+        total_victims=total_victims,
+        cumulative_total_since_2003=cumulative_total,
+        update_date=update_date,
+        orphaned_children=orphaned_children,
+        investigation_note=investigation_note,
+        regional=regional,
+        age=age,
+        origin=origin,
+        relationship_type=relationship_type,
+        cohabitation=cohabitation,
+        source_document=pdf_name,
+        confidence="high",
+        notes="",
     )
-    if orphans:
-        result['orphaned_children'] = int(orphans.group(1))
-
-    return result
 
 
-def extract_table_2_1_regional(text: str) -> List[Dict]:
-    """Extract Table 2.1: Regional breakdown of victims."""
-    data = []
-
-    # Extract the column-formatted table
-    match = re.search(
-        r'Tabla 2\.1.*?Comunidad/ciudad autónoma\s+(.*?)\s+Número\s+%\s+([\d.\s]+?)(?=Tabla|$)',
-        text,
-        re.DOTALL
+def _parse_legacy_format(text: str, year: int, pdf_name: str) -> FeminicideReport:
+    """2003-2005 'ficha resumen' chart-style format -- structurally
+    incompatible with the 2006+ numbered-table layout. Only year/source
+    metadata are populated; breakdowns are left empty rather than risk
+    mis-extracting a total from the chart-adjacent number soup."""
+    return FeminicideReport(
+        year=year,
+        source_document=pdf_name,
+        confidence="low",
+        notes=(
+            "Legacy 'ficha resumen' format (pre-2006): DENUNCIA/MEDIDAS DE "
+            "PROTECCIÓN/QUEBRANTAMIENTO chart layout, structurally "
+            "incompatible with the 2006+ numbered-table format this parser "
+            "targets. No fields extracted from the PDF for this year -- see "
+            "data/sources/delegacion_gobierno_femicidio.md for a manually "
+            "curated headline count."
+        ),
     )
-    if not match:
-        return data
 
-    regions_text = match.group(1).strip()
-    values_text = match.group(2).strip()
 
-    regions = [r.strip() for r in regions_text.split('\n') if r.strip()]
-    values = [v.strip() for v in values_text.split() if v.strip()]
+def parse_pdf(pdf_path: Path, year: int | None = None) -> FeminicideReport:
+    """Parse one yearly Delegación feminicide PDF into a FeminicideReport."""
+    year = year or infer_year(pdf_path)
+    if not year:
+        raise ValueError(f"Cannot infer year from filename: {pdf_path.name}")
+    text = extract_text(pdf_path, timeout=30)
+    if re.search(r"Tabla 2\.1", text):
+        return _parse_modern_format(text, year, pdf_path.name)
+    return _parse_legacy_format(text, year, pdf_path.name)
 
-    if len(regions) < 1 or len(values) < len(regions) * 2:
-        return data
 
-    # Values are: first N are numbers, next N are percentages
-    numbers = values[:len(regions)]
-    percentages = values[len(regions) : len(regions) * 2]
+# ──────────────────────────────────────────────────────────────
+# CLI
+# ──────────────────────────────────────────────────────────────
 
-    for i, region in enumerate(regions):
-        try:
-            data.append({
-                'region': region,
-                'victims': int(numbers[i]),
-                'percentage': float(percentages[i]),
-                'table': 2.1,
-            })
-        except (ValueError, IndexError):
+def infer_year(pdf_path: Path) -> int | None:
+    m = re.search(r"(20\d{2})", pdf_path.stem)
+    return int(m.group(1)) if m else None
+
+
+def write_dataset(dataset: FeminicideDataset, out_path: Path):
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(dataset.model_dump_json(indent=2), encoding="utf-8")
+    print(f"  -> {out_path} ({len(dataset.reports)} report(s))")
+
+
+def run_batch(pdf_paths: list[Path], out_dir: Path) -> Path:
+    """Parse every PDF and write exactly one FeminicideDataset JSON file,
+    named by the actual year range -- not one file per input plus a
+    redundant consolidated copy."""
+    by_year: dict[int, list[str]] = {}
+    for pdf in pdf_paths:
+        y = infer_year(pdf)
+        if y:
+            by_year.setdefault(y, []).append(pdf.name)
+    collisions = {y: names for y, names in by_year.items() if len(names) > 1}
+    if collisions:
+        detail = "; ".join(f"{y}: {names}" for y, names in sorted(collisions.items()))
+        raise ValueError(
+            f"run_batch: multiple PDFs infer to the same year -- {detail}. "
+            "Pass explicit --pdf per file instead of a mixed --pdf-dir."
+        )
+
+    reports = []
+    for pdf in pdf_paths:
+        year = infer_year(pdf)
+        if not year:
+            print(f"  SKIP {pdf.name} (cannot infer year)")
             continue
+        print(f"  Parsing {year}: {pdf.name}")
+        reports.append(parse_pdf(pdf, year))
 
-    return data
-
-
-def extract_table_2_2_age(text: str) -> List[Dict]:
-    """Extract Table 2.2: Age distribution of victims and perpetrators."""
-    data = []
-
-    match = re.search(
-        r'Tabla 2\.2.*?Grupo de edad\s+(.*?)\s+Mujeres víctimas mortales.*?Número\s+([\d\s]+?)\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)\s+%\s+([\d.\s]+?)(?=Tabla|$)',
-        text,
-        re.DOTALL
-    )
-    if not match:
-        return data
-
-    age_text = match.group(1).strip()
-    victim_nums_text = match.group(2).strip()
-    perp_nums_text = match.group(3).strip()
-    victim_pcts_text = match.group(4).strip()
-    perp_pcts_text = match.group(5).strip()
-
-    ages = [a.strip() for a in age_text.split('\n') if a.strip()]
-    victim_nums = [int(v) for v in victim_nums_text.split() if v.strip().isdigit()]
-    perp_nums = [int(p) for p in perp_nums_text.split() if p.strip().isdigit()]
-    victim_pcts = [float(v) for v in victim_pcts_text.split() if v.strip()]
-    perp_pcts = [float(p) for p in perp_pcts_text.split() if p.strip()]
-
-    for i, age in enumerate(ages):
-        if i < len(victim_nums) and i < len(perp_nums) and i < len(victim_pcts) and i < len(perp_pcts):
-            data.append({
-                'age_group': age,
-                'victims_count': victim_nums[i],
-                'victims_pct': victim_pcts[i],
-                'perpetrators_count': perp_nums[i],
-                'perpetrators_pct': perp_pcts[i],
-                'table': 2.2,
-            })
-
-    return data
-
-
-def extract_table_2_3_origin(text: str) -> List[Dict]:
-    """Extract Table 2.3: Country of birth (victims & perpetrators)."""
-    data = []
-
-    match = re.search(
-        r'Tabla 2\.3.*?País de nacimiento\s+(.*?)\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)\s+Presuntos agresores\s+Número\s+([\d\s]+?)\s+%\s+([\d.\s]+?)(?=Tabla|$)',
-        text,
-        re.DOTALL
-    )
-    if not match:
-        return data
-
-    origin_text = match.group(1).strip()
-    victim_nums_text = match.group(2).strip()
-    victim_pcts_text = match.group(3).strip()
-    perp_nums_text = match.group(4).strip()
-    perp_pcts_text = match.group(5).strip()
-
-    origins = [o.strip() for o in origin_text.split('\n') if o.strip()]
-    victim_nums = [int(v) for v in victim_nums_text.split() if v.strip().isdigit()]
-    victim_pcts = [float(v) for v in victim_pcts_text.split() if v.strip()]
-    perp_nums = [int(p) for p in perp_nums_text.split() if p.strip().isdigit()]
-    perp_pcts = [float(p) for p in perp_pcts_text.split() if p.strip()]
-
-    for i, origin in enumerate(origins):
-        if i < len(victim_nums) and i < len(perp_nums) and i < len(victim_pcts) and i < len(perp_pcts):
-            data.append({
-                'origin': origin,
-                'victims_count': victim_nums[i],
-                'victims_pct': victim_pcts[i],
-                'perpetrators_count': perp_nums[i],
-                'perpetrators_pct': perp_pcts[i],
-                'table': 2.3,
-            })
-
-    return data
-
-
-def validate_extraction(data: Dict) -> Tuple[bool, List[str]]:
-    """
-    Validation gates:
-    - V12: sum(regions) = total, sum(age_groups) = total, sum(origins) = total
-    """
-    errors = []
-
-    # Get headline total from Table 2.1
-    if 'regional' in data and data['regional']:
-        regional_sum = sum(r['victims'] for r in data['regional'] if r['region'] != 'TOTAL')
-        # The headline number should match
-        if 'headline_count' in data and data['headline_count'] != regional_sum:
-            errors.append(
-                f"Regional sum validation: {regional_sum} != {data['headline_count']}"
-            )
-
-    # Age distribution sums
-    if 'age' in data and data['age']:
-        age_sum = sum(r['victims_count'] for r in data['age'] if r['age_group'] != 'TOTAL')
-        if age_sum > 0 and 'headline_count' in data and abs(age_sum - data['headline_count']) > 1:
-            errors.append(
-                f"Age distribution sum: {age_sum} != {data['headline_count']}"
-            )
-
-    return len(errors) == 0, errors
-
-
-def parse_pdf(pdf_path: str) -> Dict:
-    """
-    Parse feminicide PDF using text extraction.
-
-    Returns:
-    {
-        'year': int,
-        'headline_count': int,
-        'headline': dict,
-        'regional': [dict],
-        'age': [dict],
-        'origin': [dict],
-        'validation': {
-            'passed': bool,
-            'errors': [str]
-        }
-    }
-    """
-    pdf_file = Path(pdf_path)
-    if not pdf_file.exists():
-        return {'error': f"PDF not found: {pdf_path}"}
-
-    result = {
-        'file': str(pdf_file),
-        'headline': {},
-        'regional': [],
-        'age': [],
-        'origin': [],
-        'validation': {'passed': True, 'errors': []},
-    }
-
-    try:
-        text = extract_text(pdf_path, timeout=30)
-
-        # Extract headline data
-        result['headline'] = extract_headline_data(text)
-        result['year'] = result['headline'].get('year')
-
-        # Extract tables
-        result['regional'] = extract_table_2_1_regional(text)
-        result['age'] = extract_table_2_2_age(text)
-        result['origin'] = extract_table_2_3_origin(text)
-
-        # Headline count (year-specific total) from Table 2.1's TOTAL row
-        for row in result['regional']:
-            if row['region'] == 'TOTAL':
-                result['headline_count'] = row['victims']
-                break
-
-        # Run validation
-        is_valid, errors = validate_extraction(result)
-        result['validation']['passed'] = is_valid
-        result['validation']['errors'] = errors
-
-    except subprocess.TimeoutExpired:
-        result['validation']['errors'].append("PDF extraction timeout")
-        result['validation']['passed'] = False
-    except Exception as e:
-        result['validation']['passed'] = False
-        result['validation']['errors'].append(f"PDF parsing error: {e}")
-
-    return result
+    reports.sort(key=lambda r: r.year)
+    years = [r.year for r in reports]
+    stem = f"{years[0]}" if years[0] == years[-1] else f"{years[0]}-{years[-1]}"
+    out = out_dir / f"feminicidios_delegacion_{stem}.json"
+    write_dataset(FeminicideDataset(reports=reports), out)
+    return out
 
 
 def main():
-    """Command-line interface."""
-    cli_require_arg(sys.argv, "Usage: feminicide_parser.py <pdf_path>")
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--pdf-dir", type=Path, help="Directory of PDFs")
+    ap.add_argument("--pdf", type=Path, help="Single PDF file")
+    ap.add_argument("--year", type=int, help="Override year (use with --pdf)")
+    ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
+    args = ap.parse_args()
 
-    pdf_path = sys.argv[1]
-    result = parse_pdf(pdf_path)
-
-    if 'error' in result:
-        print(f"ERROR: {result['error']}")
-        sys.exit(1)
-
-    print(f"=== FEMINICIDE PDF PARSER ===")
-    print(f"File: {result['file']}")
-    print(f"Year: {result.get('year', 'unknown')}")
-    print(f"Total victims {result['headline'].get('period', '???')}: {result['headline'].get('total_2003_2024', 'N/A')}")
-    print(f"Victims in {result.get('year')}: {result.get('headline_count', 'N/A')}")
-    print(f"\nTables extracted:")
-    print(f"  - Regional breakdown: {len(result['regional'])} rows")
-    print(f"  - Age distribution: {len(result['age'])} rows")
-    print(f"  - Origin (birth country): {len(result['origin'])} rows")
-
-    print(f"\nValidation: {'PASS' if result['validation']['passed'] else 'FAIL'}")
-    if result['validation']['errors']:
-        print("Errors:")
-        for err in result['validation']['errors']:
-            print(f"  - {err}")
-
-    # Print sample data
-    if result['regional']:
-        print(f"\nSample regional data (first 3):")
-        for row in result['regional'][:3]:
-            print(f"  {row['region']}: {row['victims']} ({row['percentage']}%)")
-
-    if result['age']:
-        print(f"\nSample age data (first 3):")
-        for row in result['age'][:3]:
-            print(f"  {row['age_group']}: victims={row['victims_count']}, perps={row['perpetrators_count']}")
+    if args.pdf:
+        run_batch([args.pdf], args.out_dir)
+    elif args.pdf_dir:
+        pdfs = sorted(args.pdf_dir.glob("VMujeres_*.pdf"))
+        if not pdfs:
+            sys.exit(f"No VMujeres_*.pdf files found in {args.pdf_dir}")
+        run_batch(pdfs, args.out_dir)
+    else:
+        ap.error("Pass either --pdf or --pdf-dir")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

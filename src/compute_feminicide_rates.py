@@ -3,12 +3,13 @@
 Compute per-origin feminicide rates with 95% confidence intervals.
 
 Data source:
-- Feminicide counts (2024) from Delegación del Gobierno (T20 output)
+- Feminicide counts (2024) from Delegación del Gobierno (T19/T20 output)
 - Population (2024) from INE Padrón (branch 2 merge)
 - Rate information: Spanish women 1.68/million, foreign women 8.32/million
 """
 
 import csv
+import json
 import math
 from pathlib import Path
 
@@ -25,21 +26,17 @@ def poisson_ci_95(count):
 
 
 def load_feminicide_data():
-    """Load 2024 feminicide counts by origin."""
+    """Load 2024 feminicide counts by origin from the consolidated dataset."""
     data = {}
-    with open('data/raw/feminicidios_delegacion_2024.csv', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            year = row['year']
-            if year != '2024':
-                continue
-            breakdown = row['breakdown_type']
-            if breakdown != 'origin':
-                continue
+    with open('data/raw/feminicidios_delegacion_2003-2026.json', encoding='utf-8') as f:
+        dataset = json.load(f)
 
-            category = row['category']
-            count = int(row['victims_count'])
-            data[category] = count
+    report = next((r for r in dataset['reports'] if r['year'] == 2024), None)
+    if report is None:
+        return data
+
+    for entry in report['origin']:
+        data[entry['label']] = entry['victim_count']
 
     return data
 

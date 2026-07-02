@@ -1,0 +1,4825 @@
+{
+  "reports": [
+    {
+      "year": 2003,
+      "total_victims": null,
+      "cumulative_total_since_2003": null,
+      "update_date": null,
+      "orphaned_children": null,
+      "investigation_note": null,
+      "regional": [],
+      "age": [],
+      "origin": [],
+      "relationship_type": [],
+      "cohabitation": [],
+      "source_document": "VMujeres_2003.pdf",
+      "source_page": 1,
+      "confidence": "low",
+      "verified": false,
+      "notes": "Legacy 'ficha resumen' format (pre-2006): DENUNCIA/MEDIDAS DE PROTECCIÓN/QUEBRANTAMIENTO chart layout, structurally incompatible with the 2006+ numbered-table format this parser targets. No fields extracted from the PDF for this year -- see data/sources/delegacion_gobierno_femicidio.md for a manually curated headline count."
+    },
+    {
+      "year": 2004,
+      "total_victims": null,
+      "cumulative_total_since_2003": null,
+      "update_date": null,
+      "orphaned_children": null,
+      "investigation_note": null,
+      "regional": [],
+      "age": [],
+      "origin": [],
+      "relationship_type": [],
+      "cohabitation": [],
+      "source_document": "VMujeres_2004.pdf",
+      "source_page": 1,
+      "confidence": "low",
+      "verified": false,
+      "notes": "Legacy 'ficha resumen' format (pre-2006): DENUNCIA/MEDIDAS DE PROTECCIÓN/QUEBRANTAMIENTO chart layout, structurally incompatible with the 2006+ numbered-table format this parser targets. No fields extracted from the PDF for this year -- see data/sources/delegacion_gobierno_femicidio.md for a manually curated headline count."
+    },
+    {
+      "year": 2005,
+      "total_victims": null,
+      "cumulative_total_since_2003": null,
+      "update_date": null,
+      "orphaned_children": null,
+      "investigation_note": null,
+      "regional": [],
+      "age": [],
+      "origin": [],
+      "relationship_type": [],
+      "cohabitation": [],
+      "source_document": "VMujeres_2005.pdf",
+      "source_page": 1,
+      "confidence": "low",
+      "verified": false,
+      "notes": "Legacy 'ficha resumen' format (pre-2006): DENUNCIA/MEDIDAS DE PROTECCIÓN/QUEBRANTAMIENTO chart layout, structurally incompatible with the 2006+ numbered-table format this parser targets. No fields extracted from the PDF for this year -- see data/sources/delegacion_gobierno_femicidio.md for a manually curated headline count."
+    },
+    {
+      "year": 2006,
+      "total_victims": 69,
+      "cumulative_total_since_2003": 269,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2006.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 21,
+          "pct": 30.4
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 3,
+          "pct": 4.3
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 3,
+          "pct": 4.3
+        },
+        {
+          "label": "Canarias",
+          "count": 4,
+          "pct": 5.8
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 4.3
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 4,
+          "pct": 5.8
+        },
+        {
+          "label": "Cataluña",
+          "count": 10,
+          "pct": 14.5
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 8,
+          "pct": 11.6
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "Galicia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 5,
+          "pct": 7.2
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 3,
+          "pct": 4.3
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 3,
+          "pct": 4.3
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.4,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 2.9,
+          "perp_count": 3,
+          "perp_pct": 4.3
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 15,
+          "victim_pct": 21.7,
+          "perp_count": 10,
+          "perp_pct": 14.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 27,
+          "victim_pct": 39.1,
+          "perp_count": 25,
+          "perp_pct": 36.2
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 9,
+          "victim_pct": 13.0,
+          "perp_count": 13,
+          "perp_pct": 18.8
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 5.8,
+          "perp_count": 6,
+          "perp_pct": 8.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 7.2,
+          "perp_count": 2,
+          "perp_pct": 2.9
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 8.7,
+          "perp_count": 7,
+          "perp_pct": 10.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 3,
+          "perp_pct": 4.3
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 49,
+          "victim_pct": 71.0,
+          "perp_count": 50,
+          "perp_pct": 72.5
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 20,
+          "victim_pct": 29.0,
+          "perp_count": 19,
+          "perp_pct": 27.5
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 39,
+          "pct": 56.5
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 30,
+          "pct": 43.5
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 45,
+          "pct": 65.2
+        },
+        {
+          "label": "No convivían",
+          "count": 24,
+          "pct": 34.8
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2006.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2007,
+      "total_victims": 71,
+      "cumulative_total_since_2003": 340,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2007.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 8,
+          "pct": 11.3
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 2.8
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 2,
+          "pct": 2.8
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "Canarias",
+          "count": 6,
+          "pct": 8.5
+        },
+        {
+          "label": "Cantabria",
+          "count": 2,
+          "pct": 2.8
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 4.2
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 5,
+          "pct": 7.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 12,
+          "pct": 16.9
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 10,
+          "pct": 14.1
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 5,
+          "pct": 7.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 9,
+          "pct": 12.7
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 2.8
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 2.8
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 1,
+          "pct": 1.4
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 2.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 19,
+          "victim_pct": 26.8,
+          "perp_count": 15,
+          "perp_pct": 21.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 15,
+          "victim_pct": 21.1,
+          "perp_count": 19,
+          "perp_pct": 26.8
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 15,
+          "victim_pct": 21.1,
+          "perp_count": 15,
+          "perp_pct": 21.1
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 11.3,
+          "perp_count": 7,
+          "perp_pct": 9.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 6,
+          "victim_pct": 8.5,
+          "perp_count": 8,
+          "perp_pct": 11.3
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 8.5,
+          "perp_count": 7,
+          "perp_pct": 9.9
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 43,
+          "victim_pct": 60.6,
+          "perp_count": 44,
+          "perp_pct": 62.0
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 28,
+          "victim_pct": 39.4,
+          "perp_count": 27,
+          "perp_pct": 38.0
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 45,
+          "pct": 63.4
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 26,
+          "pct": 36.6
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 47,
+          "pct": 66.2
+        },
+        {
+          "label": "No convivían",
+          "count": 24,
+          "pct": 33.8
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2007.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2008,
+      "total_victims": 76,
+      "cumulative_total_since_2003": 416,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización existe un caso en investigación en 2008.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 9,
+          "pct": 11.8
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 1.3
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 1.3
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.3
+        },
+        {
+          "label": "Canarias",
+          "count": 5,
+          "pct": 6.6
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 6,
+          "pct": 7.9
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 3,
+          "pct": 3.9
+        },
+        {
+          "label": "Cataluña",
+          "count": 10,
+          "pct": 13.2
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 10,
+          "pct": 13.2
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 7,
+          "pct": 9.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 11,
+          "pct": 14.5
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 4,
+          "pct": 5.3
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 3,
+          "pct": 3.9
+        },
+        {
+          "label": "País Vasco",
+          "count": 3,
+          "pct": 3.9
+        },
+        {
+          "label": "Rioja, La",
+          "count": 2,
+          "pct": 2.6
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.3,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 4,
+          "victim_pct": 5.3,
+          "perp_count": 1,
+          "perp_pct": 1.3
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 20,
+          "victim_pct": 26.3,
+          "perp_count": 13,
+          "perp_pct": 17.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 15,
+          "victim_pct": 19.7,
+          "perp_count": 21,
+          "perp_pct": 27.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 19,
+          "victim_pct": 25.0,
+          "perp_count": 18,
+          "perp_pct": 23.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 10.5,
+          "perp_count": 10,
+          "perp_pct": 13.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 6.6,
+          "perp_count": 4,
+          "perp_pct": 5.3
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 5.3,
+          "perp_count": 9,
+          "perp_pct": 11.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 40,
+          "victim_pct": 52.6,
+          "perp_count": 45,
+          "perp_pct": 59.2
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 36,
+          "victim_pct": 47.4,
+          "perp_count": 31,
+          "perp_pct": 40.8
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 43,
+          "pct": 56.6
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 33,
+          "pct": 43.4
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 40,
+          "pct": 52.6
+        },
+        {
+          "label": "No convivían",
+          "count": 36,
+          "pct": 47.4
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2008.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2009,
+      "total_victims": 58,
+      "cumulative_total_since_2003": 474,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2009.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 16,
+          "pct": 27.6
+        },
+        {
+          "label": "Aragón",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Canarias",
+          "count": 5,
+          "pct": 8.6
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Cataluña",
+          "count": 10,
+          "pct": 17.2
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 9,
+          "pct": 15.5
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 5.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 5,
+          "pct": 8.6
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 3.4
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 3.4
+        },
+        {
+          "label": "Rioja, La",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Ceuta",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 5,
+          "victim_pct": 8.6,
+          "perp_count": 1,
+          "perp_pct": 1.7
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 11,
+          "victim_pct": 19.0,
+          "perp_count": 11,
+          "perp_pct": 19.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 31.0,
+          "perp_count": 16,
+          "perp_pct": 27.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 10,
+          "victim_pct": 17.2,
+          "perp_count": 12,
+          "perp_pct": 20.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 10.3,
+          "perp_count": 5,
+          "perp_pct": 8.6
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 7,
+          "perp_pct": 12.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 5,
+          "perp_pct": 8.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.7
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 37,
+          "victim_pct": 63.8,
+          "perp_count": 33,
+          "perp_pct": 56.9
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 21,
+          "victim_pct": 36.2,
+          "perp_count": 25,
+          "perp_pct": 43.1
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 33,
+          "pct": 56.9
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 25,
+          "pct": 43.1
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 35,
+          "pct": 60.3
+        },
+        {
+          "label": "No convivían",
+          "count": 22,
+          "pct": 37.9
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 1.7
+        }
+      ],
+      "source_document": "VMujeres_2009.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2010,
+      "total_victims": 74,
+      "cumulative_total_since_2003": 548,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2010.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 17,
+          "pct": 23.0
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 2.7
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 5,
+          "pct": 6.8
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 2.7
+        },
+        {
+          "label": "Canarias",
+          "count": 8,
+          "pct": 10.8
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 4,
+          "pct": 5.4
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 3,
+          "pct": 4.1
+        },
+        {
+          "label": "Cataluña",
+          "count": 12,
+          "pct": 16.2
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 8,
+          "pct": 10.8
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "Galicia",
+          "count": 2,
+          "pct": 2.7
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 9.5
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 1,
+          "pct": 1.4
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 2.7
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.4,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.4
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 16,
+          "victim_pct": 21.6,
+          "perp_count": 6,
+          "perp_pct": 8.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 22,
+          "victim_pct": 29.7,
+          "perp_count": 24,
+          "perp_pct": 32.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 18,
+          "victim_pct": 24.3,
+          "perp_count": 16,
+          "perp_pct": 21.6
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 11,
+          "victim_pct": 14.9,
+          "perp_count": 14,
+          "perp_pct": 18.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 4,
+          "victim_pct": 5.4,
+          "perp_count": 7,
+          "perp_pct": 9.5
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 2.7,
+          "perp_count": 5,
+          "perp_pct": 6.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.4
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 46,
+          "victim_pct": 62.2,
+          "perp_count": 45,
+          "perp_pct": 60.8
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 28,
+          "victim_pct": 37.8,
+          "perp_count": 29,
+          "perp_pct": 39.2
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 45,
+          "pct": 60.8
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 29,
+          "pct": 39.2
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 48,
+          "pct": 64.9
+        },
+        {
+          "label": "No convivían",
+          "count": 26,
+          "pct": 35.1
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2010.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2011,
+      "total_victims": 62,
+      "cumulative_total_since_2003": 610,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización existe un caso en investigación en 2011.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 17,
+          "pct": 27.4
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 3.2
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 2,
+          "pct": 3.2
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.6
+        },
+        {
+          "label": "Canarias",
+          "count": 3,
+          "pct": 4.8
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 2,
+          "pct": 3.2
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 1.6
+        },
+        {
+          "label": "Cataluña",
+          "count": 9,
+          "pct": 14.5
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 8,
+          "pct": 12.9
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 4.8
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 9,
+          "pct": 14.5
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 3.2
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 1.6
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 3.2
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 3,
+          "victim_pct": 4.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 15,
+          "victim_pct": 24.2,
+          "perp_count": 9,
+          "perp_pct": 14.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 25.8,
+          "perp_count": 11,
+          "perp_pct": 17.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 12,
+          "victim_pct": 19.4,
+          "perp_count": 18,
+          "perp_pct": 29.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 11.3,
+          "perp_count": 11,
+          "perp_pct": 17.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 3.2,
+          "perp_count": 5,
+          "perp_pct": 8.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 11.3,
+          "perp_count": 7,
+          "perp_pct": 11.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.6
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 38,
+          "victim_pct": 61.3,
+          "perp_count": 40,
+          "perp_pct": 64.5
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 24,
+          "victim_pct": 38.7,
+          "perp_count": 22,
+          "perp_pct": 35.5
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 35,
+          "pct": 56.5
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 27,
+          "pct": 43.5
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 40,
+          "pct": 64.5
+        },
+        {
+          "label": "No convivían",
+          "count": 22,
+          "pct": 35.5
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2011.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2012,
+      "total_victims": 51,
+      "cumulative_total_since_2003": 661,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": null,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2012.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 7,
+          "pct": 13.7
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 3.9
+        },
+        {
+          "label": "Canarias",
+          "count": 2,
+          "pct": 3.9
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 2,
+          "pct": 3.9
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 4,
+          "pct": 7.8
+        },
+        {
+          "label": "Cataluña",
+          "count": 13,
+          "pct": 25.5
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 6,
+          "pct": 11.8
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Galicia",
+          "count": 4,
+          "pct": 7.8
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 6,
+          "pct": 11.8
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 3.9
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 13,
+          "victim_pct": 25.5,
+          "perp_count": 5,
+          "perp_pct": 9.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 7,
+          "victim_pct": 13.7,
+          "perp_count": 15,
+          "perp_pct": 29.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 9,
+          "victim_pct": 17.6,
+          "perp_count": 8,
+          "perp_pct": 15.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 11.8,
+          "perp_count": 7,
+          "perp_pct": 13.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 8,
+          "victim_pct": 15.7,
+          "perp_count": 5,
+          "perp_pct": 9.8
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 11.8,
+          "perp_count": 9,
+          "perp_pct": 17.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 37,
+          "victim_pct": 72.5,
+          "perp_count": 36,
+          "perp_pct": 70.6
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 14,
+          "victim_pct": 27.5,
+          "perp_count": 15,
+          "perp_pct": 29.4
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 37,
+          "pct": 72.5
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 14,
+          "pct": 27.5
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 37,
+          "pct": 72.5
+        },
+        {
+          "label": "No convivían",
+          "count": 14,
+          "pct": 27.5
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2012.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2013,
+      "total_victims": 54,
+      "cumulative_total_since_2003": 715,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 42,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2013.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 11,
+          "pct": 20.4
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 3.7
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 1.9
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 3.7
+        },
+        {
+          "label": "Canarias",
+          "count": 2,
+          "pct": 3.7
+        },
+        {
+          "label": "Cantabria",
+          "count": 1,
+          "pct": 1.9
+        },
+        {
+          "label": "Castilla y León",
+          "count": 4,
+          "pct": 7.4
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 4,
+          "pct": 7.4
+        },
+        {
+          "label": "Cataluña",
+          "count": 4,
+          "pct": 7.4
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 9,
+          "pct": 16.7
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 1.9
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 5.6
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 9,
+          "pct": 16.7
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 1,
+          "pct": 1.9
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 1,
+          "perp_pct": 1.9
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 12,
+          "victim_pct": 22.2,
+          "perp_count": 5,
+          "perp_pct": 9.3
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 33.3,
+          "perp_count": 18,
+          "perp_pct": 33.3
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 10,
+          "victim_pct": 18.5,
+          "perp_count": 17,
+          "perp_pct": 31.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 7.4,
+          "perp_count": 4,
+          "perp_pct": 7.4
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 9.3,
+          "perp_count": 3,
+          "perp_pct": 5.6
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 5.6,
+          "perp_count": 5,
+          "perp_pct": 9.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.9
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 38,
+          "victim_pct": 70.4,
+          "perp_count": 37,
+          "perp_pct": 68.5
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 16,
+          "victim_pct": 29.6,
+          "perp_count": 17,
+          "perp_pct": 31.5
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 31,
+          "pct": 57.4
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 23,
+          "pct": 42.6
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 30,
+          "pct": 55.6
+        },
+        {
+          "label": "No convivían",
+          "count": 24,
+          "pct": 44.4
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2013.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2014,
+      "total_victims": 57,
+      "cumulative_total_since_2003": 772,
+      "update_date": "18 de diciembre de 2025",
+      "orphaned_children": 43,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2014.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 11,
+          "pct": 19.3
+        },
+        {
+          "label": "Aragón",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 1.8
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 3,
+          "pct": 5.3
+        },
+        {
+          "label": "Canarias",
+          "count": 1,
+          "pct": 1.8
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 5.3
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 13,
+          "pct": 22.8
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 8,
+          "pct": 14.0
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 5,
+          "pct": 8.8
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 12.3
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 3,
+          "pct": 5.3
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 2,
+          "pct": 3.5
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 5,
+          "victim_pct": 8.8,
+          "perp_count": 3,
+          "perp_pct": 5.3
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 28.1,
+          "perp_count": 15,
+          "perp_pct": 26.3
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 17,
+          "victim_pct": 29.8,
+          "perp_count": 15,
+          "perp_pct": 26.3
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 10.5,
+          "perp_count": 9,
+          "perp_pct": 15.8
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 5.3,
+          "perp_count": 6,
+          "perp_pct": 10.5
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 12.3,
+          "perp_count": 7,
+          "perp_pct": 12.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 2,
+          "victim_pct": 3.5,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 38,
+          "victim_pct": 66.7,
+          "perp_count": 38,
+          "perp_pct": 66.7
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 19,
+          "victim_pct": 33.3,
+          "perp_count": 19,
+          "perp_pct": 33.3
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 38,
+          "pct": 66.7
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 19,
+          "pct": 33.3
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 39,
+          "pct": 68.4
+        },
+        {
+          "label": "No convivían",
+          "count": 18,
+          "pct": 31.6
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2014.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2015,
+      "total_victims": 59,
+      "cumulative_total_since_2003": 831,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 51,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2015.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 14,
+          "pct": 23.7
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 3,
+          "pct": 5.1
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Canarias",
+          "count": 3,
+          "pct": 5.1
+        },
+        {
+          "label": "Cantabria",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Castilla y León",
+          "count": 2,
+          "pct": 3.4
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Cataluña",
+          "count": 6,
+          "pct": 10.2
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 11,
+          "pct": 18.6
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Galicia",
+          "count": 7,
+          "pct": 11.9
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 4,
+          "pct": 6.8
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 3,
+          "pct": 5.1
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 12,
+          "victim_pct": 20.3,
+          "perp_count": 4,
+          "perp_pct": 6.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 30.5,
+          "perp_count": 18,
+          "perp_pct": 30.5
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 19,
+          "victim_pct": 32.2,
+          "perp_count": 18,
+          "perp_pct": 30.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 2,
+          "victim_pct": 3.4,
+          "perp_count": 10,
+          "perp_pct": 16.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 6,
+          "victim_pct": 10.2,
+          "perp_count": 6,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 3.4,
+          "perp_count": 3,
+          "perp_pct": 5.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 37,
+          "victim_pct": 62.7,
+          "perp_count": 43,
+          "perp_pct": 72.9
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 22,
+          "victim_pct": 37.3,
+          "perp_count": 16,
+          "perp_pct": 27.1
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 31,
+          "pct": 52.5
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 28,
+          "pct": 47.5
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 39,
+          "pct": 66.1
+        },
+        {
+          "label": "No convivían",
+          "count": 20,
+          "pct": 33.9
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2015.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2016,
+      "total_victims": 49,
+      "cumulative_total_since_2003": 880,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 30,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2016.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 5,
+          "pct": 10.2
+        },
+        {
+          "label": "Aragón",
+          "count": 3,
+          "pct": 6.1
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "Canarias",
+          "count": 4,
+          "pct": 8.2
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Galicia",
+          "count": 4,
+          "pct": 8.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 3,
+          "pct": 6.1
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 1,
+          "pct": 2.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 13,
+          "victim_pct": 26.5,
+          "perp_count": 15,
+          "perp_pct": 30.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 13,
+          "victim_pct": 26.5,
+          "perp_count": 13,
+          "perp_pct": 26.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 16.3,
+          "perp_count": 5,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 5,
+          "victim_pct": 10.2,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 27,
+          "victim_pct": 55.1,
+          "perp_count": 32,
+          "perp_pct": 65.3
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 22,
+          "victim_pct": 44.9,
+          "perp_count": 17,
+          "perp_pct": 34.7
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 24,
+          "pct": 49.0
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 25,
+          "pct": 51.0
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 30,
+          "pct": 61.2
+        },
+        {
+          "label": "No convivían",
+          "count": 19,
+          "pct": 38.8
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2016.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2017,
+      "total_victims": 49,
+      "cumulative_total_since_2003": 929,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 26,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2017.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Aragón",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Canarias",
+          "count": 5,
+          "pct": 10.2
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "Cataluña",
+          "count": 8,
+          "pct": 16.3
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Galicia",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 3,
+          "pct": 6.1
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 32.7,
+          "perp_count": 18,
+          "perp_pct": 36.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 12,
+          "victim_pct": 24.5,
+          "perp_count": 13,
+          "perp_pct": 26.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 8.2,
+          "perp_count": 5,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 6.1,
+          "perp_count": 2,
+          "perp_pct": 4.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 2,
+          "perp_pct": 4.1
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 32,
+          "victim_pct": 65.3,
+          "perp_count": 33,
+          "perp_pct": 67.3
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 17,
+          "victim_pct": 34.7,
+          "perp_count": 16,
+          "perp_pct": 32.7
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 30,
+          "pct": 61.2
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 19,
+          "pct": 38.8
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 29,
+          "pct": 59.2
+        },
+        {
+          "label": "No convivían",
+          "count": 19,
+          "pct": 38.8
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 2.0
+        }
+      ],
+      "source_document": "VMujeres_2017.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2018,
+      "total_victims": 52,
+      "cumulative_total_since_2003": 981,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 41,
+      "investigation_note": "A fecha de actualización no existen casos en investigación en 2018.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 12,
+          "pct": 23.1
+        },
+        {
+          "label": "Aragón",
+          "count": 4,
+          "pct": 7.7
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 3,
+          "pct": 5.8
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Canarias",
+          "count": 3,
+          "pct": 5.8
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Cataluña",
+          "count": 8,
+          "pct": 15.4
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 5.8
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 5,
+          "pct": 9.6
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 3.8
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 7,
+          "victim_pct": 13.5,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 14,
+          "victim_pct": 26.9,
+          "perp_count": 10,
+          "perp_pct": 19.2
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 18,
+          "victim_pct": 34.6,
+          "perp_count": 16,
+          "perp_pct": 30.8
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 7.7,
+          "perp_count": 12,
+          "perp_pct": 23.1
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 5.8,
+          "perp_count": 5,
+          "perp_pct": 9.6
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 7.7,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 33,
+          "victim_pct": 63.5,
+          "perp_count": 32,
+          "perp_pct": 61.5
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 19,
+          "victim_pct": 36.5,
+          "perp_count": 20,
+          "perp_pct": 38.5
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 35,
+          "pct": 67.3
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 17,
+          "pct": 32.7
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 33,
+          "pct": 63.5
+        },
+        {
+          "label": "No convivían",
+          "count": 16,
+          "pct": 30.8
+        },
+        {
+          "label": "No consta",
+          "count": 3,
+          "pct": 5.8
+        }
+      ],
+      "source_document": "VMujeres_2018.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2019,
+      "total_victims": 56,
+      "cumulative_total_since_2003": 1037,
+      "update_date": "15 de octubre de 2025",
+      "orphaned_children": 48,
+      "investigation_note": "A fecha de actualización existe un caso en investigación en 2019.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 15,
+          "pct": 26.8
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 1.8
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 1.8
+        },
+        {
+          "label": "Canarias",
+          "count": 9,
+          "pct": 16.1
+        },
+        {
+          "label": "Cantabria",
+          "count": 2,
+          "pct": 3.6
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 5.4
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 8,
+          "pct": 14.3
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 7,
+          "pct": 12.5
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 5.4
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 6,
+          "pct": 10.7
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 1,
+          "pct": 1.8
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 11,
+          "victim_pct": 19.6,
+          "perp_count": 5,
+          "perp_pct": 8.9
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 10,
+          "victim_pct": 17.9,
+          "perp_count": 6,
+          "perp_pct": 10.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 21,
+          "victim_pct": 37.5,
+          "perp_count": 27,
+          "perp_pct": 48.2
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 14.3,
+          "perp_count": 10,
+          "perp_pct": 17.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 3.6,
+          "perp_count": 3,
+          "perp_pct": 5.4
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 2,
+          "perp_pct": 3.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 2,
+          "victim_pct": 3.6,
+          "perp_count": 2,
+          "perp_pct": 3.6
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 33,
+          "victim_pct": 58.9,
+          "perp_count": 33,
+          "perp_pct": 58.9
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 23,
+          "victim_pct": 41.1,
+          "perp_count": 23,
+          "perp_pct": 41.1
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 40,
+          "pct": 71.4
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 16,
+          "pct": 28.6
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 37,
+          "pct": 66.1
+        },
+        {
+          "label": "No convivían",
+          "count": 13,
+          "pct": 23.2
+        },
+        {
+          "label": "No consta",
+          "count": 6,
+          "pct": 10.7
+        }
+      ],
+      "source_document": "VMujeres_2019.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2020,
+      "total_victims": 50,
+      "cumulative_total_since_2003": 1087,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 26,
+      "investigation_note": "A fecha 23 de abril no existe ningún caso en investigación en 2020.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 9,
+          "pct": 18.0
+        },
+        {
+          "label": "Aragón",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 3,
+          "pct": 6.0
+        },
+        {
+          "label": "Canarias",
+          "count": 5,
+          "pct": 10.0
+        },
+        {
+          "label": "Cantabria",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 4,
+          "pct": 8.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 8,
+          "pct": 16.0
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 8,
+          "pct": 16.0
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 4,
+          "pct": 8.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 3,
+          "pct": 6.0
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 4.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 6,
+          "victim_pct": 12.0,
+          "perp_count": 9,
+          "perp_pct": 18.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 11,
+          "victim_pct": 22.0,
+          "perp_count": 8,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 13,
+          "victim_pct": 26.0,
+          "perp_count": 11,
+          "perp_pct": 22.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 9,
+          "perp_pct": 18.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 10.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 32,
+          "victim_pct": 64.0,
+          "perp_count": 36,
+          "perp_pct": 72.0
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 18,
+          "victim_pct": 36.0,
+          "perp_count": 14,
+          "perp_pct": 28.0
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 38,
+          "pct": 76.0
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 12,
+          "pct": 24.0
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 39,
+          "pct": 78.0
+        },
+        {
+          "label": "No convivían",
+          "count": 8,
+          "pct": 16.0
+        },
+        {
+          "label": "No consta",
+          "count": 3,
+          "pct": 6.0
+        }
+      ],
+      "source_document": "VMujeres_2020.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2021,
+      "total_victims": 49,
+      "cumulative_total_since_2003": 1136,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 32,
+      "investigation_note": "A fecha 23 de abril existe un caso en investigación en 2021.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 9,
+          "pct": 18.4
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Canarias",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Cantabria",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 4,
+          "pct": 8.2
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 11,
+          "pct": 22.4
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 7,
+          "victim_pct": 14.3,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 32.7,
+          "perp_count": 10,
+          "perp_pct": 20.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 11,
+          "victim_pct": 22.4,
+          "perp_count": 14,
+          "perp_pct": 28.6
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 12,
+          "perp_pct": 24.5
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 6.1,
+          "perp_count": 3,
+          "perp_pct": 6.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 27,
+          "victim_pct": 55.1,
+          "perp_count": 38,
+          "perp_pct": 77.6
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 22,
+          "victim_pct": 44.9,
+          "perp_count": 11,
+          "perp_pct": 22.4
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 26,
+          "pct": 53.1
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 23,
+          "pct": 46.9
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 28,
+          "pct": 57.1
+        },
+        {
+          "label": "No convivían",
+          "count": 16,
+          "pct": 32.7
+        },
+        {
+          "label": "No consta",
+          "count": 5,
+          "pct": 10.2
+        }
+      ],
+      "source_document": "VMujeres_2021.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2022,
+      "total_victims": 50,
+      "cumulative_total_since_2003": 1186,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 36,
+      "investigation_note": "A fecha 23 de abril existen dos casos en investigación en 2022.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 11,
+          "pct": 22.0
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 4.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Canarias",
+          "count": 2,
+          "pct": 4.0
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 6.0
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 7,
+          "pct": 14.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 9,
+          "pct": 18.0
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 3,
+          "pct": 6.0
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Galicia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 14.0
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 4.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 2,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 6,
+          "victim_pct": 12.0,
+          "perp_count": 2,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 9,
+          "victim_pct": 18.0,
+          "perp_count": 10,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 17,
+          "victim_pct": 34.0,
+          "perp_count": 19,
+          "perp_pct": 38.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 8,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 3,
+          "perp_pct": 6.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 34,
+          "victim_pct": 68.0,
+          "perp_count": 31,
+          "perp_pct": 62.0
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 16,
+          "victim_pct": 32.0,
+          "perp_count": 19,
+          "perp_pct": 38.0
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 33,
+          "pct": 66.0
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 17,
+          "pct": 34.0
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 35,
+          "pct": 70.0
+        },
+        {
+          "label": "No convivían",
+          "count": 11,
+          "pct": 22.0
+        },
+        {
+          "label": "No consta",
+          "count": 4,
+          "pct": 8.0
+        }
+      ],
+      "source_document": "VMujeres_2022.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2023,
+      "total_victims": 58,
+      "cumulative_total_since_2003": 1244,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 58,
+      "investigation_note": "A fecha 23 de abril existe un caso en investigación en 2023.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 16,
+          "pct": 27.6
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Canarias",
+          "count": 3,
+          "pct": 5.2
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 3,
+          "pct": 5.2
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 2,
+          "pct": 3.4
+        },
+        {
+          "label": "Cataluña",
+          "count": 11,
+          "pct": 19.0
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 7,
+          "pct": 12.1
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 3,
+          "pct": 5.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 7,
+          "pct": 12.1
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 3.4
+        },
+        {
+          "label": "Rioja, La",
+          "count": 1,
+          "pct": 1.7
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.7,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 10,
+          "victim_pct": 17.2,
+          "perp_count": 9,
+          "perp_pct": 15.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 22,
+          "victim_pct": 37.9,
+          "perp_count": 9,
+          "perp_pct": 15.5
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 13,
+          "victim_pct": 22.4,
+          "perp_count": 23,
+          "perp_pct": 39.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 6,
+          "perp_pct": 10.3
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 5.2,
+          "perp_count": 5,
+          "perp_pct": 8.6
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 4,
+          "perp_pct": 6.9
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 1.7,
+          "perp_count": 2,
+          "perp_pct": 3.4
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 32,
+          "victim_pct": 55.2,
+          "perp_count": 32,
+          "perp_pct": 55.2
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 26,
+          "victim_pct": 44.8,
+          "perp_count": 26,
+          "perp_pct": 44.8
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 34,
+          "pct": 58.6
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 24,
+          "pct": 41.4
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 39,
+          "pct": 67.2
+        },
+        {
+          "label": "No convivían",
+          "count": 15,
+          "pct": 25.9
+        },
+        {
+          "label": "No consta",
+          "count": 4,
+          "pct": 6.9
+        }
+      ],
+      "source_document": "VMujeres_2023.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2024,
+      "total_victims": 49,
+      "cumulative_total_since_2003": 1293,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 36,
+      "investigation_note": "A fecha 23 de abril existe un caso en investigación en 2024.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 10,
+          "pct": 20.4
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Canarias",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Cataluña",
+          "count": 13,
+          "pct": 26.5
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "Extremadura",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Galicia",
+          "count": 5,
+          "pct": 10.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 4,
+          "pct": 8.2
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 2,
+          "pct": 4.1
+        },
+        {
+          "label": "Rioja, La",
+          "count": 1,
+          "pct": 2.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 1,
+          "perp_pct": 2.1
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 5,
+          "victim_pct": 10.2,
+          "perp_count": 2,
+          "perp_pct": 4.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 13,
+          "victim_pct": 26.5,
+          "perp_count": 13,
+          "perp_pct": 27.1
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 14,
+          "victim_pct": 28.6,
+          "perp_count": 13,
+          "perp_pct": 27.1
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 14.3,
+          "perp_count": 11,
+          "perp_pct": 22.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 10.2,
+          "perp_count": 4,
+          "perp_pct": 8.3
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 6.1,
+          "perp_count": 3,
+          "perp_pct": 6.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 2.1
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 25,
+          "victim_pct": 51.0,
+          "perp_count": 31,
+          "perp_pct": 64.6
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 24,
+          "victim_pct": 49.0,
+          "perp_count": 17,
+          "perp_pct": 35.4
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 30,
+          "pct": 61.2
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 19,
+          "pct": 38.8
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 31,
+          "pct": 63.3
+        },
+        {
+          "label": "No convivían",
+          "count": 14,
+          "pct": 28.6
+        },
+        {
+          "label": "No consta",
+          "count": 4,
+          "pct": 8.2
+        }
+      ],
+      "source_document": "VMujeres_2024.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2025,
+      "total_victims": 48,
+      "cumulative_total_since_2003": 1341,
+      "update_date": "23 de abril de 2026",
+      "orphaned_children": 41,
+      "investigation_note": "A fecha 23 de abril existen 2 casos en investigación en 2025.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 15,
+          "pct": 31.3
+        },
+        {
+          "label": "Aragón",
+          "count": 1,
+          "pct": 2.1
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Canarias",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Cantabria",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 1,
+          "pct": 2.1
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Cataluña",
+          "count": 5,
+          "pct": 10.4
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 4,
+          "pct": 8.3
+        },
+        {
+          "label": "Extremadura",
+          "count": 4,
+          "pct": 8.3
+        },
+        {
+          "label": "Galicia",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 4,
+          "pct": 8.3
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 2,
+          "pct": 4.2
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 1,
+          "pct": 2.1
+        },
+        {
+          "label": "País Vasco",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 1,
+          "pct": 2.1
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.1,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 7,
+          "victim_pct": 14.6,
+          "perp_count": 6,
+          "perp_pct": 12.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 11,
+          "victim_pct": 22.9,
+          "perp_count": 5,
+          "perp_pct": 10.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 15,
+          "victim_pct": 31.3,
+          "perp_count": 17,
+          "perp_pct": 35.4
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 5,
+          "victim_pct": 10.4,
+          "perp_count": 8,
+          "perp_pct": 16.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 6.3,
+          "perp_count": 5,
+          "perp_pct": 10.4
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 5,
+          "victim_pct": 10.4,
+          "perp_count": 5,
+          "perp_pct": 10.4
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 2.1,
+          "perp_count": 2,
+          "perp_pct": 4.2
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 27,
+          "victim_pct": 56.3,
+          "perp_count": 29,
+          "perp_pct": 60.4
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 21,
+          "victim_pct": 43.8,
+          "perp_count": 19,
+          "perp_pct": 39.6
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 30,
+          "pct": 62.5
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 18,
+          "pct": 37.5
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 40,
+          "pct": 83.3
+        },
+        {
+          "label": "No convivían",
+          "count": 8,
+          "pct": 16.7
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2025.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2026,
+      "total_victims": 25,
+      "cumulative_total_since_2003": 1366,
+      "update_date": "29 de junio de 2026",
+      "orphaned_children": 13,
+      "investigation_note": "A fecha 29 de junio no existe ningún caso en investigación en 2026.",
+      "regional": [
+        {
+          "label": "Andalucía",
+          "count": 6,
+          "pct": 24.0
+        },
+        {
+          "label": "Aragón",
+          "count": 2,
+          "pct": 8.0
+        },
+        {
+          "label": "Asturias, Principado de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Balears, Illes",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Canarias",
+          "count": 2,
+          "pct": 8.0
+        },
+        {
+          "label": "Cantabria",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "Castilla y León",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "Castilla-La Mancha",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "Cataluña",
+          "count": 2,
+          "pct": 8.0
+        },
+        {
+          "label": "Comunitat Valenciana",
+          "count": 4,
+          "pct": 16.0
+        },
+        {
+          "label": "Extremadura",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "Galicia",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "Madrid, Comunidad de",
+          "count": 2,
+          "pct": 8.0
+        },
+        {
+          "label": "Murcia, Región de",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Navarra, Comunidad Foral de",
+          "count": 2,
+          "pct": 8.0
+        },
+        {
+          "label": "País Vasco",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Rioja, La",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Ceuta",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Melilla",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 2,
+          "victim_pct": 8.0,
+          "perp_count": 2,
+          "perp_pct": 8.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 4,
+          "victim_pct": 16.0,
+          "perp_count": 4,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 7,
+          "victim_pct": 28.0,
+          "perp_count": 5,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 32.0,
+          "perp_count": 8,
+          "perp_pct": 32.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 12.0,
+          "perp_count": 5,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 1,
+          "victim_pct": 4.0,
+          "perp_count": 1,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
+      "origin": [
+        {
+          "label": "España",
+          "victim_count": 17,
+          "victim_pct": 68.0,
+          "perp_count": 18,
+          "perp_pct": 72.0
+        },
+        {
+          "label": "Otro país",
+          "victim_count": 8,
+          "victim_pct": 32.0,
+          "perp_count": 7,
+          "perp_pct": 28.0
+        }
+      ],
+      "relationship_type": [
+        {
+          "label": "Pareja",
+          "count": 8,
+          "pct": 32.0
+        },
+        {
+          "label": "Expareja o pareja en fase de ruptura",
+          "count": 17,
+          "pct": 68.0
+        }
+      ],
+      "cohabitation": [
+        {
+          "label": "Convivían",
+          "count": 12,
+          "pct": 48.0
+        },
+        {
+          "label": "No convivían",
+          "count": 13,
+          "pct": 52.0
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "source_document": "VMujeres_2026.pdf",
+      "source_page": 1,
+      "confidence": "high",
+      "verified": false,
+      "notes": ""
+    }
+  ]
+}

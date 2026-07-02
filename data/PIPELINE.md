@@ -12,13 +12,14 @@ partial/in-progress, `.` = not yet functional for its stated purpose.
 
 ## Parsers (`src/parsers/`)
 
-All six share `src/parsers/utils.py` (`extract_text`, `write_csv_rows`,
-`parse_es_number`, `cli_require_arg` — see T53).
+Most share `src/parsers/utils.py` (`extract_text`, `write_csv_rows`,
+`parse_es_number`, `cli_require_arg` — see T53); `feminicide_parser.py` only
+uses `extract_text` (it writes JSON via Pydantic, not CSV, so the
+CSV-writing/argv-guard helpers don't apply).
 
 | script | reads | writes | §T task | status |
 |---|---|---|---|---|
-| `feminicide_parser.py` | Delegación del Gobierno feminicide PDF (per year) | stdout summary only — parsing-logic module, no file output of its own | T19 | x |
-| `feminicide_extractor.py` | PDF dir, via `feminicide_parser.parse_pdf()` | `data/raw/feminicidios_delegacion_2024.csv` | T20 | x |
+| `feminicide_parser.py` | Delegación del Gobierno feminicide PDFs, 2003-2026 (single file or `--pdf-dir`), via `pdftotext` | `data/raw/feminicidios_delegacion_{min_year}-{max_year}.json` | T19,T20 | x |
 | `mir_parser.py` | MIR Informe (2019-2024) + Anuario (2000-2021) PDFs, via `pdfplumber` | `data/raw/sexual_crimes_mir_{min_year}-{max_year}.json` | T21,T22 | ~ |
 | `mir_violence_parser.py` | `MIR_ViolenceWomen_2015-2019.pdf` (pages 52-57 by default) | stdout summary only — parsing-logic module, no file output of its own | T32 (input, untapped) | . |
 | `mir_violence_extractor.py` | same PDF, via `mir_violence_parser.parse_pdf()` | `data/raw/mir_violence_sexual_2015-2019.csv` | T32 (input, untapped) | . |
@@ -36,7 +37,7 @@ this cleanup) `pdftotext`/report-layout mismatch, see §B.
 | `parse_ine_mortality.py` | INE API table 7947 JSON dump (input/output paths via argv) | CSV named via argv → `data/processed/mortality_spain_ine_ecm.csv` | T49 | x |
 | `summarize_mortality.py` | `mortality_spain_ine_ecm.csv` | `data/processed/mortality_by_chapter.csv`, `mortality_by_age_sex.csv`, `mortality_key_causes.csv` | T49 | x |
 | `compute_mortality_rates.py` | `mortality_spain_ine_ecm.csv`, `population_spain_midyear_5yr.csv` | `data/processed/mortality_rates.csv`, `mortality_rates_key.csv`, `mortality_rates_all_cause_by_age.csv` | T7 | x |
-| `compute_feminicide_rates.py` | `feminicidios_delegacion_2024.csv`, `population_spain_midyear_5yr.csv` | `data/processed/feminicide_rates_2024.csv` | T24 | ~ |
+| `compute_feminicide_rates.py` | `feminicidios_delegacion_2003-2026.json` (2024 report only), `population_spain_midyear_5yr.csv` | `data/processed/feminicide_rates_2024.csv` | T24 | ~ |
 | `parse_ine_tabla28716.py` | INE table 28716 CSV, fetched live from `ine.es` | `data/processed/ine_condenados_28716_sexual_crimes.csv`, `ine_condenados_28716_nationality_pct.csv` | T26,T30 | ~ |
 | `parse_eurostat_migration_cohort.py` | Eurostat bulk TSV `migr_imm1ctz`/`migr_pop1ctz` (manual download, not in `data/raw/`) | appends to `data/raw/migration_spain.csv` | T11,T43,T44 | ~ |
 | `analyze_cohort_crime_rate.py` | `migration_spain.csv`, `sexual_crimes_mir_2019-2024.json`, `population_spain_midyear_5yr.csv` | `data/processed/cohort_tenure_*.csv` (4 files) + 2 PNGs | T41 | x |
@@ -47,7 +48,7 @@ this cleanup) `pdftotext`/report-layout mismatch, see §B.
 | `build_dashboard_data.py` | `mortality_rates_key.csv`, `mortality_by_chapter.csv`, `mortality_rates.csv`, `mortality_spain_ine_ecm.csv` | stdout JS block → manually pasted into `docs/index.html` (mortality tab) | T17,T23 | x |
 | `build_migration_dashboard_data.py` | `migration_spain.csv` | stdout JS block → manually pasted into `docs/index.html` (migration tab) | T-mig-tab | x |
 
-20 scripts total (6 parsers + 14 analysis), zero missing a `§T` reference.
+19 scripts total (5 parsers + 14 analysis), zero missing a `§T` reference.
 
 ## Script-level flow
 
@@ -64,7 +65,7 @@ flowchart LR
     TSV_EURO[Eurostat migr_imm1ctz/<br/>migr_pop1ctz TSV]
   end
 
-  PDF_FEM --> feminicide_parser.py --> feminicide_extractor.py --> CSV_FEM[(feminicidios_delegacion_2024.csv)]
+  PDF_FEM --> feminicide_parser.py --> JSON_FEM[(feminicidios_delegacion_2003-2026.json)]
   PDF_MIR --> mir_parser.py --> JSON_MIR[(sexual_crimes_mir_2019-2024.json)]
   PDF_MIRV --> mir_violence_parser.py --> mir_violence_extractor.py --> CSV_MIRV[(mir_violence_sexual_2015-2019.csv)]
   PDF_GRP --> mir_migrant_nationality_parser.py --> CSV_MIG[(migrant_crime_numerator.csv)]
@@ -74,7 +75,7 @@ flowchart LR
   URL_28716 --> parse_ine_tabla28716.py --> CSV_28716[(ine_condenados_28716_*.csv)]
   TSV_EURO --> parse_eurostat_migration_cohort.py --> CSV_MIGR[(migration_spain.csv)]
 
-  CSV_FEM --> compute_feminicide_rates.py
+  JSON_FEM --> compute_feminicide_rates.py
   CSV_POP --> compute_feminicide_rates.py
   compute_feminicide_rates.py --> CSV_FEMRATE[(feminicide_rates_2024.csv)]
 
@@ -110,7 +111,7 @@ flowchart LR
 
 ## Not yet wired into §T
 
-None — all 20 scripts now cite a `§T` id (see tables above). Two things
+None — all 19 scripts now cite a `§T` id (see tables above). Two things
 worth flagging as *still incomplete*, not orphaned:
 
 - `mir_violence_parser.py`/`mir_violence_extractor.py` cite `T32` as an

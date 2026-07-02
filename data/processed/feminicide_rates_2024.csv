@@ -1,3 +1,3 @@
 year,origin,victims_count,population,rate_per_100k,ci_lower,ci_upper,confidence,notes
-2024,españa,24,14285714,0.17,0.1,0.24,high,españa — rate computed from INE population + Delegación victims
+2024,españa,25,14285714,0.17,0.11,0.24,high,españa — rate computed from INE population + Delegación victims
 2024,otro_pais,24,2884615,0.83,0.5,1.16,high,otro_pais — rate computed from INE population + Delegación victims
