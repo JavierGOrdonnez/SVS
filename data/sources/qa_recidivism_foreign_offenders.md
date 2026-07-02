@@ -24,16 +24,19 @@ Whichever "~20,000" is being cited in public debate, it is almost certainly the 
 prosecution-stage count, not convicted offenders. The gap between ~20k reported and ~4–5k convicted
 reflects cases dropped at instruction, acquittals, and **time lag** (a 2024 conviction often stems from
 a complaint filed years earlier) — it is *not* a same-cohort conviction rate, and dividing one by the
-other would be methodologically invalid (same error flagged for other ratios in
-`../../CRITIQUE_HAIKU_ARTIFACTS.md`).
+other would be methodologically invalid (same error flagged for other ratios in this repo's early,
+Haiku-generated pass, which fabricated several stage-mismatched ratios; that critique doc was removed
+as superseded by §B once its findings were folded into SPEC.md — see git history pre-2026-07 for the
+original writeup).
 
 Separately, survey data (Macroencuesta) suggests only ~16–33% of sexual-violence victims report at
 all, so true incidence is a further multiple above the reported figures — a distinct "dark figure"
 question from reported-vs-convicted.
 
 **This repo currently lacks:** a longitudinal cohort-based conviction-rate computation (tracking the
-same complaints through to outcome). The CGPJ "Condenados" registry has a reincidencia field
-(`data/haiku_artifacts/FASE_2_TAREA_2.4_CGPJ_CONDENADOS.txt`) that is flagged pending extraction.
+same complaints through to outcome). The CGPJ "Condenados" registry has a reincidencia field, flagged
+pending extraction in the now-removed `data/haiku_artifacts/` notes (see git history pre-2026-07 for
+the original writeup) — still an open gap, not yet re-tracked in `SPEC.md` §T.
 
 ---
 
@@ -151,7 +154,8 @@ share" statistic answers a different question (overrepresentation in first-time 
 by age/sex structure of migrant populations and differential police contact) than recidivism
 (whether someone already convicted once reoffends more after release). Conflating the two converts a
 population-composition fact into an unsupported recidivism claim. Given this repo's documented history
-of confabulated statistics on this exact topic (`../../CRITIQUE_HAIKU_ARTIFACTS.md`), any specific
+of confabulated statistics on this exact topic (see git history pre-2026-07 for the removed
+Haiku-artifacts critique, folded into SPEC.md §B), any specific
 nationality-recidivism percentage should be verified against an INE/Instituciones
 Penitenciarias/CGPJ primary table — including table 28716 (`ine_poblacion_femicidios.md`) — before use
 in either direction of the argument.
@@ -205,8 +209,8 @@ in either direction of the argument.
 
 ## Open follow-ups for this repo (not yet done)
 
-1. Extract CGPJ "Condenados" reincidencia field by offense subtype (flagged pending in
-   `../haiku_artifacts/FASE_2_TAREA_2.4_CGPJ_CONDENADOS.txt`).
+1. Extract CGPJ "Condenados" reincidencia field by offense subtype (flagged pending in the
+   now-removed `data/haiku_artifacts/` notes — see git history pre-2026-07).
 2. Verify or refute the foreigner/Spaniard sexual-recidivism percentages (~7.9% vs ~24.8%) against a
    primary INE/Instituciones Penitenciarias/CGPJ table — currently unsourced beyond a search-engine
    summary.
