@@ -1,23 +1,34 @@
 #!/usr/bin/env python3
 """
-Feminicide data extractor — parse PDFs and generate CSV output.
-Converts parser output (age/origin demographics) to structured CSV.
+Feminicide data extractor (T20) — CLI wrapper around feminicide_parser.py.
+
+Target report: Delegación del Gobierno "Víctimas Mortales por Violencia de
+Género" ficha (currently 2024 only; historical 2003-2023 counts live in
+violence_spain.csv via T1's manual entries, not this file).
+
+Parses each PDF via feminicide_parser.parse_pdf(), then writes two row types
+to a single cumulative CSV: age-distribution rows and origin-distribution
+rows (year, breakdown_type, category, victims_count, perpetrators_count,
+confidence, notes).
+
+Usage:
+    python feminicide_extractor.py <pdf_dir> [output_csv]
 """
 
 import sys
-import csv
-import json
 from pathlib import Path
 from feminicide_parser import parse_pdf
+from utils import write_csv_rows, cli_require_arg
 
 
 def extract_to_csv(pdf_path: str, output_csv: str) -> None:
     """
-    Parse feminicide PDF and output structured CSV.
+    Parse one feminicide PDF and append its rows to `output_csv`.
 
-    Two sets of rows:
-    1. Age distribution: (year, age_group, total victims, total perpetrators)
-    2. Origin distribution: (year, origin, total victims, total perpetrators)
+    Writes two row types (columns: year, breakdown_type, category,
+    victims_count, perpetrators_count, confidence, notes):
+    1. breakdown_type='age': one row per age_group.
+    2. breakdown_type='origin': one row per country-of-birth category.
     """
     result = parse_pdf(pdf_path)
 
@@ -62,17 +73,12 @@ def extract_to_csv(pdf_path: str, output_csv: str) -> None:
     if rows:
         fieldnames = ['year', 'breakdown_type', 'category', 'victims_count',
                      'perpetrators_count', 'confidence', 'notes']
-        with open(output_csv, 'a', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            # Only write header if file is new
-            if f.tell() == 0:
-                writer.writeheader()
-            writer.writerows(rows)
-        print(f"✓ Extracted {len(rows)} rows from {year}")
+        write_csv_rows(output_csv, rows, fieldnames)
+        print(f"Extracted {len(rows)} rows from {year}")
 
 
 def batch_extract(pdf_dir: str, output_csv: str) -> None:
-    """Process all PDFs in directory and generate cumulative CSV."""
+    """Process every PDF in `pdf_dir` and (re)generate `output_csv` from scratch."""
     pdf_path = Path(pdf_dir)
     if not pdf_path.exists():
         print(f"Error: Directory not found: {pdf_dir}")
@@ -89,17 +95,17 @@ def batch_extract(pdf_dir: str, output_csv: str) -> None:
     for pdf in pdfs:
         extract_to_csv(str(pdf), output_csv)
 
-    print(f"\n✓ CSV output: {output_csv}")
+    print(f"\nCSV output: {output_csv}")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: feminicide_extractor.py <pdf_dir> [output_csv]")
-        print("  pdf_dir: Directory containing feminicide PDFs")
-        print("  output_csv: Output CSV file (default: data/raw/feminicidios_delegacion_2003-2026.csv)")
-        sys.exit(1)
+    cli_require_arg(sys.argv, [
+        "Usage: feminicide_extractor.py <pdf_dir> [output_csv]",
+        "  pdf_dir: Directory containing feminicide PDFs",
+        "  output_csv: Output CSV file (default: data/raw/feminicidios_delegacion_2024.csv)",
+    ])
 
     pdf_dir = sys.argv[1]
-    output_csv = sys.argv[2] if len(sys.argv) > 2 else "data/raw/feminicidios_delegacion_2003-2026.csv"
+    output_csv = sys.argv[2] if len(sys.argv) > 2 else "data/raw/feminicidios_delegacion_2024.csv"
 
     batch_extract(pdf_dir, output_csv)

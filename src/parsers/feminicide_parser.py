@@ -19,6 +19,8 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
+from utils import extract_text, cli_require_arg
+
 
 def extract_headline_data(text: str) -> Dict:
     """Extract headline summary: year, total, update date, last case."""
@@ -233,19 +235,7 @@ def parse_pdf(pdf_path: str) -> Dict:
     }
 
     try:
-        # Extract text using pdftotext
-        proc = subprocess.run(
-            ['pdftotext', str(pdf_path), '-'],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
-
-        if proc.returncode != 0:
-            result['validation']['errors'].append(f"pdftotext failed: {proc.stderr}")
-            return result
-
-        text = proc.stdout
+        text = extract_text(pdf_path, timeout=30)
 
         # Extract headline data
         result['headline'] = extract_headline_data(text)
@@ -279,9 +269,7 @@ def parse_pdf(pdf_path: str) -> Dict:
 
 def main():
     """Command-line interface."""
-    if len(sys.argv) < 2:
-        print("Usage: feminicide_parser.py <pdf_path>")
-        sys.exit(1)
+    cli_require_arg(sys.argv, "Usage: feminicide_parser.py <pdf_path>")
 
     pdf_path = sys.argv[1]
     result = parse_pdf(pdf_path)
@@ -300,7 +288,7 @@ def main():
     print(f"  - Age distribution: {len(result['age'])} rows")
     print(f"  - Origin (birth country): {len(result['origin'])} rows")
 
-    print(f"\nValidation: {'PASS ✓' if result['validation']['passed'] else 'FAIL ✗'}")
+    print(f"\nValidation: {'PASS' if result['validation']['passed'] else 'FAIL'}")
     if result['validation']['errors']:
         print("Errors:")
         for err in result['validation']['errors']:

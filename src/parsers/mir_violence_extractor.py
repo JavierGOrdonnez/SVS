@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 """
-MIR sexual violence data extractor — parse PDFs and generate CSV output.
-Converts mir_violence_parser output (5 tables) to a single tidy CSV.
+MIR sexual violence data extractor (T32 input) — CLI wrapper around
+mir_violence_parser.py.
+
+Target report: Ministerio del Interior "Informe sobre la evolución de la
+violencia contra la mujer", "Violencia Sexual" chapter (2015-2019 series).
+
+Parses each PDF via mir_violence_parser.parse_pdf(), then writes all 5 tables
+(crime-by-year, crime-by-age, crime-by-nationality, location-by-year,
+relationship-by-year) to a single tidy CSV (columns: source_table, period,
+year, crime_type, age_group, nationality, location, relationship, count,
+confidence, notes).
+
+Usage:
+    python mir_violence_extractor.py <pdf_dir_or_file> [output_csv]
 """
 
 import sys
-import csv
 from pathlib import Path
 from mir_violence_parser import parse_pdf
+from utils import write_csv_rows, cli_require_arg
 
 
 FIELDNAMES = ['source_table', 'period', 'year', 'crime_type', 'age_group',
@@ -68,12 +80,8 @@ def extract_to_csv(pdf_path: str, output_csv: str) -> None:
         })
 
     if rows:
-        with open(output_csv, 'a', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
-            if f.tell() == 0:
-                writer.writeheader()
-            writer.writerows(rows)
-        print(f"✓ Extracted {len(rows)} rows from {Path(pdf_path).name}")
+        write_csv_rows(output_csv, rows, FIELDNAMES)
+        print(f"Extracted {len(rows)} rows from {Path(pdf_path).name}")
     else:
         print(f"Skipped {Path(pdf_path).name}: no Violencia Sexual tables found "
               f"in pages 52-57 (unexpected layout)")
@@ -96,15 +104,15 @@ def batch_extract(pdf_dir: str, output_csv: str) -> None:
     for pdf in pdfs:
         extract_to_csv(str(pdf), output_csv)
 
-    print(f"\n✓ CSV output: {output_csv}")
+    print(f"\nCSV output: {output_csv}")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: mir_violence_extractor.py <pdf_dir_or_file> [output_csv]")
-        print("  pdf_dir_or_file: Directory containing MIR PDFs, or a single PDF")
-        print("  output_csv: Output CSV file (default: data/raw/mir_violence_sexual_2015-2019.csv)")
-        sys.exit(1)
+    cli_require_arg(sys.argv, [
+        "Usage: mir_violence_extractor.py <pdf_dir_or_file> [output_csv]",
+        "  pdf_dir_or_file: Directory containing MIR PDFs, or a single PDF",
+        "  output_csv: Output CSV file (default: data/raw/mir_violence_sexual_2015-2019.csv)",
+    ])
 
     pdf_arg = sys.argv[1]
     output_csv = sys.argv[2] if len(sys.argv) > 2 else "data/raw/mir_violence_sexual_2015-2019.csv"
@@ -114,4 +122,4 @@ if __name__ == '__main__':
     else:
         Path(output_csv).unlink(missing_ok=True)
         extract_to_csv(pdf_arg, output_csv)
-        print(f"\n✓ CSV output: {output_csv}")
+        print(f"\nCSV output: {output_csv}")

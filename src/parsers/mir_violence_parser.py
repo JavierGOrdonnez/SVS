@@ -11,6 +11,10 @@ Tables extracted:
   - Table 3: Victimizations by crime type and victim nationality
   - Table 4: Victimizations by location of offense and year
   - Table 5: Victimizations by victim-offender relationship and year
+
+Input: a single source PDF (pages 52-57 by default; MIR_ViolenceWomen_2015-2019.pdf).
+Output: parse_pdf() returns a dict of 5 row-lists (stdout summary only — see
+mir_violence_extractor.py for the CSV-writing CLI).
 """
 
 import re
@@ -18,6 +22,8 @@ import sys
 import subprocess
 from pathlib import Path
 from typing import Dict, List, Tuple
+
+from utils import extract_text, parse_es_number, cli_require_arg
 
 
 CRIME_TYPES = ['ABUSO SEXUAL', 'AGRESIÓN SEXUAL', 'AGRESIÓN SEXUAL CON PENETRACIÓN',
@@ -40,7 +46,7 @@ NUM6 = r'([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)'
 
 def to_num(s: str) -> int:
     """Convert a Spanish-formatted integer string ('23.706') to int."""
-    return int(s.replace('.', ''))
+    return int(parse_es_number(s))
 
 
 def extract_table_1_crime_by_year(raw: str) -> List[Dict]:
@@ -269,23 +275,8 @@ def parse_pdf(pdf_path: str, first_page: int = 52, last_page: int = 57) -> Dict:
     }
 
     try:
-        raw_proc = subprocess.run(
-            ['pdftotext', '-f', str(first_page), '-l', str(last_page), str(pdf_path), '-'],
-            capture_output=True, text=True, timeout=60
-        )
-        layout_proc = subprocess.run(
-            ['pdftotext', '-layout', '-f', str(first_page), '-l', str(last_page), str(pdf_path), '-'],
-            capture_output=True, text=True, timeout=60
-        )
-
-        if raw_proc.returncode != 0 or layout_proc.returncode != 0:
-            result['validation']['passed'] = False
-            result['validation']['errors'].append(
-                f"pdftotext failed: {raw_proc.stderr or layout_proc.stderr}"
-            )
-            return result
-
-        raw, layout = raw_proc.stdout, layout_proc.stdout
+        raw = extract_text(pdf_path, first_page=first_page, last_page=last_page, timeout=60)
+        layout = extract_text(pdf_path, layout=True, first_page=first_page, last_page=last_page, timeout=60)
 
         result['crime_by_year'] = extract_table_1_crime_by_year(raw)
         result['crime_by_age'] = extract_table_2_crime_by_age(raw)
@@ -309,9 +300,7 @@ def parse_pdf(pdf_path: str, first_page: int = 52, last_page: int = 57) -> Dict:
 
 def main():
     """Command-line interface."""
-    if len(sys.argv) < 2:
-        print("Usage: mir_violence_parser.py <pdf_path> [first_page] [last_page]")
-        sys.exit(1)
+    cli_require_arg(sys.argv, "Usage: mir_violence_parser.py <pdf_path> [first_page] [last_page]")
 
     pdf_path = sys.argv[1]
     first_page = int(sys.argv[2]) if len(sys.argv) > 2 else 52
@@ -334,7 +323,7 @@ def main():
     print(f"  - Location by year: {len(result['location_by_year'])} rows")
     print(f"  - Relationship by year: {len(result['relationship_by_year'])} rows")
 
-    print(f"\nValidation: {'PASS ✓' if result['validation']['passed'] else 'FAIL ✗'}")
+    print(f"\nValidation: {'PASS' if result['validation']['passed'] else 'FAIL'}")
     if result['validation']['errors']:
         print("Errors:")
         for err in result['validation']['errors']:

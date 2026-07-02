@@ -15,13 +15,14 @@ Output rows go to data/raw/migrant_crime_numerator.csv (per SPEC §I).
 
 import csv
 import re
-import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from utils import extract_text, write_csv_rows
 
-REFERENCE_DIR = Path("data/sources/reference_documents")
+
+REFERENCE_DIR = Path("data/sources")
 OUTPUT_CSV = Path("data/raw/migrant_crime_numerator.csv")
 
 FIELDNAMES = [
@@ -29,16 +30,6 @@ FIELDNAMES = [
     "crime_type", "actor_role", "nationality_group", "iso2", "count", "pct",
     "denominator", "denominator_value", "unit", "source_table", "confidence", "notes",
 ]
-
-
-def extract_text(pdf_path: Path) -> str:
-    proc = subprocess.run(
-        ["pdftotext", str(pdf_path), "-"],
-        capture_output=True, text=True, timeout=60,
-    )
-    if proc.returncode != 0:
-        raise RuntimeError(f"pdftotext failed: {proc.stderr}")
-    return proc.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -497,12 +488,10 @@ def manual_entries_mir_informe_2023_2024() -> List[Dict]:
 # ---------------------------------------------------------------------------
 
 def write_csv(rows: List[Dict], path: Path) -> None:
+    """Assign row_id then overwrite `path` from scratch (columns: FIELDNAMES)."""
     for i, row in enumerate(rows, start=1):
         row["row_id"] = i
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDNAMES, quoting=csv.QUOTE_ALL)
-        writer.writeheader()
-        writer.writerows(rows)
+    write_csv_rows(path, rows, FIELDNAMES, mode="w", quoting=csv.QUOTE_ALL)
 
 
 def validate_rows(rows: List[Dict]) -> Tuple[bool, List[str]]:
