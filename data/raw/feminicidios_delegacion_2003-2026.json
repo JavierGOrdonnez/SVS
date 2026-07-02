@@ -12,6 +12,10 @@
       "origin": [],
       "relationship_type": [],
       "cohabitation": [],
+      "prior_complaint": [],
+      "protective_measures": [],
+      "restraining_order_breach": [],
+      "perpetrator_suicide_attempt": [],
       "source_document": "VMujeres_2003.pdf",
       "source_page": 1,
       "confidence": "low",
@@ -30,6 +34,10 @@
       "origin": [],
       "relationship_type": [],
       "cohabitation": [],
+      "prior_complaint": [],
+      "protective_measures": [],
+      "restraining_order_breach": [],
+      "perpetrator_suicide_attempt": [],
       "source_document": "VMujeres_2004.pdf",
       "source_page": 1,
       "confidence": "low",
@@ -48,6 +56,10 @@
       "origin": [],
       "relationship_type": [],
       "cohabitation": [],
+      "prior_complaint": [],
+      "protective_measures": [],
+      "restraining_order_breach": [],
+      "perpetrator_suicide_attempt": [],
       "source_document": "VMujeres_2005.pdf",
       "source_page": 1,
       "confidence": "low",
@@ -273,6 +285,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 69,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 22,
+          "pct": 31.9
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 47,
+          "pct": 68.1
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 21,
+          "pct": 95.5
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 1,
+          "pct": 4.5
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 21,
+          "pct": 95.5
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 1,
+          "pct": 4.5
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 20,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 15,
+          "pct": 75.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 25.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 4,
+          "pct": 80.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 20.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 6,
+          "pct": 40.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 8,
+          "pct": 53.3
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 6.7
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 69,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 17,
+          "pct": 24.6
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 9,
+          "pct": 13.0
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 43,
+          "pct": 62.3
         }
       ],
       "source_document": "VMujeres_2006.pdf",
@@ -502,6 +667,159 @@
           "pct": 0.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 71,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 21,
+          "pct": 29.6
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 50,
+          "pct": 70.4
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 18,
+          "pct": 85.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 3,
+          "pct": 14.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 18,
+          "pct": 85.7
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 14.3
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 18,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 14,
+          "pct": 77.8
+        },
+        {
+          "label": "No vigentes",
+          "count": 4,
+          "pct": 22.2
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 2,
+          "pct": 50.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 14,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 6,
+          "pct": 42.9
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 6,
+          "pct": 42.9
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 14.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 71,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 5,
+          "pct": 7.0
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 10,
+          "pct": 14.1
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 56,
+          "pct": 78.9
+        }
+      ],
       "source_document": "VMujeres_2007.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -727,6 +1045,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 76,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 18,
+          "pct": 23.7
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 18,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 58,
+          "pct": 76.3
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 18,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 18,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 16,
+          "pct": 88.9
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 2,
+          "pct": 11.1
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 18,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 16,
+          "pct": 88.9
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 2,
+          "pct": 11.1
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 14,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 12,
+          "pct": 85.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 2,
+          "pct": 14.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 50.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 50.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 4,
+          "pct": 33.3
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 7,
+          "pct": 58.3
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 8.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 76,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 16,
+          "pct": 21.1
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 7,
+          "pct": 9.2
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 53,
+          "pct": 69.7
         }
       ],
       "source_document": "VMujeres_2008.pdf",
@@ -956,6 +1427,159 @@
           "pct": 1.7
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 58,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 15,
+          "pct": 25.9
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 43,
+          "pct": 74.1
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 14,
+          "pct": 93.3
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 1,
+          "pct": 6.7
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 14,
+          "pct": 93.3
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 1,
+          "pct": 6.7
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 7,
+          "pct": 58.3
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 41.7
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 3,
+          "pct": 60.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 40.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 4,
+          "pct": 57.1
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 58,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 13,
+          "pct": 22.4
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 8,
+          "pct": 13.8
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 37,
+          "pct": 63.8
+        }
+      ],
       "source_document": "VMujeres_2009.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -1181,6 +1805,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 74,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 22,
+          "pct": 29.7
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 52,
+          "pct": 70.3
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 18,
+          "pct": 81.8
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 4,
+          "pct": 18.2
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 22,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 17,
+          "pct": 77.3
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 5,
+          "pct": 22.7
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 14,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 13,
+          "pct": 92.9
+        },
+        {
+          "label": "No vigentes",
+          "count": 1,
+          "pct": 7.1
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 13,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 7.7
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 9,
+          "pct": 69.2
+        },
+        {
+          "label": "No consta",
+          "count": 3,
+          "pct": 23.1
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 74,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 12,
+          "pct": 16.2
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 16,
+          "pct": 21.6
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 46,
+          "pct": 62.2
         }
       ],
       "source_document": "VMujeres_2010.pdf",
@@ -1410,6 +2187,159 @@
           "pct": 0.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 62,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 15,
+          "pct": 24.2
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 47,
+          "pct": 75.8
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 13,
+          "pct": 86.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 2,
+          "pct": 13.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 10,
+          "pct": 66.7
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 6.7
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 4,
+          "pct": 26.7
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 11,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 8,
+          "pct": 72.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 3,
+          "pct": 27.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 33.3
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 2,
+          "pct": 66.7
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 8,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 37.5
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 4,
+          "pct": 50.0
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 12.5
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 62,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 10,
+          "pct": 16.1
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 9,
+          "pct": 14.5
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 43,
+          "pct": 69.4
+        }
+      ],
       "source_document": "VMujeres_2011.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -1635,6 +2565,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 51,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 9,
+          "pct": 17.6
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 42,
+          "pct": 82.4
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 6,
+          "pct": 66.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 3,
+          "pct": 33.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 8,
+          "pct": 88.9
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 1,
+          "pct": 11.1
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 57.1
+        },
+        {
+          "label": "No vigentes",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 66.7
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 33.3
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 75.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 51,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 13,
+          "pct": 25.5
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 9,
+          "pct": 17.6
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 29,
+          "pct": 56.9
         }
       ],
       "source_document": "VMujeres_2012.pdf",
@@ -1864,6 +2947,159 @@
           "pct": 0.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 54,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 10,
+          "pct": 18.5
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 9,
+          "pct": 90.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 1,
+          "pct": 10.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 44,
+          "pct": 81.5
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 8,
+          "pct": 80.0
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 2,
+          "pct": 20.0
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 9,
+          "pct": 90.0
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 1,
+          "pct": 10.0
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 8,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 50.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 4,
+          "pct": 50.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 25.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 3,
+          "pct": 75.0
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 25.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 54,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 9,
+          "pct": 16.7
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 12,
+          "pct": 22.2
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 33,
+          "pct": 61.1
+        }
+      ],
       "source_document": "VMujeres_2013.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -2089,6 +3325,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 57,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 16,
+          "pct": 28.1
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 13,
+          "pct": 81.3
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 3,
+          "pct": 18.8
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 41,
+          "pct": 71.9
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 16,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 16,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 10,
+          "pct": 62.5
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 6,
+          "pct": 37.5
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 16,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 10,
+          "pct": 62.5
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 6,
+          "pct": 37.5
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 44.4
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 55.6
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 3,
+          "pct": 60.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 2,
+          "pct": 40.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 25.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 57,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 18,
+          "pct": 31.6
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 4,
+          "pct": 7.0
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 35,
+          "pct": 61.4
         }
       ],
       "source_document": "VMujeres_2014.pdf",
@@ -2318,6 +3707,159 @@
           "pct": 0.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 59,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 12,
+          "pct": 20.3
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 8,
+          "pct": 66.7
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 4,
+          "pct": 33.3
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 47,
+          "pct": 79.7
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 6,
+          "pct": 50.0
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 6,
+          "pct": 50.0
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 6,
+          "pct": 50.0
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 8.3
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 5,
+          "pct": 41.7
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 66.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 2,
+          "pct": 33.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 2,
+          "pct": 100.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 75.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "No consta",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 59,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 16,
+          "pct": 27.1
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 6,
+          "pct": 10.2
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 37,
+          "pct": 62.7
+        }
+      ],
       "source_document": "VMujeres_2015.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -2543,6 +4085,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 17,
+          "pct": 34.7
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 13,
+          "pct": 76.5
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 4,
+          "pct": 23.5
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 32,
+          "pct": 65.3
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 17,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 17,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 9,
+          "pct": 52.9
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 8,
+          "pct": 47.1
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 17,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 10,
+          "pct": 58.8
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 2,
+          "pct": 11.8
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 2,
+          "pct": 11.8
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 17.6
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 7,
+          "pct": 58.3
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 41.7
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 5,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 14.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 9,
+          "pct": 18.4
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 7,
+          "pct": 14.3
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 33,
+          "pct": 67.3
         }
       ],
       "source_document": "VMujeres_2016.pdf",
@@ -2772,6 +4467,159 @@
           "pct": 2.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 12,
+          "pct": 24.5
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 11,
+          "pct": 91.7
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 1,
+          "pct": 8.3
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 37,
+          "pct": 75.5
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 8,
+          "pct": 66.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 4,
+          "pct": 33.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 12,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 9,
+          "pct": 75.0
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 25.0
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 6,
+          "pct": 85.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 1,
+          "pct": 14.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 2,
+          "pct": 33.3
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 2,
+          "pct": 33.3
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 33.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 15,
+          "pct": 30.6
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 10,
+          "pct": 20.4
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 24,
+          "pct": 49.0
+        }
+      ],
       "source_document": "VMujeres_2017.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -2997,6 +4845,159 @@
           "label": "No consta",
           "count": 3,
           "pct": 5.8
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 52,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 15,
+          "pct": 28.8
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 37,
+          "pct": 71.2
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 10,
+          "pct": 66.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 5,
+          "pct": 33.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 11,
+          "pct": 73.3
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 6.7
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 20.0
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 5,
+          "pct": 50.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 50.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 1,
+          "pct": 20.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 3,
+          "pct": 60.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 20.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 5,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 2,
+          "pct": 40.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 2,
+          "pct": 40.0
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 20.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 52,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 9,
+          "pct": 17.3
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 7,
+          "pct": 13.5
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 36,
+          "pct": 69.2
         }
       ],
       "source_document": "VMujeres_2018.pdf",
@@ -3226,6 +5227,159 @@
           "pct": 10.7
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 56,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 13,
+          "pct": 23.2
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 10,
+          "pct": 76.9
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 3,
+          "pct": 23.1
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 43,
+          "pct": 76.8
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 13,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 13,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 8,
+          "pct": 61.5
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 5,
+          "pct": 38.5
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 13,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 5,
+          "pct": 38.5
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 2,
+          "pct": 15.4
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 6,
+          "pct": 46.2
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 66.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 2,
+          "pct": 33.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "No consta",
+          "count": 3,
+          "pct": 75.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 56,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 16,
+          "pct": 28.6
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 3,
+          "pct": 5.4
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 37,
+          "pct": 66.1
+        }
+      ],
       "source_document": "VMujeres_2019.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -3451,6 +5605,159 @@
           "label": "No consta",
           "count": 3,
           "pct": 6.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 50,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 7,
+          "pct": 14.0
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 5,
+          "pct": 71.4
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 2,
+          "pct": 28.6
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 43,
+          "pct": 86.0
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 4,
+          "pct": 57.1
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 7,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 14.3
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 42.9
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 2,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 50.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 50.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 50,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 11,
+          "pct": 22.0
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 7,
+          "pct": 14.0
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 32,
+          "pct": 64.0
         }
       ],
       "source_document": "VMujeres_2020.pdf",
@@ -3680,6 +5987,159 @@
           "pct": 10.2
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 10,
+          "pct": 20.4
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 39,
+          "pct": 79.6
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 9,
+          "pct": 90.0
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 1,
+          "pct": 10.0
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 10,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 8,
+          "pct": 80.0
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 1,
+          "pct": 10.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 10.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 6,
+          "pct": 66.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 3,
+          "pct": 33.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 2,
+          "pct": 66.7
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 33.3
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 16.7
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 3,
+          "pct": 50.0
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 33.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 14,
+          "pct": 28.6
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 6,
+          "pct": 12.2
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 29,
+          "pct": 59.2
+        }
+      ],
       "source_document": "VMujeres_2021.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -3905,6 +6365,159 @@
           "label": "No consta",
           "count": 4,
           "pct": 8.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 50,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 21,
+          "pct": 42.0
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 17,
+          "pct": 81.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 4,
+          "pct": 19.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 29,
+          "pct": 58.0
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 12,
+          "pct": 57.1
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 9,
+          "pct": 42.9
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 21,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 15,
+          "pct": 71.4
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 6,
+          "pct": 28.6
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 13,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 5,
+          "pct": 38.5
+        },
+        {
+          "label": "No vigentes",
+          "count": 8,
+          "pct": 61.5
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 3,
+          "pct": 37.5
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 5,
+          "pct": 62.5
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 5,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 20.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 2,
+          "pct": 40.0
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 40.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 50,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 10,
+          "pct": 20.0
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 9,
+          "pct": 18.0
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 31,
+          "pct": 62.0
         }
       ],
       "source_document": "VMujeres_2022.pdf",
@@ -4134,6 +6747,159 @@
           "pct": 6.9
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 58,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 15,
+          "pct": 25.9
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 13,
+          "pct": 86.7
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 2,
+          "pct": 13.3
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 43,
+          "pct": 74.1
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 14,
+          "pct": 93.3
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 9,
+          "pct": 64.3
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 5,
+          "pct": 35.7
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 1,
+          "pct": 6.7
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 15,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 11,
+          "pct": 73.3
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 4,
+          "pct": 26.7
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 44.4
+        },
+        {
+          "label": "No vigentes",
+          "count": 5,
+          "pct": 55.6
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 1,
+          "pct": 20.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 3,
+          "pct": 60.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 20.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 1,
+          "pct": 25.0
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 50.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 58,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 14,
+          "pct": 24.1
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 6,
+          "pct": 10.3
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 38,
+          "pct": 65.5
+        }
+      ],
       "source_document": "VMujeres_2023.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -4359,6 +7125,159 @@
           "label": "No consta",
           "count": 4,
           "pct": 8.2
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 49,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 16,
+          "pct": 32.7
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 12,
+          "pct": 75.0
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 4,
+          "pct": 25.0
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 33,
+          "pct": 67.3
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 16,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 13,
+          "pct": 81.3
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 8,
+          "pct": 61.5
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 5,
+          "pct": 38.5
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 3,
+          "pct": 18.8
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 16,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 9,
+          "pct": 56.3
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 1,
+          "pct": 6.3
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 6,
+          "pct": 37.5
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 6,
+          "pct": 66.7
+        },
+        {
+          "label": "No vigentes",
+          "count": 3,
+          "pct": 33.3
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 2,
+          "pct": 66.7
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 1,
+          "pct": 33.3
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 3,
+          "pct": 50.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 1,
+          "pct": 16.7
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 33.3
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 48,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 11,
+          "pct": 22.9
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 6,
+          "pct": 12.5
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 31,
+          "pct": 64.6
         }
       ],
       "source_document": "VMujeres_2024.pdf",
@@ -4588,6 +7507,159 @@
           "pct": 0.0
         }
       ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 48,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 11,
+          "pct": 22.9
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 8,
+          "pct": 72.7
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 3,
+          "pct": 27.3
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 37,
+          "pct": 77.1
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 11,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 10,
+          "pct": 90.9
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 6,
+          "pct": 60.0
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 4,
+          "pct": 40.0
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 1,
+          "pct": 9.1
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 11,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 6,
+          "pct": 54.5
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 1,
+          "pct": 9.1
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 1,
+          "pct": 9.1
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 3,
+          "pct": 27.3
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 5,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 4,
+          "pct": 80.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 1,
+          "pct": 20.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 1,
+          "pct": 100.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 4,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 2,
+          "pct": 50.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No consta",
+          "count": 2,
+          "pct": 50.0
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 48,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 5,
+          "pct": 10.4
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 9,
+          "pct": 18.8
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 34,
+          "pct": 70.8
+        }
+      ],
       "source_document": "VMujeres_2025.pdf",
       "source_page": 1,
       "confidence": "high",
@@ -4813,6 +7885,159 @@
           "label": "No consta",
           "count": 0,
           "pct": 0.0
+        }
+      ],
+      "prior_complaint": [
+        {
+          "label": "TOTAL víctimas por violencia de género",
+          "count": 25,
+          "pct": 100.0
+        },
+        {
+          "label": "Con una o más denuncias previas",
+          "count": 9,
+          "pct": 36.0
+        },
+        {
+          "label": "Interpuestas por la víctima",
+          "count": 8,
+          "pct": 88.9
+        },
+        {
+          "label": "Interpuestas por otros",
+          "count": 1,
+          "pct": 11.1
+        },
+        {
+          "label": "Sin denuncias previas",
+          "count": 16,
+          "pct": 64.0
+        },
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Proceso iniciado",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Continuación del proceso por parte de la víctima",
+          "count": 6,
+          "pct": 66.7
+        },
+        {
+          "label": "No continuación del proceso",
+          "count": 3,
+          "pct": 33.3
+        },
+        {
+          "label": "Proceso no iniciado",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "protective_measures": [
+        {
+          "label": "TOTAL casos con una o más denuncias previas",
+          "count": 9,
+          "pct": 100.0
+        },
+        {
+          "label": "Con medidas solicitadas por la víctima",
+          "count": 7,
+          "pct": 77.8
+        },
+        {
+          "label": "Con medidas solicitadas por otros",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Existían medidas de oficio",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "No se solicitaron medidas",
+          "count": 2,
+          "pct": 22.2
+        },
+        {
+          "label": "TOTAL casos con medidas adoptadas",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Vigentes",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "No vigentes",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por renuncia de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por final periodo vigencia",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Por otros motivos",
+          "count": 0,
+          "pct": 0.0
+        }
+      ],
+      "restraining_order_breach": [
+        {
+          "label": "TOTAL",
+          "count": 6,
+          "pct": 100.0
+        },
+        {
+          "label": "Sin oposición de la víctima",
+          "count": 0,
+          "pct": 0.0
+        },
+        {
+          "label": "Con oposición de la víctima",
+          "count": 5,
+          "pct": 83.3
+        },
+        {
+          "label": "No consta",
+          "count": 1,
+          "pct": 16.7
+        }
+      ],
+      "perpetrator_suicide_attempt": [
+        {
+          "label": "TOTAL",
+          "count": 25,
+          "pct": 100.0
+        },
+        {
+          "label": "Suicidio consumado",
+          "count": 6,
+          "pct": 24.0
+        },
+        {
+          "label": "Tentativa no consumada",
+          "count": 1,
+          "pct": 4.0
+        },
+        {
+          "label": "No hubo tentativa",
+          "count": 18,
+          "pct": 72.0
         }
       ],
       "source_document": "VMujeres_2026.pdf",

@@ -8,9 +8,10 @@ sus parejas o exparejas", one PDF per year, 2003-present.
 Two source-format eras exist:
   - 2006-present: numbered-table format (Tabla 2.1-2.4, 3.1-3.4). This
     parser extracts headline totals plus Tables 2.1 (region), 2.2 (age),
-    2.3 (country of birth), 2.4 (relationship/cohabitation). Tables
-    3.1-3.4 (denuncias previas, medidas de alejamiento, quebrantamiento,
-    tentativa de suicidio) are present in the source but NOT YET parsed.
+    2.3 (country of birth), 2.4 (relationship/cohabitation), 3.1 (prior
+    complaint / process continuation), 3.2 (protective measures requested
+    and adopted), 3.3 (restraining order breach), 3.4 (perpetrator suicide
+    attempt).
   - 2003-2005: an older "ficha resumen" layout (DENUNCIA / MEDIDAS DE
     PROTECCIÓN / QUEBRANTAMIENTO chart-style page) with a structurally
     different, harder-to-parse table. Only year + source metadata are
@@ -68,6 +69,40 @@ ORIGINS = ["España", "Otro país"]
 RELATIONSHIP_TYPES = ["Pareja", "Expareja o pareja en fase de ruptura"]
 COHABITATION = ["Convivían", "No convivían", "No consta"]
 
+# Tables 3.1/3.2: two mini-tables back to back, TOTAL rows kept (each TOTAL is
+# a distinct, meaningful count -- not a redundant grand total to drop).
+PRIOR_COMPLAINT_LABELS = [
+    "TOTAL víctimas por violencia de género",
+    "Con una o más denuncias previas",
+    "Interpuestas por la víctima",
+    "Interpuestas por otros",
+    "Sin denuncias previas",
+    "TOTAL casos con una o más denuncias previas",
+    "Proceso iniciado",
+    "Continuación del proceso por parte de la víctima",
+    "No continuación del proceso",
+    "Proceso no iniciado",
+]
+PROTECTIVE_MEASURES_LABELS = [
+    "TOTAL casos con una o más denuncias previas",
+    "Con medidas solicitadas por la víctima",
+    "Con medidas solicitadas por otros",
+    "Existían medidas de oficio",
+    "No se solicitaron medidas",
+    "TOTAL casos con medidas adoptadas",
+    "Vigentes",
+    "No vigentes",
+    "Por renuncia de la víctima",
+    "Por final periodo vigencia",
+    "Por otros motivos",
+]
+RESTRAINING_ORDER_BREACH_LABELS = [
+    "TOTAL", "Sin oposición de la víctima", "Con oposición de la víctima", "No consta",
+]
+SUICIDE_ATTEMPT_LABELS = [
+    "TOTAL", "Suicidio consumado", "Tentativa no consumada", "No hubo tentativa",
+]
+
 
 # ──────────────────────────────────────────────────────────────
 # Output schema
@@ -99,6 +134,10 @@ class FeminicideReport(BaseModel):
     origin: list[VictimPerpCategoryCount] = []
     relationship_type: list[CategoryCount] = []
     cohabitation: list[CategoryCount] = []
+    prior_complaint: list[CategoryCount] = []
+    protective_measures: list[CategoryCount] = []
+    restraining_order_breach: list[CategoryCount] = []
+    perpetrator_suicide_attempt: list[CategoryCount] = []
     source_document: str
     source_page: int = 1
     confidence: str = "high"
@@ -181,6 +220,22 @@ def _extract_victim_perp_table(block: str, vocab: list[str]) -> list[VictimPerpC
     return out
 
 
+def _extract_flat_table(block: str, labels: list[str]) -> list[CategoryCount]:
+    """Table where every 'Número'-block token maps 1:1, in order, to
+    `labels` -- no leading TOTAL is dropped (used for Tables 3.1-3.4, whose
+    TOTAL rows are distinct, meaningful counts, not a redundant grand total
+    to discard)."""
+    n = len(labels)
+    nums = _numbers_after(r"Número", block, 2 * n)
+    if len(nums) < 2 * n:
+        return []
+    counts, pcts = nums[:n], nums[n:2 * n]
+    return [
+        CategoryCount(label=label, count=int(float(c)), pct=float(p))
+        for label, c, p in zip(labels, counts, pcts)
+    ]
+
+
 def _extract_relationship_table(block: str) -> tuple[list[CategoryCount], list[CategoryCount]]:
     """Table 2.4: one Número/% pair holding TOTAL+2 relationship-type values
     followed by TOTAL+3 cohabitation values, back to back."""
@@ -219,12 +274,32 @@ def _parse_modern_format(text: str, year: int, pdf_name: str) -> FeminicideRepor
         text, r"País de nacimiento", r"Tipo de relación")
     relationship_block = _slice_block(
         text, r"Tipo de relación/convivencia", r"3\. Denuncias previas|Tabla 3\.1")
+    prior_complaint_block = _slice_block(text, r"Tabla 3\.1", r"Tabla 3\.2")
+    protective_measures_block = _slice_block(text, r"Tabla 3\.2", r"Tabla 3\.3")
+    breach_block = _slice_block(text, r"Tabla 3\.3", r"Tabla 3\.4")
+    suicide_attempt_block = _slice_block(text, r"Tabla 3\.4", None)
 
     regional = _extract_simple_table(region_block, REGIONS) if region_block else []
     age = _extract_victim_perp_table(age_block, AGE_BRACKETS) if age_block else []
     origin = _extract_victim_perp_table(origin_block, ORIGINS) if origin_block else []
     relationship_type, cohabitation = (
         _extract_relationship_table(relationship_block) if relationship_block else ([], [])
+    )
+    prior_complaint = (
+        _extract_flat_table(prior_complaint_block, PRIOR_COMPLAINT_LABELS)
+        if prior_complaint_block else []
+    )
+    protective_measures = (
+        _extract_flat_table(protective_measures_block, PROTECTIVE_MEASURES_LABELS)
+        if protective_measures_block else []
+    )
+    restraining_order_breach = (
+        _extract_flat_table(breach_block, RESTRAINING_ORDER_BREACH_LABELS)
+        if breach_block else []
+    )
+    perpetrator_suicide_attempt = (
+        _extract_flat_table(suicide_attempt_block, SUICIDE_ATTEMPT_LABELS)
+        if suicide_attempt_block else []
     )
 
     total_victims = None
@@ -263,6 +338,10 @@ def _parse_modern_format(text: str, year: int, pdf_name: str) -> FeminicideRepor
         origin=origin,
         relationship_type=relationship_type,
         cohabitation=cohabitation,
+        prior_complaint=prior_complaint,
+        protective_measures=protective_measures,
+        restraining_order_breach=restraining_order_breach,
+        perpetrator_suicide_attempt=perpetrator_suicide_attempt,
         source_document=pdf_name,
         confidence="high",
         notes="",
