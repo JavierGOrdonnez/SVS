@@ -82,6 +82,7 @@ flowchart LR
 - `reports/results.md`: Checklist of target quantities and their current status.
 - `reports/methodology.md`: Detailed per-source extraction table and composition DAG.
 - `data/sources/SOURCES_INDEX.md`: One-page index over living source documents.
+- `data/PIPELINE.md`: Script-level data pipeline map — every script's reads/writes + `§T` task, distinct from the goal-level DAG above.
 - `docs/index.html`: Interactive dashboard with rich visualizations.
 
 ## Status
