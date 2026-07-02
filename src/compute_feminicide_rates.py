@@ -27,7 +27,7 @@ def poisson_ci_95(count):
 def load_feminicide_data():
     """Load 2024 feminicide counts by origin."""
     data = {}
-    with open('data/raw/feminicidios_delegacion_2003-2026.csv') as f:
+    with open('data/raw/feminicidios_delegacion_2024.csv', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             year = row['year']
@@ -49,7 +49,7 @@ def load_population_data():
     # From INE Padrón (mid-year July 1)
     total_female = 0
 
-    with open('data/processed/population_spain_midyear_5yr.csv') as f:
+    with open('data/processed/population_spain_midyear_5yr.csv', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             year = row['year']
@@ -104,8 +104,10 @@ def compute_rates():
 
     results = []
 
+    origin_to_category = {'españa': 'España', 'otro_pais': 'Otro país'}
+
     for origin in ['españa', 'otro_pais']:
-        count = fem_data.get(origin.capitalize(), 0)
+        count = fem_data.get(origin_to_category[origin], 0)
         pop = pop_data[origin]
 
         # Rate per 100,000
@@ -137,14 +139,14 @@ def write_output(results):
     """Write results to CSV."""
     output_path = 'data/processed/feminicide_rates_2024.csv'
 
-    with open(output_path, 'w', newline='') as f:
+    with open(output_path, 'w', newline='', encoding='utf-8') as f:
         fieldnames = ['year', 'origin', 'victims_count', 'population', 'rate_per_100k',
                      'ci_lower', 'ci_upper', 'confidence', 'notes']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(results)
 
-    print(f"✓ Rates written to {output_path}")
+    print(f"Rates written to {output_path}")
 
     # Print summary
     for r in results:
