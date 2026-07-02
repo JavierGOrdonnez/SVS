@@ -37,6 +37,36 @@ C15: Literature-first: published studies/syntheses ! preferred where they exist,
 
 ---
 
+## §R — Research
+
+R1: Eurostat vs INE migration/population parsers — investigated whether
+`parse_eurostat_migration_cohort.py`, `parse_ine_population.py`,
+`parse_ine_mortality.py`, `parse_ine_tabla28716.py` are near-duplicate scripts
+that should be merged. Verdict: **not duplicative** — each targets a distinct
+source format + delivery mechanism, and only one (`parse_eurostat_migration_cohort.py`)
+touches migration at all; there is no separate INE-migration parser script in
+`src/` to compare it against (`migration_spain.csv`'s base T11 data, 2337 rows,
+was built in a merged branch, not a script that lives here today).
+
+| | `parse_eurostat_migration_cohort.py` | `parse_ine_population.py` | `parse_ine_mortality.py` | `parse_ine_tabla28716.py` |
+|---|---|---|---|---|
+| source | Eurostat bulk SDMX TSV (`migr_imm1ctz`/`migr_pop1ctz`), manual gunzip download, not committed | INE table 56934 CSV, semicolon-delimited, `;` sep | INE table 7947, JSON API dump (`wstempus`) | INE table 28716 CSV, semicolon-delimited |
+| fetch | manual (large bulk file, user downloads + gunzips) | manual CSV (could be scripted, isn't) | manual JSON dump | **live HTTP fetch** via `requests` inside the script |
+| number format | plain int + trailing flag chars (`b`,`e`,`p`,`@N`) stripped by regex | Spanish thousands-dot, some post-2021 Censo rows plain int — both handled inline | plain int (JSON) | Spanish thousands-dot + decimal-comma, `pandas`-based |
+| dimension shape | wide TSV, one column per year, dims packed into first column comma-joined | long CSV, one row per (age, sex, period) | nested JSON, `nombre` field encodes sex+age+cause in two inconsistent string formats (regex-split) | long CSV, one row per (crime_type, nationality, year) |
+| output | appends to shared `migration_spain.csv` (idempotent: drops+regenerates its own joint-cross rows on rerun) | writes 2 new CSVs (`population_spain_estimates.csv` full long form, `population_spain_midyear_5yr.csv` binned to match mortality table's age bins) | writes 1 new CSV, columns include a `series_cod` for traceability | writes 2 new CSVs (raw counts + derived nationality %) |
+| why separate | different bulk-download source entirely (Eurostat, not INE); different join granularity (age×sex×citizenship cross INE itself doesn't publish past 2021/2022) | population is a distinct target quantity (denominator) from migration flow/stock | mortality is a distinct target quantity again, and INE's JSON API differs structurally from its CSV exports | crime convictions by nationality is a distinct target quantity; also the only one of the four with a live network fetch built in |
+
+Conclusion: the shared pattern across all four is "some INE/Eurostat tabular
+dump → tidy CSV", but the actual parsing logic (delimiter, number format,
+dimension encoding, fetch mechanism) differs enough per source that a merged
+parser would need a source-specific branch for every step anyway — same
+non-duplication verdict as T53 reached for `src/parsers/`'s shared `utils.py`
+extraction (that consolidation targeted truly identical logic — pdftotext
+subprocess calls, CSV header guards — not source-specific parsing).
+
+---
+
 ## §I — Interfaces
 
 ```
