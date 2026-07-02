@@ -29,43 +29,64 @@ Feminicidio.net uses a broader definition (all female homicides); their annual f
 
 ## Known annual counts (partner/ex-partner, confirmed)
 
+**Source (2006–2026): `data/raw/feminicidios_delegacion_2003-2026.json`**, extracted
+directly from each year's Delegación "ficha" PDF by `src/parsers/feminicide_parser.py`
+(T19/T20; confidence=high, validation gate: sum(region) = total held exactly for all
+21 years). **2003–2005 remain manually curated** (medium confidence) — those years use
+a structurally different legacy PDF layout the parser does not extract (see T19 scope
+note); if a future pass adds legacy-format extraction, replace these three rows too.
+
 | Year | Count | Status |
 |---|---|---|
-| 2003 | 71 | First registry year |
-| 2004 | 72 | |
-| 2005 | 57 | |
-| 2006 | 69 | |
-| 2007 | 71 | |
-| 2008 | 76 | Highest on record |
-| 2009 | 56 | |
-| 2010 | 73 | |
-| 2011 | 61 | |
-| 2012 | 52 | |
-| 2013 | 54 | |
-| 2014 | 54 | |
-| 2015 | 60 | |
-| 2016 | 49 | |
-| 2017 | 51 | |
-| 2018 | 47 | |
-| 2019 | 55 | |
-| 2020 | 44 | COVID year |
-| 2021 | 43 | |
-| 2022 | 49 | |
-| 2023 | 57 | |
-| 2024 | **47** | Lowest since 2003; 51% foreign-born |
-| Cumulative 2003–2024 | **1,290** | |
+| 2003 | 71 | First registry year — manually curated, legacy PDF format not parsed |
+| 2004 | 72 | manually curated, legacy PDF format not parsed |
+| 2005 | 57 | manually curated, legacy PDF format not parsed |
+| 2006 | 69 | parsed, ficha updated 15 de octubre de 2025 |
+| 2007 | 71 | parsed, ficha updated 15 de octubre de 2025 |
+| 2008 | 76 | parsed, ficha updated 15 de octubre de 2025; highest on record |
+| 2009 | 58 | parsed, ficha updated 15 de octubre de 2025 |
+| 2010 | 74 | parsed, ficha updated 15 de octubre de 2025 |
+| 2011 | 62 | parsed, ficha updated 15 de octubre de 2025 |
+| 2012 | 51 | parsed, ficha updated 15 de octubre de 2025 |
+| 2013 | 54 | parsed, ficha updated 15 de octubre de 2025 |
+| 2014 | 57 | parsed, ficha updated 18 de diciembre de 2025 |
+| 2015 | 59 | parsed, ficha updated 15 de octubre de 2025 |
+| 2016 | 49 | parsed, ficha updated 15 de octubre de 2025 |
+| 2017 | 49 | parsed, ficha updated 15 de octubre de 2025 |
+| 2018 | 52 | parsed, ficha updated 15 de octubre de 2025 |
+| 2019 | 56 | parsed, ficha updated 15 de octubre de 2025 |
+| 2020 | 50 | parsed, ficha updated 23 de abril de 2026; COVID year |
+| 2021 | 49 | parsed, ficha updated 23 de abril de 2026 |
+| 2022 | 50 | parsed, ficha updated 23 de abril de 2026 |
+| 2023 | 58 | parsed, ficha updated 23 de abril de 2026 |
+| 2024 | 49 | parsed, ficha updated 23 de abril de 2026; 49% foreign-born |
+| 2025 | 48 | parsed, ficha updated 23 de abril de 2026 |
+| 2026 | 25 | parsed, ficha updated 29 de junio de 2026; **partial year, in progress** |
+| Cumulative 2003–2026 | **1,366** | per 2026 ficha's own running total, see below |
 
-All values 2003–2023 are medium confidence (secondary summaries); 2024 is high (verified Dec 2024 / Feb 2025 ficha).
+**Why these differ from the previously published table here (2026-07-01 note):**
+this doc's earlier table (written from secondary summaries, before the full-history
+parser existed) reported 2024 as 47/51%-foreign and a 2003–2024 cumulative of 1,290.
+The freshly parsed primary-source PDFs give 2024 = 49/49%-foreign and, more broadly,
+differ from the old table in most years by 1–6 (e.g. 2018: 47 → 52; 2020: 44 → 50;
+2021: 43 → 49). Root cause: **Delegación revises historical years retroactively** as
+cases initially flagged "en investigación" are confirmed or reclassified — every ficha
+PDF in `data/sources/` carries a recent `update_date` (Oct 2025 – Jun 2026), meaning
+each row above is the *current, revised* figure as of that update, not the count as it
+stood at the close of that calendar year. The parsed values are treated as more
+authoritative (primary source, machine-extracted, validation-gated) and this table now
+reflects them; the discrepancy itself is logged as SPEC.md §B22.
 
 ## Nationality breakdown 2024
 
-- Spanish-born: ~49% (~23 of 47)
-- Foreign-born: **51%** (~24 of 47) — first time ever exceeding Spanish-born
-- Rate: Spanish women 1.68/million; foreign women 8.32/million → ratio **4.95×**
-- Cumulative foreign victims 2003–2024: 442 (34.2% of 1,290 total)
+- Spanish-born: 51.0% (25 of 49)
+- Foreign-born: **49.0%** (24 of 49)
+- Rate: Spanish women 1.68/million; foreign women 8.32/million → ratio **4.95×** (rate figure itself not re-derived this pass — carried over from the prior secondary source; population denominators may need revisiting given the updated victim counts)
+- Cumulative foreign victims 2003–2026: see `origin` breakdown per year in the JSON; not re-summed here since 2003–2005 origin data is unavailable (legacy format)
 
 ## Caveats
 
 - Registry began 2003; 2000–2002 requires INE series or police records
-- Minor discrepancy between Delegación registry (47) and CGPJ count (48, based on "1 every 7.6 days") likely due to one case under investigation at year-end
-- Feminicidio.net broader count for 2024: 95 total female homicides (86 feminicidios)
+- Minor discrepancy between Delegación registry and CGPJ counts is expected in-year (cases under investigation at year-end); less relevant now that this doc tracks the ficha's own revised totals rather than a point-in-time snapshot
+- Feminicidio.net broader count for 2024: 95 total female homicides (86 feminicidios) — different definition (see above), not directly comparable to this table
+- 2026 row is a partial year (ficha dated 29 de junio de 2026) — will keep changing until the year closes
