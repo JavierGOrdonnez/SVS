@@ -23,6 +23,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import extract_text, parse_es_number, cli_require_arg
 
 

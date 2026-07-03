@@ -41,6 +41,7 @@ try:
 except ImportError:
     sys.exit("Install: pip install pdfplumber pandas pydantic")
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import parse_es_number
 
 ROOT = Path(__file__).parent.parent.parent

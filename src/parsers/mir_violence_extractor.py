@@ -18,6 +18,8 @@ Usage:
 
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mir_violence_parser import parse_pdf
 from utils import write_csv_rows, cli_require_arg
 
