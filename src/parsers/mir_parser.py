@@ -17,12 +17,13 @@ The PDFs must be downloaded manually (interior.gob.es returns 403 for automated 
   Anuarios index: https://www.interior.gob.es/opencms/es/archivos-y-documentacion/
       publicaciones/.../anuario-estadistico-del-ministerio-del-interior/
 
-Output (data/raw/sexual_crimes_mir_YYYY.json per year, plus a consolidated
-data/raw/sexual_crimes_mir_{min_year}-{max_year}.json): nested, Pydantic-
-validated MIRDataset -> MIRReport (one per year) -> categories: [CategorySex
-Breakdown] for category x sex, nationality: {victims, perpetrators} for
-nationality x sex at report-total level -- see the MIRReport/MIRDataset
-models below for the full schema.
+Output: one consolidated data/raw/sexual_crimes_mir_{min_year}-{max_year}.json
+per --mode run (informe mode keeps the bare filename; anuario mode gets an
+`_anuario` tag, since the two are independently-sourced series, not one
+dataset -- see B6/V13). Nested, Pydantic-validated MIRDataset -> MIRReport
+(one per year) -> categories: [CategorySexBreakdown] for category x sex,
+nationality: {victims, perpetrators} for nationality x sex at report-total
+level -- see the MIRReport/MIRDataset models below for the full schema.
 
 Validation gate (V12): sum(crime subcategories) must equal headline total.
 """
@@ -761,14 +762,6 @@ def header_matches(text: str, patterns: list) -> bool:
     return any(p.search(text) for p in patterns)
 
 
-def find_number_in_row(cells: list[str]) -> int | None:
-    for c in reversed(cells):
-        v = parse_es_number(c)
-        if v is not None and v >= 0:
-            return int(round(v))
-    return None
-
-
 # ──────────────────────────────────────────────────────────────
 # Informe parser (2019–2024 format)
 # ──────────────────────────────────────────────────────────────
@@ -953,23 +946,36 @@ class InformeParser:
 
 class AnuarioParser:
     """
-    The MIR "Anuario Estadístico" has sexual crimes in Chapter 4 (Delincuencia)
-    or Chapter 5, depending on year. The relevant table is titled something like
-    "Delitos contra la Libertad e Indemnidad Sexual" or "Infracciones Penales".
+    Sexual crimes in the MIR "Anuario Estadístico" do NOT live in a dedicated
+    chapter with per-category tables (that was the original, untested
+    assumption -- see B9). They live as one row ("III. Libertad sexual") plus
+    4-5 numbered sub-rows inside TABLA 3-1-5 ("Hechos conocidos por tipología
+    penal") and TABLA 3-1-6 ("Hechos esclarecidos..."), each a single dense
+    page covering ALL crime types with a 5-year "evolución" column window, in
+    the "Seguridad Ciudadana" chapter. The table has no ruling lines --
+    pdfplumber's extract_tables() finds nothing; text must be parsed directly.
 
-    Format varies significantly by year:
-    - 2000–2011: partial territory (Policía Nacional + Guardia Civil only)
-    - 2012+: national coverage (includes Mossos, Ertzaintza, Policía Foral)
-    - 2015: break due to Código Penal reform
-
-    The chapter is typically pp. 130–200 in recent Anuarios.
+    Sub-category count varies by publication date (LO 10/2022 reform):
+    - Pre-reform editions (e.g. the 2021 Anuario): 4 sub-rows. "Agresión
+      sexual con penetración" = Art.179 alone (the violación-equivalent
+      series, comparable to Informe's Art.179-only figures).
+    - Post-reform editions (2022 Anuario onward) RETROACTIVELY restate prior
+      years using the new merged scheme: 5 sub-rows, "Agresión sexual" +
+      "Agresión sexual con penetración" are each agresión+abuso MERGED (see
+      footnote "se computan agresiones sexuales... y abusos sexuales...").
+      Consequence: the same year's headline sub-count differs by edition --
+      e.g. 2021's "con penetración" count is 2.143 in the 2021 edition (old
+      scheme) but 3.795 in the 2022/2023 editions (new scheme, retroactively
+      restated) -- a genuine ~1.8x discrepancy from recategorization, not a
+      parsing error. See B9/§B6.
     """
 
-    CHAPTER_KEYWORDS = re.compile(
-        r"delito(s)?.{0,30}(libertad|sexual|indemnidad)|"
-        r"infracci(on|ón).{0,30}penal",
-        re.I
-    )
+    TABLE5_RE = re.compile(r"TABLA\s*3-1-5\b", re.I)
+    TABLE6_RE = re.compile(r"TABLA\s*3-1-6\b", re.I)
+    YEAR_HEADER_RE = re.compile(r"Tipolog.a penal\s+((?:\d{4}\s*){2,6})", re.I)
+    TOTAL_ROW_RE = re.compile(r"^(iii\.|3\.)\s*libertad sexual\b")
+    SECTION_END_RE = re.compile(r"^(iv\.|4\.)\s*relaciones familiares\b")
+    NUM_RE = re.compile(r"\d{1,3}(?:\.\d{3})*(?:,\d+)?")
 
     def __init__(self, pdf_path: Path, year: int):
         self.pdf_path = pdf_path
@@ -978,91 +984,139 @@ class AnuarioParser:
         self.records: list[MIRRecord] = []
 
     def parse(self) -> list[MIRRecord]:
+        page5 = page6 = None
+        page5_no = page6_no = None
         with pdfplumber.open(self.pdf_path) as pdf:
-            in_chapter = False
-            chapter_pages = 0
-            for page in pdf.pages:
+            for i, page in enumerate(pdf.pages):
                 text = page.extract_text() or ""
-                if self.CHAPTER_KEYWORDS.search(text):
-                    in_chapter = True
-                    chapter_pages = 0
-                if in_chapter:
-                    chapter_pages += 1
-                    self._process_page(page)
-                    # Stop after 30 pages within chapter (Anuarios are large)
-                    if chapter_pages > 30 and not self.CHAPTER_KEYWORDS.search(text):
-                        in_chapter = False
+                if page5 is None and self.TABLE5_RE.search(text):
+                    page5, page5_no = text, i + 1
+                elif page6 is None and self.TABLE6_RE.search(text):
+                    page6, page6_no = text, i + 1
+                if page5 is not None and page6 is not None:
+                    break
+        if page5 is None:
+            print(f"  ⚠ {self.year}: TABLA 3-1-5 (hechos conocidos) not found in {self.source}", file=sys.stderr)
+            return []
+        self._extract(page5, page6, page5_no, page6_no)
         self._validate()
         return self.records
 
-    def _process_page(self, page):
-        tables = page.extract_tables()
-        for table in tables:
-            if not table:
-                continue
-            flat = [[str(c or "").strip() for c in row] for row in table]
-            self._try_crime_table(flat, page.page_number)
+    def _year_columns(self, text: str) -> list[int]:
+        m = self.YEAR_HEADER_RE.search(text)
+        return [int(y) for y in m.group(1).split()] if m else []
 
-    def _try_crime_table(self, table: list[list[str]], page_no: int):
-        for row in table:
-            if not row:
-                continue
-            label = row[0]
-            count = find_number_in_row(row[1:])
-            label_l = label.lower()
+    def _row_values(self, text: str, predicate, n_cols: int) -> list[float | None] | None:
+        """Last n_cols numeric tokens of the first line matching predicate(line_lower)."""
+        for line in text.splitlines():
+            if predicate(line.lower()) and len(self.NUM_RE.findall(line)) >= n_cols:
+                nums = self.NUM_RE.findall(line)[-n_cols:]
+                return [parse_es_number(t) for t in nums]
+        return None
 
-            if re.search(r"total.*libert|libert.*sexual.*total|infracci.*total", label_l):
-                if count:
-                    self._upsert("total_sexual_crimes", "all", count, page_no)
+    def _libertad_sexual_section(self, text: str) -> str:
+        lines, started, out = text.splitlines(), False, []
+        for line in lines:
+            if not started and self.TOTAL_ROW_RE.match(line.strip().lower()):
+                started = True
+            if started:
+                out.append(line)
+                if self.SECTION_END_RE.match(line.strip().lower()) and len(out) > 1:
+                    break
+        return "\n".join(out)
 
-            elif re.search(r"violaci[oó]n|art\.?\s*179", label_l):
-                self._upsert("violacion", "Art.179", count, page_no)
-
-            elif re.search(r"agres.{0,20}sin penetra|art\.?\s*178", label_l):
-                self._upsert("agresion_sin_penetracion", "Art.178", count, page_no)
-
-            elif re.search(r"abuso sexual|art\.?\s*181", label_l):
-                self._upsert("abuso_sexual", "Art.181", count, page_no)
-
-            elif re.search(r"exhibicion|provocaci[oó]n sexual", label_l):
-                self._upsert("exhibicionismo", "Art.185", count, page_no)
-
-            elif re.search(r"prostituci[oó]n|corrupci[oó]n", label_l):
-                self._upsert("prostitucion", "Art.187", count, page_no)
-
-    def _upsert(self, category: str, article: str, count: int | None, page_no: int):
-        for r in self.records:
-            if r.crime_category == category:
-                if count:
-                    r.count = count
-                return
-        notes = ""
-        if self.year <= 2011:
-            notes = "TERRITORIAL LIMITATION: excludes Cataluña/PaísVasco/Navarra (~25-30% population). Multiply by ~1.3-1.5 for national estimate."
+    def _add_category(self, category: str, article: str, count: float | None, page_no: int, note: str):
         self.records.append(MIRRecord(
-            year=self.year,
-            crime_category=category,
-            legal_article=article,
-            count=count,
+            year=self.year, crime_category=category, legal_article=article,
+            count=int(count) if count is not None else None,
             source_document=self.source,
-            source_table="anuario_chapter",
+            source_table="TABLA 3-1-5 (Seguridad Ciudadana)",
             source_page=page_no,
-            confidence="medium" if self.year >= 2012 else "low",
-            notes=notes,
+            confidence="high" if self.year >= 2012 else "medium",
+            notes=note,
         ))
+
+    def _extract(self, page5: str, page6: str | None, page5_no: int | None, page6_no: int | None):
+        years5 = self._year_columns(page5)
+        if self.year not in years5:
+            print(f"  ⚠ {self.year}: not in TABLA 3-1-5 column range {years5} of {self.source}", file=sys.stderr)
+            return
+        idx, n = years5.index(self.year), len(years5)
+
+        total_row = self._row_values(page5, lambda l: self.TOTAL_ROW_RE.match(l) is not None, n)
+        if total_row is None:
+            print(f"  ⚠ {self.year}: 'III. Libertad sexual' row not found in TABLA 3-1-5", file=sys.stderr)
+            return
+        total = total_row[idx]
+
+        clearance = None
+        if page6:
+            years6 = self._year_columns(page6)
+            if self.year in years6:
+                esclar_row = self._row_values(page6, lambda l: self.TOTAL_ROW_RE.match(l) is not None, len(years6))
+                if esclar_row is not None:
+                    esclar = esclar_row[years6.index(self.year)]
+                    if esclar is not None and total:
+                        clearance = round(esclar / total * 100, 1)
+
+        territorial_note = ""
+        if self.year <= 2011:
+            territorial_note = "TERRITORIAL LIMITATION: excludes Cataluña/PaísVasco/Navarra (~25-30% population). Multiply by ~1.3-1.5 for national estimate."
+
+        self.records.append(MIRRecord(
+            year=self.year, crime_category="total_sexual_crimes", legal_article="all",
+            count=int(total) if total is not None else None,
+            clearance_rate=clearance,
+            source_document=self.source,
+            source_table="TABLA 3-1-5/3-1-6 (Seguridad Ciudadana)",
+            source_page=page5_no,
+            confidence="high" if self.year >= 2012 else "medium",
+            notes=territorial_note,
+        ))
+
+        section = self._libertad_sexual_section(page5)
+        agresion_penetracion = self._row_values(section, lambda l: "sexual con penetraci" in l, n)
+        agresion_sin_penetracion = self._row_values(
+            section, lambda l: "agresi" in l and "sexual" in l and "penetraci" not in l, n)
+        corrupcion = self._row_values(section, lambda l: "corrupci" in l and "menor" in l, n)
+        pornografia = self._row_values(section, lambda l: "pornograf" in l and "menor" in l, n)
+        otras = self._row_values(section, lambda l: "otras infracciones" in l and "libertad" in l, n)
+
+        merged_scheme = agresion_sin_penetracion is not None
+
+        if agresion_penetracion is not None:
+            if merged_scheme:
+                self._add_category("agresion_sexual_con_penetracion_post_lo10_2022",
+                                    "Art.179 (LO 10/2022)", agresion_penetracion[idx], page5_no, REFORM_NOTE)
+            else:
+                self._add_category("agresion_sexual_con_penetracion",
+                                    "Art.179", agresion_penetracion[idx], page5_no, "")
+
+        if agresion_sin_penetracion is not None:
+            self._add_category("agresion_sexual_post_lo10_2022", "Art.178-179 (LO 10/2022)",
+                                agresion_sin_penetracion[idx], page5_no, REFORM_NOTE)
+
+        if corrupcion is not None:
+            self._add_category("corrupcion_menores_discapacitados", "Art.181", corrupcion[idx], page5_no, "")
+
+        if pornografia is not None:
+            self._add_category("pornografia_menores", "Art.189", pornografia[idx], page5_no, "")
+
+        if otras is not None:
+            note = ("Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately "
+                    "in this Anuario table; not directly comparable to Informe's per-article categories.")
+            self._add_category("otras_libertad_indemnidad_sexual", "various", otras[idx], page5_no, note)
 
     def _validate(self):
         total_rec = next((r for r in self.records if r.crime_category == "total_sexual_crimes"), None)
         if total_rec is None or total_rec.count is None:
-            print(f"  ⚠ {self.year}: no total sexual crimes found", file=sys.stderr)
             return
         total = total_rec.count
-        sub_cats = ["violacion", "agresion_sin_penetracion", "abuso_sexual",
-                    "exhibicionismo", "prostitucion"]
-        sub_sum = sum(r.count for r in self.records if r.crime_category in sub_cats and r.count)
-        if sub_sum > 0 and abs(sub_sum - total) / max(total, 1) > 0.20:
+        sub_sum = sum(r.count for r in self.records
+                      if r.crime_category != "total_sexual_crimes" and r.count)
+        if sub_sum > 0 and abs(sub_sum - total) / max(total, 1) > 0.05:
             note = f"VALIDATION: sub-cat sum {sub_sum} vs headline {total}"
-            total_rec.notes += note
+            total_rec.notes = (total_rec.notes + " " + note).strip()
             print(f"  ⚠ {self.year}: {note}", file=sys.stderr)
 
 
@@ -1194,11 +1248,17 @@ def run_anuario(pdf_path: Path, year: int) -> list[MIRRecord]:
     return parser.parse()
 
 
-def run_batch(pdf_year_pairs: list[tuple[Path, int]], parse_fn, out_dir: Path) -> Path:
+def run_batch(pdf_year_pairs: list[tuple[Path, int]], parse_fn, out_dir: Path, filename_tag: str = "") -> Path:
     """Parse each (pdf, year) pair and write exactly one MIRDataset JSON file
     (V21) -- named by the actual year range, or the single year if there's
     only one report -- instead of one file per input plus a redundant
-    consolidated copy of the same data."""
+    consolidated copy of the same data.
+
+    `filename_tag` disambiguates the Anuario series from the Informe series
+    when their year ranges could otherwise collide/be confused (they are two
+    independently-sourced, cross-validated series per B6/V13, not one
+    dataset) -- left empty for informe mode to avoid renaming the existing,
+    already-referenced `sexual_crimes_mir_{range}.json` file."""
     by_year: dict[int, list[str]] = {}
     for pdf, year in pdf_year_pairs:
         by_year.setdefault(year, []).append(pdf.name)
@@ -1216,7 +1276,8 @@ def run_batch(pdf_year_pairs: list[tuple[Path, int]], parse_fn, out_dir: Path) -
     ]
     years = sorted(r.year for r in reports)
     stem = f"{years[0]}" if years[0] == years[-1] else f"{years[0]}-{years[-1]}"
-    out = out_dir / f"sexual_crimes_mir_{stem}.json"
+    tag = f"_{filename_tag}" if filename_tag else ""
+    out = out_dir / f"sexual_crimes_mir{tag}_{stem}.json"
     write_dataset(MIRDataset(reports=reports), out)
     return out
 
@@ -1231,12 +1292,13 @@ def main():
     args = ap.parse_args()
 
     parse_fn = run_informe if args.mode == "informe" else run_anuario
+    filename_tag = "anuario" if args.mode == "anuario" else ""
 
     if args.pdf:
         year = args.year or infer_year(args.pdf)
         if not year:
             sys.exit("Cannot infer year from filename; pass --year")
-        run_batch([(args.pdf, year)], parse_fn, args.out_dir)
+        run_batch([(args.pdf, year)], parse_fn, args.out_dir, filename_tag)
 
     elif args.pdf_dir:
         pdfs = sorted(args.pdf_dir.glob("*.pdf"))
@@ -1251,7 +1313,7 @@ def main():
             pairs.append((pdf, year))
         if not pairs:
             sys.exit("No PDFs with inferable years found")
-        run_batch(pairs, parse_fn, args.out_dir)
+        run_batch(pairs, parse_fn, args.out_dir, filename_tag)
 
     else:
         ap.error("Pass either --pdf or --pdf-dir")
