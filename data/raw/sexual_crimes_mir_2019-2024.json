@@ -725,6 +725,510 @@
       "notes": ""
     },
     {
+      "year": 2020,
+      "total_count": 13174,
+      "clearance_rate": 78.1,
+      "victims_minor_pct": null,
+      "perp_male_pct": 96.6,
+      "categories": [
+        {
+          "category": "abuso_sexual",
+          "legal_article": "Art.181",
+          "count": 5616,
+          "victims": {
+            "female": 4853,
+            "male": 827,
+            "unknown": 6
+          },
+          "perpetrators": {
+            "female": 77,
+            "male": 3370,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "agresion_sexual",
+          "legal_article": "Art.178",
+          "count": 1660,
+          "victims": {
+            "female": 1456,
+            "male": 148,
+            "unknown": 0
+          },
+          "perpetrators": {
+            "female": 22,
+            "male": 1064,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1596,
+          "victims": {
+            "female": 1314,
+            "male": 111,
+            "unknown": 0
+          },
+          "perpetrators": {
+            "female": 13,
+            "male": 1041,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "abuso_sexual_con_penetracion",
+          "legal_article": "Art.182",
+          "count": 1189,
+          "victims": {
+            "female": 992,
+            "male": 137,
+            "unknown": 3
+          },
+          "perpetrators": {
+            "female": 13,
+            "male": 784,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 762,
+          "victims": {
+            "female": 137,
+            "male": 85,
+            "unknown": 1
+          },
+          "perpetrators": {
+            "female": 26,
+            "male": 424,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "exhibicionismo",
+          "legal_article": "Art.185",
+          "count": 612,
+          "victims": {
+            "female": 520,
+            "male": 189,
+            "unknown": 1
+          },
+          "perpetrators": {
+            "female": 10,
+            "male": 344,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 350,
+          "victims": {
+            "female": 245,
+            "male": 130,
+            "unknown": 3
+          },
+          "perpetrators": {
+            "female": 9,
+            "male": 154,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "contacto_tecnologico_menor_16",
+          "legal_article": "Art.183 bis",
+          "count": 575,
+          "victims": {
+            "female": 417,
+            "male": 199,
+            "unknown": 0
+          },
+          "perpetrators": {
+            "female": 5,
+            "male": 123,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "acoso_sexual",
+          "legal_article": "Art.184",
+          "count": 476,
+          "victims": {
+            "female": 457,
+            "male": 46,
+            "unknown": 1
+          },
+          "perpetrators": {
+            "female": 4,
+            "male": 202,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "delitos_relativos_prostitucion",
+          "legal_article": "Art.187",
+          "count": 216,
+          "victims": {
+            "female": 332,
+            "male": 32,
+            "unknown": 2
+          },
+          "perpetrators": {
+            "female": 88,
+            "male": 148,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "provocacion_sexual",
+          "legal_article": "Art.186",
+          "count": 122,
+          "victims": {
+            "female": 75,
+            "male": 49,
+            "unknown": 1
+          },
+          "perpetrators": {
+            "female": 3,
+            "male": 34,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": 72.3,
+          "foreign_pct": 27.7,
+          "by_country": [
+            {
+              "name": "AFRICA",
+              "region": "AFRICA",
+              "is_region_total": true,
+              "male": 3,
+              "female": 10,
+              "unknown": 0,
+              "total": 13,
+              "pct": 3.0
+            },
+            {
+              "name": "AMERICA",
+              "region": "AMERICA",
+              "is_region_total": true,
+              "male": 1,
+              "female": 58,
+              "unknown": 0,
+              "total": 59,
+              "pct": 13.8
+            },
+            {
+              "name": "UNION EUROPEA",
+              "region": "UNION EUROPEA",
+              "is_region_total": true,
+              "male": 4,
+              "female": 31,
+              "unknown": 0,
+              "total": 35,
+              "pct": 8.2
+            },
+            {
+              "name": "ASIA",
+              "region": "ASIA",
+              "is_region_total": true,
+              "male": 0,
+              "female": 4,
+              "unknown": 0,
+              "total": 4,
+              "pct": 0.9
+            }
+          ]
+        },
+        "perpetrators": {
+          "spanish_pct": 67.1,
+          "foreign_pct": 32.9,
+          "by_country": [
+            {
+              "name": "AFRICA",
+              "region": "AFRICA",
+              "is_region_total": true,
+              "male": 768,
+              "female": 14,
+              "unknown": 0,
+              "total": 782,
+              "pct": 9.8
+            },
+            {
+              "name": "MARRUECOS",
+              "region": "AFRICA",
+              "is_region_total": false,
+              "male": 528,
+              "female": 8,
+              "unknown": 0,
+              "total": 536,
+              "pct": 6.7
+            },
+            {
+              "name": "ARGELIA",
+              "region": "AFRICA",
+              "is_region_total": false,
+              "male": 59,
+              "female": 1,
+              "unknown": 0,
+              "total": 60,
+              "pct": 0.8
+            },
+            {
+              "name": "RESTO",
+              "region": "AFRICA",
+              "is_region_total": false,
+              "male": 181,
+              "female": 5,
+              "unknown": 0,
+              "total": 186,
+              "pct": 2.3
+            },
+            {
+              "name": "AMERICA",
+              "region": "AMERICA",
+              "is_region_total": true,
+              "male": 1054,
+              "female": 59,
+              "unknown": 0,
+              "total": 1113,
+              "pct": 14.0
+            },
+            {
+              "name": "COLOMBIA",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 239,
+              "female": 23,
+              "unknown": 0,
+              "total": 262,
+              "pct": 3.3
+            },
+            {
+              "name": "ECUADOR",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 169,
+              "female": 1,
+              "unknown": 0,
+              "total": 170,
+              "pct": 2.1
+            },
+            {
+              "name": "BOLIVIA",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 100,
+              "female": 1,
+              "unknown": 0,
+              "total": 101,
+              "pct": 1.3
+            },
+            {
+              "name": "PERU",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 94,
+              "female": 2,
+              "unknown": 0,
+              "total": 96,
+              "pct": 1.2
+            },
+            {
+              "name": "VENUZUELA",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 86,
+              "female": 3,
+              "unknown": 0,
+              "total": 89,
+              "pct": 1.1
+            },
+            {
+              "name": "DOMINICANA",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 65,
+              "female": 1,
+              "unknown": 0,
+              "total": 66,
+              "pct": 0.8
+            },
+            {
+              "name": "RESTO",
+              "region": "AMERICA",
+              "is_region_total": false,
+              "male": 301,
+              "female": 28,
+              "unknown": 0,
+              "total": 329,
+              "pct": 4.1
+            },
+            {
+              "name": "UNION EUROPEA",
+              "region": "UNION EUROPEA",
+              "is_region_total": true,
+              "male": 455,
+              "female": 18,
+              "unknown": 0,
+              "total": 473,
+              "pct": 5.9
+            },
+            {
+              "name": "RUMANIA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 236,
+              "female": 14,
+              "unknown": 0,
+              "total": 250,
+              "pct": 3.1
+            },
+            {
+              "name": "BULGARIA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 49,
+              "female": 0,
+              "unknown": 0,
+              "total": 49,
+              "pct": 0.6
+            },
+            {
+              "name": "ITALIA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 40,
+              "female": 1,
+              "unknown": 0,
+              "total": 41,
+              "pct": 0.5
+            },
+            {
+              "name": "PORTUGAL",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 28,
+              "female": 0,
+              "unknown": 0,
+              "total": 28,
+              "pct": 0.4
+            },
+            {
+              "name": "FRANCIA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 22,
+              "female": 0,
+              "unknown": 0,
+              "total": 22,
+              "pct": 0.3
+            },
+            {
+              "name": "ALEMANIA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 20,
+              "female": 1,
+              "unknown": 0,
+              "total": 21,
+              "pct": 0.3
+            },
+            {
+              "name": "BELGICA",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 9,
+              "female": 1,
+              "unknown": 0,
+              "total": 10,
+              "pct": 0.1
+            },
+            {
+              "name": "RESTO",
+              "region": "UNION EUROPEA",
+              "is_region_total": false,
+              "male": 51,
+              "female": 1,
+              "unknown": 0,
+              "total": 52,
+              "pct": 0.7
+            },
+            {
+              "name": "ASIA",
+              "region": "ASIA",
+              "is_region_total": true,
+              "male": 156,
+              "female": 7,
+              "unknown": 0,
+              "total": 163,
+              "pct": 2.0
+            },
+            {
+              "name": "PAKISTAN",
+              "region": "ASIA",
+              "is_region_total": false,
+              "male": 60,
+              "female": 0,
+              "unknown": 0,
+              "total": 60,
+              "pct": 0.8
+            },
+            {
+              "name": "CHINA",
+              "region": "ASIA",
+              "is_region_total": false,
+              "male": 30,
+              "female": 7,
+              "unknown": 0,
+              "total": 37,
+              "pct": 0.5
+            },
+            {
+              "name": "RESTO",
+              "region": "ASIA",
+              "is_region_total": false,
+              "male": 66,
+              "female": 0,
+              "unknown": 0,
+              "total": 66,
+              "pct": 0.8
+            },
+            {
+              "name": "RESTO PAISES",
+              "region": "RESTO PAISES",
+              "is_region_total": true,
+              "male": 81,
+              "female": 6,
+              "unknown": 0,
+              "total": 87,
+              "pct": 1.1
+            }
+          ]
+        }
+      },
+      "source_document": "MIR_Informe_DelitosSexuales2020.pdf",
+      "source_table": "tipologia_penal_table",
+      "source_page": 7,
+      "verified": false,
+      "notes": ""
+    },
+    {
       "year": 2021,
       "total_count": 17016,
       "clearance_rate": 81.2,

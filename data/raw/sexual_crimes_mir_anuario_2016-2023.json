@@ -1,0 +1,756 @@
+{
+  "reports": [
+    {
+      "year": 2016,
+      "total_count": 10844,
+      "clearance_rate": 77.3,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1249,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 368,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 621,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 8606,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2016.pdf",
+      "source_table": "Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
+      "source_page": 167,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2017,
+      "total_count": 11692,
+      "clearance_rate": 76.1,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1382,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 400,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 767,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 9143,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2017.pdf",
+      "source_table": "Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
+      "source_page": 162,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2018,
+      "total_count": 13782,
+      "clearance_rate": 77.4,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1700,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 268,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 892,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 10922,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2018.pdf",
+      "source_table": "Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
+      "source_page": 162,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2019,
+      "total_count": 15319,
+      "clearance_rate": 77.6,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1873,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 369,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 866,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 12211,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2019.pdf",
+      "source_table": "Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
+      "source_page": 171,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2020,
+      "total_count": 13174,
+      "clearance_rate": 78.1,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1596,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 350,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 762,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 10466,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2020.pdf",
+      "source_table": "Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
+      "source_page": 140,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2021,
+      "total_count": 17016,
+      "clearance_rate": 77.9,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 2143,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 347,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 739,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 13787,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2021.pdf",
+      "source_table": "TABLA 3-1-5/3-1-6 (Seguridad Ciudadana)",
+      "source_page": 137,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2022,
+      "total_count": 19013,
+      "clearance_rate": 76.6,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 4270,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022."
+        },
+        {
+          "category": "agresion_sexual_post_lo10_2022",
+          "legal_article": "Art.178-179 (LO 10/2022)",
+          "count": 11426,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022."
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 384,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 707,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 2226,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2022.pdf",
+      "source_table": "TABLA 3-1-5/3-1-6 (Seguridad Ciudadana)",
+      "source_page": 107,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2023,
+      "total_count": 21825,
+      "clearance_rate": 78.2,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 4890,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022."
+        },
+        {
+          "category": "agresion_sexual_post_lo10_2022",
+          "legal_article": "Art.178-179 (LO 10/2022)",
+          "count": 12727,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022."
+        },
+        {
+          "category": "corrupcion_menores_discapacitados",
+          "legal_article": "Art.181",
+          "count": 389,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "pornografia_menores",
+          "legal_article": "Art.189",
+          "count": 909,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "otras_libertad_indemnidad_sexual",
+          "legal_article": "various",
+          "count": 2910,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Aggregates remaining Art.178/181/183/185/187 etc. not broken out separately in this Anuario table; not directly comparable to Informe's per-article categories."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_AnuarioEstadistico_2023.pdf",
+      "source_table": "TABLA 3-1-5/3-1-6 (Seguridad Ciudadana)",
+      "source_page": 104,
+      "verified": false,
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "reports": [
+    {
+      "year": 2019,
+      "total_count": 15338,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1878,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 13460,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL Acumulado enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2019_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 331,
+      "verified": false,
+      "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+    },
+    {
+      "year": 2020,
+      "total_count": 13240,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 1602,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 11638,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL Acumulado enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2020_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 330,
+      "verified": false,
+      "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+    },
+    {
+      "year": 2021,
+      "total_count": 17016,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion",
+          "legal_article": "Art.179",
+          "count": 2143,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 14873,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL Acumulado enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2021_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 492,
+      "verified": false,
+      "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+    },
+    {
+      "year": 2022,
+      "total_count": 17389,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 2870,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022. NACIONAL Acumulado enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 14519,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL Acumulado enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2022_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 493,
+      "verified": false,
+      "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+    },
+    {
+      "year": 2023,
+      "total_count": 19981,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 4875,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022. NACIONAL Acumulado enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 15106,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL Acumulado enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2023_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 501,
+      "verified": false,
+      "notes": "NACIONAL Acumulado enero a diciembre (Q4)."
+    },
+    {
+      "year": 2024,
+      "total_count": 21159,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 5206,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022. NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 15953,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2024_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 2,
+      "verified": false,
+      "notes": "NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+    },
+    {
+      "year": 2025,
+      "total_count": 21659,
+      "clearance_rate": null,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "agresion_sexual_con_penetracion_post_lo10_2022",
+          "legal_article": "Art.179 (LO 10/2022)",
+          "count": 5363,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Categoria redefinida por LO 10/2022 (\"solo si es si\"), vigente desde oct-2022: incluye los delitos anteriormente tipificados como \"abuso sexual\". No comparable directamente con años anteriores a 2022. NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+        },
+        {
+          "category": "resto_libertad_sexual_balance",
+          "legal_article": "various",
+          "count": 16296,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, corrupcion de menores, pornografia, etc. sin desglosar). No equivale a 'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin penetracion', que aqui si esta incluida). NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_BalanceCriminalidad_2025_Q4.pdf",
+      "source_table": "NACIONAL (Balance de Criminalidad)",
+      "source_page": 4,
+      "verified": false,
+      "notes": "NACIONAL (Datos de PN, GC, P. Autonómicas y P. Locales) enero a diciembre (Q4)."
+    }
+  ]
+}

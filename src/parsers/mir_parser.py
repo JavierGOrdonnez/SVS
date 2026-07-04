@@ -948,12 +948,20 @@ class AnuarioParser:
     """
     Sexual crimes in the MIR "Anuario Estadístico" do NOT live in a dedicated
     chapter with per-category tables (that was the original, untested
-    assumption -- see B9). They live as one row ("III. Libertad sexual") plus
-    4-5 numbered sub-rows inside TABLA 3-1-5 ("Hechos conocidos por tipología
-    penal") and TABLA 3-1-6 ("Hechos esclarecidos..."), each a single dense
-    page covering ALL crime types with a 5-year "evolución" column window, in
-    the "Seguridad Ciudadana" chapter. The table has no ruling lines --
+    assumption -- see B9). They live as one row ("III. Libertad sexual", or
+    "III. Contra la libertad sexual" pre-2020) plus 4-5 numbered sub-rows
+    inside the "Hechos conocidos por tipología penal" and "Hechos
+    esclarecidos..." tables, each a single dense page covering ALL crime
+    types with a 5-year "evolución"/"serie histórica" column window, in the
+    "Seguridad Ciudadana" chapter. The table has no ruling lines --
     pdfplumber's extract_tables() finds nothing; text must be parsed directly.
+
+    The table's printed number is NOT stable across editions (2016: TABLA
+    3-1-1; 2017-2019: TABLA 3-1-2; 2020-2023: TABLA 3-1-5) and in at least
+    one edition (2019) the string "TABLA 3-1-5" is reused for a completely
+    different, unrelated table -- so the table is located by content (its
+    "HECHOS CONOCIDOS"/"HECHOS ESCLARECIDOS" title plus the presence of the
+    "III. libertad sexual" row) rather than by its printed number.
 
     Sub-category count varies by publication date (LO 10/2022 reform):
     - Pre-reform editions (e.g. the 2021 Anuario): 4 sub-rows. "Agresión
@@ -970,10 +978,19 @@ class AnuarioParser:
       parsing error. See B9/§B6.
     """
 
-    TABLE5_RE = re.compile(r"TABLA\s*3-1-5\b", re.I)
-    TABLE6_RE = re.compile(r"TABLA\s*3-1-6\b", re.I)
-    YEAR_HEADER_RE = re.compile(r"Tipolog.a penal\s+((?:\d{4}\s*){2,6})", re.I)
-    TOTAL_ROW_RE = re.compile(r"^(iii\.|3\.)\s*libertad sexual\b")
+    # Table numbering is NOT stable across editions: 2016 uses TABLA 3-1-1,
+    # 2017-2019 use TABLA 3-1-2, 2020-2023 use TABLA 3-1-5 -- and the 2019
+    # edition's own "TABLA 3-1-5" is a *different*, unrelated table (regional
+    # breakdown). So the table is located by content (a "HECHOS
+    # CONOCIDOS"/"HECHOS ESCLARECIDOS" page that also contains the "III./3.
+    # (Contra la) libertad sexual" row) rather than by its printed number.
+    CONOCIDOS_RE = re.compile(r"HECHOS CONOCIDOS", re.I)
+    ESCLARECIDOS_RE = re.compile(r"HECHOS ESCLARECIDOS", re.I)
+    # "Tipología penal 2016 2017 ..." (2020+ editions) or
+    # "Enero-diciembre 2015 2016 ..." (pre-2020 editions).
+    YEAR_HEADER_RE = re.compile(r"(?:Tipolog.a penal|Enero-[Dd]iciembre)\s+((?:\d{4}\s*){2,6})", re.I)
+    # "III. Libertad sexual" (2020+) or "III. Contra la libertad sexual" (pre-2020).
+    TOTAL_ROW_RE = re.compile(r"^(iii\.|3\.)\s*(contra la )?libertad sexual\b")
     SECTION_END_RE = re.compile(r"^(iv\.|4\.)\s*relaciones familiares\b")
     NUM_RE = re.compile(r"\d{1,3}(?:\.\d{3})*(?:,\d+)?")
 
@@ -989,14 +1006,20 @@ class AnuarioParser:
         with pdfplumber.open(self.pdf_path) as pdf:
             for i, page in enumerate(pdf.pages):
                 text = page.extract_text() or ""
-                if page5 is None and self.TABLE5_RE.search(text):
+                # Only accept a "HECHOS CONOCIDOS/ESCLARECIDOS" page as the
+                # crime-typology table if it actually contains the "III.
+                # (Contra la) libertad sexual" row -- some editions have
+                # other tables with the same title phrase (e.g. an
+                # aggregated summary table) that lack the per-category rows.
+                has_row = any(self.TOTAL_ROW_RE.match(l.strip().lower()) for l in text.splitlines())
+                if page5 is None and self.CONOCIDOS_RE.search(text) and has_row:
                     page5, page5_no = text, i + 1
-                elif page6 is None and self.TABLE6_RE.search(text):
+                elif page6 is None and self.ESCLARECIDOS_RE.search(text) and has_row:
                     page6, page6_no = text, i + 1
                 if page5 is not None and page6 is not None:
                     break
         if page5 is None:
-            print(f"  ⚠ {self.year}: TABLA 3-1-5 (hechos conocidos) not found in {self.source}", file=sys.stderr)
+            print(f"  ⚠ {self.year}: crime-typology table (hechos conocidos) not found in {self.source}", file=sys.stderr)
             return []
         self._extract(page5, page6, page5_no, page6_no)
         self._validate()
@@ -1030,7 +1053,9 @@ class AnuarioParser:
             year=self.year, crime_category=category, legal_article=article,
             count=int(count) if count is not None else None,
             source_document=self.source,
-            source_table="TABLA 3-1-5 (Seguridad Ciudadana)",
+            # Table number varies by edition (3-1-1 in 2016, 3-1-2 in
+            # 2017-2019, 3-1-5 in 2020-2023); identified by content, not number.
+            source_table="Hechos conocidos por tipología penal (Seguridad Ciudadana)",
             source_page=page_no,
             confidence="high" if self.year >= 2012 else "medium",
             notes=note,
@@ -1039,13 +1064,13 @@ class AnuarioParser:
     def _extract(self, page5: str, page6: str | None, page5_no: int | None, page6_no: int | None):
         years5 = self._year_columns(page5)
         if self.year not in years5:
-            print(f"  ⚠ {self.year}: not in TABLA 3-1-5 column range {years5} of {self.source}", file=sys.stderr)
+            print(f"  ⚠ {self.year}: not in crime-typology table column range {years5} of {self.source}", file=sys.stderr)
             return
         idx, n = years5.index(self.year), len(years5)
 
         total_row = self._row_values(page5, lambda l: self.TOTAL_ROW_RE.match(l) is not None, n)
         if total_row is None:
-            print(f"  ⚠ {self.year}: 'III. Libertad sexual' row not found in TABLA 3-1-5", file=sys.stderr)
+            print(f"  ⚠ {self.year}: 'III. (Contra la) libertad sexual' row not found in crime-typology table", file=sys.stderr)
             return
         total = total_row[idx]
 
@@ -1068,7 +1093,7 @@ class AnuarioParser:
             count=int(total) if total is not None else None,
             clearance_rate=clearance,
             source_document=self.source,
-            source_table="TABLA 3-1-5/3-1-6 (Seguridad Ciudadana)",
+            source_table="Hechos conocidos/esclarecidos por tipología penal (Seguridad Ciudadana)",
             source_page=page5_no,
             confidence="high" if self.year >= 2012 else "medium",
             notes=territorial_note,
@@ -1080,7 +1105,10 @@ class AnuarioParser:
             section, lambda l: "agresi" in l and "sexual" in l and "penetraci" not in l, n)
         corrupcion = self._row_values(section, lambda l: "corrupci" in l and "menor" in l, n)
         pornografia = self._row_values(section, lambda l: "pornograf" in l and "menor" in l, n)
-        otras = self._row_values(section, lambda l: "otras infracciones" in l and "libertad" in l, n)
+        # "4. Otras infracciones contra la libertad/indemnidad sexual" (2020+)
+        # or "4. Otros contra la libertad/indemnidad sexual" (pre-2020).
+        otras = self._row_values(
+            section, lambda l: re.match(r"^\d\.\s*otr", l) and ("libertad" in l or "indemnidad" in l), n)
 
         merged_scheme = agresion_sin_penetracion is not None
 
@@ -1118,6 +1146,479 @@ class AnuarioParser:
             note = f"VALIDATION: sub-cat sum {sub_sum} vs headline {total}"
             total_rec.notes = (total_rec.notes + " " + note).strip()
             print(f"  ⚠ {self.year}: {note}", file=sys.stderr)
+
+
+# ──────────────────────────────────────────────────────────────
+# Balance de Criminalidad parser (T55, quarterly format)
+# ──────────────────────────────────────────────────────────────
+
+class BalanceParser:
+    """
+    MIR "Balance de Criminalidad" quarterly reports contain one national
+    aggregate table ("NACIONAL ... Acumulado enero a {mes}") among hundreds
+    of per-region/province pages -- its page location is NOT fixed (front
+    page in some editions, last page in others; verified to vary even
+    between quarters of the same year). We scan a front+back window of pages
+    for a line starting "NACIONAL" to find it robustly.
+
+    CRITICAL: these are CUMULATIVE year-to-date figures, not per-quarter
+    increments -- "Q2" already includes Q1's crimes, Q4 ("enero a
+    diciembre") IS the full calendar year. Summing four quarters' cumulative
+    values massively over-counts (~2.4-2.5x for the sexual-crimes total --
+    see B24). The correct annual total per year is the Q4 report's own
+    figure, not a sum.
+
+    Only 2 sexual-crime subcategories are broken out (row 5.1 "con
+    penetración" and row 5.2 "resto", a residual bucket combining
+    everything else) -- coarser than Anuario/Informe's 4-7 subcategories.
+    Row 5.2 is NOT directly comparable to Anuario's
+    "otras_libertad_indemnidad_sexual" (that key excludes the
+    sin-penetración "agresión sexual" category, which Balance's "resto"
+    bucket includes) -- kept under its own key to avoid a false equivalence.
+
+    Some editions carry an explicit "(tipificación previa a LO 10/22)"
+    footnote on row 5.1 (e.g. 2022 Q3): they report the PRE-reform
+    (narrower) definition even mid-way through the reform year. Each year's
+    Q4 edition (published after the full year, without that footnote)
+    already uses the merged post-reform definition -- same year >= 2022
+    convention used elsewhere in this file.
+
+    Header year columns are NOT fixed at 2 -- some editions (2022 Q3/Q4)
+    compare against a 3-year window (e.g. 2019/2021/2022, skipping the
+    pandemic-distorted 2020) instead of just prior-year/current-year. The
+    target column must be located by matching the inferred year against the
+    header's own year list, not by a fixed index. Row text can also contain
+    spurious digit-like tokens from footnote text (e.g. "LO 10/22"), so
+    count tokens are taken from the right-hand end of the line (immediately
+    before the comma-bearing Var.% columns), not the left.
+    """
+
+    NATIONAL_RE = re.compile(r"^NACIONAL\b")
+    TIPOLOGIA_RE = re.compile(r"^TIPOLOG", re.I)
+    YEAR_RE = re.compile(r"(20\d{2})")
+    NUM_RE = re.compile(r"-?\d{1,3}(?:\.\d{3})*(?:,\d+)?")
+    PREFIX_RE = re.compile(r"^\s*\d+(?:\.\d+)?\.?-?\s*")
+    TOTAL_ROW_RE = re.compile(r"^5\.-?\s*Delitos contra la libertad", re.I)
+    PEN_ROW_RE = re.compile(r"^5\.1\.-?\s*Agresi.n sexual con penetraci", re.I)
+    RESTO_ROW_RE = re.compile(r"^5\.2\.-?\s*Resto de delitos contra la libertad", re.I)
+    WINDOW = 6  # pages scanned from front and from back to locate NACIONAL
+
+    def __init__(self, pdf_path: Path, year: int, quarter: str):
+        self.pdf_path = pdf_path
+        self.year = year
+        self.quarter = quarter
+        self.source = pdf_path.name
+        self.records: list[MIRRecord] = []
+        self.period_label: str = ""
+
+    def parse(self) -> list[MIRRecord]:
+        with pdfplumber.open(self.pdf_path) as pdf:
+            page_no, text = self._find_national_page(pdf)
+        if text is None:
+            print(f"  ⚠ {self.year} {self.quarter}: NACIONAL table not found in {self.source}", file=sys.stderr)
+            return []
+        self._extract(text, page_no)
+        self._validate()
+        return self.records
+
+    def _find_national_page(self, pdf) -> tuple[int | None, str | None]:
+        n = len(pdf.pages)
+        candidates = sorted(set(range(0, min(self.WINDOW, n))) | set(range(max(0, n - self.WINDOW), n)))
+        for i in candidates:
+            text = pdf.pages[i].extract_text() or ""
+            for line in text.splitlines():
+                if self.NATIONAL_RE.match(line.strip()):
+                    return i + 1, text
+        return None, None
+
+    def _header_years(self, text: str) -> list[str]:
+        for line in text.splitlines():
+            if self.TIPOLOGIA_RE.match(line.strip()):
+                return self.YEAR_RE.findall(line)
+        return []
+
+    def _row_counts(self, text: str, label_re, n_year_cols: int) -> list[str] | None:
+        """Last n_year_cols count-like tokens (no comma -- Var.% columns
+        always carry a decimal comma) of the first line matching label_re."""
+        for line in text.splitlines():
+            s = line.strip()
+            if label_re.match(s):
+                rest = self.PREFIX_RE.sub("", s)
+                nums = self.NUM_RE.findall(rest)
+                count_tokens = [t for t in nums if "," not in t]
+                if len(count_tokens) < n_year_cols:
+                    return None
+                return count_tokens[-n_year_cols:]
+        return None
+
+    def _extract(self, text: str, page_no: int | None):
+        period_line = next((l for l in text.splitlines() if l.strip().startswith("NACIONAL")), "")
+        self.period_label = period_line.strip()
+        note_period = f"{self.period_label} ({self.quarter})."
+
+        years = self._header_years(text)
+        if str(self.year) not in years:
+            print(f"  ⚠ {self.year} {self.quarter}: year not found in header columns {years} of {self.source}", file=sys.stderr)
+            return
+        idx, n = years.index(str(self.year)), len(years)
+
+        total = self._row_counts(text, self.TOTAL_ROW_RE, n)
+        pen = self._row_counts(text, self.PEN_ROW_RE, n)
+        resto = self._row_counts(text, self.RESTO_ROW_RE, n)
+        if total is None:
+            print(f"  ⚠ {self.year} {self.quarter}: row 5 (total) not found", file=sys.stderr)
+            return
+
+        merged = self.year >= 2022
+
+        self.records.append(MIRRecord(
+            year=self.year, crime_category="total_sexual_crimes", legal_article="all",
+            count=int(parse_es_number(total[idx])),
+            source_document=self.source, source_table="NACIONAL (Balance de Criminalidad)",
+            source_page=page_no, notes=note_period,
+        ))
+        if pen is not None:
+            key, art, note = (
+                ("agresion_sexual_con_penetracion_post_lo10_2022", "Art.179 (LO 10/2022)", REFORM_NOTE)
+                if merged else ("agresion_sexual_con_penetracion", "Art.179", "")
+            )
+            self.records.append(MIRRecord(
+                year=self.year, crime_category=key, legal_article=art,
+                count=int(parse_es_number(pen[idx])),
+                source_document=self.source, source_table="NACIONAL (Balance de Criminalidad)",
+                source_page=page_no, notes=(note + " " + note_period).strip(),
+            ))
+        if resto is not None:
+            note = ("Bucket residual del Balance: agrupa TODOS los delitos contra la libertad sexual "
+                    "salvo 'agresion con penetracion' (incluye agresion/abuso sin penetracion, "
+                    "corrupcion de menores, pornografia, etc. sin desglosar). No equivale a "
+                    "'otras_libertad_indemnidad_sexual' del Anuario (esa clave excluye 'agresion sin "
+                    "penetracion', que aqui si esta incluida).")
+            self.records.append(MIRRecord(
+                year=self.year, crime_category="resto_libertad_sexual_balance", legal_article="various",
+                count=int(parse_es_number(resto[idx])),
+                source_document=self.source, source_table="NACIONAL (Balance de Criminalidad)",
+                source_page=page_no, notes=(note + " " + note_period).strip(),
+            ))
+
+    def _validate(self):
+        total_rec = next((r for r in self.records if r.crime_category == "total_sexual_crimes"), None)
+        pen_rec = next((r for r in self.records if r.crime_category.startswith("agresion_sexual_con_penetracion")), None)
+        resto_rec = next((r for r in self.records if r.crime_category == "resto_libertad_sexual_balance"), None)
+        if not (total_rec and pen_rec and resto_rec):
+            return
+        sub_sum = pen_rec.count + resto_rec.count
+        if abs(sub_sum - total_rec.count) > 1:
+            note = f"VALIDATION: 5.1+5.2={sub_sum} vs row-5 total={total_rec.count}"
+            total_rec.notes = (total_rec.notes + " " + note).strip()
+            print(f"  ⚠ {self.year} {self.quarter}: {note}", file=sys.stderr)
+
+
+# ──────────────────────────────────────────────────────────────
+# "Delitos de Odio" (hate crime) ámbito classification
+#
+# The ámbito ("scope"/ground) list is NOT stable across years -- both
+# renames (methodology breaks, not real trend changes) and genuine new
+# ámbitos being added over time. We map every observed label variant to one
+# stable internal key so category counts can be compared/summed across
+# years without silently conflating a rename with a real change.
+#   DISCAPACIDAD (2016) -> DIVERSIDAD FUNCIONAL (2017, explicit "nueva
+#     metodologia de computo" in the report itself; causes an artefactual
+#     -91.2% single-year drop, 262->23, that is NOT a real decline) ->
+#     PERSONA CON DISCAPACIDAD (2018-2020) -> DELITOS DE ODIO CONTRA
+#     PERSONAS CON DISCAPACIDAD (2021, 2023) -- all map to "discapacidad".
+#   ANTIGITANISMO: new ámbito, introduced in the 2019 report ("nuevo
+#     ambito", explicit in the report's own prose).
+#   DISCRIMINACION GENERACIONAL (ageism) and DISCRIMINACION POR RAZON DE
+#     ENFERMEDAD: both new in the 2018 report (absent in 2016/2017).
+# ──────────────────────────────────────────────────────────────
+
+ODIO_DISCAPACIDAD_NOTE = (
+    'Ambito historicamente inestable: "DISCAPACIDAD" (2016) fue renombrado '
+    '"DIVERSIDAD FUNCIONAL" en el informe de 2017 con una nueva metodologia '
+    "de computo explicitamente senalada en el propio informe (la caida de "
+    "262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); "
+    'paso a llamarse "PERSONA CON DISCAPACIDAD" desde 2018. Tratar '
+    "comparaciones que crucen 2016/2017/2018+ con cautela."
+)
+ODIO_ANTIGITANISMO_NOTE = "Nuevo ambito introducido en el informe de 2019 (no desglosado en anos anteriores)."
+
+
+def classify_odio_category(raw_label: str) -> str | None:
+    """Map a (possibly noisy) Spanish hate-crime ámbito label to a stable
+    internal key. Order matters: more specific checks (ANTIGITANISMO,
+    ORIENTAC.) must run before generic substring checks that could
+    otherwise misfire (e.g. DISCRIMINACION+SEXO+GENERO also appearing,
+    coincidentally, inside an ORIENTACION SEXUAL label)."""
+    norm = strip_accents(raw_label).upper()
+    letters_only = re.sub(r"[^A-Z]", "", norm)
+
+    if "ANTIGITANISMO" in norm:
+        return "antigitanismo"
+    if "ANTISEMITISMO" in norm:
+        return "antisemitismo"
+    if "APOROFOBIA" in norm:
+        return "aporofobia"
+    if "CREENCIAS" in norm and ("RELIGIOS" in norm or "PRACTICAS" in norm):
+        return "creencias_practicas_religiosas"
+    if "DIVERSIDAD" in norm and "FUNCIONAL" in norm:
+        return "discapacidad"
+    if "DISCAPACIDAD" in norm:
+        return "discapacidad"
+    if "ORIENTAC" in norm and ("SEXUAL" in norm or "IDENTIDAD" in norm or "IDENT" in norm):
+        return "orientacion_identidad_sexual_genero"
+    if "RACISMO" in norm or "XENOFOB" in norm:
+        return "racismo_xenofobia"
+    if "IDEOLOG" in norm:
+        return "ideologia"
+    if "DISCRIMINACION" in norm and "GENERAC" in norm:
+        return "discriminacion_generacional"
+    if "DISCRIMINACION" in norm and "ENFERM" in norm:
+        return "discriminacion_enfermedad"
+    if "DISCRIMINACION" in norm and "SEXO" in norm and "GENERO" in norm:
+        return "discriminacion_sexo_genero"
+    if "INFRAC" in norm and ("ADM" in norm or "RESTO" in norm):
+        return "infracciones_administrativas"
+    if "TOTAL" in norm and "DELITOS" in norm and "INCIDENTES" in norm:
+        return "total_con_incidentes"
+    if "TOTAL" in norm and "DELITOS" in norm:
+        return "total_delitos"
+    if letters_only == "TOTAL":
+        return "total_delitos"
+    return None
+
+
+class OdioParser:
+    """
+    MIR "Informe sobre la evolucion de los delitos de odio en España"
+    (annual, 2016-2021 + 2023; no PDF published/available for 2022 -- see
+    below). Locate the target page by CONTENT ("HECHOS CONOCIDOS
+    REGISTRADOS" + "RACISMO" both present), not a fixed page number: the
+    table's page varies by year (2016:p14, 2017:p12, 2018:p11, 2019:p10,
+    2020:p17, 2021:p14, 2023:p12).
+
+    This table is rendered as an infographic/chart, not a ruled table:
+    both `pdftotext -layout` (scrambles reading order) and pdfplumber's
+    `extract_tables()` (relies on ruling lines, none exist here) fail on
+    it. The only reliable extraction is `page.extract_words()` (word
+    bounding boxes) reconstructed into rows by Y-POSITION CLUSTERING, not
+    exact-`top` grouping: the same logical row's label and its numeric
+    columns are sometimes rendered as two word-clusters only ~1-2pt apart
+    (and, in some rows e.g. 2023's "TOTAL DELITOS", the numbers-cluster can
+    appear ABOVE the label-cluster in raw top order), while distinct
+    ámbito rows are always >=10pt apart in every year inspected -- so a
+    small top-proximity tolerance (ROW_TOL, 3pt) safely re-joins a split
+    row without ever merging two different ámbitos.
+
+    Numeric columns are read LEFT-TO-RIGHT (opposite of BalanceParser's
+    right-to-left `_row_counts`, which dodges footnote pollution at the
+    END of a line): the first N purely-integer tokens (N = number of year
+    columns, detected per-block from the header row's own "20XX" tokens,
+    NOT hardcoded -- it is 2 for 2016-2020 and 3 for 2021/2023, which also
+    add a third, older, comparison year) in x-order are the real values;
+    any stray split-off digit (e.g. "0" split from "0,00%", or a bare
+    footnote-marker digit like the "1" trailing 2016's TOTAL row) always
+    renders AFTER the N real columns, so it's naturally dropped once N
+    values are collected. Total counts are inconsistently formatted with
+    or without a thousands-separator dot even within the same table (e.g.
+    2019's TOTAL DELITOS row: "1476" then "1.598" a few tokens later) --
+    INT_TOKEN_RE accepts both.
+
+    Table shape has evolved: 2016-2018 have ONE "TOTAL" row equal to the
+    ámbito sum. 2019+ introduces a 3-tier total: TOTAL DELITOS (= sum of
+    ~11 ámbitos) + INFRAC. ADM. Y RESTO DE INCIDENTES (administrative
+    infractions/incidents, NOT counted as an ámbito) = TOTAL DELITOS E
+    INCIDENTES DE ODIO (the report's own headline figure, "total_hate_
+    crimes" here). Both relationships verified EXACT (not approximate) for
+    every year checked.
+
+    KNOWN retroactive-restatement gotcha (parallel to, but distinct from,
+    the Anuario's B9 pattern): a later report's own backward-looking
+    comparison column for a prior year can disagree with that prior year's
+    OWN dedicated report (e.g. the 2018 report's own 2018 column says
+    RACISMO/XENOFOBIA=531, ANTISEMITISMO=9; the 2019 report's "2018"
+    comparison column says 426 and 8 respectively). We therefore ALWAYS
+    parse each year from its own dedicated report, never from a later
+    report's prior-year comparison column.
+
+    2022 GAP: no dedicated PDF for 2022 was published/is available, so no
+    2022 MIRReport is emitted. The 2023 report's own table happens to
+    retroactively include a full 2022 column (TOTAL DELITOS=1796, TOTAL
+    DELITOS E INCIDENTES=1869) purely as its own prior-year comparison --
+    this is NOT synthesized into a 2022 record here (would conflate a
+    primary-sourced year with a secondary-sourced one); it is documented
+    as a footnote only (see data/sources/mir_delitos_odio.md).
+
+    Zero-record guard (B25-class, mirrors run_balance_batch): if the table
+    can't be located or extraction yields no ámbito rows, `parse()`
+    returns an empty list rather than emitting an empty/wrong MIRReport;
+    the caller (`run_odio_batch`) skips that year and logs it.
+    """
+
+    LOCATE_KEYWORDS = ["HECHOS CONOCIDOS REGISTRADOS", "RACISMO"]
+    ROW_TOL = 3  # pt; top-position clustering tolerance (see docstring)
+    INT_TOKEN_RE = re.compile(r"^-?\d+$|^-?\d{1,3}(?:\.\d{3})+$")
+    YEAR_TOKEN_RE = re.compile(r"^20\d{2}$")
+    SOURCE_TABLE = "Hechos conocidos registrados (delitos de odio)"
+
+    def __init__(self, pdf_path: Path, year: int):
+        self.pdf_path = pdf_path
+        self.year = year
+        self.source = pdf_path.name
+        self.records: list[MIRRecord] = []
+
+    def parse(self) -> list[MIRRecord]:
+        with pdfplumber.open(self.pdf_path) as pdf:
+            page_no, page = self._locate_page(pdf)
+            if page is None:
+                print(f"  ⚠ {self.year}: hate-crime typology table not found in {self.source}", file=sys.stderr)
+                return []
+            rows = self._cluster_rows(page.extract_words())
+        known_idx = self._find_marker(rows, {"HECHOS", "CONOCIDOS"}, 0)
+        if known_idx is None:
+            print(f"  ⚠ {self.year}: 'Hechos conocidos' section not found on p.{page_no} of {self.source}", file=sys.stderr)
+            return []
+        cleared_idx = self._find_marker(rows, {"HECHOS", "ESCLARECIDOS"}, known_idx + 1)
+        known = self._extract_block(rows, known_idx)
+        cleared = self._extract_block(rows, cleared_idx) if cleared_idx is not None else {}
+        self._build_records(known, cleared, page_no)
+        self._validate()
+        return self.records
+
+    def _locate_page(self, pdf):
+        for i, page in enumerate(pdf.pages):
+            text = strip_accents(page.extract_text() or "").upper()
+            if all(kw in text for kw in self.LOCATE_KEYWORDS):
+                return i + 1, page
+        return None, None
+
+    @classmethod
+    def _cluster_rows(cls, words) -> list[list[dict]]:
+        """Group words into logical rows by Y-proximity (see docstring),
+        each row sorted left-to-right by x0."""
+        ws = sorted(words, key=lambda w: w["top"])
+        rows, cur, prev_top = [], [], None
+        for w in ws:
+            if cur and w["top"] - prev_top > cls.ROW_TOL:
+                rows.append(cur)
+                cur = []
+            cur.append(w)
+            prev_top = w["top"]
+        if cur:
+            rows.append(cur)
+        return [sorted(r, key=lambda w: w["x0"]) for r in rows]
+
+    @staticmethod
+    def _find_marker(rows, marker_words: set[str], start: int) -> int | None:
+        for i in range(start, len(rows)):
+            text = strip_accents(" ".join(w["text"] for w in rows[i])).upper()
+            if all(mw in text for mw in marker_words):
+                return i
+        return None
+
+    def _detect_n_cols(self, rows, start_idx: int) -> int:
+        best = 0
+        for row in rows[start_idx:start_idx + 6]:
+            n = sum(1 for w in row if self.YEAR_TOKEN_RE.match(w["text"]))
+            best = max(best, n)
+        return best or 2
+
+    def _extract_block(self, rows, start_idx: int) -> dict[str, list[float]]:
+        n_cols = self._detect_n_cols(rows, start_idx)
+        out: dict[str, list[float]] = {}
+        hit_total = False
+        for row in rows[start_idx + 1:start_idx + 40]:
+            label = " ".join(w["text"] for w in row if not self.INT_TOKEN_RE.match(w["text"]) and "%" not in w["text"])
+            key = classify_odio_category(label)
+            if key is None:
+                if hit_total:
+                    break
+                continue
+            count_tokens = [w["text"] for w in row if self.INT_TOKEN_RE.match(w["text"])]
+            if len(count_tokens) < n_cols:
+                continue
+            out[key] = [parse_es_number(t) for t in count_tokens[:n_cols]]
+            if key in ("total_delitos", "total_con_incidentes"):
+                hit_total = True
+        return out
+
+    def _category_note(self, key: str) -> str:
+        if key == "discapacidad" and self.year >= 2017:
+            return ODIO_DISCAPACIDAD_NOTE
+        if key == "antigitanismo" and self.year == 2019:
+            return ODIO_ANTIGITANISMO_NOTE
+        return ""
+
+    def _build_records(self, known: dict, cleared: dict, page_no: int | None):
+        if not known:
+            return
+        total_con_incidentes = known.get("total_con_incidentes")
+        total_delitos = known.get("total_delitos")
+        headline = total_con_incidentes if total_con_incidentes is not None else total_delitos
+        if headline is None:
+            return
+        headline_count = int(round(headline[-1]))
+
+        cleared_total = None
+        if cleared:
+            c = cleared.get("total_con_incidentes")
+            if c is None:
+                c = cleared.get("total_delitos")
+            if c is not None:
+                cleared_total = c[-1]
+        clearance_rate = round(cleared_total / headline_count * 100, 1) if cleared_total and headline_count else None
+
+        self.records.append(MIRRecord(
+            year=self.year, crime_category="total_hate_crimes", legal_article="Art.22.4 CP (agravante)",
+            count=headline_count, clearance_rate=clearance_rate,
+            source_document=self.source, source_table=self.SOURCE_TABLE, source_page=page_no,
+        ))
+        if total_delitos is not None:
+            note = ("Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+                    if total_con_incidentes is not None else "")
+            self.records.append(MIRRecord(
+                year=self.year, crime_category="total_delitos", legal_article="Art.22.4 CP (agravante)",
+                count=int(round(total_delitos[-1])),
+                source_document=self.source, source_table=self.SOURCE_TABLE, source_page=page_no, notes=note,
+            ))
+        infrac = known.get("infracciones_administrativas")
+        if infrac is not None:
+            note = "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+            self.records.append(MIRRecord(
+                year=self.year, crime_category="infracciones_administrativas", legal_article="n/a",
+                count=int(round(infrac[-1])),
+                source_document=self.source, source_table=self.SOURCE_TABLE, source_page=page_no, notes=note,
+            ))
+        for key, values in known.items():
+            if key in ("total_delitos", "total_con_incidentes", "infracciones_administrativas"):
+                continue
+            self.records.append(MIRRecord(
+                year=self.year, crime_category=key, legal_article="Art.22.4 CP (agravante)",
+                count=int(round(values[-1])),
+                source_document=self.source, source_table=self.SOURCE_TABLE, source_page=page_no,
+                notes=self._category_note(key),
+            ))
+
+    def _validate(self):
+        total_rec = next((r for r in self.records if r.crime_category == "total_hate_crimes"), None)
+        delitos_rec = next((r for r in self.records if r.crime_category == "total_delitos"), None)
+        infrac_rec = next((r for r in self.records if r.crime_category == "infracciones_administrativas"), None)
+        ambito_recs = [
+            r for r in self.records
+            if r.crime_category not in ("total_hate_crimes", "total_delitos", "infracciones_administrativas")
+        ]
+        if delitos_rec and delitos_rec.count is not None:
+            sub_sum = sum(r.count for r in ambito_recs if r.count is not None)
+            if sub_sum and abs(sub_sum - delitos_rec.count) > 1:
+                note = f"VALIDATION: sum(ambitos)={sub_sum} vs TOTAL DELITOS={delitos_rec.count}"
+                delitos_rec.notes = (delitos_rec.notes + " " + note).strip()
+                print(f"  ⚠ {self.year}: {note}", file=sys.stderr)
+        if total_rec and delitos_rec and total_rec.count is not None and delitos_rec.count is not None:
+            infrac = infrac_rec.count if infrac_rec and infrac_rec.count is not None else 0
+            if abs(delitos_rec.count + infrac - total_rec.count) > 1:
+                note = f"VALIDATION: TOTAL DELITOS+INFRAC={delitos_rec.count + infrac} vs headline={total_rec.count}"
+                total_rec.notes = (total_rec.notes + " " + note).strip()
+                print(f"  ⚠ {self.year}: {note}", file=sys.stderr)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -1181,8 +1682,8 @@ class MIRDataset(BaseModel):
     reports: list[MIRReport]
 
 
-def records_to_report(records: list[MIRRecord], year: int, source_document: str) -> MIRReport:
-    total_rec = next((r for r in records if r.crime_category == "total_sexual_crimes"), None)
+def records_to_report(records: list[MIRRecord], year: int, source_document: str, total_key: str = "total_sexual_crimes") -> MIRReport:
+    total_rec = next((r for r in records if r.crime_category == total_key), None)
     categories = [
         CategorySexBreakdown(
             category=r.crime_category,
@@ -1192,7 +1693,7 @@ def records_to_report(records: list[MIRRecord], year: int, source_document: str)
             perpetrators=SexCounts(female=r.perp_female, male=r.perp_male),
             notes=r.notes,
         )
-        for r in records if r.crime_category != "total_sexual_crimes"
+        for r in records if r.crime_category != total_key
     ]
     nationality = NationalitySplit(
         victims=NationalityBreakdown(
@@ -1236,6 +1737,11 @@ def infer_year(pdf_path: Path) -> int | None:
     return int(m.group(1)) if m else None
 
 
+def infer_quarter(pdf_path: Path) -> str | None:
+    m = re.search(r"Q([1-4])", pdf_path.stem)
+    return f"Q{m.group(1)}" if m else None
+
+
 def run_informe(pdf_path: Path, year: int) -> list[MIRRecord]:
     print(f"  Parsing Informe {year}: {pdf_path.name}")
     parser = InformeParser(pdf_path, year)
@@ -1245,6 +1751,12 @@ def run_informe(pdf_path: Path, year: int) -> list[MIRRecord]:
 def run_anuario(pdf_path: Path, year: int) -> list[MIRRecord]:
     print(f"  Parsing Anuario {year}: {pdf_path.name}")
     parser = AnuarioParser(pdf_path, year)
+    return parser.parse()
+
+
+def run_odio(pdf_path: Path, year: int) -> list[MIRRecord]:
+    print(f"  Parsing Odio {year}: {pdf_path.name}")
+    parser = OdioParser(pdf_path, year)
     return parser.parse()
 
 
@@ -1282,14 +1794,146 @@ def run_batch(pdf_year_pairs: list[tuple[Path, int]], parse_fn, out_dir: Path, f
     return out
 
 
+def run_balance_batch(pdf_paths: list[Path], out_dir: Path) -> Path:
+    """Balance de Criminalidad needs its own batch function, not `run_batch`:
+    each year has 4 PDFs (one per quarter) that all infer to the SAME year,
+    which would trip `run_batch`'s V22 year-collision guard. Only the Q4
+    ("enero a diciembre") report's cumulative figures are used per year (see
+    BalanceParser docstring, B24) -- Q1-Q3 are parsed too, purely to log the
+    cumulative progression and the naive-sum overcount as evidence, not to
+    contribute to the output dataset."""
+    by_year: dict[int, dict[str, Path]] = {}
+    for pdf in pdf_paths:
+        year = infer_year(pdf)
+        quarter = infer_quarter(pdf)
+        if not year or not quarter:
+            print(f"  SKIP {pdf.name} (cannot infer year/quarter)")
+            continue
+        by_year.setdefault(year, {})[quarter] = pdf
+
+    reports = []
+    for year in sorted(by_year):
+        quarters = by_year[year]
+        cumulative = {}
+        for q in ("Q1", "Q2", "Q3", "Q4"):
+            pdf = quarters.get(q)
+            if pdf is None:
+                continue
+            print(f"  Parsing Balance {year} {q}: {pdf.name}")
+            records = BalanceParser(pdf, year, q).parse()
+            total_rec = next((r for r in records if r.crime_category == "total_sexual_crimes"), None)
+            cumulative[q] = total_rec.count if total_rec else None
+            if q == "Q4":
+                q4_records = records
+        if cumulative:
+            naive_sum = sum(v for v in cumulative.values() if v is not None)
+            print(f"  {year} cumulative by quarter: {cumulative}; naive sum={naive_sum} "
+                  f"(overcounts vs Q4-alone -- see B24)")
+        if "Q4" not in quarters:
+            print(f"  SKIP {year}: no Q4 (enero-diciembre) report, cannot derive annual figure")
+            continue
+        if not q4_records:
+            print(f"  SKIP {year}: Q4 report found but table extraction failed (no records) -- "
+                  f"likely a pre-2019 layout not yet handled by BalanceParser")
+            continue
+        reports.append(records_to_report(q4_records, year, quarters["Q4"].name))
+
+    years = sorted(r.year for r in reports)
+    stem = f"{years[0]}" if years[0] == years[-1] else f"{years[0]}-{years[-1]}"
+    out = out_dir / f"sexual_crimes_mir_balance_{stem}.json"
+    write_dataset(MIRDataset(reports=reports), out)
+    return out
+
+
+def _year_range_stem(years: list[int]) -> str:
+    """Build a filename stem from a sorted year list that keeps a gap
+    visible (e.g. [2016..2021, 2023] -> "2016-2021_2023") instead of a
+    plain first-last range, which would silently imply a continuous series
+    when a year (e.g. Odio's missing 2022) is actually missing."""
+    blocks = []
+    start = prev = years[0]
+    for y in years[1:]:
+        if y == prev + 1:
+            prev = y
+            continue
+        blocks.append((start, prev))
+        start = prev = y
+    blocks.append((start, prev))
+    parts = [f"{a}" if a == b else f"{a}-{b}" for a, b in blocks]
+    return "_".join(parts)
+
+
+def run_odio_batch(pdf_paths: list[Path], out_dir: Path) -> Path:
+    """Delitos de Odio needs its own batch function, not `run_batch`: its
+    headline total lives under a "total_hate_crimes" key (not
+    "total_sexual_crimes" -- see `records_to_report`'s `total_key` param),
+    the output must be filed under a "hate_crimes_mir" prefix (this is an
+    independently-sourced series, not sexual-crime data -- same reasoning
+    as Anuario's separate filename_tag per B6/V13), and 2022 has no
+    dedicated PDF (a genuine gap, not a parser bug -- see OdioParser
+    docstring), so the year list is not guaranteed contiguous."""
+    pairs = []
+    for pdf in sorted(pdf_paths):
+        year = infer_year(pdf)
+        if not year:
+            print(f"  SKIP {pdf.name} (cannot infer year)")
+            continue
+        pairs.append((pdf, year))
+    if not pairs:
+        sys.exit("run_odio_batch: no PDFs with inferable years found")
+
+    by_year: dict[int, list[str]] = {}
+    for pdf, year in pairs:
+        by_year.setdefault(year, []).append(pdf.name)
+    collisions = {y: names for y, names in by_year.items() if len(names) > 1}
+    if collisions:
+        detail = "; ".join(f"{y}: {names}" for y, names in sorted(collisions.items()))
+        raise ValueError(f"run_odio_batch: multiple PDFs infer to the same year (V22) -- {detail}.")
+
+    reports = []
+    for pdf, year in pairs:
+        records = run_odio(pdf, year)
+        if not records:
+            print(f"  SKIP {year}: hate-crime typology table not found/extracted (no records)")
+            continue
+        reports.append(records_to_report(records, year, pdf.name, total_key="total_hate_crimes"))
+
+    if not reports:
+        sys.exit("run_odio_batch: no reports produced")
+
+    years = sorted(r.year for r in reports)
+    stem = _year_range_stem(years)
+    out = out_dir / f"hate_crimes_mir_{stem}.json"
+    write_dataset(MIRDataset(reports=reports), out)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--mode", choices=["informe", "anuario"], required=True)
+    ap.add_argument("--mode", choices=["informe", "anuario", "balance", "odio"], required=True)
     ap.add_argument("--pdf-dir", type=Path, help="Directory of PDFs")
     ap.add_argument("--pdf", type=Path, help="Single PDF file")
     ap.add_argument("--year", type=int, help="Override year (use with --pdf)")
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     args = ap.parse_args()
+
+    if args.mode == "balance":
+        if not args.pdf_dir:
+            ap.error("--mode balance requires --pdf-dir (needs all 4 quarters per year)")
+        pdfs = sorted(args.pdf_dir.glob("*.pdf"))
+        if not pdfs:
+            sys.exit(f"No PDFs found in {args.pdf_dir}")
+        run_balance_batch(pdfs, args.out_dir)
+        return
+
+    if args.mode == "odio":
+        if not args.pdf_dir:
+            ap.error("--mode odio requires --pdf-dir")
+        pdfs = sorted(args.pdf_dir.glob("MIR_InformeDelitosOdio_*.pdf"))
+        if not pdfs:
+            sys.exit(f"No MIR_InformeDelitosOdio_*.pdf found in {args.pdf_dir}")
+        run_odio_batch(pdfs, args.out_dir)
+        return
 
     parse_fn = run_informe if args.mode == "informe" else run_anuario
     filename_tag = "anuario" if args.mode == "anuario" else ""
