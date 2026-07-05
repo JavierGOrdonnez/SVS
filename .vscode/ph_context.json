@@ -1,0 +1,145 @@
+{
+  "projects": [
+    {
+      "ph_project": "SVS - Sexual Violence in Spain",
+      "milestones": [
+        {
+          "number": 1,
+          "name": "Milestone 1 - Data Acquisition, Extraction & Parsing",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "1.1",  "name": "T6 - INE population by 5-yr age group 2000-2025", "spec_ref": "T6",  "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.2",  "name": "T7 - Age-specific incidence rates per 100k",       "spec_ref": "T7",  "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.3",  "name": "T49 - INE ECM all-cause mortality 2000-2024",      "spec_ref": "T49", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.4",  "name": "T11 - Populate migration_spain.csv",               "spec_ref": "T11", "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "1.5",  "name": "T17 - Dashboard tabbed interface refactor",        "spec_ref": "T17", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.6",  "name": "T18 - Download reference synthesis documents",     "spec_ref": "T18", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.7",  "name": "T19 - Feminicide PDF parser",                      "spec_ref": "T19", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.8",  "name": "T20 - Structure feminicide dataset (nested JSON)", "spec_ref": "T20", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.9",  "name": "T21 - MIR sexual-violence parser",                 "spec_ref": "T21", "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "1.10", "name": "T22 - Structure sexual-violence dataset",          "spec_ref": "T22", "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "1.11", "name": "T23 - Rich visualizations for feminicides tab",    "spec_ref": "T23", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.12", "name": "T25 - Restructure markdown docs",                  "spec_ref": "T25", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.13", "name": "T26 - Perpetrator-nationality parser (sexual)",    "spec_ref": "T26", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.14", "name": "T27 - Perpetrator-nationality data (general crime)","spec_ref": "T27","ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "1.15", "name": "T36 - Dashboard methodology/composition DAG",      "spec_ref": "T36", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.16", "name": "T50 - MIR x migration flux correlation",          "spec_ref": "T50", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.17", "name": "T51 - Rape trend & nationality analysis",          "spec_ref": "T51", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.18", "name": "T52 - Aggression profile analysis",                "spec_ref": "T52", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.19", "name": "T53 - Consolidate src/parsers/ shared logic",      "spec_ref": "T53", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.20", "name": "T54 - Consolidate analysis-script patterns",       "spec_ref": "T54", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.21", "name": "T55 - MIR Balance de Criminalidad parser",         "spec_ref": "T55", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.22", "name": "T56 - Pull Eurostat EU-GBV survey API",            "spec_ref": "T56", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.23", "name": "T57 - Extract EU-MIDIS II Spain country-sheet PDF","spec_ref": "T57", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.24", "name": "T58 - Pull EIGE administrative IPV/DV indicators", "spec_ref": "T58", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.25", "name": "T59 - MIR Delitos de Odio (hate crime) parser",    "spec_ref": "T59", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "1.26", "name": "T-mig-tab - Migration dashboard tab rebuild",      "spec_ref": "T-mig-tab", "ph_status": "completed", "spec_status": "done" },
+            { "ph_task": "1.27", "name": "N1 - Broaden INE table coverage",                  "spec_ref": "N1", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.28", "name": "N2 - Acquire CIS concern-ranking series",          "spec_ref": "N2", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.29", "name": "N3 - Acquire migrant outflow / emigration data",   "spec_ref": "N3", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.30", "name": "N4 - Source/estimate undocumented-migrant stock",  "spec_ref": "N4", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.31", "name": "N5 - Acquire political + mainstream-TV discourse dataset", "spec_ref": "N5", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.32", "name": "N6 - Acquire MENA & asylum-seeker source data",    "spec_ref": "N6", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "1.33", "name": "N19 - Acquire asylum-application statistics (Spain + EU)", "spec_ref": "N19", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 2,
+          "name": "Milestone 2 - Core Reported Violence Series",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "2.1", "name": "T1 - Populate violence_spain.csv: femicide",                 "spec_ref": "T1",  "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "2.2", "name": "T2 - Populate violence_spain.csv: all-cause homicide by sex", "spec_ref": "T2",  "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "2.3", "name": "T3 - Populate violence_spain.csv: sexual crimes MIR",         "spec_ref": "T3",  "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "2.4", "name": "T4 - Populate violence_spain.csv: non-sexual DV denuncias",   "spec_ref": "T4",  "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "2.5", "name": "T14 - Re-verify confidence=unverified rows",                  "spec_ref": "T14", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "2.6", "name": "N7 - Policy-change annotation layer",                         "spec_ref": "N7",  "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 3,
+          "name": "Milestone 3 - Dark-Figure & Reporting-Rate Correction",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "3.1", "name": "T5 - Macroencuesta victimization rows",        "spec_ref": "T5",  "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "3.2", "name": "T9 - Dark-figure estimation",                   "spec_ref": "T9",  "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "3.3", "name": "T34 - GBV non-sexual justice funnel",           "spec_ref": "T34", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "3.4", "name": "T35 - Literature-evidence synthesis",           "spec_ref": "T35", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "3.5", "name": "N8 - Reporting-rate time series & drift model",  "spec_ref": "N8",  "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "3.6", "name": "N9 - Transversal correction layer",             "spec_ref": "N9",  "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 4,
+          "name": "Milestone 4 - Victim Risk, Peligrosity & Victim-Aggressor Structure",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "4.1",  "name": "T8 - Competing-risks life table",                    "spec_ref": "T8",  "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.2",  "name": "T15 - Write reports/methodology.md",                  "spec_ref": "T15", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.3",  "name": "T16 - Write reports/results.md estimates",            "spec_ref": "T16", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.4",  "name": "T24 - Integrate INE population -> per-origin rates",  "spec_ref": "T24", "ph_status": "in-progress", "spec_status": "todo" },
+            { "ph_task": "4.5",  "name": "T28 - Compute absolute migrant crime rates",          "spec_ref": "T28", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.6",  "name": "T29 - Migrant-crime absolute framing dashboard/report","spec_ref": "T29","ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.7",  "name": "T30 - Extract distinct-perpetrator counts (sexual)",  "spec_ref": "T30", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.8",  "name": "T31 - Compute peligrosity bracket",                   "spec_ref": "T31", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.9",  "name": "T32 - Extract victim-aggressor relationship structure","spec_ref": "T32","ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "4.10", "name": "T33 - Apply relationship adjustment",                 "spec_ref": "T33", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 5,
+          "name": "Milestone 5 - Temporal & Covariate Analysis (National vs Migrant Evolution)",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "5.1",  "name": "T10 - Collect covariate series (far-right vote share)", "spec_ref": "T10", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.2",  "name": "T12 - Covariate regression",                           "spec_ref": "T12", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.3",  "name": "T13 - Scenario projections",                           "spec_ref": "T13", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.4",  "name": "T41 - Cohort-tenure hypothesis tests",                 "spec_ref": "T41", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "5.5",  "name": "T42 - Sexual-crime category & nationality trend",       "spec_ref": "T42", "ph_status": "completed",   "spec_status": "done" },
+            { "ph_task": "5.6",  "name": "T43 - Eurostat joint-cross: South America",            "spec_ref": "T43", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.7",  "name": "T44 - Eurostat joint-cross: EU-Europe",                "spec_ref": "T44", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.8",  "name": "T45 - Run Test A for new groups",                      "spec_ref": "T45", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.9",  "name": "T46 - Run Test B for new groups",                      "spec_ref": "T46", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.10", "name": "T47 - Run Test D for new groups",                      "spec_ref": "T47", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.11", "name": "T48 - Run Test E for new groups",                      "spec_ref": "T48", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.12", "name": "N10 - Net-stock denominators (inflow minus outflow)",  "spec_ref": "N10", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "5.13", "name": "N11 - Undocumented-migration sensitivity analysis",    "spec_ref": "N11", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 6,
+          "name": "Milestone 6 - Hate Speech, Discourse & Public Perception",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "6.1", "name": "T37 - Collect hate-speech watchdog + primary datasets", "spec_ref": "T37", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "6.2", "name": "T38 - Map correlation series",                      "spec_ref": "T38", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "6.3", "name": "T39 - Media presence of hate-speech/xenophobia",   "spec_ref": "T39", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "6.4", "name": "T40 - Write reports/hate_speech_analysis.md",       "spec_ref": "T40", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "6.5", "name": "N12 - Longitudinal discourse-salience analysis",   "spec_ref": "N12", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "6.6", "name": "N13 - Perception vs phenomenology correlation",     "spec_ref": "N13", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 7,
+          "name": "Milestone 7 - EU-Comparative GBV",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "7.1", "name": "N14 - Spain-vs-EU comparison analysis",           "spec_ref": "N14", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "7.2", "name": "N15 - EU-comparative dashboard section + write-up","spec_ref": "N15", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        },
+        {
+          "number": 8,
+          "name": "Milestone 8 - MENAs & Asylum Seekers: Fiscal Cost & Crime Attribution",
+          "spec_path": "SPEC.md",
+          "tasks": [
+            { "ph_task": "8.1", "name": "N16 - MENA/asylum fiscal-cost estimate",         "spec_ref": "N16", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "8.2", "name": "N17 - MENA/asylum crime attribution + base rates","spec_ref": "N17", "ph_status": "not-started", "spec_status": "todo" },
+            { "ph_task": "8.3", "name": "N18 - Asylum acceptance-rate analysis (Spain vs Italy/Germany)", "spec_ref": "N18", "ph_status": "not-started", "spec_status": "todo" }
+          ]
+        }
+      ]
+    }
+  ],
+  "last_synced": "2026-07-05T00:00:00Z"
+}
