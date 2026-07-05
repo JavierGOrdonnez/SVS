@@ -56,7 +56,8 @@ def load_chapter(path):
     return out
 
 
-def main():
+def build():
+    """Return the mortality-tab data blob (also reused by build_dashboard.py)."""
     rates = load_rates_key("data/processed/mortality_rates_key.csv")
     chap = load_chapter("data/processed/mortality_by_chapter.csv")
     all_age = []
@@ -167,7 +168,7 @@ def main():
         "deaths": [d for _, d in top_causes],
     }
 
-    blob = {
+    return {
         "all_cause_by_sex": s1,
         "female_chapter_over_time": s2,
         "female_age_profile_latest": s3,
@@ -176,7 +177,10 @@ def main():
         "female_young_top_causes": s6,
     }
 
-    # Emit as a JS const block (compact; the dashboard HTML inlines this).
+
+def main():
+    # Legacy CLI: emit as a JS const block on stdout.
+    blob = build()
     js = "const MORTALITY = " + json.dumps(blob, ensure_ascii=False, separators=(",", ":")) + ";\n"
     sys.stdout.write(js)
 

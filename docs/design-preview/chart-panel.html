@@ -1,0 +1,33 @@
+<!-- @dsCard group="Data Viz" name="Chart panel" subtitle="Chart.js card with title, badge, source" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg); }
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script type="module" src="../components/chart-panel.js"></script></head>
+<body>
+  <div class="grid">
+    <svs-chart-panel id="p" size="full" confidence="high"
+      title="Partner & ex-partner feminicides" subtitle="Delegación del Gobierno — sample data.">
+      <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno"></svs-source-cite>
+    </svs-chart-panel>
+  </div>
+  <script type="module">
+    import '../components/source-cite.js';
+    const years = [2018,2019,2020,2021,2022,2023,2024];
+    const vals  = [51,55,44,43,49,57,47];
+    const p = document.getElementById('p');
+    p.builder = (cv) => new Chart(cv, {
+      type: 'bar',
+      data: { labels: years, datasets: [{ data: vals, backgroundColor: 'rgba(34,197,94,0.7)', borderColor: '#22c55e', borderWidth: 1.5 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+        scales: { x: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#6b7280' } },
+                  y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#6b7280' } } } },
+    });
+    requestAnimationFrame(() => p.mount());
+  </script>
+</body></html>

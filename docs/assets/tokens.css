@@ -1,0 +1,59 @@
+/* ============================================================
+   SVS Design System — Foundations
+   Design tokens for the Spain Violence Statistics dashboard.
+   Single source of truth for color, type, spacing, and the
+   4-tier data-confidence scale (high / medium / low / unverified).
+   ============================================================ */
+
+:root {
+  /* ── Surfaces ─────────────────────────────────────── */
+  --bg:      #0f1117;   /* page background */
+  --bg2:     #1a1d27;   /* card background */
+  --bg3:     #22263a;   /* raised card / tooltip background */
+  --border:  #2e3347;   /* hairline borders */
+
+  /* ── Text ─────────────────────────────────────────── */
+  --text:    #e8eaf6;   /* primary */
+  --text2:   #9ba3bf;   /* secondary / muted */
+  --accent:  #7c83ff;   /* links, highlights, brand */
+
+  /* ── Confidence scale (per-row data provenance) ───── */
+  --high:        #22c55e;   /* primary source, direct read */
+  --medium:      #eab308;   /* primary source + minor computation, or reputable secondary */
+  --low:         #f97316;   /* ambiguous / inferred / interpolated */
+  --unverified:  #ef4444;   /* from prior AI chat — prohibited in modeling until re-checked */
+
+  /* semi-transparent fills for chart bars, keyed by confidence */
+  --high-a:        rgba(34,197,94,0.70);
+  --medium-a:      rgba(234,179,8,0.70);
+  --low-a:         rgba(249,115,22,0.70);
+  --unverified-a:  rgba(239,68,68,0.70);
+  --accent-a:      rgba(124,131,255,0.60);
+
+  /* ── Chart chrome ─────────────────────────────────── */
+  --grid:    rgba(255,255,255,0.06);
+  --tick:    #6b7280;
+
+  /* ── Shape & rhythm ───────────────────────────────── */
+  --card-radius: 12px;
+  --pill-radius: 20px;
+  --gap: 20px;
+
+  /* ── Typography ───────────────────────────────────── */
+  /* Editorial gravitas for a government-statistics product:
+       Display — Fraunces, a characterful optical serif for headings.
+       Body    — IBM Plex Sans, purpose-built for dense data legibility.
+       Mono    — IBM Plex Mono for stat numbers, so figures align. */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body:    'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* Reset shared across the app and every component preview. */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Confidence helper classes — usable in light DOM and previews. */
+.conf-high       { color: var(--high); }
+.conf-medium     { color: var(--medium); }
+.conf-low        { color: var(--low); }
+.conf-unverified { color: var(--unverified); }

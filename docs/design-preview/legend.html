@@ -1,0 +1,19 @@
+<!-- @dsCard group="Primitives" name="Legend" subtitle="Chart swatch legend" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 32px; background: var(--bg); font-family: var(--font-body); }
+</style>
+<script type="module" src="../components/legend.js"></script></head>
+<body>
+  <svs-legend id="l"></svs-legend>
+  <script type="module">
+    document.getElementById('l').items = [
+      { label: 'High', color: '#22c55e' },
+      { label: 'Medium', color: '#eab308' },
+      { label: 'Low', color: '#f97316' },
+      { label: 'Unverified', color: '#ef4444' },
+    ];
+  </script>
+</body></html>

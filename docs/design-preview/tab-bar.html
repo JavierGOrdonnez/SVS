@@ -1,0 +1,17 @@
+<!-- @dsCard group="Navigation" name="Tab bar" subtitle="Main + sub-tab navigation" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 0 0 24px; background: var(--bg); font-family: var(--font-body); }
+  .lbl { padding: 20px 40px 6px; color: var(--text2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+</style>
+<script type="module" src="../components/tab-bar.js"></script></head>
+<body>
+  <div class="lbl">Main</div>
+  <svs-tab-bar level="main" active="violence"
+    tabs='[{"id":"violence","label":"Violence & Sexual Crime"},{"id":"mortality","label":"Mortality baseline"},{"id":"migration","label":"Migration & Cohorts"}]'></svs-tab-bar>
+  <div class="lbl">Sub</div>
+  <svs-tab-bar level="sub" active="feminicides"
+    tabs='[{"id":"sexual-crimes","label":"Sexual crime"},{"id":"feminicides","label":"Feminicides"},{"id":"hate-crimes","label":"Hate crime"}]'></svs-tab-bar>
+</body></html>

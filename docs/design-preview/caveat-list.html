@@ -1,0 +1,18 @@
+<!-- @dsCard group="Primitives" name="Caveat list" subtitle="Data-quality callout" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg); font-family: var(--font-body); }
+</style>
+<script type="module" src="../components/caveat-list.js"></script></head>
+<body>
+  <svs-caveat-list id="c" heading="Sexual crime — caveats"></svs-caveat-list>
+  <script type="module">
+    document.getElementById('c').items = [
+      { label: 'Definition break', text: 'LO 10/2022 narrowed the legal rape definition; pre/post-2022 counts are not directly comparable.' },
+      { label: 'Two series', text: 'Anuario and Informe count different legal articles for 2017–2019. This dashboard uses the Informe series.' },
+      { label: 'Nationality', text: 'MIR publishes nationality × sex only at report level — no nationality × crime-type cross exists.' },
+    ];
+  </script>
+</body></html>

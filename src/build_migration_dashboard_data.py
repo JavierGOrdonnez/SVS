@@ -43,7 +43,8 @@ def load_rows(path):
         return list(csv.DictReader(f))
 
 
-def main():
+def build():
+    """Return the migration-tab data blob (also reused by build_dashboard.py)."""
     rows = load_rows(CSV_PATH)
     flow = [r for r in rows if r["series"] == "flow_immigration_from_abroad"]
 
@@ -139,7 +140,7 @@ def main():
         "foreign_born": [int(r["value"]) for r in stock_born],
     }
 
-    blob = {
+    return {
         "annual_inflow": s1,
         "origin_composition": s2,
         "sex_split": s3,
@@ -148,6 +149,10 @@ def main():
         "stock_trend": s6,
     }
 
+
+def main():
+    # Legacy CLI: emit as a JS const block on stdout.
+    blob = build()
     js = "const MIGRATION = " + json.dumps(blob, ensure_ascii=False, separators=(",", ":")) + ";\n"
     sys.stdout.write(js)
 

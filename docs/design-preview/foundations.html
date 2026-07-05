@@ -1,0 +1,40 @@
+<!-- @dsCard group="Foundations" name="Design tokens" subtitle="Color, confidence scale, type" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+  h1 { font: 600 1.4rem var(--font-display); margin: 0 0 4px; }
+  h2 { font: 600 0.8rem var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text2); margin: 24px 0 10px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .sw { width: 92px; }
+  .chip { height: 52px; border-radius: 8px; border: 1px solid var(--border); }
+  .cap { font: 500 0.72rem var(--font-mono); margin-top: 6px; color: var(--text2); }
+  .type { font-family: var(--font-display); }
+</style></head>
+<body>
+  <h1>SVS — Foundations</h1>
+  <div style="color:var(--text2);font-size:0.85rem">Design tokens shared by every component.</div>
+
+  <h2>Confidence scale</h2>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--high)"></div><div class="cap">high</div></div>
+    <div class="sw"><div class="chip" style="background:var(--medium)"></div><div class="cap">medium</div></div>
+    <div class="sw"><div class="chip" style="background:var(--low)"></div><div class="cap">low</div></div>
+    <div class="sw"><div class="chip" style="background:var(--unverified)"></div><div class="cap">unverified</div></div>
+  </div>
+
+  <h2>Surfaces & accent</h2>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--bg)"></div><div class="cap">--bg</div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg2)"></div><div class="cap">--bg2</div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg3)"></div><div class="cap">--bg3</div></div>
+    <div class="sw"><div class="chip" style="background:var(--border)"></div><div class="cap">--border</div></div>
+    <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="cap">--accent</div></div>
+  </div>
+
+  <h2>Type</h2>
+  <div class="type" style="font-size:2rem;font-weight:600">Fraunces — display</div>
+  <div style="font-size:1rem">IBM Plex Sans — body copy for dense data tables and captions</div>
+  <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--accent)">1,234 · 22,846 — IBM Plex Mono</div>
+</body></html>

@@ -1,0 +1,17 @@
+<!-- @dsCard group="Primitives" name="Stat card" subtitle="Headline KPI with confidence badge" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg); font-family: var(--font-body); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; max-width: 640px; }
+</style>
+<script type="module" src="../components/stat-card.js"></script></head>
+<body>
+  <div class="grid">
+    <svs-stat-card value="47" label="Partner feminicides · 2024" confidence="high"></svs-stat-card>
+    <svs-stat-card value="22,846" label="Reported sexual crimes · 2024" confidence="high"></svs-stat-card>
+    <svs-stat-card value="4.9×" label="Foreign-born vs Spanish-born rate" confidence="medium"></svs-stat-card>
+    <svs-stat-card value="2,268" label="Hate crimes · 2023" delta="+7%" delta-dir="up" confidence="high"></svs-stat-card>
+  </div>
+</body></html>

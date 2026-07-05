@@ -1,0 +1,18 @@
+<!-- @dsCard group="Primitives" name="Confidence badge" subtitle="4-tier provenance chip" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+  body { margin: 0; padding: 32px; background: var(--bg); font-family: var(--font-body); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+</style>
+<script type="module" src="../components/confidence-badge.js"></script></head>
+<body>
+  <div class="row">
+    <svs-confidence-badge level="high"></svs-confidence-badge>
+    <svs-confidence-badge level="medium"></svs-confidence-badge>
+    <svs-confidence-badge level="low"></svs-confidence-badge>
+    <svs-confidence-badge level="unverified"></svs-confidence-badge>
+    <svs-confidence-badge level="high" label="Primary source"></svs-confidence-badge>
+  </div>
+</body></html>
