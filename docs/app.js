@@ -286,16 +286,8 @@ function showTab(id) {
   const main = document.getElementById('main-tabs'); if (main) main.active = id;
   mountVisible();
 }
-function showSubtab(tabId, subId) {
-  const scope = document.getElementById('tab-' + tabId);
-  scope.querySelectorAll('.subtab-panel').forEach(p => p.classList.toggle('active', p.id === 'sub-' + subId));
-  mountVisible();
-}
-
 function wire() {
   document.getElementById('main-tabs')?.addEventListener('tab-change', e => showTab(e.detail.id));
-  document.querySelectorAll('svs-tab-bar[level="sub"]').forEach(bar =>
-    bar.addEventListener('tab-change', e => showSubtab(bar.dataset.scope, e.detail.id)));
   document.querySelector('svs-confidence-filter')?.addEventListener('conf-change', e => {
     activeConf = e.detail.active;
     document.querySelectorAll('svs-chart-panel').forEach(p => { if (p._chart) p.refresh(activeConf); });
@@ -314,7 +306,7 @@ async function main() {
   buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort();
   setHeadlines();
   wire();
-  showTab('violence');   // mounts the initially-visible panels
+  showTab('feminicides');   // mounts the initially-visible panels
 }
 
 main().catch(err => {

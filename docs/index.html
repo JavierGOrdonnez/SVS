@@ -29,94 +29,51 @@
 </header>
 
 <!-- ═══════════════ MAIN TABS ═══════════════ -->
-<svs-tab-bar id="main-tabs" level="main" active="violence"
-  tabs='[{"id":"violence","label":"Violence & Sexual Crime"},{"id":"mortality","label":"Mortality baseline"},{"id":"migration","label":"Migration & Cohorts"}]'></svs-tab-bar>
+<svs-tab-bar id="main-tabs" level="main" active="feminicides"
+  tabs='[{"id":"feminicides","label":"Feminicides"},{"id":"sexual-crimes","label":"Sexual crime"},{"id":"migration","label":"Migration & Cohorts"},{"id":"hate-crimes","label":"Hate crime"}]'></svs-tab-bar>
 
-<!-- ─────────── TAB: VIOLENCE ─────────── -->
-<section id="tab-violence" class="tab-panel active">
-  <svs-confidence-filter active="high,medium,low"></svs-confidence-filter>
+<!-- Confidence filter is global (docs/app.js wire() binds the single instance's conf-change
+     to every mounted chart, not just one tab's), so it lives here rather than inside any one
+     tab-panel now that feminicides/sexual-crimes/hate-crimes are no longer sub-tabs of one tab. -->
+<svs-confidence-filter active="high,medium,low"></svs-confidence-filter>
 
-  <svs-tab-bar level="sub" data-scope="violence" active="sexual-crimes"
-    tabs='[{"id":"sexual-crimes","label":"Sexual crime"},{"id":"feminicides","label":"Feminicides"},{"id":"hate-crimes","label":"Hate crime"}]'></svs-tab-bar>
-
-  <!-- Sub: sexual crime -->
-  <div id="sub-sexual-crimes" class="subtab-panel active">
-    <div class="grid">
-      <svs-chart-panel id="sx-totals" size="half" confidence="high"
-        title="Reported sexual crimes, 2019–2024" subtitle="MIR Informe totals. Break: LO 10/2022 narrowed the rape definition.">
-        <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR — Informe delitos libertad sexual"></svs-source-cite>
-      </svs-chart-panel>
-      <svs-chart-panel id="sx-categories" size="half" confidence="high"
-        title="By category, 2019–2024" subtitle="Unified agresión sexual series and stable sub-types."></svs-chart-panel>
-      <svs-chart-panel id="sx-nationality" size="half" confidence="medium"
-        title="Perpetrator nationality split" subtitle="Spanish vs foreign identified perpetrators (report-level totals).">
-        <svs-source-cite slot="source" label="MIR Informe — nationality × sex totals (no per-category cross)" note="associative only"></svs-source-cite>
-      </svs-chart-panel>
-      <svs-chart-panel id="sx-convictions" size="half" confidence="high"
-        title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
-    </div>
-    <div class="caveat-row">
-      <svs-caveat-list id="cav-sexual" heading="Sexual crime — caveats"></svs-caveat-list>
-    </div>
+<!-- ─────────── TAB: FEMINICIDES ─────────── -->
+<section id="tab-feminicides" class="tab-panel active">
+  <div class="grid">
+    <svs-chart-panel id="fem-timeline" size="full" confidence="high"
+      title="Partner & ex-partner feminicides, 2006–present" subtitle="Delegación del Gobierno. Bars colored by the confidence filter above.">
+      <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="fem-regional" size="half" confidence="high"
+      title="Regional distribution, latest year" subtitle="Victims by autonomous community."></svs-chart-panel>
+    <svs-chart-panel id="fem-rates" size="half" confidence="high"
+      title="Rate per 100k by origin, 2024" subtitle="Spanish-born vs foreign-born, with 95% CIs. Absolute counts in tooltip."></svs-chart-panel>
+    <svs-chart-panel id="fem-age-origin" size="full" confidence="high"
+      title="Victims by age band, latest year" subtitle="Age profile of feminicide victims."></svs-chart-panel>
   </div>
-
-  <!-- Sub: feminicides -->
-  <div id="sub-feminicides" class="subtab-panel">
-    <div class="grid">
-      <svs-chart-panel id="fem-timeline" size="full" confidence="high"
-        title="Partner & ex-partner feminicides, 2006–present" subtitle="Delegación del Gobierno. Bars colored by the confidence filter above.">
-        <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género"></svs-source-cite>
-      </svs-chart-panel>
-      <svs-chart-panel id="fem-regional" size="half" confidence="high"
-        title="Regional distribution, latest year" subtitle="Victims by autonomous community."></svs-chart-panel>
-      <svs-chart-panel id="fem-rates" size="half" confidence="high"
-        title="Rate per 100k by origin, 2024" subtitle="Spanish-born vs foreign-born, with 95% CIs. Absolute counts in tooltip."></svs-chart-panel>
-      <svs-chart-panel id="fem-age-origin" size="full" confidence="high"
-        title="Victims by age band, latest year" subtitle="Age profile of feminicide victims."></svs-chart-panel>
-    </div>
-    <div class="caveat-row">
-      <svs-caveat-list id="cav-fem" heading="Feminicides — caveats"></svs-caveat-list>
-    </div>
-  </div>
-
-  <!-- Sub: hate crimes (NEW) -->
-  <div id="sub-hate-crimes" class="subtab-panel">
-    <div class="section-intro">
-      <h2>Hate & xenophobic crime</h2>
-      <p>MIR hate-crime reports, 2016–2023. There is no 2022 edition (publication gap), and a 2017
-      methodology change makes the disability series discontinuous — both flagged on the charts.</p>
-    </div>
-    <div class="grid">
-      <svs-chart-panel id="hc-totals" size="half" confidence="high"
-        title="Total hate crimes reported, 2016–2023" subtitle="Gap at 2022 — no report published that year.">
-        <svs-source-cite slot="source" href="https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/delitos-de-odio/" label="MIR — Informe delitos de odio"></svs-source-cite>
-      </svs-chart-panel>
-      <svs-chart-panel id="hc-categories" size="half" confidence="high"
-        title="By motive category" subtitle="Top six categories by latest-year count."></svs-chart-panel>
-    </div>
-    <div class="caveat-row">
-      <svs-caveat-list id="cav-hate" heading="Hate crime — caveats"></svs-caveat-list>
-    </div>
+  <div class="caveat-row">
+    <svs-caveat-list id="cav-fem" heading="Feminicides — caveats"></svs-caveat-list>
   </div>
 </section>
 
-<!-- ─────────── TAB: MORTALITY ─────────── -->
-<section id="tab-mortality" class="tab-panel">
-  <div class="section-intro">
-    <h2>Mortality baseline</h2>
-    <p>All-cause and external-cause mortality (INE ECM, 2000–2024) — the competing-risk denominators
-    behind any lifetime-probability estimate.</p>
-  </div>
+<!-- ─────────── TAB: SEXUAL CRIME ─────────── -->
+<section id="tab-sexual-crimes" class="tab-panel">
   <div class="grid">
-    <svs-chart-panel id="mo-allcause" size="half" confidence="high" title="All-cause rate per 100k, by sex" subtitle="2000–2024."></svs-chart-panel>
-    <svs-chart-panel id="mo-chapter" size="half" confidence="high" title="Female deaths by ICD chapter" subtitle="Top 7 chapters, stacked counts."></svs-chart-panel>
-    <svs-chart-panel id="mo-ageprofile" size="half" confidence="high" title="Female external-cause rates by age, latest year" subtitle="Per 100k."></svs-chart-panel>
-    <svs-chart-panel id="mo-external" size="half" confidence="high" title="Female external-cause rates over time" subtitle="All ages, per 100k."></svs-chart-panel>
-    <svs-chart-panel id="mo-repro" size="half" confidence="medium" title="Reproductive-age (15–44) female rates" subtitle="Cohort-weighted, per 100k."></svs-chart-panel>
-    <svs-chart-panel id="mo-young" size="half" confidence="high" title="Top causes, women 20–24, latest year" subtitle="Specific-cause death counts."></svs-chart-panel>
+    <svs-chart-panel id="sx-totals" size="half" confidence="high"
+      title="Reported sexual crimes, 2019–2024" subtitle="MIR Informe totals. Break: LO 10/2022 narrowed the rape definition.">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR — Informe delitos libertad sexual"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-categories" size="half" confidence="high"
+      title="By category, 2019–2024" subtitle="Unified agresión sexual series and stable sub-types."></svs-chart-panel>
+    <svs-chart-panel id="sx-nationality" size="half" confidence="medium"
+      title="Perpetrator nationality split" subtitle="Spanish vs foreign identified perpetrators (report-level totals).">
+      <svs-source-cite slot="source" label="MIR Informe — nationality × sex totals (no per-category cross)" note="associative only"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-convictions" size="half" confidence="high"
+      title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
   </div>
   <div class="caveat-row">
-    <svs-caveat-list id="cav-mort" heading="Mortality — caveats"></svs-caveat-list>
+    <svs-caveat-list id="cav-sexual" heading="Sexual crime — caveats"></svs-caveat-list>
   </div>
 </section>
 
@@ -151,6 +108,51 @@
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-mig" heading="Migration & cohorts — caveats"></svs-caveat-list>
+  </div>
+</section>
+
+<!-- ─────────── TAB: HATE CRIME ─────────── -->
+<section id="tab-hate-crimes" class="tab-panel">
+  <div class="section-intro">
+    <h2>Hate & xenophobic crime</h2>
+    <p>MIR hate-crime reports, 2016–2023. There is no 2022 edition (publication gap), and a 2017
+    methodology change makes the disability series discontinuous — both flagged on the charts.</p>
+  </div>
+  <div class="grid">
+    <svs-chart-panel id="hc-totals" size="half" confidence="high"
+      title="Total hate crimes reported, 2016–2023" subtitle="Gap at 2022 — no report published that year.">
+      <svs-source-cite slot="source" href="https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/delitos-de-odio/" label="MIR — Informe delitos de odio"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="hc-categories" size="half" confidence="high"
+      title="By motive category" subtitle="Top six categories by latest-year count."></svs-chart-panel>
+  </div>
+  <div class="caveat-row">
+    <svs-caveat-list id="cav-hate" heading="Hate crime — caveats"></svs-caveat-list>
+  </div>
+</section>
+
+<!-- ─────────── TAB: MORTALITY (intentionally hidden) ───────────
+     Not listed in #main-tabs' `tabs` attribute, so it never appears in the tab bar and
+     showTab() can never make it active — but the section, its charts, and its data loader
+     stay wired so it can be re-surfaced later by adding one entry back to that JSON list.
+     Hidden per explicit request while feminicides/sexual-crimes/migration/hate-crimes are
+     the four top-level tabs; not deleted. -->
+<section id="tab-mortality" class="tab-panel">
+  <div class="section-intro">
+    <h2>Mortality baseline</h2>
+    <p>All-cause and external-cause mortality (INE ECM, 2000–2024) — the competing-risk denominators
+    behind any lifetime-probability estimate.</p>
+  </div>
+  <div class="grid">
+    <svs-chart-panel id="mo-allcause" size="half" confidence="high" title="All-cause rate per 100k, by sex" subtitle="2000–2024."></svs-chart-panel>
+    <svs-chart-panel id="mo-chapter" size="half" confidence="high" title="Female deaths by ICD chapter" subtitle="Top 7 chapters, stacked counts."></svs-chart-panel>
+    <svs-chart-panel id="mo-ageprofile" size="half" confidence="high" title="Female external-cause rates by age, latest year" subtitle="Per 100k."></svs-chart-panel>
+    <svs-chart-panel id="mo-external" size="half" confidence="high" title="Female external-cause rates over time" subtitle="All ages, per 100k."></svs-chart-panel>
+    <svs-chart-panel id="mo-repro" size="half" confidence="medium" title="Reproductive-age (15–44) female rates" subtitle="Cohort-weighted, per 100k."></svs-chart-panel>
+    <svs-chart-panel id="mo-young" size="half" confidence="high" title="Top causes, women 20–24, latest year" subtitle="Specific-cause death counts."></svs-chart-panel>
+  </div>
+  <div class="caveat-row">
+    <svs-caveat-list id="cav-mort" heading="Mortality — caveats"></svs-caveat-list>
   </div>
 </section>
 
