@@ -77,18 +77,35 @@ AGE_BAND_REBIN = {
 
 
 def rebin_age_breakdown(age_list):
-    """Re-bucket a report's raw per-year age breakdown into CANON_AGE_BANDS."""
+    """Re-bucket a report's raw per-year age breakdown into CANON_AGE_BANDS,
+    for both victims and perpetrators. A band's `victims`/`perps` value is
+    `None` (not 0) when that actor genuinely has no data for it that year
+    (e.g. a block failed the V39 reconciliation gate) rather than a real
+    zero count."""
     if not age_list:
         return None
     victims = {b: 0 for b in CANON_AGE_BANDS}
-    present = {b: False for b in CANON_AGE_BANDS}
+    perps = {b: 0 for b in CANON_AGE_BANDS}
+    v_present = {b: False for b in CANON_AGE_BANDS}
+    p_present = {b: False for b in CANON_AGE_BANDS}
     for a in age_list:
         canon = AGE_BAND_REBIN.get(a["label"])
-        if canon is None or a.get("victim_count") is None:
+        if canon is None:
             continue
-        victims[canon] += a["victim_count"]
-        present[canon] = True
-    return [{"label": b, "victims": victims[b]} for b in CANON_AGE_BANDS if present[b]]
+        if a.get("victim_count") is not None:
+            victims[canon] += a["victim_count"]
+            v_present[canon] = True
+        if a.get("perp_count") is not None:
+            perps[canon] += a["perp_count"]
+            p_present[canon] = True
+    return [
+        {
+            "label": b,
+            "victims": victims[b] if v_present[b] else None,
+            "perps": perps[b] if p_present[b] else None,
+        }
+        for b in CANON_AGE_BANDS if v_present[b] or p_present[b]
+    ]
 
 
 def moving_average(values, window=5):
