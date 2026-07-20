@@ -21,6 +21,7 @@ from src.parsers.feminicide_parser import (
     _extract_simple_table,
     _extract_victim_perp_table,
     _numbers_after,
+    _parse_legacy_format,
     _slice_block,
     infer_year,
 )
@@ -157,6 +158,89 @@ def test_parse_pdf_dispatches_to_legacy_format_when_tabla_2_1_absent(monkeypatch
     assert report.confidence == "low"
     assert "Legacy" in report.notes
     assert report.regional == []
+
+
+# ── _parse_legacy_format: 2003-2005 "ficha resumen" extraction (T63) ─
+
+def _legacy_text(victim_nums, geo_nums, perp_nums):
+    def nums(xs):
+        return " ".join(str(x) for x in xs)
+
+    return (
+        "Características de las víctimas N.º de casos " + nums(victim_nums) + " "
+        "Ámbito geográfico N.º de casos " + nums(geo_nums) + " "
+        "Características de los agresores N.º de casos " + nums(perp_nums) + " "
+        "Fecha de actualización de esta ficha: 01/01/2020"
+    )
+
+
+# total=10, nationality 6+4+0=10, age 1+1+1+1+2+1+1+1+1=10, cohab 7+3+0,
+# relationship 5+5 -- all count blocks (18 values).
+_VICTIM_NUMS_OK = [10, 6, 4, 0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 7, 3, 0, 5, 5]
+# total=10, 19 regions summing to 10.
+_GEO_NUMS_OK = [10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# total=8, nationality 5+3+0=8, age 1*8+0=8, suicide-attempt 1+1+6 (16 values).
+_PERP_NUMS_OK = [8, 5, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 6]
+
+
+def test_parse_legacy_format_extracts_all_breakdowns_when_gate_passes():
+    text = _legacy_text(_VICTIM_NUMS_OK, _GEO_NUMS_OK, _PERP_NUMS_OK)
+    report = _parse_legacy_format(text, 2003, "VMujeres_2003.pdf")
+
+    assert report.confidence == "medium"
+    assert "GATE WARNINGS" not in report.notes
+    assert report.total_victims == 10
+    assert [(o.label, o.victim_count, o.perp_count) for o in report.origin] == [
+        ("España", 6, 5), ("Otro país", 4, 3), ("No consta", 0, 0),
+    ]
+    assert report.age[0].label == "<16 años"
+    assert [a.victim_count for a in report.age] == [1, 1, 1, 1, 2, 1, 1, 1, 1]
+    assert [a.perp_count for a in report.age] == [1, 1, 1, 1, 1, 1, 1, 1, 0]
+    assert len(report.regional) == 19
+    assert sum(c.count for c in report.regional) == 10
+    assert [(c.label, c.count) for c in report.cohabitation] == [
+        ("Convivían", 7), ("No convivían", 3), ("No consta", 0),
+    ]
+    assert {c.label: c.count for c in report.relationship_type} == {
+        "Pareja": 5, "Expareja o pareja en fase de ruptura": 5,
+    }
+    suicide = {c.label: c.count for c in report.perpetrator_suicide_attempt}
+    assert suicide["TOTAL"] == 8
+    assert suicide["Suicidio consumado"] == 6
+    assert report.update_date == "01/01/2020"
+
+
+def test_parse_legacy_format_nulls_only_the_failing_block_on_gate_mismatch():
+    # Perpetrator nationality sums to 9 (5+4+0), not the header total of 8 --
+    # mirrors the real 2004 source PDF's perpetrator-nationality row (B32).
+    bad_perp_nums = [8, 5, 4, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 6]
+    text = _legacy_text(_VICTIM_NUMS_OK, _GEO_NUMS_OK, bad_perp_nums)
+    report = _parse_legacy_format(text, 2004, "VMujeres_2004.pdf")
+
+    assert report.confidence == "low"
+    assert "perpetrator nationality" in report.notes
+    assert report.total_victims == 10
+
+    # Failing block: perp side null, victim side of the *same* category
+    # still populated.
+    assert [(o.label, o.victim_count, o.perp_count) for o in report.origin] == [
+        ("España", 6, None), ("Otro país", 4, None), ("No consta", 0, None),
+    ]
+    # Unaffected blocks still fully populated.
+    assert [a.victim_count for a in report.age] == [1, 1, 1, 1, 2, 1, 1, 1, 1]
+    assert [a.perp_count for a in report.age] == [1, 1, 1, 1, 1, 1, 1, 1, 0]
+    assert len(report.regional) == 19
+    assert sum(c.count for c in report.regional) == 10
+
+
+def test_parse_legacy_format_falls_back_to_stub_when_block_missing():
+    text = "Características de las víctimas N.º de casos 1 2 3"  # too few values
+    report = _parse_legacy_format(text, 2005, "VMujeres_2005.pdf")
+
+    assert report.confidence == "low"
+    assert "not found or incomplete" in report.notes
+    assert report.regional == []
+    assert report.total_victims is None
 
 
 # ── run_batch: V21 (exactly one output file) / V22 (year collision) ─

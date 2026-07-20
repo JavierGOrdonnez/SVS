@@ -104,6 +104,27 @@ SUICIDE_ATTEMPT_LABELS = [
     "TOTAL", "Suicidio consumado", "Tentativa no consumada", "No hubo tentativa",
 ]
 
+# 2003-2005 legacy "ficha resumen" format (T63). Confirmed identical section
+# order/counts across all 3 sampled years via direct PDF-text dump: labels
+# and "N.º de casos"/"% del total" numbers are clean text (just laid out
+# differently from the modern "Número" tables), EXCEPT the DENUNCIA/MEDIDAS
+# DE PROTECCIÓN/QUEBRANTAMIENTO block, whose figures beyond the headline
+# total are chart/graphic-rendered and not recoverable as text.
+LEGACY_NATIONALITY = ["España", "Otro país", "No consta"]
+LEGACY_AGE_BRACKETS = [
+    "<16 años", "16-17 años", "18-20 años", "21-30 años", "31-40 años",
+    "41-50 años", "51-64 años", ">64 años", "No consta",
+]
+# Value order as printed in this layout -- reversed/reworded vs the modern
+# RELATIONSHIP_TYPES/SUICIDE_ATTEMPT_LABELS vocabs, so mapped explicitly
+# rather than reusing those lists' order.
+_LEGACY_RELATIONSHIP_VALUE_ORDER = [
+    "Expareja o pareja en fase de ruptura", "Pareja",
+]
+_LEGACY_SUICIDE_VALUE_ORDER = [
+    "No hubo tentativa", "Tentativa no consumada", "Suicidio consumado",
+]
+
 
 # ──────────────────────────────────────────────────────────────
 # Output schema
@@ -349,22 +370,153 @@ def _parse_modern_format(text: str, year: int, pdf_name: str) -> FeminicideRepor
     )
 
 
+def _legacy_counts(block: str, n: int) -> list[int] | None:
+    """First `n` integer tokens after this block's 'N.º de casos' header, or
+    None if fewer than `n` are found. Percentages (comma-decimal, e.g.
+    "87,3%") are deliberately never requested -- CategoryCount.pct stays
+    unset for legacy rows rather than mis-tokenizing "87,3" as two ints."""
+    nums = _numbers_after(r"N\.º de casos", block, n)
+    if len(nums) < n:
+        return None
+    return [int(float(x)) for x in nums]
+
+
 def _parse_legacy_format(text: str, year: int, pdf_name: str) -> FeminicideReport:
-    """2003-2005 'ficha resumen' chart-style format -- structurally
-    incompatible with the 2006+ numbered-table layout. Only year/source
-    metadata are populated; breakdowns are left empty rather than risk
-    mis-extracting a total from the chart-adjacent number soup."""
+    """2003-2005 'ficha resumen' format. A direct PDF-text dump (all 3
+    years) shows age/origin/regional/relationship/cohabitation breakdowns
+    are present as clean label-then-number blocks, just laid out
+    differently from the 2006+ numbered tables (T63). Only the DENUNCIA/
+    MEDIDAS DE PROTECCIÓN/QUEBRANTAMIENTO block remains unextractable --
+    its figures beyond the headline total are chart-rendered, not text."""
+    victim_block = _slice_block(
+        text, r"Características de las víctimas", r"Ámbito geográfico")
+    geo_block = _slice_block(
+        text, r"Ámbito geográfico", r"Características de los agresores")
+    perp_block = _slice_block(text, r"Características de los agresores", None)
+
+    victim_nums = _legacy_counts(victim_block, 18) if victim_block else None
+    geo_nums = _legacy_counts(geo_block, 20) if geo_block else None
+    perp_nums = _legacy_counts(perp_block, 16) if perp_block else None
+
+    if not (victim_nums and geo_nums and perp_nums):
+        return FeminicideReport(
+            year=year,
+            source_document=pdf_name,
+            confidence="low",
+            notes=(
+                "Legacy 'ficha resumen' format (pre-2006): expected section "
+                "(Características de las víctimas / Ámbito geográfico / "
+                "Características de los agresores) not found or incomplete "
+                "in this PDF's extracted text -- no fields extracted, see "
+                "data/sources/delegacion_gobierno_femicidio.md for a "
+                "manually curated headline count."
+            ),
+        )
+
+    total_victims = victim_nums[0]
+    total_agresores = perp_nums[0]
+
+    # V39 gate: nationality/age/regional sub-totals must reconcile to the
+    # header total before that specific block is trusted. Gated per-block
+    # (not all-or-nothing) because real source PDFs have isolated, single-
+    # block rounding/data-entry inconsistencies (e.g. 2004 perpetrator
+    # nationality sums to 73 vs a header total of 72; 2005 perpetrator age
+    # sums to 56 vs 57) alongside otherwise-clean blocks -- discarding an
+    # entire year's breakdown over one bad row would lose good data (B32).
+    nat_victim_ok = sum(victim_nums[1:4]) == total_victims
+    nat_perp_ok = sum(perp_nums[1:4]) == total_agresores
+    age_victim_ok = sum(victim_nums[4:13]) == total_victims
+    age_perp_ok = sum(perp_nums[4:13]) == total_agresores
+    regional_ok = sum(geo_nums[1:20]) == total_victims
+
+    gate_failures = []
+    if not nat_victim_ok:
+        gate_failures.append(
+            f"victim nationality sums to {sum(victim_nums[1:4])}, "
+            f"expected {total_victims}")
+    if not nat_perp_ok:
+        gate_failures.append(
+            f"perpetrator nationality sums to {sum(perp_nums[1:4])}, "
+            f"expected {total_agresores}")
+    if not age_victim_ok:
+        gate_failures.append(
+            f"victim age sums to {sum(victim_nums[4:13])}, "
+            f"expected {total_victims}")
+    if not age_perp_ok:
+        gate_failures.append(
+            f"perpetrator age sums to {sum(perp_nums[4:13])}, "
+            f"expected {total_agresores}")
+    if not regional_ok:
+        gate_failures.append(
+            f"regional sums to {sum(geo_nums[1:20])}, "
+            f"expected {total_victims}")
+
+    origin = [
+        VictimPerpCategoryCount(
+            label=label,
+            victim_count=vc if nat_victim_ok else None,
+            perp_count=pc if nat_perp_ok else None,
+        )
+        for label, vc, pc in zip(
+            LEGACY_NATIONALITY, victim_nums[1:4], perp_nums[1:4])
+    ]
+    age = [
+        VictimPerpCategoryCount(
+            label=label,
+            victim_count=vc if age_victim_ok else None,
+            perp_count=pc if age_perp_ok else None,
+        )
+        for label, vc, pc in zip(
+            LEGACY_AGE_BRACKETS, victim_nums[4:13], perp_nums[4:13])
+    ]
+    regional = [
+        CategoryCount(label=label, count=c)
+        for label, c in zip(REGIONS, geo_nums[1:20])
+    ] if regional_ok else []
+    cohabitation = [
+        CategoryCount(label=label, count=c)
+        for label, c in zip(COHABITATION, victim_nums[13:16])
+    ]
+    relationship_values = dict(
+        zip(_LEGACY_RELATIONSHIP_VALUE_ORDER, victim_nums[16:18]))
+    relationship_type = [
+        CategoryCount(label=label, count=relationship_values[label])
+        for label in RELATIONSHIP_TYPES
+    ]
+    suicide_values = dict(zip(_LEGACY_SUICIDE_VALUE_ORDER, perp_nums[13:16]))
+    suicide_values["TOTAL"] = total_agresores
+    perpetrator_suicide_attempt = [
+        CategoryCount(label=label, count=suicide_values[label])
+        for label in SUICIDE_ATTEMPT_LABELS
+    ]
+
+    update_m = re.search(
+        r"Fecha de actualización de esta ficha:\s*([^\n]+)", text)
+    update_date = update_m.group(1).strip() if update_m else None
+
     return FeminicideReport(
         year=year,
+        total_victims=total_victims,
+        update_date=update_date,
+        regional=regional,
+        age=age,
+        origin=origin,
+        relationship_type=relationship_type,
+        cohabitation=cohabitation,
+        perpetrator_suicide_attempt=perpetrator_suicide_attempt,
         source_document=pdf_name,
-        confidence="low",
+        confidence="low" if gate_failures else "medium",
         notes=(
-            "Legacy 'ficha resumen' format (pre-2006): DENUNCIA/MEDIDAS DE "
-            "PROTECCIÓN/QUEBRANTAMIENTO chart layout, structurally "
-            "incompatible with the 2006+ numbered-table format this parser "
-            "targets. No fields extracted from the PDF for this year -- see "
-            "data/sources/delegacion_gobierno_femicidio.md for a manually "
-            "curated headline count."
+            "Legacy 'ficha resumen' format (pre-2006): age/origin/regional/"
+            "relationship/cohabitation extracted directly from this PDF's "
+            "text (T63); prior_complaint/protective_measures/"
+            "restraining_order_breach stay unset -- that block's figures "
+            "are chart/graphic-rendered, not text, in this format."
+        ) + (
+            " V39 GATE WARNINGS (source PDF sub-total doesn't reconcile "
+            "to header total for this block, value withheld): "
+            + "; ".join(gate_failures) + "."
+            if gate_failures else ""
         ),
     )
 
