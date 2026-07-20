@@ -155,8 +155,6 @@ def build():
                 "count": num(r["count"]),
                 "population": num(r["population"]),
                 "rate_per_100k": num(r["rate_per_100k"]),
-                "ci_lower": num(r["ci_lower"]),
-                "ci_upper": num(r["ci_upper"]),
                 "confidence": r["confidence"],
             }
             for r in rate_rows

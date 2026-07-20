@@ -276,7 +276,7 @@ function buildFeminicides() {
     (row, roleLabel) => `${(row.population / 1e6).toFixed(1)}M ${row.origin === 'españa' ? 'Spanish-resident' : 'foreign-resident'} population`));
 
   register('fem-rates', (cv) => buildOriginRoleChart(cv, 'rate_per_100k',
-    (row, roleLabel) => `${row.count} ${roleLabel} / ${(row.population / 1e6).toFixed(1)}M · 95% CI ${row.ci_lower}–${row.ci_upper} (Wald approx. on the raw count, not the population)`));
+    (row, roleLabel) => `${row.count} ${roleLabel} / ${(row.population / 1e6).toFixed(1)}M`));
 }
 
 function buildSexual() {
