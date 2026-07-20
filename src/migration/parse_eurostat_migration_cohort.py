@@ -15,7 +15,7 @@ Source (download manually -- large bulk files, not committed):
   (gunzip before passing to this script)
 
 Usage:
-    python src/parse_eurostat_migration_cohort.py <migr_imm1ctz.tsv> <migr_pop1ctz.tsv>
+    python src/migration/parse_eurostat_migration_cohort.py <migr_imm1ctz.tsv> <migr_pop1ctz.tsv>
 
 Appends new rows to data/raw/migration_spain.csv (idempotent: rows for
 citizen in {MA, DZ} with a non-'all' age_group are dropped and regenerated
