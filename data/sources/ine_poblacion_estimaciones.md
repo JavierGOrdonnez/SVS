@@ -28,8 +28,8 @@ We use **July 1 mid-year population** as the denominator for annual mortality ra
 
 ```
 curl -s "https://www.ine.es/jaxiT3/files/t/es/csv_bdsc/56934.csv?nocab=1" -o /tmp/ine_pop.csv
-python3 src/parse_ine_population.py /tmp/ine_pop.csv
-python3 src/compute_mortality_rates.py \
+python3 src/analysis/parse_ine_population.py /tmp/ine_pop.csv
+python3 src/mortality/compute_mortality_rates.py \
     data/processed/mortality_spain_ine_ecm.csv \
     data/processed/population_spain_midyear_5yr.csv
 ```

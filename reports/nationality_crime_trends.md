@@ -1,6 +1,6 @@
 # T42 — Sexual-crime category & nationality trend analysis
 
-Full results for T42 (`src/plot_sexual_crime_trends.py`). SPEC.md's T42 row
+Full results for T42 (`src/sexual_crimes/plot_sexual_crime_trends.py`). SPEC.md's T42 row
 keeps only a summary; this file is the source of record.
 
 Descriptive/correlational only (⊥ causal, V9).

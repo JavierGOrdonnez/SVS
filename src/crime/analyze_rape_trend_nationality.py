@@ -10,7 +10,7 @@ Questions answered:
 Data sources used:
   - data/raw/violence_spain.csv  (police-reported crimes + Macroencuesta)
   - data/processed/ine_condenados_28716_sexual_crimes.csv  (convicted by nationality)
-    [run src/parse_ine_tabla28716.py first if file is missing]
+    [run src/crime/parse_ine_tabla28716.py first if file is missing]
   - data/processed/population_spain_midyear_5yr.csv  (population denominators)
 """
 
@@ -218,7 +218,7 @@ def build_report(sv_rows, conv):
     h("2. DISTRIBUCIÓN POR NACIONALIDAD — CONDENADOS (INE Tabla 28716, 2017–2024)")
 
     if conv is None:
-        lines.append("  ⚠ Archivo INE no disponible. Ejecute: python src/parse_ine_tabla28716.py")
+        lines.append("  ⚠ Archivo INE no disponible. Ejecute: python src/crime/parse_ine_tabla28716.py")
         lines.append("  Datos disponibles para 2023-2024 en violence_spain.csv (filas 74, 162-165).")
     else:
         s("Capítulo 8 — Todos los delitos contra la libertad sexual")
@@ -508,13 +508,13 @@ def build_report(sv_rows, conv):
     → confidence low (denominadores de población estimados)
     → NO publicar sin verificar con datos INE Padrón por nacionalidad
 
-  PASO SIGUIENTE: ejecutar src/parse_ine_tabla28716.py para datos INE.
+  PASO SIGUIENTE: ejecutar src/crime/parse_ine_tabla28716.py para datos INE.
   PASO SIGUIENTE: descargar PDFs MIR y ejecutar src/parsers/mir_parser.py
     para extraer historial completo 2019-2024 incluyendo % perpetrador extranjero.
 """)
 
     lines.append(DIVIDER)
-    lines.append(f"  Generado: src/analyze_rape_trend_nationality.py")
+    lines.append(f"  Generado: src/crime/analyze_rape_trend_nationality.py")
     lines.append(f"  Datos: {RAW_CSV.name} + INE Tabla 28716")
     lines.append(DIVIDER)
 
@@ -526,7 +526,7 @@ def main():
     conv = load_ine_convictions(INE_CSV)
 
     if conv is None:
-        print("INE conviction data not found — run src/parse_ine_tabla28716.py first.")
+        print("INE conviction data not found — run src/crime/parse_ine_tabla28716.py first.")
         print("Continuing with partial data from violence_spain.csv...")
 
     report = build_report(sv_rows, conv)

@@ -33,9 +33,9 @@ Total cell count: 3 × 22 × 120 × 25 = 198,000 data points.
 ```
 curl -s "https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/7947?nult=25&tip=A" \
   -o /tmp/ine_mortality_full.json     # ~24 MB JSON, 7,920 series × 25 years
-python3 src/parse_ine_mortality.py /tmp/ine_mortality_full.json \
+python3 src/mortality/parse_ine_mortality.py /tmp/ine_mortality_full.json \
   data/processed/mortality_spain_ine_ecm.csv
-python3 src/summarize_mortality.py data/processed/mortality_spain_ine_ecm.csv
+python3 src/mortality/summarize_mortality.py data/processed/mortality_spain_ine_ecm.csv
 ```
 
 Pulled 2026-05-20. All 2024 figures marked `Definitivo` (final) by INE.

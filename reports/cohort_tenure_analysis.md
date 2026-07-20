@@ -1,6 +1,6 @@
 # T41 — Morocco/Algeria (+ South America/EU-Europe) cohort-tenure crime-rate analysis
 
-Full methodology, results, and caveats for T41 (`src/analyze_cohort_crime_rate.py`).
+Full methodology, results, and caveats for T41 (`src/crime/analyze_cohort_crime_rate.py`).
 SPEC.md's T41 row keeps only a summary; this file is the source of record.
 
 Association only throughout (⊥ causal, V9).
