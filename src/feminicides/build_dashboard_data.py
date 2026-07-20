@@ -75,10 +75,12 @@ def build():
             }
             break
 
-    # 2024 rate per 100k by origin (Spanish-born vs foreign-born).
-    rate_rows = read_csv("data/processed/feminicide_rates_2024.csv")
+    # Latest-year rate per 100k by origin (Spanish resident vs foreign resident).
+    rate_rows = read_csv("data/processed/feminicide_rates_2006-2024.csv")
+    latest_year = max((num(r["year"]) for r in rate_rows), default=None)
+    latest_rows = [r for r in rate_rows if num(r["year"]) == latest_year]
     rates = {
-        "year": num(rate_rows[0]["year"]) if rate_rows else None,
+        "year": latest_year,
         "rows": [
             {
                 "origin": r["origin"],
@@ -89,7 +91,7 @@ def build():
                 "ci_upper": num(r["ci_upper"]),
                 "confidence": r["confidence"],
             }
-            for r in rate_rows
+            for r in latest_rows
         ],
     }
 
