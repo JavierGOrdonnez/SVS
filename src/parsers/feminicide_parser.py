@@ -216,19 +216,42 @@ def _extract_simple_table(block: str, vocab: list[str]) -> list[CategoryCount]:
 
 def _extract_victim_perp_table(block: str, vocab: list[str]) -> list[VictimPerpCategoryCount]:
     """Table with separate 'Mujeres víctimas mortales' and 'Presuntos
-    agresores' Número/% sub-blocks."""
+    agresores' Número/% sub-blocks. Two layouts exist across report years
+    (B33): 2023+ interleaves per-actor Número/% pairs (vc,vp then, after a
+    'Presuntos agresores' sub-header, pc,pp); 2006-2022 instead prints both
+    'Mujeres víctimas mortales'/'Presuntos agresores' as column headers
+    BEFORE either actor's data, then both actors' raw counts back-to-back,
+    then both actors' percentages back-to-back (vc,pc,vp,pp). Splitting on
+    the position of 'Presuntos agresores' (as the 2023+ layout requires)
+    lands before any numbers in the 2006-2022 layout, silently zeroing out
+    victim_block and returning [] -- detect which layout this block uses
+    instead of assuming the newer one."""
     n = len(vocab) + 1
-    perp_m = re.search(r"Presuntos agresores", block)
-    victim_block = block[:perp_m.start()] if perp_m else block
-    perp_block = block[perp_m.start():] if perp_m else ""
-
-    v_nums = _numbers_after(r"Número", victim_block, 2 * n)
-    p_nums = _numbers_after(r"Número", perp_block, 2 * n) if perp_block else []
-
-    if len(v_nums) < 2 * n:
+    num_ms = list(re.finditer(r"Número", block))
+    if not num_ms:
         return []
-    vc, vp = v_nums[:n], v_nums[n:2 * n]
-    pc, pp = (p_nums[:n], p_nums[n:2 * n]) if len(p_nums) >= 2 * n else ([None] * n, [None] * n)
+    perp_header_m = re.search(r"Presuntos agresores", block)
+    # old layout: the perp header (if present) appears before any 'Número'
+    # -- it's a column label, not a section boundary.
+    old_layout = bool(perp_header_m) and perp_header_m.start() < num_ms[0].start()
+
+    if old_layout:
+        nums = _numbers_after(r"Número", block, 4 * n)
+        if len(nums) < 4 * n:
+            return []
+        vc, pc, vp, pp = nums[0:n], nums[n:2 * n], nums[2 * n:3 * n], nums[3 * n:4 * n]
+    else:
+        perp_m = perp_header_m
+        victim_block = block[:perp_m.start()] if perp_m else block
+        perp_block = block[perp_m.start():] if perp_m else ""
+
+        v_nums = _numbers_after(r"Número", victim_block, 2 * n)
+        p_nums = _numbers_after(r"Número", perp_block, 2 * n) if perp_block else []
+
+        if len(v_nums) < 2 * n:
+            return []
+        vc, vp = v_nums[:n], v_nums[n:2 * n]
+        pc, pp = (p_nums[:n], p_nums[n:2 * n]) if len(p_nums) >= 2 * n else ([None] * n, [None] * n)
 
     out = []
     for i, label in enumerate(vocab, start=1):
