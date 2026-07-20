@@ -860,7 +860,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.4,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 2.9,
+          "perp_count": 3,
+          "perp_pct": 4.3
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 15,
+          "victim_pct": 21.7,
+          "perp_count": 10,
+          "perp_pct": 14.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 27,
+          "victim_pct": 39.1,
+          "perp_count": 25,
+          "perp_pct": 36.2
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 9,
+          "victim_pct": 13.0,
+          "perp_count": 13,
+          "perp_pct": 18.8
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 5.8,
+          "perp_count": 6,
+          "perp_pct": 8.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 7.2,
+          "perp_count": 2,
+          "perp_pct": 2.9
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 8.7,
+          "perp_count": 7,
+          "perp_pct": 10.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 3,
+          "perp_pct": 4.3
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -1169,7 +1240,78 @@
           "pct": 1.4
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 2.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 19,
+          "victim_pct": 26.8,
+          "perp_count": 15,
+          "perp_pct": 21.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 15,
+          "victim_pct": 21.1,
+          "perp_count": 19,
+          "perp_pct": 26.8
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 15,
+          "victim_pct": 21.1,
+          "perp_count": 15,
+          "perp_pct": 21.1
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 11.3,
+          "perp_count": 7,
+          "perp_pct": 9.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 6,
+          "victim_pct": 8.5,
+          "perp_count": 8,
+          "perp_pct": 11.3
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 8.5,
+          "perp_count": 7,
+          "perp_pct": 9.9
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -1478,7 +1620,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.3,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 4,
+          "victim_pct": 5.3,
+          "perp_count": 1,
+          "perp_pct": 1.3
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 20,
+          "victim_pct": 26.3,
+          "perp_count": 13,
+          "perp_pct": 17.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 15,
+          "victim_pct": 19.7,
+          "perp_count": 21,
+          "perp_pct": 27.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 19,
+          "victim_pct": 25.0,
+          "perp_count": 18,
+          "perp_pct": 23.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 10.5,
+          "perp_count": 10,
+          "perp_pct": 13.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 6.6,
+          "perp_count": 4,
+          "perp_pct": 5.3
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 5.3,
+          "perp_count": 9,
+          "perp_pct": 11.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -1787,7 +2000,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 5,
+          "victim_pct": 8.6,
+          "perp_count": 1,
+          "perp_pct": 1.7
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 11,
+          "victim_pct": 19.0,
+          "perp_count": 11,
+          "perp_pct": 19.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 31.0,
+          "perp_count": 16,
+          "perp_pct": 27.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 10,
+          "victim_pct": 17.2,
+          "perp_count": 12,
+          "perp_pct": 20.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 10.3,
+          "perp_count": 5,
+          "perp_pct": 8.6
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 7,
+          "perp_pct": 12.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 6.9,
+          "perp_count": 5,
+          "perp_pct": 8.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.7
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -2096,7 +2380,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.4,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.4
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 16,
+          "victim_pct": 21.6,
+          "perp_count": 6,
+          "perp_pct": 8.1
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 22,
+          "victim_pct": 29.7,
+          "perp_count": 24,
+          "perp_pct": 32.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 18,
+          "victim_pct": 24.3,
+          "perp_count": 16,
+          "perp_pct": 21.6
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 11,
+          "victim_pct": 14.9,
+          "perp_count": 14,
+          "perp_pct": 18.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 4,
+          "victim_pct": 5.4,
+          "perp_count": 7,
+          "perp_pct": 9.5
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 2.7,
+          "perp_count": 5,
+          "perp_pct": 6.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.4
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -2405,7 +2760,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 3,
+          "victim_pct": 4.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 15,
+          "victim_pct": 24.2,
+          "perp_count": 9,
+          "perp_pct": 14.5
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 25.8,
+          "perp_count": 11,
+          "perp_pct": 17.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 12,
+          "victim_pct": 19.4,
+          "perp_count": 18,
+          "perp_pct": 29.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 11.3,
+          "perp_count": 11,
+          "perp_pct": 17.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 3.2,
+          "perp_count": 5,
+          "perp_pct": 8.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 11.3,
+          "perp_count": 7,
+          "perp_pct": 11.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.6
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -2714,7 +3140,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 13,
+          "victim_pct": 25.5,
+          "perp_count": 5,
+          "perp_pct": 9.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 7,
+          "victim_pct": 13.7,
+          "perp_count": 15,
+          "perp_pct": 29.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 9,
+          "victim_pct": 17.6,
+          "perp_count": 8,
+          "perp_pct": 15.7
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 11.8,
+          "perp_count": 7,
+          "perp_pct": 13.7
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 8,
+          "victim_pct": 15.7,
+          "perp_count": 5,
+          "perp_pct": 9.8
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 6,
+          "victim_pct": 11.8,
+          "perp_count": 9,
+          "perp_pct": 17.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -3023,7 +3520,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 1,
+          "perp_pct": 1.9
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 12,
+          "victim_pct": 22.2,
+          "perp_count": 5,
+          "perp_pct": 9.3
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 33.3,
+          "perp_count": 18,
+          "perp_pct": 33.3
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 10,
+          "victim_pct": 18.5,
+          "perp_count": 17,
+          "perp_pct": 31.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 7.4,
+          "perp_count": 4,
+          "perp_pct": 7.4
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 9.3,
+          "perp_count": 3,
+          "perp_pct": 5.6
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 5.6,
+          "perp_count": 5,
+          "perp_pct": 9.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.9
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -3332,7 +3900,78 @@
           "pct": 3.5
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 5,
+          "victim_pct": 8.8,
+          "perp_count": 3,
+          "perp_pct": 5.3
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 28.1,
+          "perp_count": 15,
+          "perp_pct": 26.3
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 17,
+          "victim_pct": 29.8,
+          "perp_count": 15,
+          "perp_pct": 26.3
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 6,
+          "victim_pct": 10.5,
+          "perp_count": 9,
+          "perp_pct": 15.8
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 5.3,
+          "perp_count": 6,
+          "perp_pct": 10.5
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 12.3,
+          "perp_count": 7,
+          "perp_pct": 12.3
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 2,
+          "victim_pct": 3.5,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -3641,7 +4280,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 12,
+          "victim_pct": 20.3,
+          "perp_count": 4,
+          "perp_pct": 6.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 18,
+          "victim_pct": 30.5,
+          "perp_count": 18,
+          "perp_pct": 30.5
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 19,
+          "victim_pct": 32.2,
+          "perp_count": 18,
+          "perp_pct": 30.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 2,
+          "victim_pct": 3.4,
+          "perp_count": 10,
+          "perp_pct": 16.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 6,
+          "victim_pct": 10.2,
+          "perp_count": 6,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 3.4,
+          "perp_count": 3,
+          "perp_pct": 5.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -3950,7 +4660,78 @@
           "pct": 2.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 13,
+          "victim_pct": 26.5,
+          "perp_count": 15,
+          "perp_pct": 30.6
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 13,
+          "victim_pct": 26.5,
+          "perp_count": 13,
+          "perp_pct": 26.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 16.3,
+          "perp_count": 5,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 5,
+          "victim_pct": 10.2,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -4259,7 +5040,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 32.7,
+          "perp_count": 18,
+          "perp_pct": 36.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 12,
+          "victim_pct": 24.5,
+          "perp_count": 13,
+          "perp_pct": 26.5
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 8.2,
+          "perp_count": 5,
+          "perp_pct": 10.2
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 6.1,
+          "perp_count": 2,
+          "perp_pct": 4.1
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 2,
+          "perp_pct": 4.1
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -4568,7 +5420,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 7,
+          "victim_pct": 13.5,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 14,
+          "victim_pct": 26.9,
+          "perp_count": 10,
+          "perp_pct": 19.2
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 18,
+          "victim_pct": 34.6,
+          "perp_count": 16,
+          "perp_pct": 30.8
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 4,
+          "victim_pct": 7.7,
+          "perp_count": 12,
+          "perp_pct": 23.1
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 5.8,
+          "perp_count": 5,
+          "perp_pct": 9.6
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 4,
+          "victim_pct": 7.7,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 1.9,
+          "perp_count": 3,
+          "perp_pct": 5.8
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -4877,7 +5800,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 1.8
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 11,
+          "victim_pct": 19.6,
+          "perp_count": 5,
+          "perp_pct": 8.9
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 10,
+          "victim_pct": 17.9,
+          "perp_count": 6,
+          "perp_pct": 10.7
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 21,
+          "victim_pct": 37.5,
+          "perp_count": 27,
+          "perp_pct": 48.2
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 14.3,
+          "perp_count": 10,
+          "perp_pct": 17.9
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 3.6,
+          "perp_count": 3,
+          "perp_pct": 5.4
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 1,
+          "victim_pct": 1.8,
+          "perp_count": 2,
+          "perp_pct": 3.6
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 2,
+          "victim_pct": 3.6,
+          "perp_count": 2,
+          "perp_pct": 3.6
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -5186,7 +6180,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 6,
+          "victim_pct": 12.0,
+          "perp_count": 9,
+          "perp_pct": 18.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 11,
+          "victim_pct": 22.0,
+          "perp_count": 8,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 13,
+          "victim_pct": 26.0,
+          "perp_count": 11,
+          "perp_pct": 22.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 9,
+          "perp_pct": 18.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 5,
+          "victim_pct": 10.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 1,
+          "perp_pct": 2.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -5495,7 +6560,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 7,
+          "victim_pct": 14.3,
+          "perp_count": 4,
+          "perp_pct": 8.2
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 16,
+          "victim_pct": 32.7,
+          "perp_count": 10,
+          "perp_pct": 20.4
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 11,
+          "victim_pct": 22.4,
+          "perp_count": 14,
+          "perp_pct": 28.6
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 9,
+          "victim_pct": 18.4,
+          "perp_count": 12,
+          "perp_pct": 24.5
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 2,
+          "victim_pct": 4.1,
+          "perp_count": 6,
+          "perp_pct": 12.2
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 6.1,
+          "perp_count": 3,
+          "perp_pct": 6.1
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -5804,7 +6940,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 2,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 6,
+          "victim_pct": 12.0,
+          "perp_count": 2,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 9,
+          "victim_pct": 18.0,
+          "perp_count": 10,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 17,
+          "victim_pct": 34.0,
+          "perp_count": 19,
+          "perp_pct": 38.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 7,
+          "victim_pct": 14.0,
+          "perp_count": 8,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 3,
+          "perp_pct": 6.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 3,
+          "victim_pct": 6.0,
+          "perp_count": 6,
+          "perp_pct": 12.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 1,
+          "victim_pct": 2.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",
@@ -7253,7 +8460,78 @@
           "pct": 0.0
         }
       ],
-      "age": [],
+      "age": [
+        {
+          "label": "13 a 14 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "15 a 17 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "18 a 20 años",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        },
+        {
+          "label": "21 a 30 años",
+          "victim_count": 2,
+          "victim_pct": 8.0,
+          "perp_count": 2,
+          "perp_pct": 8.0
+        },
+        {
+          "label": "31 a 40 años",
+          "victim_count": 4,
+          "victim_pct": 16.0,
+          "perp_count": 4,
+          "perp_pct": 16.0
+        },
+        {
+          "label": "41 a 50 años",
+          "victim_count": 7,
+          "victim_pct": 28.0,
+          "perp_count": 5,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "51 a 60 años",
+          "victim_count": 8,
+          "victim_pct": 32.0,
+          "perp_count": 8,
+          "perp_pct": 32.0
+        },
+        {
+          "label": "61 a 70 años",
+          "victim_count": 3,
+          "victim_pct": 12.0,
+          "perp_count": 5,
+          "perp_pct": 20.0
+        },
+        {
+          "label": "71 a 84 años",
+          "victim_count": 1,
+          "victim_pct": 4.0,
+          "perp_count": 1,
+          "perp_pct": 4.0
+        },
+        {
+          "label": "85 años o más",
+          "victim_count": 0,
+          "victim_pct": 0.0,
+          "perp_count": 0,
+          "perp_pct": 0.0
+        }
+      ],
       "origin": [
         {
           "label": "España",

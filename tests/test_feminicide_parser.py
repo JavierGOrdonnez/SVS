@@ -106,6 +106,25 @@ def test_extract_victim_perp_table_handles_missing_perp_block():
     assert result[0].perp_pct is None
 
 
+def test_V40_extract_victim_perp_table_handles_old_flat_layout():
+    """2006-2022 age table: both actor headers precede any 'Número', and
+    the data is one flat [vc, pc, vp, pp] run rather than per-actor
+    Número/% sub-blocks (B33)."""
+    vocab = ["España", "Otro país"]
+    block = (
+        "Mujeres víctimas mortales Presuntos agresores "
+        "Número 49 33 16 49 31 18 % 100.0 67.3 32.7 100.0 63.3 36.7"
+    )
+    result = _extract_victim_perp_table(block, vocab)
+    assert [
+        (c.label, c.victim_count, c.victim_pct, c.perp_count, c.perp_pct)
+        for c in result
+    ] == [
+        ("España", 33, 67.3, 31, 63.3),
+        ("Otro país", 16, 32.7, 18, 36.7),
+    ]
+
+
 # ── _extract_flat_table (Tables 3.1-3.4, TOTAL rows kept) ───────
 
 def test_extract_flat_table_keeps_all_labels_1to1():
