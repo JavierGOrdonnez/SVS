@@ -87,6 +87,16 @@ function ageColor(age) {
   const t = Math.max(0, Math.min(1, age / 100));
   return hslToHex(t * 220, 65, 58);
 }
+// trailing 5-year moving average that skips nulls (band/actor not
+// applicable that year) rather than treating them as 0; all-null windows
+// stay null so genuinely inapplicable spans (e.g. a legacy-only band past
+// 2005) render as a true gap, not a fabricated flat line.
+function movingAvg5(values, window = 5) {
+  return values.map((_, i) => {
+    const span = values.slice(Math.max(0, i - window + 1), i + 1).filter(v => v !== null && v !== undefined);
+    return span.length ? span.reduce((a, b) => a + b, 0) / span.length : null;
+  });
+}
 const line = (label, data, color, extra = {}) => ({
   label, data, borderColor: color, backgroundColor: color + '22',
   borderWidth: 2, tension: 0.25, pointRadius: 2, pointHoverRadius: 4, ...extra,
@@ -183,25 +193,28 @@ function buildFeminicides() {
     });
   });
 
-  // each age band as its own (non-stacked) line, same colors as the
-  // fem-timeline stack, to show whether declines are age-group-specific
-  // or general across bands.
-  register('fem-ageband', (cv) => {
+  // each age band as its own (non-stacked) 5-year-moving-average line,
+  // same colors as the fem-timeline stack, to show whether declines are
+  // age-group-specific or general across bands. Smoothed (not raw
+  // per-year values) to cut small-subgroup year-to-year noise. One
+  // builder shared between the victims and perpetrators variants.
+  function buildAgeBandChart(cv, actorKey) {
     const raw = d.timeline;
     const idxs = raw.years.map((_, i) => i).filter(i => raw.years[i] >= FEM_AXIS_START && raw.years[i] <= FEM_AXIS_END);
     const years = idxs.map(i => raw.years[i]);
     const ab = idxs.map(i => raw.age_breakdown[i]);
 
     const bandLabels = [];
-    ab.forEach(a => { if (a) a.forEach(x => { if (!bandLabels.includes(x.label)) bandLabels.push(x.label); }); });
+    ab.forEach(a => { if (a) a.forEach(x => { if (x[actorKey] != null && !bandLabels.includes(x.label)) bandLabels.push(x.label); }); });
     bandLabels.sort((a, b) => ageMidpoint(a) - ageMidpoint(b));
 
     const datasets = bandLabels.map((label) => {
       const color = ageColor(ageMidpoint(label));
-      return line(label, years.map((_, yi) => {
+      const series = years.map((_, yi) => {
         const entry = ab[yi] && ab[yi].find(x => x.label === label);
-        return entry ? entry.victims : null;
-      }), color, { spanGaps: false });
+        return entry ? entry[actorKey] : null;
+      });
+      return line(label, movingAvg5(series), color, { spanGaps: false });
     });
 
     return new Chart(cv, {
@@ -214,7 +227,9 @@ function buildFeminicides() {
         },
       }),
     });
-  });
+  }
+  register('fem-ageband', (cv) => buildAgeBandChart(cv, 'victims'));
+  register('fem-ageband-perp', (cv) => buildAgeBandChart(cv, 'perps'));
 
   // shared by fem-counts/fem-rates: one line per origin x role (color =
   // origin, dash = perpetrator), plotted over the shared 2003-2025 axis
