@@ -85,7 +85,7 @@ function buildFeminicides() {
     const borders = t.confidence.map(c => activeConf[c] ? CONF[c] : 'rgba(120,120,140,0.3)');
     return new Chart(cv, {
       type: 'bar',
-      data: { labels: t.years, datasets: [{ label: 'Victims', data: t.values, backgroundColor: colors, borderColor: borders, borderWidth: 1.5 }] },
+      data: { labels: t.years.map(String), datasets: [{ label: 'Victims', data: t.values, backgroundColor: colors, borderColor: borders, borderWidth: 1.5 }] },
       options: baseOpts({ plugins: { annotation: { annotations: {
         covid: vline(String(2020), 'COVID', '#60a5fa') } } } }),
     });
@@ -126,7 +126,7 @@ function buildSexual() {
 
   register('sx-totals', (cv) => new Chart(cv, {
     type: 'line',
-    data: { labels: d.totals.years, datasets: [line('Reported sexual crimes', d.totals.total, ACCENT, { fill: true })] },
+    data: { labels: d.totals.years.map(String), datasets: [line('Reported sexual crimes', d.totals.total, ACCENT, { fill: true })] },
     options: baseOpts({ plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } } } }),
   }));
 
@@ -167,7 +167,7 @@ function buildHate() {
 
   register('hc-totals', (cv) => new Chart(cv, {
     type: 'line',
-    data: { labels: d.totals.years, datasets: [line('Hate crimes reported', d.totals.total, CONF.low, { fill: true, spanGaps: false })] },
+    data: { labels: d.totals.years.map(String), datasets: [line('Hate crimes reported', d.totals.total, CONF.low, { fill: true, spanGaps: false })] },
     options: baseOpts({ plugins: { annotation: { annotations: { gap: vline(String(d.gap_year), 'no 2022 report', TICK) } } } }),
   }));
 
@@ -206,7 +206,7 @@ function buildMortality() {
 function buildMigration() {
   const d = DATA.migration;
   register('mi-inflow', (cv) => new Chart(cv, { type: 'line',
-    data: { labels: d.annual_inflow.years, datasets: [line('Immigration inflow', d.annual_inflow.values, ACCENT, { fill: true })] },
+    data: { labels: d.annual_inflow.years.map(String), datasets: [line('Immigration inflow', d.annual_inflow.values, ACCENT, { fill: true })] },
     options: baseOpts({ plugins: { annotation: { annotations: { br: vline(String(2008), 'EVR→EMCR', TICK) } } } }) }));
   register('mi-origin', (cv) => { const s = d.origin_composition; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.origins.map((o, i) => line(o, s.series[o], PALETTE[i % PALETTE.length])) },
