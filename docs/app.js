@@ -20,10 +20,6 @@ const CONF = {
   high: tok('--high', '#22c55e'), medium: tok('--medium', '#eab308'),
   low: tok('--low', '#f97316'), unverified: tok('--unverified', '#ef4444'),
 };
-const CONF_A = {
-  high: 'rgba(34,197,94,0.7)', medium: 'rgba(234,179,8,0.7)',
-  low: 'rgba(249,115,22,0.7)', unverified: 'rgba(239,68,68,0.7)',
-};
 const ACCENT = tok('--accent', '#7c83ff');
 const PALETTE = ['#7c83ff', '#22c55e', '#eab308', '#f472b6', '#06b6d4', '#f97316', '#a855f7', '#60a5fa'];
 const GRID = 'rgba(255,255,255,0.06)', TICK = '#6b7280';
@@ -56,6 +52,41 @@ function vline(x, label, color = ACCENT) {
   return { type: 'line', xMin: x, xMax: x, borderColor: color, borderWidth: 1, borderDash: [4, 4],
     label: { display: true, content: label, color, backgroundColor: 'rgba(15,17,23,0.85)', font: { size: 9 }, position: 'start' } };
 }
+// dim a '#rrggbb' color to a lower alpha, e.g. for provisional/not-yet-consolidated bars
+function fadeAlpha(hex, factor = 0.35) {
+  const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${factor})`;
+}
+// midpoint age (years) of a band label, handling both the Spanish
+// "N a M años" / "N años o más" and migration "N-M" / "N+" formats, plus
+// open-ended-low bands ("<N años"). Open-ended-high bands ("o más"/"+")
+// get a +7.5y nudge past their floor so they sit past the preceding
+// closed band on the 0-100 colormap domain; open-ended-low bands ("<N")
+// instead take the floor's lower half (N/2) so they sort/color youngest.
+function ageMidpoint(label) {
+  if (label.startsWith('<')) {
+    const lt = label.match(/(\d+)/);
+    return lt ? Number(lt[1]) / 2 : 0;
+  }
+  const range = label.match(/(\d+)\D+(\d+)/);
+  if (range) return (Number(range[1]) + Number(range[2])) / 2;
+  const open = label.match(/(\d+)/);
+  return open ? Number(open[1]) + 7.5 : 50;
+}
+// continuous age colormap: red (young) -> blue (old) hue sweep, fixed to
+// a 0-100y domain so the same age always maps to the same color across charts.
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const toHex = (x) => Math.round(255 * x).toString(16).padStart(2, '0');
+  return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+}
+function ageColor(age) {
+  const t = Math.max(0, Math.min(1, age / 100));
+  return hslToHex(t * 220, 65, 58);
+}
 const line = (label, data, color, extra = {}) => ({
   label, data, borderColor: color, backgroundColor: color + '22',
   borderWidth: 2, tension: 0.25, pointRadius: 2, pointHoverRadius: 4, ...extra,
@@ -76,49 +107,161 @@ function mountVisible() {
 }
 
 /* ── chart builders per domain ───────────────────────── */
+const FEM_AXIS_START = 2003, FEM_AXIS_END = 2025;
+const FEM_AXIS_YEARS = Array.from({ length: FEM_AXIS_END - FEM_AXIS_START + 1 }, (_, i) => FEM_AXIS_START + i);
+
 function buildFeminicides() {
   const d = DATA.feminicides;
 
   register('fem-timeline', (cv) => {
-    const t = d.timeline;
-    const colors = t.confidence.map(c => activeConf[c] ? CONF_A[c] : 'rgba(120,120,140,0.12)');
-    const borders = t.confidence.map(c => activeConf[c] ? CONF[c] : 'rgba(120,120,140,0.3)');
+    const raw = d.timeline;
+    // clip to the shared 2003-2025 axis (all feminicide panels line up)
+    const idxs = raw.years.map((_, i) => i).filter(i => raw.years[i] >= FEM_AXIS_START && raw.years[i] <= FEM_AXIS_END);
+    const t = {
+      age_breakdown: idxs.map(i => raw.age_breakdown[i]),
+      has_age_breakdown: idxs.map(i => raw.has_age_breakdown[i]),
+      provisional: idxs.map(i => raw.provisional[i]),
+      values: idxs.map(i => raw.values[i]),
+      values_ma5: idxs.map(i => raw.values_ma5[i]),
+    };
+    const years = idxs.map(i => raw.years[i]);
+    const provFactor = 0.35;
+
+    // union of age-band labels, in ascending-age order (2003-2005 have none)
+    const bandLabels = [];
+    t.age_breakdown.forEach(ab => { if (ab) ab.forEach(a => { if (!bandLabels.includes(a.label)) bandLabels.push(a.label); }); });
+    bandLabels.sort((a, b) => ageMidpoint(a) - ageMidpoint(b));
+
+    const bandDatasets = bandLabels.map((label) => {
+      const color = ageColor(ageMidpoint(label));
+      return {
+        label,
+        data: years.map((_, yi) => {
+          const ab = t.age_breakdown[yi];
+          if (!ab) return null;
+          const entry = ab.find(a => a.label === label);
+          return entry ? entry.victims : 0;
+        }),
+        backgroundColor: years.map((_, yi) => t.provisional[yi] ? fadeAlpha(color, provFactor) : color + 'cc'),
+        borderColor: color, borderWidth: 1, stack: 's',
+      };
+    });
+
+    // 2003-2005: no age breakdown in the source (legacy-format stub reports),
+    // so render as a single solid bar instead of a stack for those years only.
+    const legacyDataset = {
+      label: 'Total (no age breakdown)',
+      data: years.map((_, yi) => t.has_age_breakdown[yi] ? null : t.values[yi]),
+      backgroundColor: years.map((_, yi) => t.provisional[yi] ? fadeAlpha(TICK, provFactor) : ACCENT + '99'),
+      borderColor: ACCENT, borderWidth: 1, stack: 's',
+    };
+
+    const ma5Dataset = {
+      type: 'line', label: '5-year moving average', data: t.values_ma5,
+      borderColor: '#fff', backgroundColor: 'transparent', borderWidth: 2,
+      borderDash: [6, 3], pointRadius: 0, tension: 0.2, order: -1, stack: 'ma5',
+    };
+
+    const annotations = { covid: vline(String(2020), 'COVID', '#60a5fa') };
+    d.milestones.forEach((m, i) => { annotations['ms' + i] = vline(String(m.year), m.label, '#a855f7'); });
+
     return new Chart(cv, {
       type: 'bar',
-      data: { labels: t.years.map(String), datasets: [{ label: 'Victims', data: t.values, backgroundColor: colors, borderColor: borders, borderWidth: 1.5 }] },
-      options: baseOpts({ plugins: { annotation: { annotations: {
-        covid: vline(String(2020), 'COVID', '#60a5fa') } } } }),
+      data: { labels: years.map(String), datasets: [legacyDataset, ...bandDatasets, ma5Dataset] },
+      options: baseOpts({
+        x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } },
+        y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations },
+          tooltip: { callbacks: { footer: (items) => {
+            const yi = items[0]?.dataIndex;
+            return t.provisional[yi] ? 'Provisional — year not yet consolidated' : '';
+          } } },
+        },
+      }),
     });
   });
 
-  register('fem-regional', (cv) => {
-    const r = d.regional.rows.slice().sort((a, b) => b.count - a.count);
+  // each age band as its own (non-stacked) line, same colors as the
+  // fem-timeline stack, to show whether declines are age-group-specific
+  // or general across bands.
+  register('fem-ageband', (cv) => {
+    const raw = d.timeline;
+    const idxs = raw.years.map((_, i) => i).filter(i => raw.years[i] >= FEM_AXIS_START && raw.years[i] <= FEM_AXIS_END);
+    const years = idxs.map(i => raw.years[i]);
+    const ab = idxs.map(i => raw.age_breakdown[i]);
+
+    const bandLabels = [];
+    ab.forEach(a => { if (a) a.forEach(x => { if (!bandLabels.includes(x.label)) bandLabels.push(x.label); }); });
+    bandLabels.sort((a, b) => ageMidpoint(a) - ageMidpoint(b));
+
+    const datasets = bandLabels.map((label) => {
+      const color = ageColor(ageMidpoint(label));
+      return line(label, years.map((_, yi) => {
+        const entry = ab[yi] && ab[yi].find(x => x.label === label);
+        return entry ? entry.victims : null;
+      }), color, { spanGaps: false });
+    });
+
     return new Chart(cv, {
-      type: 'bar',
-      data: { labels: r.map(x => x.label), datasets: [{ data: r.map(x => x.count), backgroundColor: ACCENT + 'cc', borderColor: ACCENT, borderWidth: 1 }] },
-      options: baseOpts({ scales: { x: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { grid: { display: false }, ticks: { color: TICK, font: { size: 10 } } } }, y: undefined }),
+      type: 'line',
+      data: { labels: years.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations: { covid: vline(String(2020), 'COVID', '#60a5fa') } },
+        },
+      }),
     });
   });
 
-  register('fem-rates', (cv) => {
-    const r = d.rates_2024.rows;
-    return new Chart(cv, {
-      type: 'bar',
-      data: { labels: r.map(x => x.origin), datasets: [{ label: 'per 100k', data: r.map(x => x.rate_per_100k),
-        backgroundColor: r.map((_, i) => PALETTE[i] + 'cc'), borderColor: r.map((_, i) => PALETTE[i]), borderWidth: 1 }] },
-      options: baseOpts({ plugins: { tooltip: { callbacks: { afterLabel: (c) => {
-        const row = r[c.dataIndex]; return `${row.victims} victims / ${(row.population/1e6).toFixed(1)}M · 95% CI ${row.ci_lower}–${row.ci_upper}`; } } } } }),
-    });
-  });
+  // shared by fem-counts/fem-rates: one line per origin x role (color =
+  // origin, dash = perpetrator), plotted over the shared 2003-2025 axis
+  // with true gaps (no data before 2006 or after 2024).
+  function buildOriginRoleChart(cv, valueKey, afterLabel) {
+    const rows = d.rates.rows;
+    const origins = ['españa', 'otro_pais'];
+    const originLabel = { 'españa': 'Spanish', 'otro_pais': 'Foreign-born' };
+    const originColor = { 'españa': PALETTE[0], 'otro_pais': PALETTE[4] };
+    const roles = ['victim', 'perpetrator'];
+    const roleLabel = { victim: 'victims', perpetrator: 'perpetrators' };
+    const byKey = {};
+    rows.forEach(r => { byKey[`${r.year}|${r.origin}|${r.role}`] = r; });
 
-  register('fem-age-origin', (cv) => {
-    const a = d.age_origin.age.filter(x => (x.victims || 0) > 0);
+    const datasets = [];
+    origins.forEach(o => roles.forEach(role => {
+      const color = originColor[o];
+      datasets.push({
+        label: `${originLabel[o]} — ${roleLabel[role]}`,
+        data: FEM_AXIS_YEARS.map(y => byKey[`${y}|${o}|${role}`]?.[valueKey] ?? null),
+        borderColor: color, backgroundColor: color + '22', borderWidth: 2,
+        borderDash: role === 'perpetrator' ? [5, 4] : [],
+        pointRadius: 2, pointHoverRadius: 4, tension: 0.2, spanGaps: false,
+      });
+    }));
+
     return new Chart(cv, {
-      type: 'bar',
-      data: { labels: a.map(x => x.label), datasets: [{ label: 'Victims', data: a.map(x => x.victims), backgroundColor: ACCENT + 'aa', borderColor: ACCENT, borderWidth: 1 }] },
-      options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 }, maxRotation: 45 } } }),
+      type: 'line',
+      data: { labels: FEM_AXIS_YEARS.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const o = origins[Math.floor(c.datasetIndex / 2)], role = roles[c.datasetIndex % 2];
+            const row = byKey[`${FEM_AXIS_YEARS[c.dataIndex]}|${o}|${role}`];
+            return row ? afterLabel(row, roleLabel[role]) : '';
+          } } },
+        },
+      }),
     });
-  });
+  }
+
+  register('fem-counts', (cv) => buildOriginRoleChart(cv, 'count',
+    (row, roleLabel) => `${(row.population / 1e6).toFixed(1)}M ${row.origin === 'españa' ? 'Spanish-resident' : 'foreign-resident'} population`));
+
+  register('fem-rates', (cv) => buildOriginRoleChart(cv, 'rate_per_100k',
+    (row, roleLabel) => `${row.count} ${roleLabel} / ${(row.population / 1e6).toFixed(1)}M · 95% CI ${row.ci_lower}–${row.ci_upper} (Wald approx. on the raw count, not the population)`));
 }
 
 function buildSexual() {
@@ -215,7 +358,7 @@ function buildMigration() {
     data: { labels: d.sex_split.years, datasets: [line('Male', d.sex_split.male, PALETTE[4]), line('Female', d.sex_split.female, PALETTE[3])] },
     options: baseOpts() }));
   register('mi-ageband', (cv) => { const s = d.age_band_over_time; return new Chart(cv, { type: 'line',
-    data: { labels: s.years, datasets: s.bands.map((b, i) => line(b, s.series[b], PALETTE[i % PALETTE.length], { fill: true, stack: 's', tension: 0.2 })) },
+    data: { labels: s.years, datasets: s.bands.map((b) => line(b, s.series[b], ageColor(ageMidpoint(b)), { fill: true, stack: 's', tension: 0.2 })) },
     options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }) }); });
   register('mi-ageprofile', (cv) => { const s = d.age_profile_latest; return new Chart(cv, { type: 'bar',
     data: { labels: s.ages, datasets: [{ data: s.values, backgroundColor: ACCENT + 'cc' }] },
@@ -264,8 +407,9 @@ function setHeadlines() {
   const fem = DATA.feminicides, sx = DATA.sexual_crimes, hc = DATA.hate_crimes;
   const femIdx = fem.timeline.years.indexOf(2024);
   const fem2024 = femIdx >= 0 ? fem.timeline.values[femIdx] : fem.timeline.values.at(-1);
-  const foreignRate = (fem.rates_2024.rows.find(r => r.origin !== 'españa') || {}).rate_per_100k;
-  const spainRate = (fem.rates_2024.rows.find(r => r.origin === 'españa') || {}).rate_per_100k;
+  const victimRates = fem.rates.rows.filter(r => r.role === 'victim' && r.year === fem.rates.latest_year);
+  const foreignRate = (victimRates.find(r => r.origin !== 'españa') || {}).rate_per_100k;
+  const spainRate = (victimRates.find(r => r.origin === 'españa') || {}).rate_per_100k;
   const sx2024 = sx.totals.total.at(-1);
   const hcLatest = hc.totals.total.at(-1);
   const hcYear = hc.totals.years.at(-1);

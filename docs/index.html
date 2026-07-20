@@ -41,15 +41,19 @@
 <section id="tab-feminicides" class="tab-panel active">
   <div class="grid">
     <svs-chart-panel id="fem-timeline" size="full" confidence="high"
-      title="Partner & ex-partner feminicides, 2006–present" subtitle="Delegación del Gobierno. Bars colored by the confidence filter above.">
+      title="Partner & ex-partner feminicides, 2003–2025" subtitle="Stacked by victim age band, dashed white line = 5-year moving average. Dashed vertical lines: COVID and legal milestones.">
       <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género"></svs-source-cite>
     </svs-chart-panel>
-    <svs-chart-panel id="fem-regional" size="half" confidence="high"
-      title="Regional distribution, latest year" subtitle="Victims by autonomous community."></svs-chart-panel>
-    <svs-chart-panel id="fem-rates" size="half" confidence="high"
-      title="Rate per 100k by origin, 2024" subtitle="Spanish-born vs foreign-born, with 95% CIs. Absolute counts in tooltip."></svs-chart-panel>
-    <svs-chart-panel id="fem-age-origin" size="full" confidence="high"
-      title="Victims by age band, latest year" subtitle="Age profile of feminicide victims."></svs-chart-panel>
+    <svs-chart-panel id="fem-ageband" size="full" height="220" confidence="high"
+      title="Same data, per age band" subtitle="Each band's own trend, unstacked — shows whether declines are age-group-specific or general.">
+    </svs-chart-panel>
+    <svs-chart-panel id="fem-counts" size="full" height="320" confidence="medium"
+      title="Victims & perpetrators by origin — absolute counts" subtitle="Spanish-born vs foreign-born, 2003–2025 (data available 2006–2024). Dashed lines: perpetrators.">
+    </svs-chart-panel>
+    <svs-chart-panel id="fem-rates" size="full" height="320" confidence="medium"
+      title="Rate per 100k by origin — victims & perpetrators" subtitle="Spanish-born vs foreign-born, 2003–2025 (data available 2006–2024). Dashed lines: perpetrators.">
+      <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género" note="Age composition confound: the foreign-resident population skews younger, and victimization/perpetration risk has its own age profile (visible in the timeline) — part of the Spanish-vs-foreign rate gap may be compositional, not age-standardized. No general-origin age×sex population data exists yet for all migrant populations."></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-fem" heading="Feminicides — caveats"></svs-caveat-list>
@@ -167,8 +171,8 @@
     ],
     'cav-fem': [
       { label: 'Scope', text: 'Delegación counts intimate-partner / ex-partner homicides only — narrower than all female homicides (INE MNP) or judicial records (CGPJ).' },
-      { label: 'Confidence', text: '2006–present extracted directly from primary PDFs with sum(region)=total validation. 2003–2005 legacy format is lower-confidence and omitted here.' },
-      { label: 'Rates', text: 'Per-100k rates use INE female population by origin as the denominator; single-year counts give wide confidence intervals.' },
+      { label: 'Legal milestones', text: 'The dashed vertical markers (LO 1/2004, VioGen launch, Pacto de Estado, LO 8/2021, LO 10/2022) are general-knowledge context, not independently verified against a primary source in this repo.' },
+      { label: 'Confidence intervals', text: '95% CIs on the rate chart (shown in the tooltip, not plotted as whiskers on this multi-year view) are a Wald approximation on the raw yearly count (count ± 1.96·√count), converted to a rate — they capture year-to-year count randomness only, not uncertainty in the population denominator.' },
     ],
     'cav-hate': [
       { label: '2022 gap', text: 'No MIR hate-crime report was published for 2022 — the line breaks, it is not zero.' },
