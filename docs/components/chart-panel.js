@@ -15,7 +15,7 @@
 import './confidence-badge.js';
 
 class ChartPanel extends HTMLElement {
-  static observedAttributes = ['title', 'subtitle', 'size', 'confidence'];
+  static observedAttributes = ['title', 'subtitle', 'size', 'confidence', 'height'];
 
   connectedCallback() { if (!this._built) this.render(); }
   attributeChangedCallback() { if (this._built) this.render(); }
@@ -28,6 +28,7 @@ class ChartPanel extends HTMLElement {
     const subtitle = this.getAttribute('subtitle') || '';
     const size = this.getAttribute('size') || 'full';
     const conf = this.getAttribute('confidence');
+    const height = this.getAttribute('height'); // optional fixed cp-wrap height, in px
 
     // Detach any slotted children before we overwrite innerHTML, then re-place.
     const legend = this.querySelector('[slot="legend"]');
@@ -44,7 +45,7 @@ class ChartPanel extends HTMLElement {
         ${conf ? `<svs-confidence-badge level="${conf}"></svs-confidence-badge>` : ''}
       </div>
       <div class="cp-legend"></div>
-      <div class="cp-wrap"><canvas></canvas></div>
+      <div class="cp-wrap"${height ? ` style="flex:0 0 ${Number(height)}px;min-height:0"` : ''}><canvas></canvas></div>
       <div class="cp-source"></div>`;
 
     if (legend) this.querySelector('.cp-legend').append(legend);
