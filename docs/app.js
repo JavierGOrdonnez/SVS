@@ -381,6 +381,62 @@ function buildMigration() {
   register('mi-stock', (cv) => { const s = d.stock_trend; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: [line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true })] },
     options: baseOpts() }); });
+  register('mi-stock-region', (cv) => { const s = d.stock_by_region; return new Chart(cv, { type: 'line',
+    data: { labels: s.years, datasets: s.regions.map((r, i) => line(r, s.series[r], PALETTE[i % PALETTE.length])) },
+    options: baseOpts({ plugins: { legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } } } }) }); });
+
+  // population pyramids (T69/T70): horizontal bars, males negative/left,
+  // females positive/right, oldest band at the top (reverse of PYRAMID_AGES'
+  // young-to-old storage order) to match conventional pyramid layout.
+  function pyramidOpts(maxAbs) {
+    return {
+      indexAxis: 'y',
+      ...baseOpts({
+        x: {
+          stacked: true, min: -maxAbs * 1.05, max: maxAbs * 1.05,
+          ticks: { color: TICK, font: { size: 10 }, callback: (v) => Math.round(Math.abs(v)).toLocaleString() },
+        },
+        y: { stacked: true, grid: { display: false } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 },
+            // de-dupe: the region pyramid repeats each region's label across
+            // its male/female stacked datasets, so only keep the first
+            filter: (item, data) => data.datasets.findIndex(ds => ds.label === item.text) === item.datasetIndex } },
+          tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${Math.abs(c.raw).toLocaleString()}` } },
+        },
+      }),
+    };
+  }
+
+  register('mi-age-pyramid', (cv) => {
+    const s = d.stock_age_pyramid;
+    const ages = [...s.ages].reverse();
+    const regions = Object.keys(s.regions);
+    const datasets = regions.flatMap((region, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      const male = [...s.regions[region].male].reverse().map(v => -v);
+      const female = [...s.regions[region].female].reverse();
+      return [
+        { label: region, data: male, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'male' },
+        { label: region, data: female, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'female' },
+      ];
+    });
+    const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
+    return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
+  });
+
+  register('mi-age-pyramid-es', (cv) => {
+    const s = d.stock_age_pyramid_es;
+    const ages = [...s.ages].reverse();
+    const male = [...s.male].reverse().map(v => -v);
+    const female = [...s.female].reverse();
+    const datasets = [
+      { label: 'Male', data: male, backgroundColor: PALETTE[4] + 'cc', borderColor: PALETTE[4], borderWidth: 1, stack: 'male' },
+      { label: 'Female', data: female, backgroundColor: PALETTE[3] + 'cc', borderColor: PALETTE[3], borderWidth: 1, stack: 'female' },
+    ];
+    const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
+    return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
+  });
 }
 
 function buildCohort() {

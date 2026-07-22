@@ -98,6 +98,9 @@
     <svs-chart-panel id="mi-ageband" size="half" confidence="medium" title="Inflow by age band" subtitle="Stacked, over time."></svs-chart-panel>
     <svs-chart-panel id="mi-ageprofile" size="half" confidence="medium" title="Inflow age profile, latest year" subtitle="5-year bands."></svs-chart-panel>
     <svs-chart-panel id="mi-stock" size="half" confidence="high" title="Foreign-national stock" subtitle="Resident foreign nationals, 2000–2025."></svs-chart-panel>
+    <svs-chart-panel id="mi-stock-region" size="full" height="320" confidence="high" title="Foreign-national stock by region" subtitle="50 nationalities (94% of foreign stock), 2002–2025. Eurostat migr_pop1ctz."></svs-chart-panel>
+    <svs-chart-panel id="mi-age-pyramid" size="half" height="380" confidence="high" title="Foreign-national age pyramid" subtitle="2024, by region. Males left / females right. Eurostat migr_pop1ctz."></svs-chart-panel>
+    <svs-chart-panel id="mi-age-pyramid-es" size="half" height="380" confidence="medium" title="Spanish-national age pyramid" subtitle="2024. Total population minus foreign stock, same age scale."></svs-chart-panel>
   </div>
 
   <div class="section-intro">
@@ -185,7 +188,7 @@
       { label: 'Source', text: 'INE Estadística de Causas de Muerte (table 7947), 2000–2024, joined to INE Padrón population.' },
     ],
     'cav-mig': [
-      { label: 'Age stratification', text: 'Real 5-yr age×sex×nationality denominators exist only for Morocco and Algeria (Eurostat). Other groups use share tests only.' },
+      { label: 'Age stratification', text: 'Real 5-yr age×sex×nationality denominators now cover 50 nationalities (T43/T44/T66), ~94% of foreign stock. The Spanish-national age pyramid is a derived subtraction (total population minus foreign stock) and mixes a July 1 population reference date with Eurostat’s January 1 stock date.' },
       { label: 'Causality', text: 'All cohort tests are associative and descriptive. Correlations with inflow are computed on 4–5 points — indicative, not causal.' },
       { label: 'Breaks', text: '2008 (EVR→EMCR) and 2021 methodology changes are flagged; the 2024 EU-Europe region redefinition undercounts that group.' },
     ],
