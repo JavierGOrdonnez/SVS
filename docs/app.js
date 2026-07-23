@@ -381,9 +381,103 @@ function buildMigration() {
   register('mi-stock', (cv) => { const s = d.stock_trend; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: [line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true })] },
     options: baseOpts() }); });
-  register('mi-stock-region', (cv) => { const s = d.stock_by_region; return new Chart(cv, { type: 'line',
-    data: { labels: s.years, datasets: s.regions.map((r, i) => line(r, s.series[r], PALETTE[i % PALETTE.length])) },
-    options: baseOpts({ plugins: { legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } } } }) }); });
+  // T72: mi-stock-region drill-down. Click a region's legend entry to swap
+  // its line for a stacked bar chart of that region's top-N countries +
+  // "Other" (V44: same stock_nationality rows the region line itself sums,
+  // via build_dashboard_data.py's by_country); the other regions' lines
+  // stay visible, dimmed, and remain clickable to switch the drill target.
+  // Click the same region's entry again (same label, now a hidden
+  // zero-data "back" dataset standing in for its line) to return to the
+  // plain 6-region view. Base chart type is 'bar' (needed for the stacked
+  // group) with region series overriding `type: 'line'` per-dataset —
+  // Chart.js 4.x supports this mixed-type combo natively.
+  register('mi-stock-region', (cv) => {
+    const s = d.stock_by_region;
+    let drilled = null; // null = aggregate view, else a region name
+
+    const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
+
+    // hard y-axis cap sized to the DRILLED region's own bar total, not the
+    // union with the (possibly much larger) dimmed regions — otherwise a
+    // small region (e.g. Non-EU Europe, ~350k) renders as a sliver of bars
+    // under an axis stretched to fit Latin America/EU's multi-million lines.
+    // The dimmed lines simply clip at the top if they exceed this; that's
+    // an accepted tradeoff for keeping the drilled region readable.
+    function barAxisMax(region) {
+      const bc = s.by_country[region];
+      const perYearTotal = s.years.map((_, yi) =>
+        bc.countries.reduce((sum, name) => sum + bc.series[name][yi], 0));
+      return Math.round(Math.max(...perYearTotal) * 1.1);
+    }
+
+    function regionLine(region, extra = {}) {
+      const color = regionColor(region);
+      // each line gets its OWN stack id (not left undefined, not shared with
+      // any other dataset): with the y-scale's `stacked` flag on (needed for
+      // the countries bars below), Chart.js sums every dataset sharing a
+      // scale into the axis max unless each has a distinct stack group —
+      // otherwise the 5 dimmed region lines get added together for autoscale,
+      // ballooning the axis far past any actual series value.
+      return { type: 'line', label: region, data: s.series[region], borderColor: color,
+        backgroundColor: color + '22', borderWidth: 2, tension: 0.25,
+        pointRadius: 2, pointHoverRadius: 4, _region: region, stack: `line-${region}`, ...extra };
+    }
+
+    function buildDatasets() {
+      if (!drilled) return s.regions.map((r) => regionLine(r));
+      const dimmed = s.regions.filter((r) => r !== drilled).map((r) => regionLine(r, {
+        borderColor: regionColor(r) + '55', backgroundColor: 'transparent',
+        borderWidth: 1, borderDash: [3, 3], pointRadius: 0, order: 1,
+      }));
+      // invisible click target carrying the drilled region's own label, so
+      // clicking "the region again" (V44's chosen back-toggle) always finds
+      // a legend entry with that exact name, in either view.
+      const backHandle = { type: 'line', label: drilled, data: s.years.map(() => null),
+        borderColor: 'transparent', pointRadius: 0, showLine: false, order: 0, _region: drilled,
+        stack: `line-${drilled}-back` };
+      const bc = s.by_country[drilled];
+      const bars = bc.countries.map((name, i) => ({
+        type: 'bar', label: name, data: bc.series[name],
+        backgroundColor: PALETTE[i % PALETTE.length] + 'cc',
+        borderColor: PALETTE[i % PALETTE.length], borderWidth: 1, stack: 'countries', order: 2,
+      }));
+      return [backHandle, ...dimmed, ...bars];
+    }
+
+    const chart = new Chart(cv, {
+      type: 'bar',
+      data: { labels: s.years.map(String), datasets: buildDatasets() },
+      options: baseOpts({
+        x: { stacked: false },
+        y: { stacked: false, beginAtZero: true },
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
+            onClick: (evt, item, legend) => {
+              const ci = legend.chart;
+              const ds = ci.data.datasets[item.datasetIndex];
+              if (ds._region) {
+                drilled = (drilled === ds._region) ? null : ds._region;
+                ci.data.datasets = buildDatasets();
+                ci.options.scales.x.stacked = !!drilled;
+                ci.options.scales.y.stacked = !!drilled;
+                ci.options.scales.y.max = drilled ? barAxisMax(drilled) : undefined;
+                ci.update();
+                return;
+              }
+              // non-region entries (a drilled region's country/"Other" bars):
+              // default Chart.js legend behavior, toggle that dataset's visibility.
+              const i = item.datasetIndex;
+              if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
+              else { ci.show(i); item.hidden = false; }
+            },
+          },
+        },
+      }),
+    });
+    return chart;
+  });
 
   // population pyramids (T69/T70): horizontal bars, males negative/left,
   // females positive/right, oldest band at the top (reverse of PYRAMID_AGES'

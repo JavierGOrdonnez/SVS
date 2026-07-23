@@ -57,11 +57,26 @@ COUNTRY_NAMES = {
     "MA": "Morocco",
     "RO": "Romania",
     "IT": "Italy",
-    "GB": "United Kingdom",
+    "GB": "United Kingdom",  # legacy flow-series code (pre-2018 EU convention)
     "VE": "Venezuela",
     "PE": "Peru",
     "CN": "China",
     "HN": "Honduras",
+    # T72: rest of REGION_MAP's 50 stock_nationality codes (Eurostat's own
+    # "UK", not the legacy flow-series "GB" above, for the same country).
+    "DZ": "Algeria", "SN": "Senegal", "NG": "Nigeria", "ML": "Mali",
+    "GQ": "Equatorial Guinea", "GN": "Guinea", "GH": "Ghana", "GM": "Gambia",
+    "AR": "Argentina", "EC": "Ecuador", "PY": "Paraguay", "BR": "Brazil",
+    "BO": "Bolivia", "CU": "Cuba", "NI": "Nicaragua", "DO": "Dominican Republic",
+    "CL": "Chile", "MX": "Mexico", "UY": "Uruguay",
+    "UK": "United Kingdom", "US": "United States",
+    "DE": "Germany", "FR": "France", "PT": "Portugal", "BG": "Bulgaria",
+    "NL": "Netherlands", "PL": "Poland", "SE": "Sweden", "IE": "Ireland",
+    "BE": "Belgium", "DK": "Denmark", "FI": "Finland", "LT": "Lithuania",
+    "AT": "Austria",
+    "UA": "Ukraine", "RU": "Russia", "CH": "Switzerland", "NO": "Norway",
+    "MD": "Moldova",
+    "PK": "Pakistan", "IN": "India", "BD": "Bangladesh", "PH": "Philippines",
 }
 
 # Countries with the longest, most continuous year-coverage in the source
@@ -93,8 +108,30 @@ def _pyramid_band_value(totals, key_prefix, age):
     return totals[(*key_prefix, age)]
 
 
+TOP_N_PER_REGION = 7  # T72: drill-down bar chart shows this many named countries + "Other"
+
+
+def _region_country_breakdown(by_country_year, region_codes, years):
+    """T72: one region's per-country stock, ranked by latest-year value,
+    top TOP_N_PER_REGION named individually + the rest summed into "Other"
+    (kept as a single bucket rather than showing all — Latin America/EU
+    have 15 constituent countries each, more than PALETTE's 8 colors)."""
+    latest_year = years[-1]
+    ranked = sorted(region_codes, key=lambda c: by_country_year[c].get(latest_year, 0), reverse=True)
+    top, rest = ranked[:TOP_N_PER_REGION], ranked[TOP_N_PER_REGION:]
+    series = {
+        COUNTRY_NAMES.get(c, c): [by_country_year[c].get(y, 0) for y in years]
+        for c in top
+    }
+    if rest:
+        series["Other"] = [sum(by_country_year[c].get(y, 0) for c in rest) for y in years]
+    return {"countries": list(series.keys()), "series": series}
+
+
 def _stock_by_region(rows):
-    """T68: foreign-national stock summed per display region, over time."""
+    """T68: foreign-national stock summed per display region, over time.
+    T72: also carries each region's per-country breakdown (by_country) for
+    the mi-stock-region drill-down panel."""
     stock_all = [
         r for r in rows
         if r["series"] == "stock_nationality"
@@ -102,14 +139,26 @@ def _stock_by_region(rows):
     ]
     years = sorted({int(r["year"]) for r in stock_all})
     by_region_year = defaultdict(lambda: defaultdict(int))
+    by_country_year = defaultdict(lambda: defaultdict(int))
     for r in stock_all:
         region = REGION_MAP.get(r["nationality"])
         if region is None:
             continue
-        by_region_year[region][int(r["year"])] += int(r["value"])
+        year = int(r["year"])
+        by_region_year[region][year] += int(r["value"])
+        by_country_year[r["nationality"]][year] += int(r["value"])
+
+    codes_by_region = defaultdict(list)
+    for code, region in REGION_MAP.items():
+        codes_by_region[region].append(code)
+
     return {
         "years": years,
         "regions": REGIONS,
+        "by_country": {
+            region: _region_country_breakdown(by_country_year, codes_by_region[region], years)
+            for region in REGIONS
+        },
         "series": {
             region: [by_region_year[region].get(y, 0) for y in years]
             for region in REGIONS
