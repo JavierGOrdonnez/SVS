@@ -9,10 +9,11 @@ citizenship cross needed for:
   - Crime cohort analysis (T43/T44): per-nationality age-band x sex stock
   - Immigration flow analysis: sex-disaggregated inflows by nationality
 
-Stock extraction also carries the `Y_LT15`/`Y_GE65`/`Y_GE85` aggregate age
-bands (mapped to age_group `0-14`/`65+`/`85+`) alongside 5yr bands through
-`80-84`, needed by the age-pyramid panels (T69/T70) to derive a 0-9 band as
-`0-14 minus 10-14` and an 80+ band as `80-84 plus 85+`.
+Stock extraction also carries the `Y_LT15`/`Y_LT5`/`Y_GE65`/`Y_GE85`
+aggregate age bands (mapped to age_group `0-14`/`0-4`/`65+`/`85+`)
+alongside 5yr bands `5-9` through `80-84`, needed by the age-pyramid panels
+(T69/T70) for a fine-grained 0-4/5-9 split and an 80+ band derived as
+`80-84 plus 85+`.
 
 Data source: Eurostat SDMX-JSON API (migr_pop1ctz stock, migr_imm1ctz flow)
   Stock: https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/migr_pop1ctz
@@ -68,7 +69,7 @@ CITIZENS = [
 ]
 
 AGE_BANDS_5YR = [
-    "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
+    "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
     "40-44", "45-49", "50-54", "55-59",
     "60-64", "65-69", "70-74", "75-79", "80-84",
 ]
@@ -94,6 +95,8 @@ def _age_to_group(age: str) -> str | None:
         return "all"
     if age == "Y_LT15":
         return "0-14"
+    if age == "Y_LT5":
+        return "0-4"
     if age == "Y_GE65":
         return "65+"
     if age == "Y_GE85":
