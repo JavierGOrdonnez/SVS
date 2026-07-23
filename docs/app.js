@@ -417,8 +417,8 @@ function buildMigration() {
       const male = [...s.regions[region].male].reverse().map(v => -v);
       const female = [...s.regions[region].female].reverse();
       return [
-        { label: region, data: male, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'male' },
-        { label: region, data: female, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'female' },
+        { label: region, data: male, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'male', grouped: false },
+        { label: region, data: female, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'female', grouped: false },
       ];
     });
     const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
@@ -431,8 +431,8 @@ function buildMigration() {
     const male = [...s.male].reverse().map(v => -v);
     const female = [...s.female].reverse();
     const datasets = [
-      { label: 'Male', data: male, backgroundColor: PALETTE[4] + 'cc', borderColor: PALETTE[4], borderWidth: 1, stack: 'male' },
-      { label: 'Female', data: female, backgroundColor: PALETTE[3] + 'cc', borderColor: PALETTE[3], borderWidth: 1, stack: 'female' },
+      { label: 'Male', data: male, backgroundColor: PALETTE[4] + 'cc', borderColor: PALETTE[4], borderWidth: 1, stack: 'male', grouped: false },
+      { label: 'Female', data: female, backgroundColor: PALETTE[3] + 'cc', borderColor: PALETTE[3], borderWidth: 1, stack: 'female', grouped: false },
     ];
     const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
     return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });

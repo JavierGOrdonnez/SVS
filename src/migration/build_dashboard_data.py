@@ -42,13 +42,13 @@ REGION_MAP = {
 }
 REGIONS = ["Africa", "Latin America", "Anglo", "EU", "Non-EU Europe", "Asia"]
 
-# Shared 12-band scale for both age pyramids (T69/T70). 60-64 has no
-# Eurostat migr_pop1ctz coverage (only Y_LT15/5yr-bands/Y_GE65 are
-# published) so it is dropped from both pyramids rather than folded into
-# an adjacent band, keeping the two charts on the same age axis.
+# Shared 16-band scale for both age pyramids (T69/T70), fine 5yr bands all
+# the way to 80+ (Eurostat migr_pop1ctz publishes Y60-64...Y80-84 + a
+# Y_GE85 aggregate; population_spain_midyear_5yr.csv has matching bins).
 PYRAMID_AGES = [
     "0-9", "10-14", "15-19", "20-24", "25-29", "30-34",
-    "35-39", "40-44", "45-49", "50-54", "55-59", "65+",
+    "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+    "65-69", "70-74", "75-79", "80+",
 ]
 
 COUNTRY_NAMES = {
@@ -83,10 +83,14 @@ def load_rows(path):
 
 def _pyramid_band_value(totals, key_prefix, age):
     """One pyramid age-band's value from a {(*key_prefix, age_group): value}
-    totals dict, deriving the 0-9 aggregate as `0-14 minus 10-14` (T69) since
-    Eurostat only publishes a Y_LT15 (<15) aggregate, not a 0-9 band."""
+    totals dict, deriving the 0-9 aggregate as `0-14 minus 10-14` (since
+    Eurostat only publishes a Y_LT15 (<15) aggregate, not a 0-9 band) and
+    the 80+ aggregate as `80-84 plus 85+` (Eurostat's oldest 5yr band is
+    80-84, with Y_GE85 as the open-ended top)."""
     if age == "0-9":
         return totals[(*key_prefix, "0-14")] - totals[(*key_prefix, "10-14")]
+    if age == "80+":
+        return totals[(*key_prefix, "80-84")] + totals[(*key_prefix, "85+")]
     return totals[(*key_prefix, age)]
 
 
@@ -149,21 +153,21 @@ def _stock_age_pyramid(rows, year):
     }
 
 
-# population_spain_midyear_5yr.csv's native age bins -> the shared 12-band
-# pyramid scale. 60-64 is intentionally absent (see PYRAMID_AGES comment).
+# population_spain_midyear_5yr.csv's native age bins -> the shared 16-band
+# pyramid scale (PYRAMID_AGES).
 POP_TO_PYRAMID_AGE = {
     "<1": "0-9", "1-4": "0-9", "5-9": "0-9",
     "10-14": "10-14", "15-19": "15-19", "20-24": "20-24", "25-29": "25-29",
     "30-34": "30-34", "35-39": "35-39", "40-44": "40-44", "45-49": "45-49",
-    "50-54": "50-54", "55-59": "55-59",
-    "65-69": "65+", "70-74": "65+", "75-79": "65+", "80-84": "65+",
-    "85-89": "65+", "90-94": "65+", "95+": "65+",
+    "50-54": "50-54", "55-59": "55-59", "60-64": "60-64",
+    "65-69": "65-69", "70-74": "70-74", "75-79": "75-79",
+    "80-84": "80+", "85-89": "80+", "90-94": "80+", "95+": "80+",
 }
 
 
 def _spanish_age_pyramid(rows, year):
     """T70: Spanish-national age x sex pyramid = total population (INE
-    midyear estimate) minus foreign stock (Eurostat), same 12-band scale
+    midyear estimate) minus foreign stock (Eurostat), same 16-band scale
     and year as the T69 foreign pyramid."""
     pop_rows = load_rows(POPULATION_CSV)
     pop_totals = defaultdict(int)  # (sex, pyramid_age) -> value
