@@ -42,7 +42,7 @@ were left untouched at the paths above.
 | `src/mortality/parse_ine_mortality.py` | INE API table 7947 JSON dump (input/output paths via argv) | CSV named via argv → `data/processed/mortality_spain_ine_ecm.csv` | T49 | x |
 | `src/mortality/summarize_mortality.py` | `mortality_spain_ine_ecm.csv` | `data/processed/mortality_by_chapter.csv`, `mortality_by_age_sex.csv`, `mortality_key_causes.csv` | T49 | x |
 | `src/mortality/compute_mortality_rates.py` | `mortality_spain_ine_ecm.csv`, `population_spain_midyear_5yr.csv` | `data/processed/mortality_rates.csv`, `mortality_rates_key.csv`, `mortality_rates_all_cause_by_age.csv` | T7 | x |
-| `src/feminicides/compute_feminicide_rates.py` | `feminicidios_delegacion_2003-2026.json` (2024 report only), `population_spain_midyear_5yr.csv` | `data/processed/feminicide_rates_2024.csv` | T24 | ~ |
+| `src/feminicides/compute_feminicide_rates.py` | `feminicidios_delegacion_2003-2026.json` (2006-2024 reports, victim+perpetrator counts), `population_spain_midyear_5yr.csv` (female+male), `migration_spain.csv` (foreign-resident stock, female+male share) | `data/processed/feminicide_rates_2006-2024.csv` (per-origin × per-role, 4 rows/year) | T24,T60 | x |
 | `src/crime/parse_ine_tabla28716.py` | INE table 28716 CSV, fetched live from `ine.es` | `data/processed/ine_condenados_28716_sexual_crimes.csv`, `ine_condenados_28716_nationality_pct.csv` | T26,T30 | ~ |
 | `src/migration/parse_eurostat_migration_cohort.py` | Eurostat bulk TSV `migr_imm1ctz`/`migr_pop1ctz` (manual download, not in `data/raw/`) | appends to `data/raw/migration_spain.csv` | T11,T43,T44 | ~ |
 | `src/crime/analyze_cohort_crime_rate.py` | `migration_spain.csv`, `sexual_crimes_mir_2019-2024.json`, `population_spain_midyear_5yr.csv` | `data/processed/cohort_tenure_*.csv` (4 files) + 2 PNGs | T41 | x |
@@ -52,7 +52,7 @@ were left untouched at the paths above.
 | `src/sexual_crimes/plot_sexual_crime_trends.py` | `sexual_crimes_mir_2019-2024.json`, `migration_spain.csv`, `population_spain_midyear_5yr.csv` | `data/processed/sexual_crime_evolution.csv` + 3 charts | T42 | x |
 | `src/mortality/build_dashboard_data.py` | `mortality_rates_key.csv`, `mortality_by_chapter.csv`, `mortality_rates.csv`, `mortality_spain_ine_ecm.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/mortality.json`; legacy stdout-JS `main()` kept for standalone use | T17,T23 | x |
 | `src/migration/build_dashboard_data.py` (formerly `build_migration_dashboard_data.py`) | `migration_spain.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/migration.json`; legacy stdout-JS `main()` kept for standalone use | T-mig-tab | x |
-| `src/feminicides/build_dashboard_data.py` | `feminicidios_delegacion_2003-2026.json`, `feminicide_rates_2024.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/feminicides.json` | T23,T24 | x |
+| `src/feminicides/build_dashboard_data.py` | `feminicidios_delegacion_2003-2026.json` (all years, incl. 2003-2005 stub reports), `feminicide_rates_2006-2024.csv` (full 2006-2024 series) | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/feminicides.json` (`timeline` 2003-present w/ age-band breakdown + provisional flag, `rates` w/ `years`/`latest_year`/full `rows` series, static `milestones`; `regional`/`age_origin` removed) | T23,T24,T60,T61 | x |
 | `src/sexual_crimes/build_dashboard_data.py` | `sexual_crimes_mir_2019-2024.json`, `sexual_crime_evolution.csv`, `ine_condenados_28716_sexual_crimes.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/sexual_crimes.json` | T3,T21,T22 | x |
 | `src/crime/build_dashboard_data.py` | `hate_crimes_mir_2016-2021_2023.json`, `cohort_tenure_period_test.csv`, `cohort_share_test.csv` | `build_hate_crimes()`/`build_cohort_tenure()` consumed by `src/analysis/build_dashboard.py` → `docs/data/hate_crimes.json`, `docs/data/cohort_tenure.json` | T41,T59 | x |
 | `src/analysis/build_dashboard.py` | calls each domain's `build_dashboard_data.build()` (feminicides, sexual_crimes, crime, migration, mortality) via `importlib` (all 5 modules share the filename `build_dashboard_data.py`, so a plain `import` would only bind the first one loaded) | `docs/data/*.json` (6 files) | T17,T23,T-mig-tab | x |
@@ -86,7 +86,8 @@ flowchart LR
 
   JSON_FEM --> compute_feminicide_rates.py
   CSV_POP --> compute_feminicide_rates.py
-  compute_feminicide_rates.py --> CSV_FEMRATE[(feminicide_rates_2024.csv)]
+  CSV_MIGR --> compute_feminicide_rates.py
+  compute_feminicide_rates.py --> CSV_FEMRATE[(feminicide_rates_2006-2024.csv)]
 
   CSV_ECM --> compute_mortality_rates.py
   CSV_POP --> compute_mortality_rates.py

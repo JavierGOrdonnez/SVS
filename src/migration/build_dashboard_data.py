@@ -12,17 +12,71 @@ import sys
 from collections import defaultdict
 
 CSV_PATH = "data/raw/migration_spain.csv"
+POPULATION_CSV = "data/processed/population_spain_midyear_5yr.csv"
+
+# nationality -> display region, for the T68 stock-by-region panel and the
+# T69/T70 age-pyramid regional breakdown. Covers all 50 non-ES codes carried
+# by `stock_nationality` (T43/T44/T66); AT has no Eurostat migr_pop1ctz rows
+# (never downloaded) so it contributes 0 wherever it'd otherwise appear.
+REGION_MAP = {
+    # Africa
+    "MA": "Africa", "DZ": "Africa", "SN": "Africa", "NG": "Africa", "ML": "Africa",
+    "GQ": "Africa", "GN": "Africa", "GH": "Africa", "GM": "Africa",
+    # Latin America
+    "CO": "Latin America", "VE": "Latin America", "PE": "Latin America",
+    "HN": "Latin America", "AR": "Latin America", "EC": "Latin America",
+    "PY": "Latin America", "BR": "Latin America", "BO": "Latin America",
+    "CU": "Latin America", "NI": "Latin America", "DO": "Latin America",
+    "CL": "Latin America", "MX": "Latin America", "UY": "Latin America",
+    # Anglo
+    "UK": "Anglo", "US": "Anglo",
+    # EU
+    "RO": "EU", "IT": "EU", "DE": "EU", "FR": "EU", "PT": "EU", "BG": "EU",
+    "NL": "EU", "PL": "EU", "SE": "EU", "IE": "EU", "BE": "EU", "DK": "EU",
+    "FI": "EU", "LT": "EU", "AT": "EU",
+    # Non-EU Europe
+    "UA": "Non-EU Europe", "RU": "Non-EU Europe", "CH": "Non-EU Europe",
+    "NO": "Non-EU Europe", "MD": "Non-EU Europe",
+    # Asia
+    "CN": "Asia", "PK": "Asia", "IN": "Asia", "BD": "Asia", "PH": "Asia",
+}
+REGIONS = ["Africa", "Latin America", "Anglo", "EU", "Non-EU Europe", "Asia"]
+
+# Shared 17-band scale for both age pyramids (T69/T70), fine 5yr bands all
+# the way from 0-4 to 80+ (Eurostat migr_pop1ctz publishes Y_LT5/Y5-9 at the
+# young end and Y60-64...Y80-84 + a Y_GE85 aggregate at the old end;
+# population_spain_midyear_5yr.csv has matching bins throughout).
+PYRAMID_AGES = [
+    "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34",
+    "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+    "65-69", "70-74", "75-79", "80+",
+]
 
 COUNTRY_NAMES = {
     "CO": "Colombia",
     "MA": "Morocco",
     "RO": "Romania",
     "IT": "Italy",
-    "GB": "United Kingdom",
+    "GB": "United Kingdom",  # legacy flow-series code (pre-2018 EU convention)
     "VE": "Venezuela",
     "PE": "Peru",
     "CN": "China",
     "HN": "Honduras",
+    # T72: rest of REGION_MAP's 50 stock_nationality codes (Eurostat's own
+    # "UK", not the legacy flow-series "GB" above, for the same country).
+    "DZ": "Algeria", "SN": "Senegal", "NG": "Nigeria", "ML": "Mali",
+    "GQ": "Equatorial Guinea", "GN": "Guinea", "GH": "Ghana", "GM": "Gambia",
+    "AR": "Argentina", "EC": "Ecuador", "PY": "Paraguay", "BR": "Brazil",
+    "BO": "Bolivia", "CU": "Cuba", "NI": "Nicaragua", "DO": "Dominican Republic",
+    "CL": "Chile", "MX": "Mexico", "UY": "Uruguay",
+    "UK": "United Kingdom", "US": "United States",
+    "DE": "Germany", "FR": "France", "PT": "Portugal", "BG": "Bulgaria",
+    "NL": "Netherlands", "PL": "Poland", "SE": "Sweden", "IE": "Ireland",
+    "BE": "Belgium", "DK": "Denmark", "FI": "Finland", "LT": "Lithuania",
+    "AT": "Austria",
+    "UA": "Ukraine", "RU": "Russia", "CH": "Switzerland", "NO": "Norway",
+    "MD": "Moldova",
+    "PK": "Pakistan", "IN": "India", "BD": "Bangladesh", "PH": "Philippines",
 }
 
 # Countries with the longest, most continuous year-coverage in the source
@@ -41,6 +95,159 @@ DETAILED_AGE_ORDER = (
 def load_rows(path):
     with open(path, encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+def _pyramid_band_value(totals, key_prefix, age):
+    """One pyramid age-band's value from a {(*key_prefix, age_group): value}
+    totals dict, deriving the 80+ aggregate as `80-84 plus 85+` (Eurostat's
+    oldest 5yr band is 80-84, with Y_GE85 as the open-ended top). Every
+    other band (including 0-4/5-9) is a real Eurostat/population bin, no
+    further derivation needed."""
+    if age == "80+":
+        return totals[(*key_prefix, "80-84")] + totals[(*key_prefix, "85+")]
+    return totals[(*key_prefix, age)]
+
+
+TOP_N_PER_REGION = 7  # T72: drill-down bar chart shows this many named countries + "Other"
+
+
+def _region_country_breakdown(by_country_year, region_codes, years):
+    """T72: one region's per-country stock, ranked by latest-year value,
+    top TOP_N_PER_REGION named individually + the rest summed into "Other"
+    (kept as a single bucket rather than showing all — Latin America/EU
+    have 15 constituent countries each, more than PALETTE's 8 colors)."""
+    latest_year = years[-1]
+    ranked = sorted(region_codes, key=lambda c: by_country_year[c].get(latest_year, 0), reverse=True)
+    top, rest = ranked[:TOP_N_PER_REGION], ranked[TOP_N_PER_REGION:]
+    series = {
+        COUNTRY_NAMES.get(c, c): [by_country_year[c].get(y, 0) for y in years]
+        for c in top
+    }
+    if rest:
+        series["Other"] = [sum(by_country_year[c].get(y, 0) for c in rest) for y in years]
+    return {"countries": list(series.keys()), "series": series}
+
+
+def _stock_by_region(rows):
+    """T68: foreign-national stock summed per display region, over time.
+    T72: also carries each region's per-country breakdown (by_country) for
+    the mi-stock-region drill-down panel."""
+    stock_all = [
+        r for r in rows
+        if r["series"] == "stock_nationality"
+        and r["age_group"] == "all" and r["sex"] == "all"
+    ]
+    years = sorted({int(r["year"]) for r in stock_all})
+    by_region_year = defaultdict(lambda: defaultdict(int))
+    by_country_year = defaultdict(lambda: defaultdict(int))
+    for r in stock_all:
+        region = REGION_MAP.get(r["nationality"])
+        if region is None:
+            continue
+        year = int(r["year"])
+        by_region_year[region][year] += int(r["value"])
+        by_country_year[r["nationality"]][year] += int(r["value"])
+
+    codes_by_region = defaultdict(list)
+    for code, region in REGION_MAP.items():
+        codes_by_region[region].append(code)
+
+    return {
+        "years": years,
+        "regions": REGIONS,
+        "by_country": {
+            region: _region_country_breakdown(by_country_year, codes_by_region[region], years)
+            for region in REGIONS
+        },
+        "series": {
+            region: [by_region_year[region].get(y, 0) for y in years]
+            for region in REGIONS
+        },
+    }
+
+
+def _stock_age_pyramid(rows, year):
+    """T69: foreign-national age x sex pyramid, overall + per region, for
+    the given year (latest year with matching Spanish-population coverage,
+    so it lines up with the T70 Spanish pyramid on the same axis)."""
+    stock = [
+        r for r in rows
+        if r["series"] == "stock_nationality" and int(r["year"]) == year
+        and r["sex"] in ("male", "female") and r["nationality"] in REGION_MAP
+    ]
+    totals = defaultdict(int)  # (region, sex, age_group) -> value
+    for r in stock:
+        region = REGION_MAP[r["nationality"]]
+        totals[(region, r["sex"], r["age_group"])] += int(r["value"])
+
+    def band_values(region, sex):
+        return [_pyramid_band_value(totals, (region, sex), age) for age in PYRAMID_AGES]
+
+    def all_band_values(sex):
+        return [
+            sum(_pyramid_band_value(totals, (region, sex), age) for region in REGIONS)
+            for age in PYRAMID_AGES
+        ]
+
+    return {
+        "year": year,
+        "ages": PYRAMID_AGES,
+        "male": all_band_values("male"),
+        "female": all_band_values("female"),
+        "regions": {
+            region: {"male": band_values(region, "male"), "female": band_values(region, "female")}
+            for region in REGIONS
+        },
+    }
+
+
+# population_spain_midyear_5yr.csv's native age bins -> the shared 17-band
+# pyramid scale (PYRAMID_AGES).
+POP_TO_PYRAMID_AGE = {
+    "<1": "0-4", "1-4": "0-4", "5-9": "5-9",
+    "10-14": "10-14", "15-19": "15-19", "20-24": "20-24", "25-29": "25-29",
+    "30-34": "30-34", "35-39": "35-39", "40-44": "40-44", "45-49": "45-49",
+    "50-54": "50-54", "55-59": "55-59", "60-64": "60-64",
+    "65-69": "65-69", "70-74": "70-74", "75-79": "75-79",
+    "80-84": "80+", "85-89": "80+", "90-94": "80+", "95+": "80+",
+}
+
+
+def _spanish_age_pyramid(rows, year):
+    """T70: Spanish-national age x sex pyramid = total population (INE
+    midyear estimate) minus foreign stock (Eurostat), same 17-band scale
+    and year as the T69 foreign pyramid."""
+    pop_rows = load_rows(POPULATION_CSV)
+    pop_totals = defaultdict(int)  # (sex, pyramid_age) -> value
+    for r in pop_rows:
+        if int(r["year"]) != year or r["sex"] not in ("male", "female"):
+            continue
+        pyramid_age = POP_TO_PYRAMID_AGE.get(r["age_group"])
+        if pyramid_age is None:
+            continue
+        pop_totals[(r["sex"], pyramid_age)] += int(r["population_july1"])
+
+    foreign_stock = [
+        r for r in rows
+        if r["series"] == "stock_nationality" and int(r["year"]) == year
+        and r["sex"] in ("male", "female") and r["nationality"] in REGION_MAP
+    ]
+    foreign_totals = defaultdict(int)  # (sex, age_group) -> value
+    for r in foreign_stock:
+        foreign_totals[(r["sex"], r["age_group"])] += int(r["value"])
+
+    def spanish_values(sex):
+        return [
+            pop_totals[(sex, age)] - _pyramid_band_value(foreign_totals, (sex,), age)
+            for age in PYRAMID_AGES
+        ]
+
+    return {
+        "year": year,
+        "ages": PYRAMID_AGES,
+        "male": spanish_values("male"),
+        "female": spanish_values("female"),
+    }
 
 
 def build():
@@ -140,6 +347,15 @@ def build():
         "foreign_born": [int(r["value"]) for r in stock_born],
     }
 
+    # 7. Stock by region over time (T68)
+    s7 = _stock_by_region(rows)
+
+    # 8/9. Age pyramids (T69/T70) — share the latest year covered by the
+    # Spanish population estimates (2024) so both charts sit on the same year.
+    pyramid_year = max(int(r["year"]) for r in load_rows(POPULATION_CSV))
+    s8 = _stock_age_pyramid(rows, pyramid_year)
+    s9 = _spanish_age_pyramid(rows, pyramid_year)
+
     return {
         "annual_inflow": s1,
         "origin_composition": s2,
@@ -147,6 +363,9 @@ def build():
         "age_band_over_time": s4,
         "age_profile_latest": s5,
         "stock_trend": s6,
+        "stock_by_region": s7,
+        "stock_age_pyramid": s8,
+        "stock_age_pyramid_es": s9,
     }
 
 

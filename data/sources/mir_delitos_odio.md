@@ -16,6 +16,8 @@
 
 The 2016–2021 and 2023 edition PDFs staged in `data/sources/MIR_InformeDelitosOdio_{year}.pdf` were sourced from the landing page above; per-edition direct URLs were not individually re-confirmed live for this pass (only the 2024 URL was, via `discurso_odio_inmigracion_espana.md` §2.1) — re-fetch from the landing page if a PDF needs replacing.
 
+Very interesting research on why Pais Vasco has "more" hate-based crimes: it has stronger protocols + a very active NGO network. https://www.google.com/search?q=delitos+de+odio+tasa+alta+en+pais+vasco&client=ubuntu-sn&hs=frX&sca_esv=31a84013ae363f98&channel=fs&sxsrf=APpeQnty7ErroM5Sf-jj1xe_LrAvlSEgTA%3A1784551827330&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8cY2oODYyTyZk24Xz37_7FQ0Kuh3jfnRqiKzI7KrGsO-a7vPN0oJUPXgT9BPYDfgnNyZgeXjHMCv7f4G7IWNhEcC49wBJI-L3x_dOfEKpVbUZwPZED7VgF0N_HgfGIzmpn0aTB0U82TY4K0Lq_vSHv3mMEDvfkH-4EliBhKflhow8Fu6iPrNz7A5hkc6U0S2Y1GoyVqw&aep=1&ntc=1&cs=1&sa=X&ved=2ahUKEwjd34DOpeGVAxUq9gIHHZwuKiAQ2J8OegQIExAD&biw=1864&bih=963&dpr=1&mstk=AUtExfAwdmAL2Ky8l-idm6gmLZqkAFXFiPp8HjDeCoCuGwMQRLWprR93aL4sq4XChIBDbA70iYgK3xuT2MK4S9vH-ODEO77WQcVVdUBBwyJrY7H3k5Wk4sySfAoPnBibBzcHhxpEMhNfc-4k2z_U8SW0BluIsh__W5X3DYmX7XWXYf7TqMc5yEK2XM2pv77usYrQRnQ5V-zsYlgldlnyLmpc_zT2rpQuxuSUANIYdsLtn8jZEN7kqPLdWUsgosM4Ez1CjB0I5ZRJx61aRw&csuir=1&mtid=eRxeaurWF7jKi-gPvtaooQY&udm=50
+
 ## Parser
 
 `src/parsers/mir_parser.py`'s `OdioParser` (`--mode odio`) extracts the "Hechos conocidos registrados" typology table — one row per ámbito (motivation), 2-3 year columns per edition. Run via:
