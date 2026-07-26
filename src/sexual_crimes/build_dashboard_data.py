@@ -137,7 +137,12 @@ def _unified_categories(informe):
     all_keys = sorted({k for agg in per_year.values() for k in agg})
     return {
         "years": years,
-        "series": {k: [per_year[y].get(k, 0) for y in years] for k in all_keys},
+        # None (not 0) for a category absent from that year's report — some
+        # categories were introduced partway through the series (e.g.
+        # promocion_prostitucion_nuevas_tecnologias, "categoria nueva,
+        # introducida en el informe de 2023" per the source's own notes);
+        # 0 would misrepresent "didn't exist yet" as "zero cases occurred".
+        "series": {k: [per_year[y].get(k) for y in years] for k in all_keys},
     }
 
 

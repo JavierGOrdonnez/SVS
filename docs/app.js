@@ -410,14 +410,22 @@ function buildSexual() {
     });
   });
 
-  register('sx-clearance', (cv) => new Chart(cv, {
-    type: 'line',
-    data: { labels: d.totals.years.map(String), datasets: [line('Clearance rate', d.totals.clearance_rate, PALETTE[1], { fill: true })] },
-    options: baseOpts({
-      y: { min: 0, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
-      plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } } },
-    }),
-  }));
+  register('sx-clearance', (cv) => {
+    // clearance_rate is null for 2025 (Balance doesn't publish it) — drop
+    // that trailing year entirely rather than showing an empty tick that'd
+    // contradict the panel's own "2016-2024" subtitle.
+    const idxs = d.totals.years.map((_, i) => i).filter((i) => d.totals.clearance_rate[i] != null);
+    const years = idxs.map((i) => d.totals.years[i]);
+    const rates = idxs.map((i) => d.totals.clearance_rate[i]);
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: years.map(String), datasets: [line('Clearance rate', rates, PALETTE[1], { fill: true })] },
+      options: baseOpts({
+        y: { min: 0, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
+        plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } } },
+      }),
+    });
+  });
 
   // T-sx-cat: all categories (not just the first 6), pre/post-LO10/2022
   // naming already unified in build_dashboard_data.py.
