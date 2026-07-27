@@ -66,15 +66,21 @@
 <!-- ─────────── TAB: SEXUAL CRIME ─────────── -->
 <section id="tab-sexual-crimes" class="tab-panel">
   <div class="grid">
-    <svs-chart-panel id="sx-totals" size="half" confidence="high"
-      title="Reported sexual crimes, 2019–2024" subtitle="MIR Informe totals. Break: LO 10/2022 narrowed the rape definition.">
-      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR — Informe delitos libertad sexual"></svs-source-cite>
+    <svs-chart-panel id="sx-totals" size="full" height="320" confidence="high"
+      title="Reported sexual crimes, 2016–2025" subtitle="2016–2018 Anuario, 2019–2024 Informe, 2025 Balance (provisional, dashed). Break: LO 10/2022 narrowed the rape definition.">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR — Informe/Anuario/Balance delitos libertad sexual"></svs-source-cite>
     </svs-chart-panel>
+    <svs-chart-panel id="sx-clearance" size="half" confidence="high"
+      title="Clearance rate (esclarecimiento)" subtitle="Share of reported cases with an identified suspect, 2016–2024."></svs-chart-panel>
     <svs-chart-panel id="sx-categories" size="half" confidence="high"
-      title="By category, 2019–2024" subtitle="Unified agresión sexual series and stable sub-types."></svs-chart-panel>
-    <svs-chart-panel id="sx-nationality" size="half" confidence="medium"
-      title="Perpetrator nationality split" subtitle="Spanish vs foreign identified perpetrators (report-level totals).">
-      <svs-source-cite slot="source" label="MIR Informe — nationality × sex totals (no per-category cross)" note="associative only"></svs-source-cite>
+      title="By category, 2019–2024" subtitle="All categories, pre/post-LO10/2022 naming unified. Stacked counts."></svs-chart-panel>
+    <svs-chart-panel id="sx-nationality-victims" size="half" height="320" confidence="medium"
+      title="Victim nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-nationality-perpetrators" size="half" height="320" confidence="medium"
+      title="Perpetrator nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-convictions" size="half" confidence="high"
       title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
@@ -171,9 +177,10 @@
   // Caveat content is data-about-the-data; kept here next to the layout it annotates.
   const caveats = {
     'cav-sexual': [
-      { label: 'Definition break', text: 'LO 10/2022 (“Solo sí es sí”) narrowed the legal rape definition in 2022; a further reform followed in 2023. Pre/post-2022 counts are not directly comparable.' },
-      { label: 'Two series', text: 'Anuario (~5,200/yr) and Informe (~1,200/yr) count different legal articles for 2017–2019. This dashboard uses the Informe series.' },
-      { label: 'Nationality', text: 'MIR publishes nationality × sex only at report level — there is no nationality × crime-type cross. Convictions (INE 28716) are a separate judicial funnel, not the same as police reports.' },
+      { label: 'Definition break', text: 'LO 10/2022 (“Solo sí es sí”) narrowed the legal rape definition in 2022; a further reform followed in 2023. Pre/post-2022 category counts are unified where possible, but raw pre/post totals are not directly comparable.' },
+      { label: 'Three sources blended', text: 'Reported totals blend three MIR publications: Anuario (2016–2018, before Informe existed), Informe (2019–2024, most detailed, used for categories/nationality), Balance de Criminalidad (2025, provisional quarterly). Balance’s own totals diverge 7–9% from Anuario/Informe in 2022+ — shown as a dashed overlay, not hidden; the source itself flags these years “pending consolidation.”' },
+      { label: 'Nationality', text: 'MIR publishes nationality × sex only at report level — there is no nationality × crime-type cross. Its own region groupings changed in 2024 (EU-only “Unión Europea” broadened to all-Europe), so the Europe line is not perfectly continuous across that year. Convictions (INE 28716) are a separate judicial funnel, not the same as police reports.' },
+      { label: '2020 data gap', text: 'The 2020 Informe’s own victim-nationality table sums to 429 people — about 30x too small for that year’s 13,174 reported crimes, confirmed as a defect in the source PDF itself (not a parsing error). That year is shown as a gap, not a fake near-zero dip, in the victim-nationality panel only (perpetrator nationality that year is unaffected).' },
     ],
     'cav-fem': [
       { label: 'Scope', text: 'Delegación counts intimate-partner / ex-partner homicides only — narrower than all female homicides (INE MNP) or judicial records (CGPJ).' },
