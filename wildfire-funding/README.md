@@ -55,17 +55,30 @@ project reports, not a gap to quietly fill by guessing a split.
 ## Status
 
 First real data pass landed: 16 of 17 CCAAs have at least one sourced
-2025/2026 spend figure, plus full population and forest-area denominators
-for all 17. `analysis/compute_normalized.py` computes the two ready
-normalizations and writes `reports/wff_first_pass_2025_2026.md`.
+2025/2026 wildfire-spend figure, all three normalizations now compute
+(population, forest area, and — for 15 of those 16 — % of the region's own
+total budget), and a small time series has started for two regions
+(Andalucía 2020-2026, Castilla-La Mancha 2025-2026).
+`analysis/compute_normalized.py` writes `reports/wff_first_pass_2025_2026.md`.
 
 **Read this before citing anything from it**: every spend figure is
 `confidence=low` (one `medium`), most have an unresolved conflicting
 alternate figure from a second source, and the prevention/extinction
 category split was explicitly deprioritized in favor of getting all
 regions covered — see `SPEC.md` T1–T3. This is a directional first look,
-not a verified result. The % of each region's total budget normalization
-is still missing (blocked on `SPEC.md` T6).
+not a verified result.
+
+**Budgeted is not executed, and executed is the number that actually
+matters** (per your steer): every figure sourced so far is an *initial
+credit or announced device budget*, not audited final expenditure.
+Wildfire spending routinely blows past its initial credit via
+extraordinary in-year credits once a season turns out worse than planned
+— so the nominal growth visible in Andalucía's series (171.9M → 300M,
+2020-2026) may understate real cost in the worst years and overstate the
+gap between good and bad years. Sourcing executed/liquidación figures is
+`SPEC.md` T9, not yet started — it requires each region's Intervención
+General / Cuenta General, published with a 1-2 year lag, not press
+coverage of the budget law's passage.
 
 ## Where to look
 

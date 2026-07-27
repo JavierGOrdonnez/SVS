@@ -1,18 +1,18 @@
-ccaa,year,population,population_source,forest_area_km2,forest_area_source_year,total_budget_eur,budget_type,notes,confidence
-Andalucía,2024,8631862,INE Censo Anual de Población 2024 (via es.wikipedia.org/wiki/Anexo:Comunidades_y_ciudades_autónomas_de_España),44670.70,2019,,,total_budget_eur pending T6 (Hacienda CCAA budgets portal),medium
-Aragón,2024,1351591,INE Censo Anual de Población 2024,26153.32,2019,,,total_budget_eur pending T6,medium
-Canarias,2024,2238754,INE Censo Anual de Población 2024,5782.27,2019,,,total_budget_eur pending T6,medium
-Cantabria,2024,590851,INE Censo Anual de Población 2024,3643.17,2019,,,total_budget_eur pending T6,medium
-Castilla-La Mancha,2024,2104433,INE Censo Anual de Población 2024,35975.37,2019,,,total_budget_eur pending T6,medium
-Castilla y León,2024,2391682,INE Censo Anual de Población 2024,48153.57,2019,,,total_budget_eur pending T6,medium
-Cataluña,2024,8012231,INE Censo Anual de Población 2024,20083.29,2019,,,total_budget_eur pending T6,medium
-Comunidad de Madrid,2024,7009268,INE Censo Anual de Población 2024,4382.62,2019,,,total_budget_eur pending T6,medium
-Comunidad Foral de Navarra,2024,678333,INE Censo Anual de Población 2024,5943.68,2019,,,total_budget_eur pending T6,medium
-Comunidad Valenciana,2024,5319285,INE Censo Anual de Población 2024,12670.36,2019,,,total_budget_eur pending T6,medium
-Extremadura,2024,1054681,INE Censo Anual de Población 2024,28724.51,2019,,,total_budget_eur pending T6,medium
-Galicia,2024,2705833,INE Censo Anual de Población 2024,20407.54,2019,,,total_budget_eur pending T6,medium
-Islas Baleares,2024,1231768,INE Censo Anual de Población 2024,2221.88,2019,,,total_budget_eur pending T6,medium
-La Rioja,2024,324184,INE Censo Anual de Población 2024,3109.52,2019,,,total_budget_eur pending T6,medium
-País Vasco,2024,2227684,INE Censo Anual de Población 2024,4917.86,2019,,,total_budget_eur pending T6,medium
-Principado de Asturias,2024,1009599,INE Censo Anual de Población 2024,7704.79,2019,,,total_budget_eur pending T6,medium
-Región de Murcia,2024,1568492,INE Censo Anual de Población 2024,5113.64,2019,,,total_budget_eur pending T6,medium
+ccaa,population,population_year,population_source,forest_area_km2,forest_area_source_year,total_budget_eur,total_budget_year,total_budget_status,total_budget_source,notes,confidence
+Andalucía,8631862,2024,INE Censo Anual de Población 2024 (via es.wikipedia.org/wiki/Anexo:Comunidades_y_ciudades_autónomas_de_España),44670.70,2019,51597000000,2026,aprobado_definitivo,"Parlamento de Andalucía 2025-12-18 / BOE-A-2026-945 (Ley 8/2025)",,medium
+Aragón,1351591,2024,INE Censo Anual de Población 2024,26153.32,2019,9145000000,2026,proyecto_no_aprobado,"Gobierno de Aragón, presentado 2025-12-05 (cope.es/aragonhoy.es); Cortes approval not confirmed as of this pass",Aragón's total-budget figure is a draft still pending Cortes vote — treat as provisional,low
+Canarias,2238754,2024,INE Censo Anual de Población 2024,5782.27,2019,,,,,No total-budget figure sourced this pass (Canarias also has no wildfire-spend figure — see wff_spending.csv),unverified
+Cantabria,590851,2024,INE Censo Anual de Población 2024,3643.17,2019,3925000000,2026,proyecto_no_aprobado,"Consejo de Gobierno de Cantabria, proyecto aprobado 2025-10-31/2026-03 (cantabria.es)",Draft budget approved by the executive but not yet confirmed passed by Parliament as of this pass,low
+Castilla-La Mancha,2104433,2024,INE Censo Anual de Población 2024,35975.37,2019,12903000000,2026,aprobado_definitivo,"Cortes de Castilla-La Mancha 2025-12-17 / DOCM 2025-12-29 (Ley 5/2025)",,medium
+Castilla y León,2391682,2024,INE Censo Anual de Población 2024,48153.57,2019,15715000000,2026,proyecto_convalidado,"Junta de Castilla y León press release (convalida proyecto tras incorporar Sección 20); final Cortes vote not confirmed",,low
+Cataluña,8012231,2024,INE Censo Anual de Población 2024,20083.29,2019,49162000000,2026,aprobado_definitivo,"Parlament de Catalunya 2026-07-02 (elplural.com, moncloa.com)",,medium
+Comunidad de Madrid,7009268,2024,INE Censo Anual de Población 2024,4382.62,2019,30663000000,2026,aprobado_definitivo,"Asamblea de Madrid 2025-12-19",,medium
+Comunidad Foral de Navarra,678333,2024,INE Censo Anual de Población 2024,5943.68,2019,6741514953,2026,aprobado_definitivo,"Parlamento de Navarra 2025-12-18 / BOE-A-2026-5611 (Ley Foral 16/2025)",,medium
+Comunidad Valenciana,5319285,2024,INE Censo Anual de Población 2024,12670.36,2019,33305000000,2026,aprobado_definitivo,"Les Corts Valencianes 2026-07-22",,medium
+Extremadura,1054681,2024,INE Censo Anual de Población 2024,28724.51,2019,8854000000,2026,proyecto,"Consejo de Gobierno de Extremadura aprobó proyecto 2026-05-28 (juntaex.es); Asamblea final vote reported as in progress in the same source round",,low
+Galicia,2705833,2024,INE Censo Anual de Población 2024,20407.54,2019,14240000000,2026,aprobado_definitivo,"Parlamento de Galicia, en vigor (xunta.gal, eldebate.com 2025-10-17) — one source cites 14.204M, a ~0.25% variant not reconciled",,medium
+Islas Baleares,1231768,2024,INE Censo Anual de Población 2024,2221.88,2019,7469100000,2025,aprobado_definitivo,economiademallorca.com (2025-07-09) — no 2026 total-budget figure found; this is a year behind the region's spend-row year mismatch noted in wff_spending.csv,2025 figure used since no 2026 total was found — matches this CCAA's 2025 wildfire-spend row's year exactly,medium
+La Rioja,324184,2024,INE Censo Anual de Población 2024,3109.52,2019,2118600000,2026,aprobado_definitivo,"Parlamento de La Rioja (Ley 8/2025)",,medium
+País Vasco,2227684,2024,INE Censo Anual de Población 2024,4917.86,2019,16378000000,2026,aprobado_definitivo,"Gobierno Vasco / Parlamento Vasco, aprobados Presupuestos'26 (euskadi.eus, eaj-pnv.eus)",,medium
+Principado de Asturias,1009599,2024,INE Censo Anual de Población 2024,7704.79,2019,6993000000,2026,aprobado_definitivo,"Junta General del Principado de Asturias (eldiario.es 2025-, BOE-A-2026-2888)",,medium
+Región de Murcia,1568492,2024,INE Censo Anual de Población 2024,5113.64,2019,6725800000,2025,aprobado_definitivo,"Asamblea Regional de Murcia (carm.es) — year is ambiguous in source reporting ('validado el 19 de junio'); treated as 2025, not confirmed as the 2026 figure",Year uncertain — flagged for follow-up rather than assumed,low

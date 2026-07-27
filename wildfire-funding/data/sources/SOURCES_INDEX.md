@@ -101,11 +101,15 @@ have an unresolved conflicting alternate from a second source.
 - **Population**: `es.wikipedia.org/wiki/Anexo:Comunidades_y_ciudades_autónomas_de_España`, itself relaying INE's Censo Anual de Población 2024 (1 Jan 2024 snapshot) — all 17 CCAAs + Ceuta/Melilla.
 - **Forest area**: MITECO, *Anuario de Estadística Forestal 2019*, chapter 6 ("Gestión Forestal Sostenible"), table 6.1.1 — direct PDF at
   `https://www.mapa.gob.es/estadistica/pags/anuario/2019/CAPITULOSPDF/CAPITULO06/pdfc06_1.1.pdf`, extracted with `pdfplumber` (see `analysis/compute_normalized.py`'s data prep). All 17 CCAAs, `TOTAL FORESTAL` column, hectares converted to km².
+- **Total CCAA budget (initial/approved, 2025/2026)**: sourced per-region from press coverage of each budget law's approval (regional-government sites, BOE citations where found, and regional press) rather than from Hacienda's own portal (`serviciostelematicosext.hacienda.gob.es` is a JS-driven query tool WebFetch couldn't drive this pass — worth a direct-CSV retry). 15 of 16 spend-covered CCAAs populated; Canarias not sourced (no wildfire figure either). Per-row citations and approval-stage tags (`aprobado_definitivo`/`proyecto`/`proyecto_convalidado`) are in `wff_denominators.csv`.
 
 ## Next steps
 
-See `../../SPEC.md` §T: T6 (total-CCAA-budget denominator, still blank in
-`wff_denominators.csv`) is the main remaining gap, followed by T2/T3's
-real task — tracing each spend figure above to its actual budget-law
-article instead of a press relay, and resolving the conflicting-figure
-notes.
+See `../../SPEC.md` §T. Priority order per user direction (2026-07-27):
+**T9** (executed/liquidación spend, not just initial credit — the number
+that actually matters) and **T8** (extend the historical time series
+beyond Andalucía/Castilla-La Mancha to the other 14 CCAAs) rank above
+T2/T3's remaining task of tracing each spend figure to its actual
+budget-law article instead of a press relay. T6's few `proyecto`-stage
+total-budget rows (Aragón, Cantabria, Castilla y León, Extremadura) should
+also be confirmed against final Cortes/Asamblea approval once available.

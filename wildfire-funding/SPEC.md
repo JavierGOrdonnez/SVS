@@ -59,7 +59,26 @@ C6: **Total CCAA budget denominator** = the "presupuesto inicial" (initial
 approved budget) figure from the Ministerio de Hacienda's official CCAA
 budgets portal (`serviciostelematicosext.hacienda.gob.es`) for the matching
 year, unless a row explicitly notes it's using executed spend instead —
-the two must never be silently mixed.
+the two must never be silently mixed. **First pass (2026-07-27)**: populated
+via regional press coverage of each budget law's passage instead (Hacienda's
+own portal is a JS-driven query tool WebFetch can't drive), each row tagged
+`aprobado_definitivo` / `proyecto` / `proyecto_convalidado` per how far the
+law had actually progressed at time of sourcing — see `wff_denominators.csv`.
+Revisit against Hacienda's own consolidated table when feasible.
+
+C9: **Budgeted ≠ executed, and executed is the number that matters.**
+Every `wff_spending.csv` figure sourced so far is an *initial credit or
+announced device budget* (crédito inicial), not audited final expenditure
+(liquidación). Wildfire spending is exactly the kind of item that
+routinely blows past its initial credit via extraordinary in-year credits
+once a season turns out worse than planned — nominal series (T8) that
+only track the announced figure will understate real cost in bad years
+and can't be compared across CCAAs that differ in how often they need
+supplementary credits. A `spend_type` value of `presupuestado` vs.
+`liquidado` is required once liquidación data is sourced (each region's
+Intervención General / Cuenta General, published with a 1-2 year lag);
+until then every row is implicitly `presupuestado` and must not be
+described as "what was spent."
 
 C7: A CCAA that extends its previous year's budget (no new law passed —
 this happened e.g. Cataluña for 2024 per initial research) must have that
@@ -143,6 +162,7 @@ still reconcile to its own reported combined total where one exists.
 | T2/T3 | ~ | data | 16 of 17 CCAAs now have ≥1 sourced spend figure for 2025/2026 (Canarias excluded — no consolidated regional total exists, competencies split across cabildos insulares, documented in `SOURCES_INDEX.md`). Every populated row is `confidence=low` or `medium` and most carry an unresolved conflicting alternate figure from a second source (see `notes` column) — none of this is ready to publish as a definitive ranking without T2-style primary-source tracing per region. |
 | T4 | x | data | Population denominator built for all 17 CCAAs, INE Censo Anual de Población 2024 (via es.wikipedia.org secondary relay of INE figures — not fetched from INE's own interactive table directly, since that requires JS-driven parameter selection WebFetch couldn't drive; revisit with a direct INE CSV export if precision matters). |
 | T5 | x | research/data | R2 resolved — forest-area denominator built for all 17 CCAAs from MITECO's Anuario de Estadística Forestal 2019, table 6.1.1 (a real primary source, extracted via pdfplumber from the actual PDF, not a secondary relay). |
-| T6 | . | data | Total-CCAA-budget denominator — not started. `wff_denominators.csv` has the column but every row is blank; Hacienda's portal URL is documented in `SOURCES_INDEX.md` as the source to use. |
-| T7 | x | analysis | `analysis/compute_normalized.py` joins spending × denominators and writes `reports/wff_first_pass_2025_2026.md` — € /100k hab and € /km² forest computed for the 16 covered CCAAs; % of own budget not yet computable (blocked on T6). Ranking already visibly reshuffles under normalization vs. raw totals, as the project's motivation predicted. |
-| T8 | . | analysis | Historical time series — not started. National aggregate lead (`forescat.com`/ASEMFO, 2000–2024) still needs tracing to build a real per-CCAA multi-year series. |
+| T6 | ~ | data | Total-CCAA-budget (initial/approved) sourced for 15 of 16 spend-covered CCAAs via regional press coverage of each 2025/2026 budget law (see C6, `wff_denominators.csv`); several still `proyecto`/not-yet-Cortes-confirmed at time of sourcing (Aragón, Cantabria, Castilla y León, Extremadura). Executed/liquidación figures — the ones that actually matter per C9 — not started; that's a separate, harder pull (each region's Intervención General, 1-2yr lag). |
+| T7 | x | analysis | `analysis/compute_normalized.py` joins spending × denominators and writes `reports/wff_first_pass_2025_2026.md` — € /100k hab, € /km² forest, and % of own budget (where spend-year and budget-year are within 1 year) computed for the 16 covered CCAAs. Ranking already visibly reshuffles under each normalization vs. raw totals, as the project's motivation predicted. |
+| T8 | ~ | analysis | Historical time series started: Andalucía/Plan INFOCA now has 5 sourced years (2020, 2021, 2023, 2024, 2026 — 2022 not found), Castilla-La Mancha/Plan INFOCAM has 2 (2025, 2026). Everything else is still a single year. National aggregate lead (`forescat.com`/ASEMFO, 2000–2024) still needs tracing; extending the other 14 CCAAs to multi-year is the main remaining work here. |
+| T9 | . | data | Executed vs. budgeted (C9) — not started. Trace at least Andalucía's INFOCA liquidación (or equivalent Cuenta General entry) for 1-2 recent severe fire-season years to test whether real spend exceeded the initial credit, and by how much. |
