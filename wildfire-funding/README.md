@@ -54,11 +54,22 @@ project reports, not a gap to quietly fill by guessing a split.
 
 ## Status
 
-Scaffold only — methodology, constraints, and source index committed; no
-figures populated yet. See `SPEC.md` §T for the task breakdown.
+First real data pass landed: 16 of 17 CCAAs have at least one sourced
+2025/2026 spend figure, plus full population and forest-area denominators
+for all 17. `analysis/compute_normalized.py` computes the two ready
+normalizations and writes `reports/wff_first_pass_2025_2026.md`.
+
+**Read this before citing anything from it**: every spend figure is
+`confidence=low` (one `medium`), most have an unresolved conflicting
+alternate figure from a second source, and the prevention/extinction
+category split was explicitly deprioritized in favor of getting all
+regions covered — see `SPEC.md` T1–T3. This is a directional first look,
+not a verified result. The % of each region's total budget normalization
+is still missing (blocked on `SPEC.md` T6).
 
 ## Where to look
 
 - `SPEC.md` — constraints, invariants, task roadmap.
-- `data/sources/SOURCES_INDEX.md` — official sources and NGO/press reports found so far.
-- `data/raw/` — empty until §T1 (schema) and §T2 (first sourced year) land.
+- `data/sources/SOURCES_INDEX.md` — official sources and NGO/press reports, incl. per-row citations for every populated figure.
+- `data/raw/wff_spending.csv`, `wff_denominators.csv` — the actual data.
+- `analysis/compute_normalized.py` → `reports/wff_first_pass_2025_2026.md` — the first cross-CCAA comparison.

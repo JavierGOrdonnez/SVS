@@ -79,8 +79,33 @@ traced to the actual Ley de Presupuestos article or official report table.
   years × a clean prevention/extinction split. R1 in SPEC.md tracks
   combining sources per-CCAA-per-year rather than picking one.
 
+## Per-CCAA spend sources used in the first data pass (2026-07-27)
+
+Coverage priority was explicitly widened over the prevention/extinction
+split — see SPEC.md T1/C2 note. Each source below is cited per-row in
+`data/raw/wff_spending.csv`'s `source_ref`/`notes` columns; most figures
+have an unresolved conflicting alternate from a second source.
+
+- **El Debate**, ["Así invierten las comunidades en la lucha contra los incendios" (2026-07-27)](https://www.eldebate.com/espana/20260727/asi-invierten-comunidades-lucha-contra-incendios-madrid-entre-presupuesto-proporcional-destina_443841.html)
+  — the single best same-year cross-CCAA comparative source found: Andalucía, Galicia, Castilla-La Mancha, Asturias, Madrid, Murcia, Cantabria, La Rioja. Explicitly notes regions don't use comparable budget category boundaries.
+- **Demócrata**, [ranking piece (2026)](https://www.democrata.es/politicas/comunidades-mas-invierten-en-incendios-forestales-ranking-gasto-en-espana-en-2026/) — Comunidad Valenciana, Extremadura, Aragón, Castilla y León (conflicts with El Debate's Andalucía/Galicia figures by ~10%, unresolved).
+- **Castilla-La Mancha regional government**, [official press note](https://www.castillalamancha.es/actualidad/notasdeprensa/el-gobierno-regional-invertir%C3%A1-126-millones-de-euros-en-prevenci%C3%B3n-y-extinci%C3%B3n-de-incendios) — 126M for 2026 (Plan INFOCAM); this is the one row sourced directly to an official regional-government statement rather than press aggregation, hence `confidence=medium` not `low`.
+- **zuk.eus** (Diputación de Álava coverage) — País Vasco's three diputaciones forales (Bizkaia, Álava, Gipuzkoa) each publish their own figure; summed to 100.2M but this bundles general firefighting/rescue, not wildfire-only — a real example of the "different administrations, different category boundaries" problem flagged in README.md.
+- **ecoticias.com / palmesana.com** — Islas Baleares, prevention-only partial figures (IBANAT + FOGAIBA), no consolidated total found.
+- **Crónica Global** — Cataluña's 2026 device (18M) plus a separate 5-year, 15M/year firebreak-strip program not folded into that figure.
+- **Regional press coverage** — Navarra (42.7M, explicitly caveated as including general firefighting, not wildfire-specific), Cantabria (own Plan de Incendios Forestales cites 8.4M for 2025, a much narrower figure than El Debate's 26.3M for the same region).
+- **Canarias**: no consolidated regional total found — wildfire competencies split between Gobierno de Canarias and each cabildo insular; only fragment found was Gran Canaria's own cabildo (~5M Céntimo Verde Forestal + 6M own funds, 2026). Documented as a gap, not filled with a guess.
+
+## Denominator sources used
+
+- **Population**: `es.wikipedia.org/wiki/Anexo:Comunidades_y_ciudades_autónomas_de_España`, itself relaying INE's Censo Anual de Población 2024 (1 Jan 2024 snapshot) — all 17 CCAAs + Ceuta/Melilla.
+- **Forest area**: MITECO, *Anuario de Estadística Forestal 2019*, chapter 6 ("Gestión Forestal Sostenible"), table 6.1.1 — direct PDF at
+  `https://www.mapa.gob.es/estadistica/pags/anuario/2019/CAPITULOSPDF/CAPITULO06/pdfc06_1.1.pdf`, extracted with `pdfplumber` (see `analysis/compute_normalized.py`'s data prep). All 17 CCAAs, `TOTAL FORESTAL` column, hectares converted to km².
+
 ## Next steps
 
-See `../../SPEC.md` §T (T2–T6): start with the 4 disclosed-split CCAAs
-(T2) since they need no estimation, in parallel with the population (T4)
-and total-budget (T6) denominators which don't depend on the funding data.
+See `../../SPEC.md` §T: T6 (total-CCAA-budget denominator, still blank in
+`wff_denominators.csv`) is the main remaining gap, followed by T2/T3's
+real task — tracing each spend figure above to its actual budget-law
+article instead of a press relay, and resolving the conflicting-figure
+notes.

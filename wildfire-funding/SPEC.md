@@ -32,6 +32,11 @@ C2: **Category split ⊥ inferred.** `prevención`, `extinción`, and
 spending row's `category` field. If a CCAA's budget document only gives a
 combined figure, the row goes in `no desglosado` — it is never split
 proportionally or estimated to force it into the other two buckets.
+*(Deprioritized 2026-07-27: getting all 17 CCAAs covered with at least one
+sourced total took priority over chasing the prevention/extinction split
+for the handful of regions that disclose it — see T2/T3. The constraint
+itself still holds if/when that split is added back: no inferred numbers,
+ever.)*
 
 C3: **Nominal vs. real euros.** Any multi-year comparison must state
 whether figures are nominal or inflation-adjusted (INE IPC series), and
@@ -79,10 +84,15 @@ alone covers all 17 CCAAs with a clean prevention/extinction split for all
 years — expect to combine several and document per-CCAA-per-year source
 provenance individually.
 
-R2: Whether IFN4 (potentially outdated, fieldwork up to ~20 years old for
-some regions) or MITECO's more current Mapa Forestal / Corine Land Cover
-derivative is the better forest-area denominator — investigate which is
-more consistently available per-CCAA before committing to one.
+R2: **Resolved (first pass)** — used MITECO's *Anuario de Estadística
+Forestal 2019*, table 6.1.1 ("Superficie arbolada, desarbolado y
+forestal, MFE25-MFE50, 2019"), which already tabulates total forest
+surface for all 17 CCAAs from the Mapa Forestal de España in one document
+— simpler than assembling 17 separate per-region IFN4 editions with
+non-simultaneous fieldwork years. Trade-off accepted: single 2019
+snapshot for all regions, not each region's own most-current figure.
+Revisit if a more recent MITECO Mapa Forestal update consolidates all
+CCAAs the same way.
 
 R3: Whether "presupuesto inicial" (approved) or actual executed spend is
 more meaningful for the prevention-funding-drops-after-fires hypothesis —
@@ -129,11 +139,10 @@ still reconcile to its own reported combined total where one exists.
 
 | id | status | track | what/where |
 |---|---|---|---|
-| T1 | . | infra | Design `wff_spending.csv` / `wff_denominators.csv` schemas satisfying V1/V2. |
-| T2 | . | data | Source the 4 CCAAs with disclosed prevention/extinction splits (Galicia, Extremadura, Castilla-La Mancha, Baleares) for the most recent available year as the first populated rows. |
-| T3 | . | data | Source `no_desglosado` combined totals for the remaining CCAAs, most recent year (2025/2026 budget-cycle figures already surfaced for Comunidad Valenciana, Andalucía/INFOCA, Castilla y León, Galicia/PLADIGA, Extremadura/INFOEX, Asturias, Aragón/INFOAR, Madrid/INFOMA — see SOURCES_INDEX.md). |
-| T4 | . | data | Build the population denominator table (INE, per C4) for the same year set as T2/T3. |
-| T5 | . | research | Resolve R2 (IFN4 vs. Mapa Forestal) and build the forest-area denominator table. |
-| T6 | . | data | Build the total-CCAA-budget denominator table from Hacienda's official portal (per C6), same year set. |
-| T7 | . | analysis | Once T2–T6 land for ≥1 year, compute all three normalizations (Table B) and publish the first cross-CCAA comparison, explicitly flagging the `no_desglosado` majority per the transparency caveat in `README.md`. |
-| T8 | . | analysis | Extend backward year-by-year (national aggregate already has a 2000–2024 lead via `forescat.com`/ASEMFO — see SOURCES_INDEX.md) to test the funding-drops-after-severe-seasons hypothesis with a real time series. |
+| T1 | x | infra | `data/raw/wff_spending.csv` / `wff_denominators.csv` schemas built and populated (first pass). Category split (C2) deprioritized per explicit user direction 2026-07-27 — "coverage of all regions is more important" than the prevention/extinction breakdown; `wff_spending.csv` currently carries one `amount_eur` per CCAA×year rather than the three-way category split, with per-row `notes` documenting known scope conflicts instead. |
+| T2/T3 | ~ | data | 16 of 17 CCAAs now have ≥1 sourced spend figure for 2025/2026 (Canarias excluded — no consolidated regional total exists, competencies split across cabildos insulares, documented in `SOURCES_INDEX.md`). Every populated row is `confidence=low` or `medium` and most carry an unresolved conflicting alternate figure from a second source (see `notes` column) — none of this is ready to publish as a definitive ranking without T2-style primary-source tracing per region. |
+| T4 | x | data | Population denominator built for all 17 CCAAs, INE Censo Anual de Población 2024 (via es.wikipedia.org secondary relay of INE figures — not fetched from INE's own interactive table directly, since that requires JS-driven parameter selection WebFetch couldn't drive; revisit with a direct INE CSV export if precision matters). |
+| T5 | x | research/data | R2 resolved — forest-area denominator built for all 17 CCAAs from MITECO's Anuario de Estadística Forestal 2019, table 6.1.1 (a real primary source, extracted via pdfplumber from the actual PDF, not a secondary relay). |
+| T6 | . | data | Total-CCAA-budget denominator — not started. `wff_denominators.csv` has the column but every row is blank; Hacienda's portal URL is documented in `SOURCES_INDEX.md` as the source to use. |
+| T7 | x | analysis | `analysis/compute_normalized.py` joins spending × denominators and writes `reports/wff_first_pass_2025_2026.md` — € /100k hab and € /km² forest computed for the 16 covered CCAAs; % of own budget not yet computable (blocked on T6). Ranking already visibly reshuffles under normalization vs. raw totals, as the project's motivation predicted. |
+| T8 | . | analysis | Historical time series — not started. National aggregate lead (`forescat.com`/ASEMFO, 2000–2024) still needs tracing to build a real per-CCAA multi-year series. |
