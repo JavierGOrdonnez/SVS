@@ -141,13 +141,49 @@ next step for each:
   same corps handles both) — broader scope than wildfire-only, treat as
   a ceiling.
 
+## Sequential foreground pass, round 2 (2026-07-28)
+
+Per user direction: dropped the parallel-background-agent approach (see
+the recovered-from-cache section above for why) in favor of working
+CCAAs one at a time in the foreground. Order and outcome:
+
+- **Extremadura**: landed 5 rows (2024) from the eldiario.es article
+  already in this index — 2 real presupuestado/liquidado pairs (40.8% and
+  8.9% execution) plus one presupuestado-only narrow line.
+- **Comunidad de Madrid**: real search effort (Cámara de Cuentas Madrid
+  fiscalización reports, the Cuenta General text extract already in the
+  research cache, the region's own INFOMA 2026 operational plan PDF
+  fetched directly and page-searched) — no wildfire-specific budget table
+  found in any of them. The INFOMA plan is purely operational/tactical,
+  no cost figures at all. Documented as a gap, not filled.
+- **Aragón**: real search effort (Cámara de Cuentas, a Cortes de Aragón
+  written parliamentary answer fetched directly) — found only vague
+  multi-year policy commitments (e.g. "€400M for the Strategic Plan"
+  spanning several years), nothing at the annual presupuestado/liquidado
+  grain this dataset needs. Documented as a gap.
+- **Castilla-La Mancha**: no new material found beyond what's already in
+  the dataset (2025/2026 official press-release figures).
+- **Castilla y León**: landed a strong pair — theobjective.com
+  (2025-08-14) reported the region's own mid-year ejecución presupuestaria
+  showing only 48.5% of the 104.3M "Programas de Prevención y Extinción
+  de incendios" budget executed as of 1 June 2025, weeks before that
+  year's severe fire season. Explicitly an interim, not year-end, figure.
+- **Galicia (deepen)**: mined the same Memoria-do-proxecto-de-Lei-de-
+  Orzamentos source (already used for the 2023 rows) for 5 more years —
+  2019, 2020, 2021, 2024, 2025 — recovered from the session's research
+  cache. 19 more rows, all partial investment-line slices, presupuestado
+  only. Gives Galicia the deepest year-over-year series in the dataset.
+
 ## Next steps
 
-See `../../SPEC.md` §T. Priority order per user direction (2026-07-27):
-**T9** (executed/liquidación spend, not just initial credit — the number
-that actually matters) and **T8** (extend the historical time series
-beyond Andalucía/Castilla-La Mancha to the other 14 CCAAs) rank above
-T2/T3's remaining task of tracing each spend figure to its actual
-budget-law article instead of a press relay. T6's few `proyecto`-stage
-total-budget rows (Aragón, Cantabria, Castilla y León, Extremadura) should
-also be confirmed against final Cortes/Asamblea approval once available.
+See `../../SPEC.md` §T. **T10** (rerun the now-resumable Tier-1 Hacienda
+parser — it crashed on the first full run, output was lost, but the
+script now writes incrementally and retries transient errors) is the
+next concrete action. After that: tracing every `confidence=low` row's
+`source_ref` to a live, re-verifiable URL (most of this round's rows were
+either recovered from a crashed-agent cache or cited without a captured
+URL); extending Madrid/Aragón/the remaining CCAAs beyond what real search
+effort already ruled out this round; and T6's few `proyecto`-stage
+total-budget rows (Aragón, Cantabria, Castilla y León, Extremadura)
+should be confirmed against final Cortes/Asamblea approval once
+available.

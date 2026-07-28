@@ -69,16 +69,31 @@ regions covered — see `SPEC.md` T1–T3. This is a directional first look,
 not a verified result.
 
 **Budgeted is not executed, and executed is the number that actually
-matters** (per your steer): every figure sourced so far is an *initial
-credit or announced device budget*, not audited final expenditure.
-Wildfire spending routinely blows past its initial credit via
-extraordinary in-year credits once a season turns out worse than planned
-— so the nominal growth visible in Andalucía's series (171.9M → 300M,
-2020-2026) may understate real cost in the worst years and overstate the
-gap between good and bad years. Sourcing executed/liquidación figures is
-`SPEC.md` T9, not yet started — it requires each region's Intervención
-General / Cuenta General, published with a 1-2 year lag, not press
-coverage of the budget law's passage.
+matters** (per your steer). This is no longer just a caveat — real
+executed (liquidado) figures now exist for 5 program×year pairs (see
+`reports/wff_first_pass_2025_2026.md`'s Execution rate table), each
+traced to the region's own ejecución presupuestaria / Compte General /
+open-data budget-execution extract, not a press aggregator:
+
+| CCAA | Year | Program | Execution % |
+|---|---|---|---|
+| Castilla y León | 2025 | Prevención y extinción de incendios | 48.5% (mid-year, pre-fire-season) |
+| Cataluña | 2021 | Bombers (broader than wildfire-only) | 106.6% |
+| Extremadura | 2024 | Total investment programs | 40.8% |
+| Extremadura | 2024 | Lucha contra incendios forestales (narrowest line) | 8.9% |
+| País Vasco / Bizkaia | 2023 | Medidas contra incendios forestales | 0€ initial credit → 1.34M executed |
+
+Galicia also now has 6 years of presupuestado detail (2019-2021,
+2023-2025), all partial investment-line slices of PLADIGA. Madrid and
+Aragón got real search effort (Cámara de Cuentas audits, Cortes written
+answers, Madrid's own INFOMA operational plan) but no presupuestado/
+liquidado pair — documented as a gap rather than filled with a guess.
+
+The Tier-1 official all-CCAA parser (`parsers/parse_hacienda_totals.py`,
+Hacienda's two SGCIEF portals) is confirmed working by hand but its first
+full run crashed on an environment outage before writing output — needs a
+resumability fix before it can replace the press-sourced total-budget
+denominator. See `SPEC.md` T8-T10.
 
 ## Where to look
 

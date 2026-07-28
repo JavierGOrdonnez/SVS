@@ -26,6 +26,7 @@ how this composes with the per-CCAA Tier-2 wildfire-specific parsers.
 
 from __future__ import annotations
 
+import csv
 import re
 import sys
 import time
@@ -123,46 +124,98 @@ def parse_xlsx(content: bytes) -> tuple[float | None, float | None]:
     return total, func41
 
 
-def main() -> None:
-    rows = []
-    for spend_type, cfg in PORTALS.items():
-        session = requests.Session()
-        for year in cfg["years"]:
-            # Refresh tokens once per year (cheap) rather than once per (year, ccaa) —
-            # if a CCAA-level POST ever 419s / gets a session-expired page, this loop
-            # re-fetches tokens for the next CCAA rather than silently emitting nulls.
-            tokens = fetch_tokens(session, cfg["base"], cfg["entry"])
-            for code, ccaa in CCAA_CODES.items():
-                try:
-                    content = download_one(session, cfg["base"], cfg["field"], tokens, year, code)
-                except requests.RequestException as e:
-                    print(f"  ! {spend_type} {year} {ccaa}: request failed ({e})", file=sys.stderr)
-                    continue
-                if content is None:
-                    continue
-                try:
-                    total, func41 = parse_xlsx(content)
-                except Exception as e:
-                    print(f"  ! {spend_type} {year} {ccaa}: parse failed ({e})", file=sys.stderr)
-                    continue
-                if total is None:
-                    continue
-                rows.append(
-                    {
-                        "ccaa": ccaa,
-                        "year": year,
-                        "spend_type": spend_type,
-                        "total_gastos_eur": total,
-                        "func41_agricultura_pesca_alimentacion_eur": func41,
-                        "source_ref": f"{cfg['base']}DescargaFuncionalCapDC.aspx?cdcdad={code}&ano={year}",
-                    }
-                )
-                time.sleep(0.3)  # be polite to a public-sector server, not rate-limit-evading
-            print(f"{spend_type} {year}: {sum(1 for r in rows if r['year'] == year and r['spend_type'] == spend_type)}/{len(CCAA_CODES)} CCAAs", file=sys.stderr)
+FIELDNAMES = [
+    "ccaa",
+    "year",
+    "spend_type",
+    "total_gastos_eur",
+    "func41_agricultura_pesca_alimentacion_eur",
+    "source_ref",
+]
 
-    out = pd.DataFrame(rows)
-    out.to_csv(OUT_PATH, index=False)
-    print(f"Wrote {OUT_PATH} ({len(out)} rows)")
+
+def load_done_keys() -> set[tuple[str, int, str]]:
+    """(ccaa, year, spend_type) triples already written to OUT_PATH, so a
+    rerun after a crash skips what's already on disk instead of
+    re-fetching (and instead of clobbering it — see V21-style concern in
+    ../SPEC.md about not silently discarding a prior partial run)."""
+    if not OUT_PATH.exists():
+        return set()
+    existing = pd.read_csv(OUT_PATH)
+    return {(r.ccaa, int(r.year), r.spend_type) for r in existing.itertuples()}
+
+
+def fetch_with_retry(fn, *args, attempts: int = 3, **kwargs):
+    """Transient proxy/connection errors (seen in practice: ProxyError,
+    RemoteDisconnected) get a couple of short retries before giving up on
+    that one (year, ccaa) — a real network blip shouldn't cost an entire
+    year's worth of already-fetched CCAAs the way the crash that motivated
+    this fix did."""
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return fn(*args, **kwargs)
+        except requests.RequestException as e:
+            last_exc = e
+            if attempt < attempts - 1:
+                time.sleep(2 * (attempt + 1))
+    raise last_exc
+
+
+def main() -> None:
+    done = load_done_keys()
+    write_header = not OUT_PATH.exists()
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(OUT_PATH, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
+        if write_header:
+            writer.writeheader()
+
+        for spend_type, cfg in PORTALS.items():
+            session = requests.Session()
+            for year in cfg["years"]:
+                # Refresh tokens once per year (cheap) rather than once per (year, ccaa) —
+                # if a CCAA-level POST ever 419s / gets a session-expired page, this loop
+                # re-fetches tokens for the next CCAA rather than silently emitting nulls.
+                tokens = fetch_with_retry(fetch_tokens, session, cfg["base"], cfg["entry"])
+                n_ok = 0
+                for code, ccaa in CCAA_CODES.items():
+                    if (ccaa, year, spend_type) in done:
+                        n_ok += 1
+                        continue
+                    try:
+                        content = fetch_with_retry(
+                            download_one, session, cfg["base"], cfg["field"], tokens, year, code
+                        )
+                    except requests.RequestException as e:
+                        print(f"  ! {spend_type} {year} {ccaa}: request failed ({e})", file=sys.stderr)
+                        continue
+                    if content is None:
+                        continue
+                    try:
+                        total, func41 = parse_xlsx(content)
+                    except Exception as e:
+                        print(f"  ! {spend_type} {year} {ccaa}: parse failed ({e})", file=sys.stderr)
+                        continue
+                    if total is None:
+                        continue
+                    writer.writerow(
+                        {
+                            "ccaa": ccaa,
+                            "year": year,
+                            "spend_type": spend_type,
+                            "total_gastos_eur": total,
+                            "func41_agricultura_pesca_alimentacion_eur": func41,
+                            "source_ref": f"{cfg['base']}DescargaFuncionalCapDC.aspx?cdcdad={code}&ano={year}",
+                        }
+                    )
+                    f.flush()  # survive a crash on the very next row, not just the next year
+                    n_ok += 1
+                    time.sleep(0.3)  # be polite to a public-sector server, not rate-limit-evading
+                print(f"{spend_type} {year}: {n_ok}/{len(CCAA_CODES)} CCAAs", file=sys.stderr)
+
+    print(f"Wrote/updated {OUT_PATH}")
 
 
 if __name__ == "__main__":

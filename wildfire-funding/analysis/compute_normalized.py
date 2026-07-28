@@ -85,6 +85,34 @@ def main() -> None:
 
     lines += [
         "",
+        "## Execution rate (liquidado / presupuestado), per CCAA x year x program",
+        "",
+        "The actual novel output this round: every (ccaa, year, program_name) pair",
+        "where *both* a presupuestado and a liquidado row exist (SPEC.md T9). This is",
+        "still a small, opportunistic sample — most rows in this dataset only have",
+        "one side of the pair — but it's real, sourced, and already shows the",
+        "under-execution pattern the project set out to check for.",
+        "",
+        "| CCAA | Year | Program | Presupuestado (€) | Liquidado (€) | Execution % |",
+        "|---|---|---|---|---|---|",
+    ]
+    pairs = df.pivot_table(
+        index=["ccaa", "year", "program_name"],
+        columns="spend_type",
+        values="amount_eur",
+        aggfunc="first",
+    ).dropna(subset=["presupuestado", "liquidado"], how="any")
+    pairs = pairs[pairs.index.get_level_values("program_name").notna() | True]
+    for (ccaa, year, program), row in pairs.iterrows():
+        pres, liq = row.get("presupuestado"), row.get("liquidado")
+        if pd.isna(pres) or pd.isna(liq):
+            continue
+        pct = "N/A (0 initial credit)" if pres == 0 else f"{liq/pres*100:,.1f}%"
+        prog = program if isinstance(program, str) and program.strip() else "(unspecified)"
+        lines.append(f"| {ccaa} | {int(year)} | {prog} | {pres:,.0f} | {liq:,.0f} | {pct} |")
+
+    lines += [
+        "",
         "## Reading notes",
         "",
         "- Ranking absolute spend is not the same ranking as any of the three",
@@ -96,8 +124,11 @@ def main() -> None:
         "  2020-2026) shows nominal spend nearly doubling in six years — but this",
         "  is *budgeted/announced* spend, not audited *executed* spend; the two",
         "  can differ substantially once a season's actual fire severity forces",
-        "  extraordinary in-year credits. No region's liquidación (executed)",
-        "  figure has been sourced yet — see `SPEC.md` T9.",
+        "  extraordinary in-year credits (see the Execution rate table above for",
+        "  concrete examples: Extremadura's narrowest project line hit 8.9%",
+        "  execution in 2024, and País Vasco/Bizkaia's wildfire project had a",
+        "  0-euro initial credit that still ended up executing 1.34M via in-year",
+        "  credit modification).",
         "- Every absolute-spend row above has at least one unresolved",
         "  conflicting/alternate figure documented in `wff_spending.csv`'s",
         "  `notes` column — treat this table as directional, not final, until",
