@@ -103,6 +103,44 @@ have an unresolved conflicting alternate from a second source.
   `https://www.mapa.gob.es/estadistica/pags/anuario/2019/CAPITULOSPDF/CAPITULO06/pdfc06_1.1.pdf`, extracted with `pdfplumber` (see `analysis/compute_normalized.py`'s data prep). All 17 CCAAs, `TOTAL FORESTAL` column, hectares converted to km².
 - **Total CCAA budget (initial/approved, 2025/2026)**: sourced per-region from press coverage of each budget law's approval (regional-government sites, BOE citations where found, and regional press) rather than from Hacienda's own portal (`serviciostelematicosext.hacienda.gob.es` is a JS-driven query tool WebFetch couldn't drive this pass — worth a direct-CSV retry). 15 of 16 spend-covered CCAAs populated; Canarias not sourced (no wildfire figure either). Per-row citations and approval-stage tags (`aprobado_definitivo`/`proyecto`/`proyecto_convalidado`) are in `wff_denominators.csv`.
 
+## Recovered-from-cache rows (2026-07-28) — presupuestado/liquidado pairs, source_ref pending re-verification
+
+A batch of Tier-2 background research agents crashed mid-run (environment
+proxy outage) before committing anything, but their downloaded/extracted
+research artifacts survived in the session scratchpad and were recovered
+and hand-verified before writing into `wff_spending.csv`. Each of the 9
+rows below is `confidence=low` specifically because the exact live URL for
+its source document hasn't been re-fetched/confirmed this pass (the
+content itself was read directly from the cached document, not
+guessed) — re-verifying and filling in `source_ref` is the natural
+next step for each:
+
+- **Galicia 2023, presupuestado** (4 rows): from the Memoria do proxecto
+  de Lei de Orzamentos da Xunta de Galicia 2023, Consellería do Medio
+  Rural, page 103 — 4 named wildfire-related capital-investment lines
+  (Prevención de danos..., Mellora do operativo..., Silvicultura de
+  prevención..., Recuperación integral do territorio...). These are a
+  **partial slice** of PLADIGA (capital-investment sub-programs only,
+  excludes running/personnel costs which sit elsewhere in the budget) —
+  do not compare their sum directly to the existing lumped PLADIGA press
+  figures (190-213M for 2026) without accounting for that gap.
+- **País Vasco / Diputación Foral de Bizkaia 2023** (2 rows): from
+  Bizkaia's own open-data budget-execution extract, project code
+  `2022/0121` "Medidas contra incendios forestales" — a real,
+  concrete presupuestado-vs-liquidado gap: crédito inicial €0 (not in the
+  originally-approved budget) vs. obligación reconocida (executed)
+  €1,340,946, funded entirely via in-year credit modification. Bizkaia
+  only — one of the 3 diputaciones forales, not comparable in scope to
+  the existing full-País-Vasco 2025 row.
+- **Cataluña 2020-2021** (3 rows): from the Compte General de la
+  Generalitat de Catalunya, exercici 2021 — functional program
+  **223 "Prevenció, extinció d'incendis i salvaments"**: crèdits inicials
+  237.48M (2021), obligacions reconegudes 253.10M (2021) and 212.87M
+  (2020, from the same document's YoY comparison table). This program is
+  Cataluña's general Bombers corps (urban + wildfire response together,
+  same corps handles both) — broader scope than wildfire-only, treat as
+  a ceiling.
+
 ## Next steps
 
 See `../../SPEC.md` §T. Priority order per user direction (2026-07-27):
