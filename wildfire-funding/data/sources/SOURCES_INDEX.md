@@ -150,12 +150,29 @@ CCAAs one at a time in the foreground. Order and outcome:
 - **Extremadura**: landed 5 rows (2024) from the eldiario.es article
   already in this index — 2 real presupuestado/liquidado pairs (40.8% and
   8.9% execution) plus one presupuestado-only narrow line.
-- **Comunidad de Madrid**: real search effort (Cámara de Cuentas Madrid
-  fiscalización reports, the Cuenta General text extract already in the
-  research cache, the region's own INFOMA 2026 operational plan PDF
-  fetched directly and page-searched) — no wildfire-specific budget table
-  found in any of them. The INFOMA plan is purely operational/tactical,
-  no cost figures at all. Documented as a gap, not filled.
+- **Comunidad de Madrid — round 2, intensified (2026-07-28)**: found the
+  actual official budget-by-program data source: Madrid publishes its full
+  presupuesto in structured XLSX at
+  `https://www.comunidad.madrid/docs/assets/2025/12/26/2026-presupuesto-gastos-por-programa-partida.xlsx`
+  (fetched directly, 9,868 rows, every program × chapter × subconcepto for
+  2026) plus a parallel "Ejecución y Liquidación" PDF book (Libro 08,
+  92 pages — but broken down by sección/centro presupuestario, not by
+  programa, so not usable at the granularity needed).
+  **Definitive structural finding**: inspected every one of Madrid's ~100
+  budget programs by name — **there is no "incendios forestales" or
+  INFOMA-named program at all**. Wildfire-related spending is genuinely
+  split across program `456A` (Biodiversidad y Recursos Naturales, 51.4M
+  for 2026 — includes reforestation/forest-maintenance line items but not
+  fire-specific) and program `134A` (Emergencias, 280M — Madrid's general
+  Bomberos/emergency corps, far too broad to use). Neither program's
+  line-item detail (checked down to the `Subconcepto` level) contains an
+  "incendios" label anywhere. The 52.7M INFOMA figure the Consejería
+  announces each summer is a cross-program operational estimate the region
+  itself computes, not a single traceable budget line — this is why every
+  search this session (and the prior background-agent attempt) came up
+  empty on a clean presupuestado/liquidado pair for Madrid specifically.
+  Added program `456A`'s 2026 total as the closest available context row
+  (`confidence=low`, `coverage=partial`, clearly caveated).
 - **Aragón**: real search effort (Cámara de Cuentas, a Cortes de Aragón
   written parliamentary answer fetched directly) — found only vague
   multi-year policy commitments (e.g. "€400M for the Strategic Plan"
