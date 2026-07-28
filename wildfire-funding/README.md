@@ -111,14 +111,47 @@ angle. Not added as a spending-data row (it's a 5-year cumulative figure
 for a funding stream, not a program-year line item) but documented in
 full in `SOURCES_INDEX.md` as the strongest lead found for Madrid.
 
+**Round 4** went further, tracing exactly which official documents the TSJM
+case rests on — and it paid off unexpectedly: obtained (via curl, since the
+source blocks generic fetchers) Newtral's FOI copy of the actual "encargo"
+(entrustment order) assigning Madrid's forest-brigade service to TRAGSA, a
+state-owned company. The document states the entrustment's exact budget
+address — program `134A`, subconcepto `22706` — which matches, digit for
+digit, a €31.3M line already sitting in the official 2026 budget export
+this project pulled earlier, just labeled generically ("Trabajos
+realizados por otras empresas: estudios y trabajos técnicos") with no
+mention of "incendios." **This revises the earlier finding**: Madrid's
+wildfire-brigade spending isn't untracked, it's traceable — just not by
+searching program labels for "incendios," because the entrustment document
+(not the budget itself) is what names what the money is actually for. Full
+detail, plus the total entrustment value (€107M, 2022-2025) and the one
+disclosed annual figure (€23.7M, 2022 partial year — the rest is redacted
+in this copy), in `data/sources/private_contractors_and_operations.md`.
+
+**Also new**: per your steer to look at operational capacity (personnel,
+aircraft, vehicles) as a complementary metric given how often the euro
+approach hits opacity walls — `data/raw/wff_operational_resources.csv` now
+has 2026-season deployment figures for 13 of 17 CCAAs, plus a documented
+private-contractor landscape (aerial-firefighting operators like Avincis/
+Pegasus/Eliance, a 2025 cartel conviction, an ongoing CNMC cartel
+investigation opened January 2026, and Castilla y León's ~20-company,
+~€110M/year privatized ground-crew model). Most of this is `confidence=low`
+press-relayed leads needing re-verification — flagged explicitly per row —
+except the TRAGSA document above, which is primary-sourced. The strongest
+next step identified: Civio's `todos-los-incendios-forestales` open
+dataset (EGIF-derived, per-fire personnel/equipment/cost data, 1968-2023)
+— found, not yet downloaded (gated behind a registration form).
+
 The Tier-1 official all-CCAA parser (`parsers/parse_hacienda_totals.py`,
-Hacienda's two SGCIEF portals) is confirmed working and now running
-successfully in the background (resumability fix held after an earlier
-crash) — see `SPEC.md` T8-T10 for current coverage.
+Hacienda's two SGCIEF portals) is now **complete**: presupuestado and
+liquidado totals for all 17 CCAAs, 2013-2024, in
+`data/raw/wff_total_budget_timeseries.csv` — see `SPEC.md` T8-T12 for full
+current coverage.
 
 ## Where to look
 
 - `SPEC.md` — constraints, invariants, task roadmap.
+- `data/sources/private_contractors_and_operations.md` — operational-resource data, private-contractor landscape, and the Madrid TRAGSA primary-source finding.
 - `data/sources/SOURCES_INDEX.md` — official sources and NGO/press reports, incl. per-row citations for every populated figure.
 - `data/raw/wff_spending.csv`, `wff_denominators.csv` — the actual data.
 - `analysis/compute_normalized.py` → `reports/wff_first_pass_2025_2026.md` — the first cross-CCAA comparison.
