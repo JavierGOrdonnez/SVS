@@ -173,6 +173,63 @@ CCAAs one at a time in the foreground. Order and outcome:
   empty on a clean presupuestado/liquidado pair for Madrid specifically.
   Added program `456A`'s 2026 total as the closest available context row
   (`confidence=low`, `coverage=partial`, clearly caveated).
+
+  **Madrid — round 3, journalistic leads (2026-07-28, per user request to trace secondary/press investigation)**:
+  the user's original cue for this whole project was the 2026 fire season, so
+  went looking specifically for investigative press on Madrid's fire-service
+  funding under the current government. Found a real, court-adjudicated
+  finding — not just an allegation — with a clean, well-corroborated timeline:
+
+  - **2023-12-19**: firefighters' union (CSIT Unión Profesional) files a
+    formal complaint with the Consejería de Economía, Hacienda y Empleo,
+    citing a prior Tribunal Supremo ruling that the mandatory insurance
+    surcharge funding fire services (5% on fire policies + 2.5% on
+    multi-risk policies, collected nationally via UNESPA/Consorcio de
+    Compensación de Seguros and redistributed to regional/local fire
+    services by law) "can only be dedicated to improving prevention and
+    firefighting services" — alleging ~€40M of these earmarked funds,
+    2019-2023, were instead spent on unrelated budget items.
+    (publico.es, 2023-12-19: https://www.publico.es/sociedad/bomberos-comunidad-madrid-denuncian-gobierno-ayuso-desviar-40-millones-aseguradoras.html)
+  - **2026-01-13**: the Tribunal Superior de Justicia de Madrid (TSJM)
+    **rules in the firefighters' favor**, confirming the diversion and
+    ordering the funds be used "íntegramente" (in full) for "inversión
+    real" (capital investment) in the Servicio de Prevención, Extinción de
+    Incendios y Salvamento (SPEIS) — not for "gastos de renting" (vehicle
+    leasing) or other current-expense budget items, which is what the
+    money had actually been spent on.
+    (infobae.com, 2026-01-13: https://www.infobae.com/espana/2026/01/13/la-justicia-avala-la-denuncia-de-los-bomberos-la-comunidad-de-madrid-desvio-40-millones-que-debian-invertirse-en-proteccion-contra-incendios/;
+    corroborated independently by mediadoresseguros.madrid, an insurance-industry
+    trade outlet with no political stake:
+    https://mediadoresseguros.madrid/el-tsjm-da-la-razon-a-los-bomberos-los-40-millones-aportados-por-unespa-deben-ir-integramente-a-inversion-real/)
+  - **2026-07-28**: the ruling resurfaces in press coverage of the current
+    (worst-on-record, per Ayuso's own characterization) fire season, with
+    the firefighters' union explicitly linking the historical diversion to
+    present capacity gaps — over 40 vehicles out of service, shortages of
+    aerial ladders and specialized rescue trucks.
+
+  **Scope caveat, same as the 134A finding above**: SPEIS is Madrid's
+  general fire/rescue corps (urban + wildfire together), not a
+  wildfire-isolated fund — but this is arguably the single most important
+  qualitative finding for Madrid in this whole dataset: an **adjudicated**
+  (not merely alleged) 5-year pattern (2019-2023) of a legally earmarked
+  firefighting-investment funding stream being diverted to cover operating
+  costs instead, under the current government, now resurfacing amid a
+  historic fire season. Not added as a `wff_spending.csv` row — the €40M
+  figure is a 5-year cumulative total with no disclosed annual breakdown,
+  and covers a specific earmarked *funding stream* rather than a
+  program-year budget line, so it doesn't fit this dataset's
+  (ccaa, year, program) grain without fabricating a split. Documented here
+  instead as the strongest lead for anyone extending Madrid's coverage.
+
+  **Also found, not yet independently verified**: press claims that the
+  2026 INFOMA operational scheme cut per-crew staffing from 7 to 5
+  firefighters (unions' claim, reported by El Plural, not corroborated
+  against an official document this pass) and a comparison piece
+  (bilbaohiria.com, 2026-07-25) contrasting the 52.7M INFOMA figure against
+  the 83.2M Madring/F1-circuit construction cost — explicitly an
+  opinion/critical-framing piece, not a budget-execution finding, cited
+  here only as a lead, not a fact.
+
 - **Aragón**: real search effort (Cámara de Cuentas, a Cortes de Aragón
   written parliamentary answer fetched directly) — found only vague
   multi-year policy commitments (e.g. "€400M for the Strategic Plan"

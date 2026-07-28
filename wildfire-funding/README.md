@@ -84,16 +84,37 @@ open-data budget-execution extract, not a press aggregator:
 | País Vasco / Bizkaia | 2023 | Medidas contra incendios forestales | 0€ initial credit → 1.34M executed |
 
 Galicia also now has 6 years of presupuestado detail (2019-2021,
-2023-2025), all partial investment-line slices of PLADIGA. Madrid and
-Aragón got real search effort (Cámara de Cuentas audits, Cortes written
-answers, Madrid's own INFOMA operational plan) but no presupuestado/
-liquidado pair — documented as a gap rather than filled with a guess.
+2023-2025), all partial investment-line slices of PLADIGA. Aragón got real
+search effort (Cámara de Cuentas audits, Cortes written answers) but no
+presupuestado/liquidado pair — documented as a gap rather than filled with
+a guess.
+
+**Madrid — the project's original cue — got the deepest dig, in three rounds.**
+Round 2 established *why* no clean wildfire-specific budget line exists:
+inspected Madrid's full official budget-by-program spreadsheet (~100
+programs) directly and confirmed there is no "incendios forestales"
+program at all — it's split across a forestry/biodiversity program (51.4M,
+2026) and the general Bomberos corps (280M, too broad to use); the
+announced 52.7M INFOMA figure is a cross-program estimate, not a
+traceable line. Round 3, prompted by the user asking specifically for
+journalistic leads given the 2026 fires: found a **court-adjudicated**
+finding, not a mere allegation — the Tribunal Superior de Justicia de
+Madrid ruled on 2026-01-13 that the regional government diverted ~€40M
+(2019-2023) of legally earmarked firefighting-investment funds (the
+national insurance-premium surcharge that by law must fund fire-service
+capital investment) into current expenses like vehicle leasing instead —
+a ruling now resurfacing in press coverage of the current fire season,
+explicitly linked by the firefighters' union to present capacity gaps
+(40+ vehicles out of service). Corroborated independently across
+publico.es, infobae.com, and an insurance-trade outlet with no political
+angle. Not added as a spending-data row (it's a 5-year cumulative figure
+for a funding stream, not a program-year line item) but documented in
+full in `SOURCES_INDEX.md` as the strongest lead found for Madrid.
 
 The Tier-1 official all-CCAA parser (`parsers/parse_hacienda_totals.py`,
-Hacienda's two SGCIEF portals) is confirmed working by hand but its first
-full run crashed on an environment outage before writing output — needs a
-resumability fix before it can replace the press-sourced total-budget
-denominator. See `SPEC.md` T8-T10.
+Hacienda's two SGCIEF portals) is confirmed working and now running
+successfully in the background (resumability fix held after an earlier
+crash) — see `SPEC.md` T8-T10 for current coverage.
 
 ## Where to look
 
