@@ -221,6 +221,66 @@ CCAAs one at a time in the foreground. Order and outcome:
   (ccaa, year, program) grain without fabricating a split. Documented here
   instead as the strongest lead for anyone extending Madrid's coverage.
 
+  **Tracing the legal/documentary chain behind the ruling (2026-07-28,
+  per user request)** — what official documents does this case actually
+  rest on:
+
+  - **The underlying mechanism**: a **5% surcharge on fire-insurance
+    premiums** (recargo), collected by insurers and passed to whichever
+    public administration actually maintains the fire-prevention/
+    extinction/rescue service in a given area — municipalities that have
+    assumed the service themselves, or the region where they haven't.
+    Distinct from the separate, better-known Consorcio de Compensación de
+    Seguros surcharges (extraordinary-risk cover, motor-liability cover)
+    established in Real Decreto Legislativo 7/2004 (BOE-A-2004-18910,
+    "Estatuto Legal del Consorcio de Compensación de Seguros") — this
+    fire-service recargo is regulated separately, apparently at the
+    regional/local level ("normativas autonómicas" per the sources
+    checked). For Madrid specifically, the SPEIS itself is established by
+    regional law **Ley 14/1994, de 28 de diciembre, por la que se regulan
+    los servicios de prevención y extinción de incendios y salvamentos de
+    la Comunidad de Madrid** (BOE-A-1995-8732:
+    https://www.boe.es/buscar/doc.php?id=BOE-A-1995-8732) — the most
+    likely home for the specific recargo-earmarking article, though the
+    exact article number wasn't pinned down this pass (would need to read
+    the full law text, not yet done).
+  - **The national precedent**: a **Tribunal Supremo ruling, November
+    2020**, establishing that recargo funds must be spent "única, íntegra
+    y exclusivamente" (solely, fully, exclusively) on real investment in
+    the fire service — cited by every regional ruling found. Exact
+    case/ECLI number not pinned down this pass.
+  - **This is not a Madrid-only pattern** — the same legal fight has
+    played out in at least two other regions, both independently found:
+    **Asturias/Gijón** (TSJ Asturias ruling, ratifying a case initiated
+    in 2015, ordering ~€1.5M invested) and **Cantabria** (TSJ Cantabria,
+    notified 2024-09-02, over a disputed €3.7M of €7.4M collected
+    2018-2022, per eldiariotorrelavega.es:
+    https://www.eldiariotorrelavega.es/articulo/cantabria/justicia-condena-gobierno-cantabro-obliga-invertir-37-millones-pendientes-servicios-bomberos/20240911202326035079.html).
+    This turns Madrid's case from an isolated political story into one
+    instance of a recurring, litigated national compliance problem —
+    worth knowing if this line of inquiry gets extended to other CCAAs.
+  - **The evidence base for Madrid's specific complaint**: per the
+    union's own 2023-12-19 press release (CSIT, cited in the timeline
+    above), their complaint rests on noticing that **the corresponding
+    budget line disappears/changes pattern across Madrid's own published
+    annual Presupuestos, 2019-2023** — not a leaked internal document.
+    That means this is independently re-traceable through the same public
+    budget documents already being used elsewhere in this project (the
+    `Libro 11`/`gastos-por-programa` files already fetched for the round-2
+    structural finding above) — a natural next step if this thread gets
+    picked back up, though which exact line/program the recargo revenue
+    and its offsetting investment appear under was not identified this
+    pass (the revenue side wasn't searched — only expenditure-side
+    "primas de seguros" lines were checked, which is Madrid paying
+    premiums on its own assets, the wrong direction; the recargo is
+    revenue Madrid *receives*, not pays).
+  - **Not found this pass**: the exact TSJM sentencia number/ECLI (CENDOJ,
+    the judiciary's public case database at poderjudicial.es, has a
+    search form for this but it requires interactive form submission that
+    WebFetch can't drive — a live session could search it directly), and
+    the Comunidad de Madrid government's own response/rebuttal, if any
+    (no source found quoted an official reaction).
+
   **Also found, not yet independently verified**: press claims that the
   2026 INFOMA operational scheme cut per-crew staffing from 7 to 5
   firefighters (unions' claim, reported by El Plural, not corroborated
