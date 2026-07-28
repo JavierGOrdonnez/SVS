@@ -233,18 +233,129 @@ re-checking before use).
 2. **Operational-capacity route — medium tractability.** Real per-region sources exist (regional dispositivo announcements, Galicia's PLADIGA reports specifically praised as detailed) but nothing centralized — would need per-region compilation, which is what `wff_operational_resources.csv` above already started doing by hand.
 3. **Budget/COFOG route — low tractability nationally, but not dead per-region.** National COFOG is too coarse; individual CCAA presupuesto-por-programas documents remain the only route, and (per Madrid) may hide the real line under a generic subconcepto rather than omit it entirely — worth checking other regions for the same TRAGSA-style pattern before writing off a region's budget approach.
 
+## Civio's EGIF dataset — pulled, verified, and it delivers (2026-07-28)
+
+Both leads from the strategic assessment above were chased with dedicated
+research passes. **This one came through, fully**:
+
+- **Access**: no registration needed after all (the form on the dataset
+  page is an optional newsletter signup, not a gate). Direct URL:
+  `https://data.civio.es/espanaenllamas/fires-map/fires-all.csv` — fetched
+  directly with `curl`, 32.8MB, confirmed HTTP 200. **296,839 individual
+  fire records, 1968-2023**, fields: `id, superficie, fecha, lat, lng,
+  idcomunidad, idprovincia, municipio, causa, causa_supuesta, muertos,
+  heridos, time_ctrl, time_ext, personal, medios, gastos, perdidas`.
+- **Critical data-integrity catch**: the research agent that first found
+  this claimed `idcomunidad` followed standard INE CCAA numbering
+  (Cataluña=10, Galicia=13, etc.) — **this is wrong**, verified by
+  cross-referencing each code's most common `municipio` values against
+  real place names (e.g. code 3's top municipios — Viana do Bolo, A
+  Gudiña, Muíños — are all in Ourense province, so code 3 = Galicia, not
+  "Asturias" as INE numbering would give). Built the correct mapping
+  empirically for all 18 codes present (17 CCAAs + Ceuta; Melilla has zero
+  forest-fire records, plausibly correct given its size). See
+  `parsers/aggregate_civio_egif.py` for the verified mapping — **do not
+  trust any other source's `idcomunidad` mapping for this dataset without
+  re-verifying it the same way.**
+- **Aggregated to `data/raw/wff_egif_incidents_by_ccaa_year.csv`** (921
+  rows, all 18 codes x all years present) via
+  `parsers/aggregate_civio_egif.py`. The raw 32.8MB file is NOT committed
+  to this repo (too large, and it's a stable directly-refetchable URL) —
+  the script documents the exact re-download command.
+- **The genuinely important finding, beyond just "we got the data"**:
+  `gastos` (extinction cost in EUR) is real, but **its reporting coverage
+  has collapsed for most CCAAs over time** — this is itself a citable
+  transparency-decline finding, not just a data-quality footnote. Checked
+  every CCAA's last year with any nonzero `gastos` value: **Galicia,
+  Andalucía, Aragón, and La Rioja are the only regions still reporting
+  extinction costs to EGIF as of 2019-2022** (Galicia's coverage is
+  especially strong recently: 99-100% of its fires have a cost figure in
+  2020-2022, vs. 17-18% in 2018-2019 — a real jump in reporting quality
+  worth investigating why). Every other region **stopped reporting
+  `gastos` years or decades ago**: Castilla y León (last: 2014), Cantabria
+  (2017), Asturias (2013), Castilla-La Mancha (2011), País Vasco (2014),
+  Cataluña (1996!), Comunidad Valenciana (1999), Madrid (**1991**),
+  Murcia (2004), Navarra (essentially never — 3 records total, 1989-2004).
+  This directly corroborates — with hard national data, not just Madrid's
+  case — the user's suspicion that "these things don't get reported... 
+  making this comparison very complex." It's not just Madrid; it's most
+  of the country, and it's gotten worse over decades, not better.
+- **Concrete numbers this unlocks for the regions that do report**: e.g.
+  Galicia 2020: 341 fires, €12.59M extinction cost, 99.7% coverage.
+  Galicia 2022: 355 fires, €23.90M, 100% coverage. These are real,
+  comprehensive, incident-level extinction-cost totals — a fundamentally
+  different and arguably more meaningful figure than any budget-line
+  presupuestado/liquidado pair, since it's actual money spent fighting
+  actual fires, aggregated from the incident-report system itself rather
+  than a budget document.
+- **`personal`/`medios` units not yet confirmed**: values are far larger
+  than plausible headcounts for single fires (e.g. 360 for one 14ha fire
+  in 1968) — almost certainly a cumulative effort metric (person-hours,
+  or personnel × days deployed) rather than a simple headcount. Not
+  resolved this pass; check Civio's/EGIF's own field dictionary before
+  treating `personal_units_sum`/`medios_units_sum` as comparable to the
+  press-sourced headcounts in `wff_operational_resources.csv` — they are
+  almost certainly NOT the same unit and should not be compared directly
+  without confirming this.
+
+## Public procurement (CPV) route — pulled, works, one correction needed
+
+Also chased directly. **Real, working, no-registration access confirmed**,
+with one important correction to the earlier lead:
+
+- **The CPV code was wrong in the original lead**: 75251120 is *legal
+  services*, not aerial firefighting. The correct code is **60442000**
+  ("aerial forest-firefighting services") — not yet independently
+  re-verified against the official CPV nomenclature list, but consistent
+  across multiple sources found this pass.
+- **PLACSP (Plataforma de Contratación del Sector Público) bulk data**:
+  confirmed downloadable as ATOM/XML ZIPs, no auth, pattern
+  `https://contrataciondelsectorpublico.gob.es/sindicacion/sindicacion_643/licitacionesPerfilesContratanteCompleto3_AAAAMM.zip`
+  — not yet actually downloaded/parsed this pass (large files, CODICE XML
+  schema, would need real parsing work — a natural next Tier-1-parser-
+  style project if pursued).
+- **TED (EU-level, contracts >€140k)**: confirmed searchable without
+  registration. **One concrete, independently corroborated contract
+  found**: a consortium led by **Avincis Aviation España S.A.U.**
+  (+ Avincis Aviation Iberia S.L.U. + Avincis Aviation Technics S.A.U.)
+  awarded **€319.2 million** by ASEMA (Agencia de Seguridad y Emergencias
+  de Andalucía) for aerial wildfire-suppression support, **2026-2031**
+  (TED Notice 266189-2026). Corroborated via a second independent search
+  (spaintenders.com) beyond the original research agent's claim, though
+  direct WebFetch of the TED notice page itself returned empty content
+  (likely JS-rendered) — so this is corroborated-by-search, not read
+  directly from the primary notice. **Real, unresolved discrepancy worth
+  flagging**: the Junta de Andalucía's own Consejo de Gobierno
+  authorization (2025-12-02, official press release) cites **€112 million**
+  for "contratar helicópteros para el Plan Infoca" — a very different
+  figure from the €319.2M TED total. These aren't necessarily
+  contradictory (€112M could be an initial-year/partial authorization
+  within the larger 2026-2031 contract ceiling) but this wasn't
+  reconciled — don't cite either figure as "the" Andalucía aerial
+  contract value without resolving this first.
+- **Community-maintained parsed mirrors** were also surfaced (a GitHub
+  repo claiming pre-parsed Parquet/CSV of PLACSP + TED + company-registry
+  data, 2012-2026) — **not verified this pass**, treat as an unconfirmed
+  lead, not a citable source, until someone actually checks the repo
+  exists and contains what's claimed.
+
 ## Open questions / next steps
 
-- **Top priority**: register for and download Civio's `todos-los-incendios-forestales`
-  dataset (see above) — likely the single highest-value next action in this
-  whole project, since it could replace most of the hand-compiled
-  `wff_operational_resources.csv` with a real, comprehensive, per-fire
-  official-derived dataset covering personnel/equipment/extinction-cost,
-  1968-2023, all CCAAs.
-- Investigate the Plataforma de Contratación del Sector Público's CPV-indexed
-  bulk export (CPV 75251120, aerial fire extinction) as a Tier-1-parser-style
-  target — same pattern as `parsers/parse_hacienda_totals.py`, a different
-  official portal.
+- ~~Download Civio's dataset~~ **Done** — see above, `wff_egif_incidents_by_ccaa_year.csv`.
+- ~~Investigate PLACSP CPV route~~ **Done, access confirmed** — see above;
+  actually downloading + parsing the bulk XML is the remaining work, not
+  yet started (would be a genuine parser-building project, similar scope
+  to `parsers/parse_hacienda_totals.py`).
+- **New top priority**: confirm the `personal`/`medios` unit definitions in
+  the EGIF/Civio data (person-hours? headcount-days? something else?) —
+  blocks comparing them meaningfully to `wff_operational_resources.csv`'s
+  headcounts.
+- **New**: reconcile the Andalucía Avincis contract discrepancy (€112M
+  Junta authorization vs. €319.2M TED total) before citing either figure.
+- **New**: investigate *why* Galicia's `gastos` reporting coverage jumped
+  from ~17-18% (2018-2019) to ~99-100% (2020-2022) — a real, specific,
+  answerable question (a reporting-process change? a post-2020 policy?)
+  that could matter for interpreting the whole EGIF cost series.
 - Confirm whether other CCAAs also use TRAGSA (or their own regional
   equivalent — e.g. Galicia's SEAGA, mentioned in passing during earlier
   Galicia research this session but not investigated as an entrustment
