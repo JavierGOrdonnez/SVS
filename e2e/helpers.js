@@ -47,9 +47,13 @@ export const DRILL_PANELS = [
     dataFile: 'migration.json', dataKey: 'stock_by_region' },
 ];
 
-/** Panel IDs that use vline annotations */
+/**
+ * Panel IDs that use vline (single-year-line) annotations. The 2020 COVID
+ * marker used to be one of these (fem-timeline) but is now a yearBand() box
+ * annotation on every year-indexed chart that covers 2020 — see
+ * annotation.spec.js's separate "COVID year-band shading" describe block.
+ */
 export const ANNOTATION_PANELS = [
-  { id: 'fem-timeline', label: 'COVID',        year: '2020', tab: 'feminicides' },
   { id: 'sx-totals',     label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
   { id: 'sx-clearance',  label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
   { id: 'sx-categories', label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
@@ -197,4 +201,9 @@ export async function getAnnotations(page, panelId) {
     const c = document.getElementById(id)._chart;
     return c.options?.plugins?.annotation?.annotations ?? null;
   }, panelId);
+}
+
+/** Get the chart's x-axis category labels (its `data.labels`, i.e. years-as-strings for every timeline chart). */
+export async function getChartLabels(page, panelId) {
+  return page.evaluate((id) => document.getElementById(id)._chart.data.labels, panelId);
 }

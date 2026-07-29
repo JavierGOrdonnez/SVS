@@ -52,6 +52,28 @@ function vline(x, label, color = ACCENT) {
   return { type: 'line', xMin: x, xMax: x, borderColor: color, borderWidth: 1, borderDash: [4, 4],
     label: { display: true, content: label, color, backgroundColor: 'rgba(15,17,23,0.85)', font: { size: 9 }, position: 'start' } };
 }
+// Shade an entire calendar year's category-column width (index ± 0.5 on the
+// category x-scale, not just a single vline down its center) — used for
+// 2020 across every year-indexed chart that covers it. COVID made 2020
+// anomalous almost everywhere in this dataset (lockdowns, reporting gaps,
+// activity swings), worth flagging visually on every timeline, not just the
+// couple of panels that already had an explicit marker for it. `years` must
+// be the exact array backing that chart's x-axis labels (chart.js's
+// category scale accepts numeric xMin/xMax as fractional index positions,
+// which is what makes the half-index offsets shade the full column instead
+// of collapsing to a zero-width line). Returns null if `year` isn't in
+// range, so callers can skip charts that don't cover it.
+function yearBand(years, year, text = 'COVID', color = '#60a5fa') {
+  const idx = years.indexOf(year);
+  if (idx === -1) return null;
+  return {
+    type: 'box', xMin: idx - 0.5, xMax: idx + 0.5,
+    backgroundColor: color + '1a', borderColor: color + '55', borderWidth: 1, borderDash: [2, 2],
+    drawTime: 'beforeDatasetsDraw', // behind the data, not drawn over it
+    label: { display: true, content: text, color, backgroundColor: 'rgba(15,17,23,0.85)',
+      font: { size: 9 }, position: { x: 'center', y: 'start' } },
+  };
+}
 // dim a '#rrggbb' color to a lower alpha, e.g. for provisional/not-yet-consolidated bars
 function fadeAlpha(hex, factor = 0.35) {
   const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
@@ -257,6 +279,7 @@ function regionDrilldownChart(cv, s, opts = {}) {
               else { ci.show(i); item.hidden = false; }
             },
           },
+          annotation: { annotations: { covid: yearBand(s.years, 2020) } },
         },
       }),
       // Clicking a region's line/bar directly (not just its legend entry)
@@ -346,7 +369,7 @@ function buildFeminicides() {
       borderDash: [6, 3], pointRadius: 0, tension: 0.2, order: -1, stack: 'ma5',
     };
 
-    const annotations = { covid: vline(String(2020), 'COVID', '#60a5fa') };
+    const annotations = { covid: yearBand(years, 2020) };
     d.milestones.forEach((m, i) => { annotations['ms' + i] = vline(String(m.year), m.label, '#a855f7'); });
 
     return new Chart(cv, {
@@ -397,7 +420,7 @@ function buildFeminicides() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-          annotation: { annotations: { covid: vline(String(2020), 'COVID', '#60a5fa') } },
+          annotation: { annotations: { covid: yearBand(years, 2020) } },
         },
       }),
     });
@@ -436,6 +459,7 @@ function buildFeminicides() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations: { covid: yearBand(FEM_AXIS_YEARS, 2020) } },
           tooltip: { callbacks: { afterLabel: (c) => {
             const o = origins[Math.floor(c.datasetIndex / 2)], role = roles[c.datasetIndex % 2];
             const row = byKey[`${FEM_AXIS_YEARS[c.dataIndex]}|${o}|${role}`];
@@ -479,7 +503,7 @@ function buildSexual() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(t.years, 2020) } },
           tooltip: { callbacks: { footer: (items) => `Source: ${sourceLabel[t.source[items[0]?.dataIndex]]}` } },
         },
       }),
@@ -498,7 +522,7 @@ function buildSexual() {
       data: { labels: years.map(String), datasets: [line('Clearance rate', rates, PALETTE[1], { fill: true })] },
       options: baseOpts({
         y: { min: 0, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
-        plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } } },
+        plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(years, 2020) } } },
       }),
     });
   });
@@ -518,7 +542,7 @@ function buildSexual() {
         x: { stacked: true }, y: { stacked: true, beginAtZero: true },
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
-          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(d.categories.years, 2020) } },
         },
       }),
     });
@@ -538,7 +562,8 @@ function buildSexual() {
       type: 'bar',
       data: { labels: c.years, datasets: groups.map((g, i) => ({
         label: g.replace(/_/g, ' '), data: c.series[g], backgroundColor: PALETTE[i % PALETTE.length] + 'cc', stack: 's' })) },
-      options: baseOpts({ x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }),
+      options: baseOpts({ x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+        plugins: { annotation: { annotations: { covid: yearBand(c.years, 2020) } } } }),
     });
   });
 }
@@ -549,7 +574,7 @@ function buildHate() {
   register('hc-totals', (cv) => new Chart(cv, {
     type: 'line',
     data: { labels: d.totals.years.map(String), datasets: [line('Hate crimes reported', d.totals.total, CONF.low, { fill: true, spanGaps: false })] },
-    options: baseOpts({ plugins: { annotation: { annotations: { gap: vline(String(d.gap_year), 'no 2022 report', TICK) } } } }),
+    options: baseOpts({ plugins: { annotation: { annotations: { gap: vline(String(d.gap_year), 'no 2022 report', TICK), covid: yearBand(d.totals.years, 2020) } } } }),
   }));
 
   register('hc-categories', (cv) => {
@@ -557,7 +582,7 @@ function buildHate() {
     return new Chart(cv, {
       type: 'line',
       data: { labels: d.categories.years, datasets: keys.map((k, i) => line(k.replace(/_/g, ' '), s[k], PALETTE[i % PALETTE.length])) },
-      options: baseOpts(),
+      options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.categories.years, 2020) } } } }),
     });
   });
 }
@@ -566,19 +591,20 @@ function buildMortality() {
   const d = DATA.mortality;
   register('mo-allcause', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.all_cause_by_sex.years, datasets: [line('Male', d.all_cause_by_sex.male, PALETTE[4]), line('Female', d.all_cause_by_sex.female, PALETTE[3])] },
-    options: baseOpts() }));
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.all_cause_by_sex.years, 2020) } } } }) }));
   register('mo-chapter', (cv) => { const s = d.female_chapter_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.chapters.map((c, i) => line(c, s.series[c], PALETTE[i % PALETTE.length], { fill: true, stack: 's', tension: 0.2 })) },
-    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }) }); });
+    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+      plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-ageprofile', (cv) => { const s = d.female_age_profile_latest; return new Chart(cv, { type: 'line',
     data: { labels: s.ages, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
     options: baseOpts({ x: { grid: { color: GRID }, ticks: { color: TICK, font: { size: 9 } } } }) }); });
   register('mo-external', (cv) => { const s = d.female_external_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-repro', (cv) => { const s = d.female_repro_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-young', (cv) => { const s = d.female_young_top_causes; return new Chart(cv, { type: 'bar',
     data: { labels: s.labels, datasets: [{ data: s.deaths, backgroundColor: PALETTE.map(c => c + 'cc') }] },
     options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 }, maxRotation: 60 } } }) }); });
@@ -588,16 +614,17 @@ function buildMigration() {
   const d = DATA.migration;
   register('mi-inflow', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.annual_inflow.years.map(String), datasets: [line('Immigration inflow', d.annual_inflow.values, ACCENT, { fill: true })] },
-    options: baseOpts({ plugins: { annotation: { annotations: { br: vline(String(2008), 'EVR→EMCR', TICK) } } } }) }));
+    options: baseOpts({ plugins: { annotation: { annotations: { br: vline(String(2008), 'EVR→EMCR', TICK), covid: yearBand(d.annual_inflow.years, 2020) } } } }) }));
   register('mi-origin', (cv) => { const s = d.origin_composition; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.origins.map((o, i) => line(o, s.series[o], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mi-sex', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.sex_split.years, datasets: [line('Male', d.sex_split.male, PALETTE[4]), line('Female', d.sex_split.female, PALETTE[3])] },
-    options: baseOpts() }));
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.sex_split.years, 2020) } } } }) }));
   register('mi-ageband', (cv) => { const s = d.age_band_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.bands.map((b) => line(b, s.series[b], ageColor(ageMidpoint(b)), { fill: true, stack: 's', tension: 0.2 })) },
-    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }) }); });
+    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+      plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mi-ageprofile', (cv) => { const s = d.age_profile_latest; return new Chart(cv, { type: 'bar',
     data: { labels: s.ages, datasets: [{ data: s.values, backgroundColor: ACCENT + 'cc' }] },
     options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 } } } }) }); });
@@ -608,7 +635,10 @@ function buildMigration() {
         { fill: false, borderDash: [5, 4], pointRadius: 1.5, yAxisID: 'y1', spanGaps: false }),
     ] },
     options: baseOpts({
-      plugins: { legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } } },
+      plugins: {
+        legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+        annotation: { annotations: { covid: yearBand(s.years, 2020) } },
+      },
       scales: { y1: {
         position: 'right', beginAtZero: true,
         grid: { drawOnChartArea: false },

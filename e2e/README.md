@@ -33,16 +33,14 @@ already fixed here). None of these were things a test suite should silently
 decide, so they were flagged for the user rather than papered over. Two are
 now resolved:
 
-1. **Confidence filter is a no-op — still open.** The pills
-   (`svs-confidence-filter`, "Show confidence") wire up a `conf-change` event
-   and every mounted panel does receive `refresh()`, but no chart builder in
-   `docs/app.js` actually reads the `activeConf` argument it's given, and
-   `<svs-chart-panel>` never hides itself based on its own `confidence`
-   attribute either. Toggling a tier currently just tears down and rebuilds
-   every chart with identical data — the control has no visible effect.
-   `smoke.spec.js`'s confidence-filter test only checks the pill's own
-   pressed-state/event wiring, not that anything downstream changes, since
-   that behavior doesn't exist yet to test.
+1. **Confidence badges/filter don't gate the data — confirmed intentional.**
+   The pills (`svs-confidence-filter`, "Show confidence") wire up a
+   `conf-change` event and every mounted panel does receive `refresh()`, but
+   no chart builder reads the `activeConf` argument, and `<svs-chart-panel>`
+   never hides itself by its own `confidence` attribute. Confirmed with the
+   user: the badges are a visual reminder for them, not meant to filter
+   anything — no fix needed. `smoke.spec.js`'s confidence-filter test only
+   checks the pill's own pressed-state/event wiring accordingly.
 2. **~~No data-point click-to-drill.~~ Resolved.** `regionDrilldownChart()`
    only wired `plugins.legend.onClick`; clicking a bar/line point directly
    did nothing. Built via TDD (un-skipped the existing test, confirmed it
@@ -78,3 +76,18 @@ green: `docs/app.js`'s `↩`-back-handle click handler reset `drilled` and
 rebuilt the datasets, but never reset `scales.x/y.stacked` (or `y.max`) back
 off — so drilling into a region's bar-mode chart and clicking back out left
 the chart's axes still configured as if drilled in.
+
+## COVID (2020) year-band shading
+
+Every year-indexed timeline chart that covers 2020 gets a `yearBand()` box
+annotation — a translucent shaded column spanning that year's full width
+(index ± 0.5 on the category scale, drawn `beforeDatasetsDraw` so it sits
+behind the data, not over it), not just a thin vline like the other break
+markers. 2020 is anomalous almost everywhere in this dataset (lockdowns,
+reporting gaps, activity swings), so it's flagged on every chart that has
+that year rather than case-by-case. Snapshot/non-year-axis charts (age
+pyramids, age profiles, cohort-test periods) are correctly skipped — shading
+a "2020" position on an axis that isn't years wouldn't mean anything.
+`annotation.spec.js`'s "COVID year-band shading" describe block checks one
+representative panel per tab rather than every single one, since they all
+share the same `yearBand()` mechanism.
