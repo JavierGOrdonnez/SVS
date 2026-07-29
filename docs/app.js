@@ -117,8 +117,18 @@ const line = (label, data, color, extra = {}) => ({
 // natively.
 function regionDrilldownChart(cv, s) {
   let drilled = null; // null = aggregate view, else a region name
+  const hasSpain = 'spain' in s;
 
   const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
+
+  // Optional Spain line: white solid, sits at fixed position, excluded from drill-down
+  function spainDataset() {
+    if (!hasSpain) return null;
+    return { type: 'line', label: 'España', data: s.spain,
+      borderColor: '#fff', backgroundColor: '#fff22',
+      borderWidth: 3, pointRadius: 3, pointHoverRadius: 5,
+      tension: 0.2, _region: 'España', stack: 'spain' };
+  }
 
   // hard y-axis cap sized to the DRILLED region's own bar total, not the
   // union with the (possibly much larger) dimmed regions — otherwise a
@@ -146,7 +156,11 @@ function regionDrilldownChart(cv, s) {
   }
 
   function buildDatasets() {
-    if (!drilled) return s.regions.map((r) => regionLine(r));
+    const spain = spainDataset();
+    if (!drilled) {
+      const regions = s.regions.map((r) => regionLine(r));
+      return spain ? [...regions, spain] : regions;
+    }
     const dimmed = s.regions.filter((r) => r !== drilled).map((r) => regionLine(r, {
       borderColor: regionColor(r) + '55', backgroundColor: 'transparent',
       borderWidth: 1, borderDash: [3, 3], pointRadius: 0, order: 1,
@@ -163,7 +177,9 @@ function regionDrilldownChart(cv, s) {
       backgroundColor: PALETTE[i % PALETTE.length] + 'cc',
       borderColor: PALETTE[i % PALETTE.length], borderWidth: 1, stack: 'countries', order: 2,
     }));
-    return [backHandle, ...dimmed, ...bars];
+    const result = [backHandle, ...dimmed, ...bars];
+    if (spain) result.push(spain);
+    return result;
   }
 
   return new Chart(cv, {
@@ -179,6 +195,7 @@ function regionDrilldownChart(cv, s) {
           onClick: (evt, item, legend) => {
             const ci = legend.chart;
             const ds = ci.data.datasets[item.datasetIndex];
+            if (ds._region && ds._region === 'España') return; // Spain line: no interaction
             if (ds._region) {
               drilled = (drilled === ds._region) ? null : ds._region;
               ci.data.datasets = buildDatasets();
@@ -480,30 +497,8 @@ function buildSexual() {
   register('sx-nationality-victims', (cv) => nationalityLineChart(cv, d.nationality_victims, 'Victim nationality'));
   register('sx-nationality-perpetrators', (cv) => nationalityLineChart(cv, d.nationality_perpetrators, 'Perpetrator nationality'));
 
-  // Peligrosidad: perpetrators per 100k males 15-59 by nationality
-  register('sx-peligrosidad', (cv) => {
-    const p = d.peligrosidad;
-    const datasets = p.groups.map((g, i) => ({
-      label: g, data: p.series[g],
-      borderColor: PALETTE[i % PALETTE.length],
-      backgroundColor: PALETTE[i % PALETTE.length] + '22',
-      borderWidth: g === 'España' ? 3 : 1.5,
-      borderDash: g === 'España' ? [] : [4, 3],
-      pointRadius: g === 'España' ? 3 : 1.5,
-      pointHoverRadius: 5,
-      tension: 0.2,
-    }));
-    return new Chart(cv, {
-      type: 'line',
-      data: { labels: p.years.map(String), datasets },
-      options: baseOpts({
-        y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK, callback: (v) => v + '/1k' } },
-        plugins: {
-          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-        },
-      }),
-    });
-  });
+  // Peligrosidad: perpetrators per 1k males 15-59 by nationality (region drill-down)
+  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad));
 
   register('sx-convictions', (cv) => {
     const c = d.convictions;
