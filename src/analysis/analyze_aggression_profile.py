@@ -15,7 +15,7 @@ import csv
 import os
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 CSV_PATH = ROOT / "data" / "raw" / "violence_spain.csv"
 OUT_PATH = ROOT / "data" / "processed" / "aggression_profile_summary.txt"
 

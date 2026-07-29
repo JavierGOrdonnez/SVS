@@ -149,7 +149,7 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
 MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
 POPULATION_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
@@ -174,15 +174,26 @@ AGE_BANDS_15_59 = {"15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49"
 
 
 def load_migration_totals():
-    """Return {(country_code, 'flow'|'stock'): {year: male_15_59_total}}."""
+    """Return {(country_code, 'flow'|'stock'): {year: male_15_59_total}}.
+
+    B39 fix: the pre-fix version filtered series=="stock_foreign_nationality"
+    (a name that no longer exists for MA/DZ post-T66 -- their stock rows are
+    series=="stock_nationality") and did not restrict age_group to
+    AGE_BANDS_15_59 despite the function's own docstring/dict-key naming,
+    so it silently summed every age band (0-4 through 85+) rather than the
+    working-age 15-59 band the rest of the module (load_population_totals)
+    uses for the Spanish-population comparison. Both are fixed here; see
+    SPEC.md B39 for the resulting change in Test A/B/D/E's published figures.
+    """
     totals = {}
     with open(MIGRATION_CSV, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if r["country_of_origin"] not in MIR_NAME or r["sex"] != "male" or r["age_group"] == "all":
+            if (r["country_of_origin"] not in MIR_NAME or r["sex"] != "male"
+                    or r["age_group"] not in AGE_BANDS_15_59):
                 continue
             if r["series"] == "flow_immigration_from_abroad":
                 key = (r["country_of_origin"], "flow")
-            elif r["series"] == "stock_foreign_nationality":
+            elif r["series"] == "stock_nationality":
                 key = (r["country_of_origin"], "stock")
             else:
                 continue

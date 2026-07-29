@@ -17,7 +17,7 @@ Data sources used:
 import csv
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 RAW_CSV = ROOT / "data" / "raw" / "violence_spain.csv"
 INE_CSV = ROOT / "data" / "processed" / "ine_condenados_28716_sexual_crimes.csv"
 POP_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"

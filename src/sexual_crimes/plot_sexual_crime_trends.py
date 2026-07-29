@@ -32,7 +32,7 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
 POP_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
