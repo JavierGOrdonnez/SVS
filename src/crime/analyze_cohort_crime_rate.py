@@ -125,7 +125,7 @@ Data sources:
                                                           migr_imm1ctz/migr_pop1ctz);
                                                           total foreign stock,
                                                           all nationalities
-  data/raw/sexual_crimes_mir_2019-2024.json          -- per-country
+  data/raw/sexual_crimes_mir_2017-2024.json          -- per-country
                                                           perpetrator counts,
                                                           spanish/foreign
                                                           split, perp_male_pct
@@ -151,7 +151,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.parent
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
-MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
+MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
 POPULATION_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
 OUT_CSV_PERIOD = ROOT / "data" / "processed" / "cohort_tenure_period_test.csv"
 OUT_CSV_COHORT = ROOT / "data" / "processed" / "cohort_tenure_rates.csv"

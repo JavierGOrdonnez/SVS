@@ -787,6 +787,12 @@ class InformeParser:
         self._headline_total: int | None = None
 
     def parse(self) -> list[MIRRecord]:
+        # Always seed a 'total_sexual_crimes' placeholder first (count=None)
+        # so `_extract_sex_breakdown`/`_extract_nationality`'s `_update_field`
+        # calls have a record to attach to even when `_extract_typology` finds
+        # nothing (2017/2018's older layout, see below) -- otherwise their
+        # results are silently dropped rather than shipped as a partial record.
+        self._upsert("total_sexual_crimes", "all", None, None)
         with pdfplumber.open(self.pdf_path) as pdf:
             self._extract_typology(pdf)
             self._extract_sex_breakdown(pdf)
@@ -797,7 +803,29 @@ class InformeParser:
     def _extract_typology(self, pdf):
         """Extract the crime-typology and clearance-rate tables (the report's
         headline multi-year 'Tipología penal' tables), which are far more
-        reliable than scanning every page for scattered category mentions."""
+        reliable than scanning every page for scattered category mentions.
+
+        2017/2018 editions use an older layout this table-locator does not
+        handle reliably: 2017 finds nothing at all, and 2018 was observed to
+        match the wrong table and produce an internally-inconsistent total
+        (81 vs a 703 subcategory sum -- off by ~9x). Rather than risk shipping
+        a wrong headline count for those two years, skip typology extraction
+        for year < 2019 entirely; `total_sexual_crimes.count` stays None and
+        a note points at the independently-parsed, cross-validated Anuario
+        series (`sexual_crimes_mir_anuario_2016-2023.json`) for the real
+        total. Sex-breakdown and nationality data (this method's siblings)
+        use a different, reliably-parseable table on these same editions and
+        are unaffected by this skip."""
+        if self.year < 2019:
+            self._update_field(
+                "total_sexual_crimes", "notes",
+                "Headline 'hechos conocidos' typology table not reliably parseable in this "
+                "edition's older layout (see mir_parser.py InformeParser._extract_typology "
+                "docstring) -- total_count left unset rather than risking a wrong figure. "
+                "See sexual_crimes_mir_anuario_2016-2023.json for this year's cross-validated "
+                "total. Nationality/sex breakdown below is from a different, unaffected table.",
+            )
+            return
         merged_categories = self.year >= 2022
 
         known_page, known_table = _locate_typology_table(
@@ -907,6 +935,8 @@ class InformeParser:
             if r.crime_category == category:
                 if count:
                     r.count = count
+                if page_no:
+                    r.source_page = page_no
                 if note:
                     r.notes = note
                 return
@@ -1937,6 +1967,12 @@ def main():
 
     parse_fn = run_informe if args.mode == "informe" else run_anuario
     filename_tag = "anuario" if args.mode == "anuario" else ""
+    # data/sources/ mixes Informe/Anuario/Odio/Balance PDFs together; a bare
+    # "*.pdf" glob would feed the wrong parser wrong-format files (and can
+    # trip run_batch's V22 year-collision guard, since e.g. an Anuario and an
+    # Informe PDF for the same year both infer that year). Filter by each
+    # mode's own filename prefix, same pattern odio mode already uses.
+    dir_glob = {"informe": "MIR_Informe_DelitosSexuales*.pdf", "anuario": "MIR_AnuarioEstadistico*.pdf"}
 
     if args.pdf:
         year = args.year or infer_year(args.pdf)
@@ -1945,7 +1981,7 @@ def main():
         run_batch([(args.pdf, year)], parse_fn, args.out_dir, filename_tag)
 
     elif args.pdf_dir:
-        pdfs = sorted(args.pdf_dir.glob("*.pdf"))
+        pdfs = sorted(args.pdf_dir.glob(dir_glob.get(args.mode, "*.pdf")))
         if not pdfs:
             sys.exit(f"No PDFs found in {args.pdf_dir}")
         pairs = []

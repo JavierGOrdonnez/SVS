@@ -155,7 +155,7 @@ def build_regularization_sensitivity():
         g["rate_pct_reduction"].append(num(r["rate_pct_reduction"]))
 
     return {
-        "source": "data/raw/regularization_2026.csv (application share by nationality) + migration_spain.csv (registered stock) + sexual_crimes_mir_2019-2024.json (perpetrator counts)",
+        "source": "data/raw/regularization_2026.csv (application share by nationality) + migration_spain.csv (registered stock) + sexual_crimes_mir_2017-2024.json (perpetrator counts)",
         "confidence": "medium",
         "caveat": "Explicit UPPER BOUND, not a best estimate: assumes 100% of that nationality's 2026 regularization applicants were already resident in every year 2019-2024, all aged 15-59. Real correction is smaller since not all applicants arrived that early nor are all working-age. Added population is held constant across years (no data on arrival timing); male/female split borrowed from that nationality's own 2024 registered sex ratio. See reports/algeria_morocco_divergence.md for full discussion.",
         "countries": dict(by_country),

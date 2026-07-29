@@ -39,7 +39,7 @@ never as resolving the offense-subtype question.
 Data sources:
   data/processed/ine_condenados_28716_sexual_crimes.csv  -- convicted, by
       offense subtype x nationality-region x year
-  data/raw/sexual_crimes_mir_2019-2024.json               -- investigated/
+  data/raw/sexual_crimes_mir_2017-2024.json               -- investigated/
       identified, by country x year (incl. AFRICA region total)
 
 Output:
@@ -51,7 +51,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.parent
 INE_CSV = ROOT / "data" / "processed" / "ine_condenados_28716_sexual_crimes.csv"
-MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
+MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
 OUT_CSV = ROOT / "data" / "processed" / "offense_subtype_funnel_triangulation.csv"
 
 # Subtypes to compare (excludes cap8_total and abusos_agresiones_menores16,

@@ -27,7 +27,7 @@ Data sources:
       press figures, see file's own source/notes columns)
   data/raw/migration_spain.csv (series=stock_nationality) -- real registered
       male/female 15-59 population by nationality x year (Eurostat)
-  data/raw/sexual_crimes_mir_2019-2024.json          -- male perpetrator
+  data/raw/sexual_crimes_mir_2017-2024.json          -- male perpetrator
       counts by country x year (MIR Informe, same extraction as
       analyze_cohort_crime_rate.py's load_perpetrator_counts())
 
@@ -42,7 +42,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent.parent
 REG_CSV = ROOT / "data" / "raw" / "regularization_2026.csv"
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
-MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
+MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
 OUT_CSV = ROOT / "data" / "processed" / "regularization_sensitivity_test.csv"
 OUT_CHART = ROOT / "data" / "processed" / "regularization_sensitivity.png"
 

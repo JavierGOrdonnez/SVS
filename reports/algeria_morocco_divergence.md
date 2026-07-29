@@ -82,7 +82,7 @@ shared by both countries and largely cancels in a ratio-of-ratios:
 | 2021 | 1.57 | 1.47 | widens gap |
 | 2022 | 1.80 | 1.67 | widens gap |
 | 2023 | 2.05 | 1.92 | widens gap |
-| 2024 | 2.53 | 2.41 | widens gap |
+| 2024 | 2.55 | 2.43 | widens gap |
 
 (`data/processed/age_standardized_dz_ma_ratio.csv`.) In **every** year, adjusting for age
 composition using a common reference curve **widens**, not narrows, Algeria's gap over

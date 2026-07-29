@@ -48,7 +48,7 @@ Data sources:
       (exact, no reallocation)
   data/raw/migration_spain.csv (series=stock_nationality)   -- Morocco/
       Algeria age(5yr)x sex population cross (Eurostat migr_pop1ctz)
-  data/raw/sexual_crimes_mir_2019-2024.json                 -- observed
+  data/raw/sexual_crimes_mir_2017-2024.json                 -- observed
       perpetrator counts by country (MIR Informe)
 
 Output:
@@ -63,7 +63,7 @@ ROOT = Path(__file__).parent.parent.parent
 INE_28857_CSV = ROOT / "data" / "processed" / "ine_condenados_28857_age_nationality.csv"
 POPULATION_CSV = ROOT / "data" / "processed" / "population_spain_estimates.csv"
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
-MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
+MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
 OUT_CSV = ROOT / "data" / "processed" / "age_standardized_rate_test.csv"
 OUT_CSV_RATIO = ROOT / "data" / "processed" / "age_standardized_dz_ma_ratio.csv"
 
