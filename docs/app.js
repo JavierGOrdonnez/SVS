@@ -119,6 +119,7 @@ function regionDrilldownChart(cv, s, opts = {}) {
   const drillStyle = opts.drillStyle || 'bar';   // 'bar' (migration stock) | 'line' (peligrosidad)
   let drilled = null; // null = aggregate view, else a region name
   const hasSpain = 'spain' in s;
+  let chart;
 
   const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
 
@@ -188,26 +189,35 @@ function regionDrilldownChart(cv, s, opts = {}) {
     return result;
   }
 
+  const yMax = opts.yMax;
+
   return new Chart(cv, {
     type: 'bar',
     data: { labels: s.years.map(String), datasets: buildDatasets() },
     options: baseOpts({
       x: { stacked: false },
-      y: { stacked: false, beginAtZero: true },
+      y: { stacked: false, beginAtZero: true, max: yMax },
       plugins: {
         legend: {
           display: true,
           labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
-          onClick: (evt, item, legend) => {
-            const ci = legend.chart;
-            const ds = ci.data.datasets[item.datasetIndex];
-            if (ds._region && ds._region === 'España') return;
-            if (ds._region) {
-              drilled = (drilled === ds._region) ? null : ds._region;
+          onClick: function(evt, item, _legend) {
+            const ci = (_legend && _legend.chart) || (this && this.chart);
+            if (!ci) return;
+            const txt = item.text;
+            if (txt === 'España') return;
+            if (txt.startsWith('↩ ')) {
+              drilled = null;
+              ci.data.datasets = buildDatasets();
+              ci.update();
+              return;
+            }
+            if (s.regions.includes(txt)) {
+              drilled = (drilled === txt) ? null : txt;
               ci.data.datasets = buildDatasets();
               ci.options.scales.x.stacked = !!(drilled && drillStyle === 'bar');
               ci.options.scales.y.stacked = !!(drilled && drillStyle === 'bar');
-              ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : undefined;
+              ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : yMax;
               ci.update();
               return;
             }
@@ -472,8 +482,8 @@ function buildSexual() {
   register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims, { drillStyle: 'bar' }));
   register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators, { drillStyle: 'bar' }));
 
-  // Peligrosidad: perpetrators per 1k males 15-59 by nationality (region drill-down)
-  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad, { drillStyle: 'line' }));
+  // Peligrosidad: perpetrators % males 15-59 by nationality (region drill-down)
+  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad, { drillStyle: 'line', yMax: 0.5 }));
 
   register('sx-convictions', (cv) => {
     const c = d.convictions;

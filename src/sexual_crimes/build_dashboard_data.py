@@ -306,16 +306,22 @@ def _coverage_factor(migration_rows):
 
 
 def _peligrosity(informe, migration_rows):
-    """Per-1k male 15-59 perpetrator rates by nationality, same region +
+    """Annual % male 15-59 perpetrator rates by nationality, same region +
     country drill-down shape as nationality_victims/perpetrators.
 
     Returns {years, regions, series (region→rate), spain, by_country (region→{countries, series})}
-    where values are per-1k-males-15-59 rates, not absolute counts.
+    where values are percentages, not absolute counts.
 
     Spanish rate uses total male 15-59 pop (INE Padrón) minus corrected foreign
     stock; foreign rates use per-nationality denominators from Eurostat
     migr_pop1ctz, scaled by a year-specific coverage factor so the ~14%
     small-nationality gap doesn't bias rates upward.
+
+    MIR's RESTO/OTROS residual rows (perpetrators not attributed to a specific
+    country) are folded into both the region-level rate and the "Other" drill-down
+    category. Their population denominator is estimated by distributing the
+    residual foreign stock (total corrected foreign minus sum of ISO-mapped pops)
+    across regions proportionally to each region's share of RESTO perpetrators.
     """
     # ── coverage correction ──
     cov = _coverage_factor(migration_rows)
@@ -342,24 +348,31 @@ def _peligrosity(informe, migration_rows):
             total_male_15_59_all[int(r["year"])] += int(r["population_july1"]) if r["population_july1"] else 0
 
     # Corrected foreign male 15-59 (scale up by coverage factor)
+    corrected_foreign_per_year = {}
     for y in foreign_male_15_59:
         f = cov.get(y, 1.0)
         corrected_foreign = round(foreign_male_15_59[y] * f)
+        corrected_foreign_per_year[y] = corrected_foreign
         es_pop = total_male_15_59_all.get(y, 0) - corrected_foreign
         if es_pop > 0:
             pop["ES"][y] = es_pop
 
-    # ── numerator: perpetrator counts by country + region ──
+    # ── numerator: perpetrator counts by country + RESTO residual ──
     years = sorted(r["year"] for r in informe)
     spain_by_year = dict(zip(years, _compute_spania(informe, "perpetrators")))
 
-    # Track per-country per-year totals + which region each country maps to
     perp_by_iso = defaultdict(lambda: defaultdict(int))   # iso -> year -> count
+    resto_perp = defaultdict(lambda: defaultdict(int))     # region -> year -> count
     iso_to_region = {}                                     # iso -> canonical region
     for r in informe:
         y = r["year"]
         for row in r["nationality"]["perpetrators"].get("by_country", []):
-            if row.get("is_region_total") or row["name"].upper().startswith(RESIDUAL_ROW_PREFIXES):
+            if row.get("is_region_total"):
+                continue
+            if row["name"].upper().startswith(RESIDUAL_ROW_PREFIXES):
+                region = REGION_LABEL_MAP.get(row["region"], row["region"])
+                if region in REGIONS:
+                    resto_perp[region][y] += row.get("total") or 0
                 continue
             name = COUNTRY_NAME_NORMALIZE.get(row["name"].upper(), row["name"].upper())
             iso = MIR_COUNTRY_ISO.get(name)
@@ -370,6 +383,31 @@ def _peligrosity(informe, migration_rows):
                 region = REGION_LABEL_MAP.get(row["region"], row["region"])
                 iso_to_region[iso] = region if region in REGIONS else "Other"
 
+    # ── estimate RESTO population per region ──
+    # Sum of ISO-mapped foreign male 15-59 pop per year
+    sum_iso_foreign = defaultdict(int)
+    for iso in perp_by_iso:
+        if iso == "ES": continue
+        for y in years:
+            sum_iso_foreign[y] += pop[iso].get(y, 0)
+
+    # Distribute residual foreign stock (corrected − sum ISO) across regions
+    # by each region's share of total RESTO perpetrators
+    resto_pop_est = defaultdict(lambda: defaultdict(float))
+    for region in REGIONS:
+        for y in years:
+            if y not in corrected_foreign_per_year:
+                continue
+            remaining = corrected_foreign_per_year[y] - sum_iso_foreign.get(y, 0)
+            if remaining <= 0:
+                continue
+            total_resto = sum(resto_perp[r][y] for r in REGIONS)
+            if total_resto > 0:
+                share = resto_perp[region][y] / total_resto
+            else:
+                share = 1.0 / max(len(REGIONS), 1)
+            resto_pop_est[region][y] = remaining * share
+
     # ── compute rates ──
     def rate(iso, y):
         num = spain_by_year.get(y) if iso == "ES" else perp_by_iso[iso].get(y)
@@ -378,27 +416,50 @@ def _peligrosity(informe, migration_rows):
         den = pop[iso].get(y)
         if not den:
             return None
-        return round(num / den * 1000, 2)
+        return round(num / den * 100, 2)
 
-    # Region-level rates: sum perp counts / sum pop for all countries in region
-    region_perp = defaultdict(lambda: defaultdict(int))
-    region_pop = defaultdict(lambda: defaultdict(int))
+    # Region-level rates: ISO-mapped countries + RESTO residual
+    region_perp_iso = defaultdict(lambda: defaultdict(int))
+    region_pop_iso = defaultdict(lambda: defaultdict(int))
     for iso in perp_by_iso:
         region = iso_to_region.get(iso, "Other")
         for y in years:
-            region_perp[region][y] += perp_by_iso[iso].get(y, 0)
-            region_pop[region][y] += pop[iso].get(y, 0)
+            region_perp_iso[region][y] += perp_by_iso[iso].get(y, 0)
+            region_pop_iso[region][y] += pop[iso].get(y, 0)
+
+    # Redistribute residual foreign pop by ISO-mapped pop share (not RESTO perp
+    # share — that would make the RESTO rate identical across all regions since
+    # the ratio cancels: perps / (pop * perps/total_perps) = total_perps / pop)
+    for region in REGIONS:
+        for y in years:
+            if y not in corrected_foreign_per_year:
+                continue
+            remaining = corrected_foreign_per_year[y] - sum_iso_foreign.get(y, 0)
+            if remaining <= 0:
+                continue
+            total_iso_pop = sum(region_pop_iso[r][y] for r in REGIONS)
+            if total_iso_pop > 0:
+                share = region_pop_iso[region][y] / total_iso_pop
+                resto_pop_est[region][y] = remaining * share
+
+    # Fold RESTO into region totals
+    region_perp = defaultdict(lambda: defaultdict(int))
+    region_pop = defaultdict(lambda: defaultdict(int))
+    for region in REGIONS:
+        for y in years:
+            region_perp[region][y] = region_perp_iso[region].get(y, 0) + resto_perp[region].get(y, 0)
+            region_pop[region][y] = region_pop_iso[region].get(y, 0) + round(resto_pop_est[region].get(y, 0))
 
     region_rates = {}
     for region in REGIONS:
         region_rates[region] = [
             None if y in BAD_NATIONALITY_YEARS["perpetrators"]
-            else round(region_perp[region].get(y, 0) / region_pop[region].get(y, 0) * 1000, 2)
+            else round(region_perp[region].get(y, 0) / region_pop[region].get(y, 0) * 100, 2)
             if region_pop[region].get(y, 0) > 0 else None
             for y in years
         ]
 
-    # Country-level rates per region, top N + computed "Other"
+    # Country-level rates per region, top N + computed "Other" (incl. RESTO)
     def val_or_none(v, y):
         return None if y in BAD_NATIONALITY_YEARS["perpetrators"] else v
 
@@ -413,13 +474,21 @@ def _peligrosity(informe, migration_rows):
             label = COUNTRY_LABEL.get(iso, iso)
             series[label] = [val_or_none(rate(iso, y), y) for y in years]
 
-        # Computed "Other": region's remaining perp sum / pop sum
+        # Computed "Other": remaining ISO-mapped countries + RESTO residual
         top_set = set(top)
-        other_perp = [sum(perp_by_iso[iso].get(y, 0) for iso in ranked if iso not in top_set) for y in years]
-        other_pop = [sum(pop[iso].get(y, 0) for iso in ranked if iso not in top_set) for y in years]
+        other_perp = [
+            sum(perp_by_iso[iso].get(y, 0) for iso in ranked if iso not in top_set)
+            + resto_perp[region].get(y, 0)
+            for y in years
+        ]
+        other_pop = [
+            sum(pop[iso].get(y, 0) for iso in ranked if iso not in top_set)
+            + round(resto_pop_est[region].get(y, 0))
+            for y in years
+        ]
         series["Other"] = [
             None if y in BAD_NATIONALITY_YEARS["perpetrators"] or other_pop[i] == 0
-            else round(other_perp[i] / other_pop[i] * 1000, 2)
+            else round(other_perp[i] / other_pop[i] * 100, 2)
             for i, y in enumerate(years)
         ]
         by_country[region] = {"countries": list(series.keys()), "series": series}

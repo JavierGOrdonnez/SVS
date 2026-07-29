@@ -1,1 +1,1291 @@
-{"source":"Ministerio del Interior — Informe/Anuario/Balance sobre delitos contra la libertad sexual; INE Estadística de Condenados (t.28716)","source_url":"https://estadisticasdecriminalidad.ses.mir.es/","confidence":"high","definition_breaks":{"2022":"LO 10/2022 (‘Solo sí es sí’) narrowed the rape definition","2023":"further reform"},"totals":{"years":[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"total":[10844,11692,13782,15319,13174,17016,19013,21825,22846,21659],"source":["anuario","anuario","anuario","informe","informe","informe","informe","informe","informe","balance"],"clearance_rate":[77.3,76.1,77.4,77.6,78.1,81.2,79.8,81.6,83.3,null],"perp_male_pct":[null,null,null,96.9,96.6,96.6,94.0,93.0,93.1,null],"balance_total":[null,null,null,15338,13240,17016,17389,19981,21159,21659]},"categories":{"years":[2019,2020,2021,2022,2023,2024],"series":{"acoso_sexual":[540,476,528,595,763,759],"agresion_sexual_con_penetracion_unified":[3079,2785,3795,4270,4890,5222],"agresion_sexual_unified":[8885,7276,10061,11426,12727,13674],"contacto_tecnologico_menor_16":[527,575,534,498,739,554],"corrupcion_menores_discapacitados":[369,350,347,384,389,431],"delitos_relativos_prostitucion":[248,216,229,216,328,252],"exhibicionismo":[690,612,683,739,909,839],"pornografia_menores":[866,762,739,707,836,913],"promocion_prostitucion_nuevas_tecnologias":[null,null,null,null,91,64],"provocacion_sexual":[115,122,100,178,153,138]}},"nationality_victims":{"years":[2019,2020,2021,2022,2023,2024],"regions":["Africa","America","Asia","Europe","Other"],"series":{"Africa":[550,null,608,558,718,738],"America":[1612,null,1649,2116,2982,3409],"Asia":[149,null,98,131,154,162],"Europe":[870,null,868,1047,1139,1686],"Other":[411,null,321,483,659,149]},"by_country":{"Africa":{"countries":["Marruecos","Argelia","Senegal","Guinea Ecuatorial","Nigeria","Other"],"series":{"Marruecos":[397,null,460,397,543,527],"Argelia":[0,null,0,30,55,66],"Senegal":[0,null,0,0,0,36],"Guinea Ecuatorial":[0,null,0,0,0,16],"Nigeria":[49,null,29,0,0,0],"Other":[104,null,119,131,120,93]}},"America":{"countries":["Colombia","Venezuela","Peru","Honduras","Brasil","Paraguay","Other"],"series":{"Colombia":[268,null,375,583,991,1129],"Venezuela":[173,null,148,196,302,367],"Peru":[0,null,0,224,300,360],"Honduras":[144,null,165,177,237,267],"Brasil":[146,null,107,0,179,183],"Paraguay":[109,null,0,135,148,164],"Other":[772,null,854,801,825,939]}},"Asia":{"countries":["China Popular","Filipinas","Paquistan","India","Georgia","Other"],"series":{"China Popular":[81,null,38,56,71,60],"Filipinas":[9,null,18,20,0,22],"Paquistan":[0,null,0,0,22,16],"India":[0,null,0,0,0,7],"Georgia":[0,null,0,0,0,7],"Other":[59,null,42,55,61,50]}},"Europe":{"countries":["Rumania","Reino Unido","Alemania","Francia","Italia","Ucrania","Other"],"series":{"Rumania":[286,null,300,320,332,343],"Reino Unido":[0,null,0,0,0,222],"Alemania":[90,null,71,119,126,168],"Francia":[85,null,95,102,148,156],"Italia":[85,null,86,88,123,151],"Ucrania":[0,null,0,0,0,105],"Other":[324,null,316,418,410,541]}},"Other":{"countries":["Other"],"series":{"Other":[411,null,321,483,659,149]}}},"spain":[12094,null,13413,14431,15921,16637]},"nationality_perpetrators":{"years":[2019,2020,2021,2022,2023,2024],"regions":["Africa","America","Asia","Europe","Other"],"series":{"Africa":[1110,782,1157,1373,1507,1839],"America":[1222,1113,1479,1576,2130,2311],"Asia":[230,163,221,245,323,332],"Europe":[635,473,609,772,879,1128],"Other":[175,87,136,217,297,31]},"by_country":{"Africa":{"countries":["Marruecos","Argelia","Senegal","Nigeria","Other"],"series":{"Marruecos":[751,536,801,907,1001,1100],"Argelia":[94,60,100,126,164,241],"Senegal":[0,0,0,0,0,177],"Nigeria":[0,0,0,0,0,50],"Other":[265,186,256,340,342,271]}},"America":{"countries":["Colombia","Peru","Ecuador","Venezuela","Honduras","Bolivia","Other"],"series":{"Colombia":[229,262,350,385,600,676],"Peru":[104,96,137,185,283,297],"Ecuador":[226,170,233,214,236,229],"Venezuela":[91,89,109,142,180,211],"Honduras":[0,0,0,110,143,177],"Bolivia":[115,101,121,0,130,116],"Other":[457,395,529,540,558,605]}},"Asia":{"countries":["Paquistan","India","China Popular","Georgia","Other"],"series":{"Paquistan":[87,60,100,100,153,123],"India":[0,0,0,0,0,55],"China Popular":[65,37,43,41,49,49],"Georgia":[0,0,0,0,0,20],"Other":[78,66,78,104,121,85]}},"Europe":{"countries":["Rumania","Italia","Reino Unido","Francia","Alemania","Bulgaria","Other"],"series":{"Rumania":[287,250,282,316,344,327],"Italia":[55,41,49,99,96,117],"Reino Unido":[0,0,0,0,0,90],"Francia":[53,22,48,58,98,88],"Alemania":[62,21,41,57,68,85],"Bulgaria":[53,49,46,42,52,55],"Other":[125,90,143,200,221,366]}},"Other":{"countries":["Other"],"series":{"Other":[175,87,136,217,297,31]}}},"spain":[6262,5339,6839,7501,8633,8735]},"convictions":{"years":[2017,2018,2019,2020,2021,2022,2023,2024],"groups":["africa","america","asia","española","europa_no_ue27","europa_no_ue28","oceania","total","ue27_excl_espana","ue28_excl_espana"],"series":{"africa":[338,422,594,599,759,734,870,1281],"america":[469,584,566,562,865,952,849,1767],"asia":[133,152,101,133,178,187,140,186],"española":[4441,4581,5169,4474,5831,5572,5070,7385],"europa_no_ue27":[0,0,0,78,110,178,146,240],"europa_no_ue28":[69,36,57,0,0,0,0,0],"oceania":[4,0,4,0,2,0,3,5],"total":[5915,6220,7020,6198,8253,8078,7522,11535],"ue27_excl_espana":[0,0,0,352,508,455,444,671],"ue28_excl_espana":[461,445,529,0,0,0,0,0]}},"peligrosidad":{"years":[2019,2020,2021,2022,2023,2024],"regions":["Africa","America","Asia","Europe","Other"],"series":{"Africa":[1.86,1.26,1.7,1.89,1.98,2.45],"America":[2.03,1.78,2.13,1.9,2.18,2.41],"Asia":[0.95,0.59,0.78,0.78,1.06,1.2],"Europe":[0.82,0.61,0.75,0.91,1.01,1.21],"Other":[null,null,null,null,null,null]},"by_country":{"Africa":{"countries":["Marruecos","Argelia","Senegal","Nigeria","Other"],"series":{"Marruecos":[2.12,1.46,1.95,2.13,2.18,2.24],"Argelia":[3.01,1.85,2.73,3.34,3.84,4.48],"Senegal":[null,null,null,null,null,2.25],"Nigeria":[null,null,null,null,null,2.85],"Other":[null,null,null,null,null,null]}},"America":{"countries":["Colombia","Perú","Ecuador","Venezuela","Honduras","Bolivia","Other"],"series":{"Colombia":[2.28,2.31,2.67,2.12,2.56,2.41],"Perú":[2.72,2.33,2.88,2.87,3.38,2.9],"Ecuador":[3.44,2.75,3.75,3.47,3.74,3.5],"Venezuela":[1.51,1.29,1.39,1.4,1.41,1.4],"Honduras":[null,null,null,2.69,3.02,3.4],"Bolivia":[3.32,2.97,3.41,null,3.89,3.64],"Other":[0.85,0.72,0.96,0.89,0.0,2.01]}},"Asia":{"countries":["Pakistán","India","China","Georgia","Other"],"series":{"Pakistán":[1.61,1.04,1.52,1.53,2.18,1.64],"India":[null,null,null,null,null,1.45],"China":[0.83,0.47,0.5,0.48,0.55,0.53],"Georgia":[null,null,null,null,null,null],"Other":[null,null,null,null,null,null]}},"Europe":{"countries":["Rumanía","Italia","Reino Unido","Francia","Alemania","Bulgaria","Other"],"series":{"Rumanía":[1.12,0.99,1.15,1.33,1.47,1.42],"Italia":[0.48,0.35,0.38,0.72,0.65,0.76],"Reino Unido":[null,null,null,null,null,1.37],"Francia":[1.37,0.56,1.11,1.32,2.16,1.91],"Alemania":[1.75,0.61,1.12,1.54,1.77,2.18],"Bulgaria":[1.05,1.01,0.92,0.88,1.14,1.27],"Other":[0.48,0.3,0.51,0.57,0.56,0.82]}},"Other":{"countries":["Other"],"series":{"Other":[null,null,null,null,null,null]}}},"spain":[0.52,0.44,0.57,0.63,0.73,0.74]}}
+{
+  "source": "Ministerio del Interior — Informe/Anuario/Balance sobre delitos contra la libertad sexual; INE Estadística de Condenados (t.28716)",
+  "source_url": "https://estadisticasdecriminalidad.ses.mir.es/",
+  "confidence": "high",
+  "definition_breaks": {
+    "2022": "LO 10/2022 (‘Solo sí es sí’) narrowed the rape definition",
+    "2023": "further reform"
+  },
+  "totals": {
+    "years": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "total": [
+      10844,
+      11692,
+      13782,
+      15319,
+      13174,
+      17016,
+      19013,
+      21825,
+      22846,
+      21659
+    ],
+    "source": [
+      "anuario",
+      "anuario",
+      "anuario",
+      "informe",
+      "informe",
+      "informe",
+      "informe",
+      "informe",
+      "informe",
+      "balance"
+    ],
+    "clearance_rate": [
+      77.3,
+      76.1,
+      77.4,
+      77.6,
+      78.1,
+      81.2,
+      79.8,
+      81.6,
+      83.3,
+      null
+    ],
+    "perp_male_pct": [
+      null,
+      null,
+      null,
+      96.9,
+      96.6,
+      96.6,
+      94.0,
+      93.0,
+      93.1,
+      null
+    ],
+    "balance_total": [
+      null,
+      null,
+      null,
+      15338,
+      13240,
+      17016,
+      17389,
+      19981,
+      21159,
+      21659
+    ]
+  },
+  "categories": {
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "series": {
+      "acoso_sexual": [
+        540,
+        476,
+        528,
+        595,
+        763,
+        759
+      ],
+      "agresion_sexual_con_penetracion_unified": [
+        3079,
+        2785,
+        3795,
+        4270,
+        4890,
+        5222
+      ],
+      "agresion_sexual_unified": [
+        8885,
+        7276,
+        10061,
+        11426,
+        12727,
+        13674
+      ],
+      "contacto_tecnologico_menor_16": [
+        527,
+        575,
+        534,
+        498,
+        739,
+        554
+      ],
+      "corrupcion_menores_discapacitados": [
+        369,
+        350,
+        347,
+        384,
+        389,
+        431
+      ],
+      "delitos_relativos_prostitucion": [
+        248,
+        216,
+        229,
+        216,
+        328,
+        252
+      ],
+      "exhibicionismo": [
+        690,
+        612,
+        683,
+        739,
+        909,
+        839
+      ],
+      "pornografia_menores": [
+        866,
+        762,
+        739,
+        707,
+        836,
+        913
+      ],
+      "promocion_prostitucion_nuevas_tecnologias": [
+        null,
+        null,
+        null,
+        null,
+        91,
+        64
+      ],
+      "provocacion_sexual": [
+        115,
+        122,
+        100,
+        178,
+        153,
+        138
+      ]
+    }
+  },
+  "nationality_victims": {
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "regions": [
+      "Africa",
+      "America",
+      "Asia",
+      "Europe",
+      "Other"
+    ],
+    "series": {
+      "Africa": [
+        550,
+        null,
+        608,
+        558,
+        718,
+        738
+      ],
+      "America": [
+        1612,
+        null,
+        1649,
+        2116,
+        2982,
+        3409
+      ],
+      "Asia": [
+        149,
+        null,
+        98,
+        131,
+        154,
+        162
+      ],
+      "Europe": [
+        870,
+        null,
+        868,
+        1047,
+        1139,
+        1686
+      ],
+      "Other": [
+        411,
+        null,
+        321,
+        483,
+        659,
+        149
+      ]
+    },
+    "by_country": {
+      "Africa": {
+        "countries": [
+          "Marruecos",
+          "Argelia",
+          "Senegal",
+          "Guinea Ecuatorial",
+          "Nigeria",
+          "Other"
+        ],
+        "series": {
+          "Marruecos": [
+            397,
+            null,
+            460,
+            397,
+            543,
+            527
+          ],
+          "Argelia": [
+            0,
+            null,
+            0,
+            30,
+            55,
+            66
+          ],
+          "Senegal": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            36
+          ],
+          "Guinea Ecuatorial": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            16
+          ],
+          "Nigeria": [
+            49,
+            null,
+            29,
+            0,
+            0,
+            0
+          ],
+          "Other": [
+            104,
+            null,
+            119,
+            131,
+            120,
+            93
+          ]
+        }
+      },
+      "America": {
+        "countries": [
+          "Colombia",
+          "Venezuela",
+          "Peru",
+          "Honduras",
+          "Brasil",
+          "Paraguay",
+          "Other"
+        ],
+        "series": {
+          "Colombia": [
+            268,
+            null,
+            375,
+            583,
+            991,
+            1129
+          ],
+          "Venezuela": [
+            173,
+            null,
+            148,
+            196,
+            302,
+            367
+          ],
+          "Peru": [
+            0,
+            null,
+            0,
+            224,
+            300,
+            360
+          ],
+          "Honduras": [
+            144,
+            null,
+            165,
+            177,
+            237,
+            267
+          ],
+          "Brasil": [
+            146,
+            null,
+            107,
+            0,
+            179,
+            183
+          ],
+          "Paraguay": [
+            109,
+            null,
+            0,
+            135,
+            148,
+            164
+          ],
+          "Other": [
+            772,
+            null,
+            854,
+            801,
+            825,
+            939
+          ]
+        }
+      },
+      "Asia": {
+        "countries": [
+          "China Popular",
+          "Filipinas",
+          "Paquistan",
+          "India",
+          "Georgia",
+          "Other"
+        ],
+        "series": {
+          "China Popular": [
+            81,
+            null,
+            38,
+            56,
+            71,
+            60
+          ],
+          "Filipinas": [
+            9,
+            null,
+            18,
+            20,
+            0,
+            22
+          ],
+          "Paquistan": [
+            0,
+            null,
+            0,
+            0,
+            22,
+            16
+          ],
+          "India": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            7
+          ],
+          "Georgia": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            7
+          ],
+          "Other": [
+            59,
+            null,
+            42,
+            55,
+            61,
+            50
+          ]
+        }
+      },
+      "Europe": {
+        "countries": [
+          "Rumania",
+          "Reino Unido",
+          "Alemania",
+          "Francia",
+          "Italia",
+          "Ucrania",
+          "Other"
+        ],
+        "series": {
+          "Rumania": [
+            286,
+            null,
+            300,
+            320,
+            332,
+            343
+          ],
+          "Reino Unido": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            222
+          ],
+          "Alemania": [
+            90,
+            null,
+            71,
+            119,
+            126,
+            168
+          ],
+          "Francia": [
+            85,
+            null,
+            95,
+            102,
+            148,
+            156
+          ],
+          "Italia": [
+            85,
+            null,
+            86,
+            88,
+            123,
+            151
+          ],
+          "Ucrania": [
+            0,
+            null,
+            0,
+            0,
+            0,
+            105
+          ],
+          "Other": [
+            324,
+            null,
+            316,
+            418,
+            410,
+            541
+          ]
+        }
+      },
+      "Other": {
+        "countries": [
+          "Other"
+        ],
+        "series": {
+          "Other": [
+            411,
+            null,
+            321,
+            483,
+            659,
+            149
+          ]
+        }
+      }
+    },
+    "spain": [
+      12094,
+      null,
+      13413,
+      14431,
+      15921,
+      16637
+    ]
+  },
+  "nationality_perpetrators": {
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "regions": [
+      "Africa",
+      "America",
+      "Asia",
+      "Europe",
+      "Other"
+    ],
+    "series": {
+      "Africa": [
+        1110,
+        782,
+        1157,
+        1373,
+        1507,
+        1839
+      ],
+      "America": [
+        1222,
+        1113,
+        1479,
+        1576,
+        2130,
+        2311
+      ],
+      "Asia": [
+        230,
+        163,
+        221,
+        245,
+        323,
+        332
+      ],
+      "Europe": [
+        635,
+        473,
+        609,
+        772,
+        879,
+        1128
+      ],
+      "Other": [
+        175,
+        87,
+        136,
+        217,
+        297,
+        31
+      ]
+    },
+    "by_country": {
+      "Africa": {
+        "countries": [
+          "Marruecos",
+          "Argelia",
+          "Senegal",
+          "Nigeria",
+          "Other"
+        ],
+        "series": {
+          "Marruecos": [
+            751,
+            536,
+            801,
+            907,
+            1001,
+            1100
+          ],
+          "Argelia": [
+            94,
+            60,
+            100,
+            126,
+            164,
+            241
+          ],
+          "Senegal": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            177
+          ],
+          "Nigeria": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            50
+          ],
+          "Other": [
+            265,
+            186,
+            256,
+            340,
+            342,
+            271
+          ]
+        }
+      },
+      "America": {
+        "countries": [
+          "Colombia",
+          "Peru",
+          "Ecuador",
+          "Venezuela",
+          "Honduras",
+          "Bolivia",
+          "Other"
+        ],
+        "series": {
+          "Colombia": [
+            229,
+            262,
+            350,
+            385,
+            600,
+            676
+          ],
+          "Peru": [
+            104,
+            96,
+            137,
+            185,
+            283,
+            297
+          ],
+          "Ecuador": [
+            226,
+            170,
+            233,
+            214,
+            236,
+            229
+          ],
+          "Venezuela": [
+            91,
+            89,
+            109,
+            142,
+            180,
+            211
+          ],
+          "Honduras": [
+            0,
+            0,
+            0,
+            110,
+            143,
+            177
+          ],
+          "Bolivia": [
+            115,
+            101,
+            121,
+            0,
+            130,
+            116
+          ],
+          "Other": [
+            457,
+            395,
+            529,
+            540,
+            558,
+            605
+          ]
+        }
+      },
+      "Asia": {
+        "countries": [
+          "Paquistan",
+          "India",
+          "China Popular",
+          "Georgia",
+          "Other"
+        ],
+        "series": {
+          "Paquistan": [
+            87,
+            60,
+            100,
+            100,
+            153,
+            123
+          ],
+          "India": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            55
+          ],
+          "China Popular": [
+            65,
+            37,
+            43,
+            41,
+            49,
+            49
+          ],
+          "Georgia": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            20
+          ],
+          "Other": [
+            78,
+            66,
+            78,
+            104,
+            121,
+            85
+          ]
+        }
+      },
+      "Europe": {
+        "countries": [
+          "Rumania",
+          "Italia",
+          "Reino Unido",
+          "Francia",
+          "Alemania",
+          "Bulgaria",
+          "Other"
+        ],
+        "series": {
+          "Rumania": [
+            287,
+            250,
+            282,
+            316,
+            344,
+            327
+          ],
+          "Italia": [
+            55,
+            41,
+            49,
+            99,
+            96,
+            117
+          ],
+          "Reino Unido": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            90
+          ],
+          "Francia": [
+            53,
+            22,
+            48,
+            58,
+            98,
+            88
+          ],
+          "Alemania": [
+            62,
+            21,
+            41,
+            57,
+            68,
+            85
+          ],
+          "Bulgaria": [
+            53,
+            49,
+            46,
+            42,
+            52,
+            55
+          ],
+          "Other": [
+            125,
+            90,
+            143,
+            200,
+            221,
+            366
+          ]
+        }
+      },
+      "Other": {
+        "countries": [
+          "Other"
+        ],
+        "series": {
+          "Other": [
+            175,
+            87,
+            136,
+            217,
+            297,
+            31
+          ]
+        }
+      }
+    },
+    "spain": [
+      6262,
+      5339,
+      6839,
+      7501,
+      8633,
+      8735
+    ]
+  },
+  "convictions": {
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "groups": [
+      "africa",
+      "america",
+      "asia",
+      "española",
+      "europa_no_ue27",
+      "europa_no_ue28",
+      "oceania",
+      "total",
+      "ue27_excl_espana",
+      "ue28_excl_espana"
+    ],
+    "series": {
+      "africa": [
+        338,
+        422,
+        594,
+        599,
+        759,
+        734,
+        870,
+        1281
+      ],
+      "america": [
+        469,
+        584,
+        566,
+        562,
+        865,
+        952,
+        849,
+        1767
+      ],
+      "asia": [
+        133,
+        152,
+        101,
+        133,
+        178,
+        187,
+        140,
+        186
+      ],
+      "española": [
+        4441,
+        4581,
+        5169,
+        4474,
+        5831,
+        5572,
+        5070,
+        7385
+      ],
+      "europa_no_ue27": [
+        0,
+        0,
+        0,
+        78,
+        110,
+        178,
+        146,
+        240
+      ],
+      "europa_no_ue28": [
+        69,
+        36,
+        57,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "oceania": [
+        4,
+        0,
+        4,
+        0,
+        2,
+        0,
+        3,
+        5
+      ],
+      "total": [
+        5915,
+        6220,
+        7020,
+        6198,
+        8253,
+        8078,
+        7522,
+        11535
+      ],
+      "ue27_excl_espana": [
+        0,
+        0,
+        0,
+        352,
+        508,
+        455,
+        444,
+        671
+      ],
+      "ue28_excl_espana": [
+        461,
+        445,
+        529,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "peligrosidad": {
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "regions": [
+      "Africa",
+      "America",
+      "Asia",
+      "Europe",
+      "Other"
+    ],
+    "series": {
+      "Africa": [
+        0.2,
+        0.13,
+        0.18,
+        0.21,
+        0.21,
+        0.24
+      ],
+      "America": [
+        0.24,
+        0.2,
+        0.25,
+        0.22,
+        0.24,
+        0.23
+      ],
+      "Asia": [
+        0.12,
+        0.08,
+        0.1,
+        0.11,
+        0.14,
+        0.13
+      ],
+      "Europe": [
+        0.07,
+        0.06,
+        0.07,
+        0.09,
+        0.1,
+        0.13
+      ],
+      "Other": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "by_country": {
+      "Africa": {
+        "countries": [
+          "Marruecos",
+          "Argelia",
+          "Senegal",
+          "Nigeria",
+          "Other"
+        ],
+        "series": {
+          "Marruecos": [
+            0.21,
+            0.15,
+            0.19,
+            0.21,
+            0.22,
+            0.22
+          ],
+          "Argelia": [
+            0.3,
+            0.18,
+            0.27,
+            0.33,
+            0.38,
+            0.45
+          ],
+          "Senegal": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            0.22
+          ],
+          "Nigeria": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            0.28
+          ],
+          "Other": [
+            0.24,
+            0.16,
+            0.23,
+            0.29,
+            0.28,
+            0.21
+          ]
+        }
+      },
+      "America": {
+        "countries": [
+          "Colombia",
+          "Perú",
+          "Ecuador",
+          "Venezuela",
+          "Honduras",
+          "Bolivia",
+          "Other"
+        ],
+        "series": {
+          "Colombia": [
+            0.23,
+            0.23,
+            0.27,
+            0.21,
+            0.26,
+            0.24
+          ],
+          "Perú": [
+            0.27,
+            0.23,
+            0.29,
+            0.29,
+            0.34,
+            0.29
+          ],
+          "Ecuador": [
+            0.34,
+            0.27,
+            0.38,
+            0.35,
+            0.37,
+            0.35
+          ],
+          "Venezuela": [
+            0.15,
+            0.13,
+            0.14,
+            0.14,
+            0.14,
+            0.14
+          ],
+          "Honduras": [
+            null,
+            null,
+            null,
+            0.27,
+            0.3,
+            0.34
+          ],
+          "Bolivia": [
+            0.33,
+            0.3,
+            0.34,
+            null,
+            0.39,
+            0.36
+          ],
+          "Other": [
+            0.24,
+            0.2,
+            0.26,
+            0.22,
+            0.2,
+            0.19
+          ]
+        }
+      },
+      "Asia": {
+        "countries": [
+          "Pakistán",
+          "India",
+          "China",
+          "Georgia",
+          "Other"
+        ],
+        "series": {
+          "Pakistán": [
+            0.16,
+            0.1,
+            0.15,
+            0.15,
+            0.22,
+            0.16
+          ],
+          "India": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            0.14
+          ],
+          "China": [
+            0.08,
+            0.05,
+            0.05,
+            0.05,
+            0.06,
+            0.05
+          ],
+          "Georgia": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "Other": [
+            0.2,
+            0.16,
+            0.2,
+            0.27,
+            0.31,
+            0.2
+          ]
+        }
+      },
+      "Europe": {
+        "countries": [
+          "Rumanía",
+          "Italia",
+          "Reino Unido",
+          "Francia",
+          "Alemania",
+          "Bulgaria",
+          "Other"
+        ],
+        "series": {
+          "Rumanía": [
+            0.11,
+            0.1,
+            0.11,
+            0.13,
+            0.15,
+            0.14
+          ],
+          "Italia": [
+            0.05,
+            0.03,
+            0.04,
+            0.07,
+            0.07,
+            0.08
+          ],
+          "Reino Unido": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            0.14
+          ],
+          "Francia": [
+            0.14,
+            0.06,
+            0.11,
+            0.13,
+            0.22,
+            0.19
+          ],
+          "Alemania": [
+            0.18,
+            0.06,
+            0.11,
+            0.15,
+            0.18,
+            0.22
+          ],
+          "Bulgaria": [
+            0.11,
+            0.1,
+            0.09,
+            0.09,
+            0.11,
+            0.13
+          ],
+          "Other": [
+            0.04,
+            0.03,
+            0.05,
+            0.07,
+            0.07,
+            0.11
+          ]
+        }
+      },
+      "Other": {
+        "countries": [
+          "Other"
+        ],
+        "series": {
+          "Other": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        }
+      }
+    },
+    "spain": [
+      0.05,
+      0.04,
+      0.06,
+      0.06,
+      0.07,
+      0.07
+    ]
+  }
+}
