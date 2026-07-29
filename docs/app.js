@@ -448,9 +448,62 @@ function buildSexual() {
     });
   });
 
-  // T-sx-nat: region-drilldown (shared with migration's mi-stock-region).
-  register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims));
-  register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators));
+  // T-sx-nat: line chart per region + Spain line (derived from spanish_pct).
+  function nationalityLineChart(cv, s, title) {
+    const regions = [...s.regions, 'España'];
+    const regionColor = (r) => r === 'España' ? '#fff' : PALETTE[s.regions.indexOf(r) % PALETTE.length];
+    const datasets = regions.map((r) => {
+      const data = r === 'España' ? s.spain : s.series[r];
+      const color = regionColor(r);
+      const is_spain = r === 'España';
+      return {
+        label: r, data,
+        borderColor: color, backgroundColor: color + '22',
+        borderWidth: is_spain ? 3 : 1.5,
+        borderDash: is_spain ? [] : [4, 3],
+        pointRadius: is_spain ? 3 : 1.5,
+        pointHoverRadius: 5,
+        tension: 0.2,
+      };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: s.years.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          tooltip: { callbacks: { title: () => title } },
+        },
+      }),
+    });
+  }
+  register('sx-nationality-victims', (cv) => nationalityLineChart(cv, d.nationality_victims, 'Victim nationality'));
+  register('sx-nationality-perpetrators', (cv) => nationalityLineChart(cv, d.nationality_perpetrators, 'Perpetrator nationality'));
+
+  // Peligrosidad: perpetrators per 100k males 15-59 by nationality
+  register('sx-peligrosidad', (cv) => {
+    const p = d.peligrosidad;
+    const datasets = p.groups.map((g, i) => ({
+      label: g, data: p.series[g],
+      borderColor: PALETTE[i % PALETTE.length],
+      backgroundColor: PALETTE[i % PALETTE.length] + '22',
+      borderWidth: g === 'España' ? 3 : 1.5,
+      borderDash: g === 'España' ? [] : [4, 3],
+      pointRadius: g === 'España' ? 3 : 1.5,
+      pointHoverRadius: 5,
+      tension: 0.2,
+    }));
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: p.years.map(String), datasets },
+      options: baseOpts({
+        y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK, callback: (v) => v + '/100k' } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+        },
+      }),
+    });
+  });
 
   register('sx-convictions', (cv) => {
     const c = d.convictions;

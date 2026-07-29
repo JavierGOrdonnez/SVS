@@ -75,12 +75,17 @@
     <svs-chart-panel id="sx-categories" size="half" confidence="high"
       title="By category, 2019–2024" subtitle="All categories, pre/post-LO10/2022 naming unified. Stacked counts."></svs-chart-panel>
     <svs-chart-panel id="sx-nationality-victims" size="half" height="320" confidence="medium"
-      title="Victim nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      title="Victim nationality by region" subtitle="2019–2024. White line: Spain (derived from spanish_pct).">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-nationality-perpetrators" size="half" height="320" confidence="medium"
-      title="Perpetrator nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      title="Perpetrator nationality by region" subtitle="2019–2024. White line: Spain (derived from spanish_pct).">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-peligrosidad" size="full" height="320" confidence="medium"
+      title="Peligrosidad — identified perpetrators per 100k males 15–59 by nationality"
+      subtitle="MIR Informe perpetrator counts ÷ male population aged 15–59 by nationality. White line: Spain. Eurostat migr_pop1ctz denominators + INE total population.">
+      <svs-source-cite slot="source" label="MIR Informe perpetrators × Eurostat migr_pop1ctz / INE Padrón" note="Upper-bound (identified, not convicted). Spanish denominator = total male 15-59 pop − foreign stock (50 nationalities, ~86% of ECP foreign stock); residual small nationalities cause slight Spanish-denominator overcount → Spanish rate slight underestimate, foreign rates slight overestimate."></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-convictions" size="half" confidence="high"
       title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
