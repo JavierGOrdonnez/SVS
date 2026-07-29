@@ -1,6 +1,6 @@
 # Algeria/Morocco peligrosity divergence — why is Algeria's rate higher and rising while Morocco's is stable?
 
-Synthesizes T41's cohort-tenure tests with three follow-up hypotheses (T76-T79, N20)
+Synthesizes T41's cohort-tenure tests with three follow-up hypotheses (T76-T79, T84, N20)
 prompted by the observation that Algeria's sexual-crime perpetrator rate looks high and
 rising over the last ~4 years while Morocco's — a "culturally similar" country — looks
 comparatively stable. Association only throughout (V9); every number below cites its
@@ -88,21 +88,53 @@ shared by both countries and largely cancels in a ratio-of-ratios:
 composition using a common reference curve **widens**, not narrows, Algeria's gap over
 Morocco — the opposite of what H3 predicts. **H3 does not explain the divergence.**
 
-**Population-side confirmation (T76)** — Morocco vs Algeria age pyramid
-(`docs/index.html` panel `mi-age-pyramid-dz-ma`) and working-age composition trend
-(panel `mi-dz-ma-age-trend`, `data/processed` via `src/migration/build_dashboard_data.py`'s
-new `_working_age_composition_trend()`) show why: Morocco's population has been steadily
-**aging in place** since 2002 (% of male stock aged 15-39 fell from 81.9% in 2002 to 57.4%
-by 2024 — a long-settled community). Algeria's population followed the same aging
-trajectory even more sharply through 2017-2018 (bottoming at ~41-42% aged 15-39), then
-**rejuvenated sharply** from a fresh wave of arrivals starting ~2018-2019 (rising back to
-57.0% by 2024, 60.2% by 2025) — timing that roughly coincides with the period T41 already
-found the rate divergence emerging in. But by **2023-2024, the two countries' age shares
-had converged to nearly identical values** (Morocco 57.4%/56.6%, Algeria 57.6%/57.0%) —
-exactly the period where the rate GAP is largest. If age composition were driving the
-gap, it should be smallest when the two populations' age profiles are most similar; the
-opposite is observed. This is consistent with, and explains mechanically why, the SIR-ratio
-test above shows age-adjustment widening rather than narrowing the divergence.
+**Population-side confirmation (T76) — real, country-level Eurostat data, not an
+estimate.** To be unambiguous about what does and doesn't exist here: the CRIME numerator
+(MIR perpetrator counts) has no age breakdown, full stop — that's the actual gap. The
+POPULATION denominator absolutely does have real age×sex×country data for Morocco and
+Algeria specifically (Eurostat `migr_pop1ctz`, 5-year bands, continuous 2002-2025,
+`migration_spain.csv`'s `stock_nationality` series) — this is what built the pyramid
+(`docs/index.html` panel `mi-age-pyramid-dz-ma`) and the trend below. 2024 male-population
+snapshot by age band:
+
+| Age band | Morocco (male) | Algeria (male) |
+|---|---|---|
+| 15-19 | 25,746 | 3,221 |
+| 20-24 | 43,761 | 2,958 |
+| 25-29 | 53,059 | 4,520 |
+| 30-34 | 54,983 | 5,097 |
+| 35-39 | 58,304 | 4,593 |
+| 40-44 | 63,111 | 4,393 |
+| 45-49 | 54,991 | 4,896 |
+| 50-54 | 37,267 | 4,849 |
+| 55-59 | 22,673 | 3,430 |
+| **Total 15-59** | **413,895** | **37,957** |
+
+And the working-age composition trend (% of male 15-59 population that is 15-39, the rest
+40-59; panel `mi-dz-ma-age-trend`, `src/migration/build_dashboard_data.py`'s
+`_working_age_composition_trend()`), selected years:
+
+| Year | Morocco 15-39% | Algeria 15-39% |
+|---|---|---|
+| 2002 | 81.9% | 87.4% |
+| 2010 | 75.7% | 65.7% |
+| 2017 | 58.8% | 42.0% |
+| 2019 | 57.4% | 42.9% |
+| 2022 | 56.3% | 48.6% |
+| 2024 | 57.0% | 53.7% |
+| 2025 | 57.6% | 60.2% |
+
+Morocco's population has been steadily **aging in place** since 2002 (a long-settled
+community). Algeria's followed the same aging trajectory even more sharply through
+2017-2018 (bottoming at 41.2% aged 15-39 that year), then **rejuvenated** from a fresh wave
+of arrivals starting ~2018-2019 (back to 53.7% by 2024, 60.2% by 2025) — timing that
+roughly coincides with the period T41 found the rate divergence emerging in. By 2024 the
+two countries' shares are close (57.0% vs 53.7%, Algeria still slightly older-skewed that
+specific year) — much closer than in 2010 (75.7% vs 65.7%) or 2017 (58.8% vs 42.0%) — yet
+2024 is exactly the year the rate GAP is largest. If age composition were driving the gap,
+the gap should track the age-share gap; instead the age-share gap shrank while the rate gap
+grew. This is consistent with, and explains mechanically why, the SIR-ratio test above
+shows age-adjustment widening rather than narrowing the divergence.
 
 ## H1 — is it a denominator undercount (differential legal access → more unregistered Algerians)?
 
@@ -147,30 +179,72 @@ point in late July 2026
 ([Moncloa, 2 Jul 2026](https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/inclusion/Paginas/2026/020726-balance-regularizacion-extraordinaria.aspx);
 [Moncloa summary, 24 Jul 2026](https://www.moncloa.com/2026/07/24/regularizacion-extraordinaria-migrantes-822000-3404704/)).
 
-**Official nationality breakdown of the 1,174,978 applications** (per the Moncloa press
-release): Colombia 25.9%, **Morocco 13.3%**, Venezuela 11.8%, Peru 8.8%, Honduras 4.9%.
-By continent: Latin America 66.7%, **Africa 22.9%**, Asia 8.3%. **Algeria is not named** —
-its applications fall inside the residual "Africa minus Morocco" bucket
-(22.9% − 13.3% = 9.6% of all applications, ≈112,800), shared with Senegal, Nigeria, Mali,
-Ghana, Gambia, Guinea, and Equatorial Guinea (the other African nationalities tracked in
-this project's `REGION_MAP`) — Algeria's individual share cannot be isolated from public
-figures.
+**Correction to an earlier pass of this report**: an initial search only surfaced the
+top-5-named ranking (Colombia/Morocco/Venezuela/Peru/Honduras) plus continent aggregates,
+with Algeria folded into an unresolved "Africa minus Morocco" residual. A fuller ranking
+does exist and names Algeria individually — found by fetching the primary news article
+directly rather than trusting a search engine's own synthesized summary (which, on
+verification, had fabricated a plausible-looking but unsourced extended list; discarded).
+
+**Full nationality breakdown of the 1,174,978 applications**, quoted directly from
+[El Español, 2 Jul 2026](https://www.elespanol.com/espana/20260702/colombianos-marroquies-venezolanos-ranking-regularizacion-total-solicitudes/1003744307730_0.html)
+(citing provisional Ministry figures, corroborated for the top-5 by the
+[official Moncloa release](https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/inclusion/Paginas/2026/020726-balance-regularizacion-extraordinaria.aspx)):
+Colombia 25.9%, Morocco 13.3%, Venezuela 11.8%, Peru 8.8%, Honduras 4.8%, Paraguay 3.8%,
+**Algeria 3.4%**, Senegal 2.9%, Pakistan 2.5%, Argentina 2.3%, other 20.5% — sums to
+100.0% exactly, an internal-consistency check that this is a real, coherent table, not a
+partial quote. Stored with full provenance in `data/raw/regularization_2026.csv`.
 
 **Comparing to existing registered population share** (this project's own data,
 `migration_spain.csv`, 2025 Eurostat stock, 50-nationality cross, V6 denominator stated):
-Morocco is 968,999 of 6,560,766 (**14.8%**) of that cross; Algeria is 89,592 (**1.4%**).
-Morocco's regularization-application share (13.3%) tracks its existing registered
-population share (14.8%) closely — **no evidence of a large hidden Moroccan population
-surfacing**, despite Morocco having the *stronger* institutionalized legal pathway per H1.
-Algeria's true regularization share is bounded above by the 9.6% "other Africa" residual —
-roughly 6-7x Algeria's 1.4% existing population share **if** the entire residual were
-Algerian, which is implausible given seven other named nationalities compete for that same
-bucket. **Inconclusive for Algeria specifically**: the published data does not break
-Algeria out, so H1/H2 cannot be confirmed or ruled out from this process's results as
-currently published. This is reported honestly as an open gap (per C9 — no fabricated
-point estimate), not resolved. N20 in SPEC.md is set to `~` (searched, found real
-aggregate/Morocco-specific data, but not an Algeria-specific figure) rather than left
-silently unaddressed.
+
+| Country | Applications | % of applications | Existing 2025 stock | % of registered stock | Ratio (applications ÷ stock share) |
+|---|---|---|---|---|---|
+| Morocco | 156,272 | 13.3% | 968,999 | 14.8% | **0.90x** |
+| Algeria | 39,949 | 3.4% | 89,592 | 1.4% | **2.49x** |
+
+Morocco's regularization-application share tracks its existing registered population share
+closely (slightly *below* proportional) — no evidence of a large hidden Moroccan
+population, despite Morocco having the *stronger* institutionalized legal pathway per H1.
+**Algeria's application share is ~2.5x its existing registered population share** — a real,
+disproportionate signal in exactly the direction H1 predicts: a nationality with weaker
+legal pathways into documented status shows up disproportionately in the pool of people who
+needed this regularization process to formalize their situation. This is now a genuine,
+though not conclusive, quantitative data point supporting H1 — not just a plausible
+mechanism. (Caveat: this is one regularization process, self-selected among people who met
+the "resident before 2026-01-01" eligibility bar and chose to apply; it is not a direct
+census of the full irregular population, and 20.5% of applications remain in an
+unattributed "other" bucket.) N20 in SPEC.md updated to reflect this finding.
+
+### Sensitivity scenario: how much would this shrink the peligrosity rate? (T84)
+
+Direct follow-up: if the *entire* regularization-application pool for a nationality (a)
+had already been present in Spain throughout the 2019-2024 crime-data window, just
+uncounted in official stock, (b) were 100% aged 15-59, and (c) split male/female in that
+nationality's own real registered sex ratio — an explicit **upper bound**, not a best
+estimate, per the two most aggressive assumptions — how much would the computed peligrosity
+rate fall? `src/crime/compute_regularization_sensitivity.py` →
+`data/processed/regularization_sensitivity_test.csv` + chart
+(`data/processed/regularization_sensitivity.png`), run for Morocco, Algeria, and (as a
+comparison pair with much larger recent irregular-migration inflows) Colombia and
+Venezuela:
+
+| Country | 2024 registered male 15-59 | + upper-bound addition | Denom. increase | Rate 2024: original → over-corrected |
+|---|---|---|---|---|
+| Morocco | 413,895 | +93,158 | +22.5% | 260.9 → 213.0 /100k (−18.4%) |
+| Algeria | 37,957 | +26,551 | **+69.9%** | 634.9 → 373.6 /100k (**−41.2%**) |
+| Colombia | 218,022 | +139,651 | +64.1% | 281.6 → 171.7 /100k (−39.0%) |
+| Venezuela | 113,963 | +63,941 | +56.1% | 170.2 → 109.0 /100k (−35.9%) |
+
+The correction is proportionally far larger for Algeria than Morocco — Algeria's small
+existing registered base means the same regularization pool nearly doubles its denominator,
+while Morocco's much larger existing base only grows ~23% — directly visualizing H1's
+mechanism. **But even at this maximal correction, Algeria's 2024 rate is still ~1.75x
+Morocco's** (373.6 vs 213.0/100k), down from 2.43x uncorrected — narrowed substantially,
+not eliminated. The true correction is smaller than this upper bound in reality (not every
+applicant arrived by 2019, not all are 15-59), so the real gap sits somewhere between the
+original and over-corrected figures — but even the extreme end leaves a real residual gap
+between Algeria and Morocco unexplained by this mechanism alone.
 
 ## Exploratory: does an offense-subtype signal exist for the "Africa" nationality group? (T78)
 
@@ -206,17 +280,19 @@ drawn from currently available data.
 | Hypothesis | Verdict | Confidence |
 |---|---|---|
 | H3 (age composition explains the gap) | **Not supported** — age-adjustment widens, not narrows, the gap in every year tested; population age-shares converged exactly when the rate gap was largest | Medium (real data, but funnel-stage-mismatched reference curve) |
-| H1 (denominator undercount via differential legal access) | **Plausible mechanism, unquantified** — real, citable asymmetry in bilateral legal-migration pathways (Morocco has them since 1996/2001+GECCO, Algeria doesn't), but no irregular-population estimate exists to size the effect | Low (mechanism sourced; magnitude unknown) |
-| H2 (2026 regularization disproportionately surfaced Algerians) | **Inconclusive** — official data doesn't break out Algeria; Morocco's share tracks its existing population closely (no surprise there); Algeria's upper bound is suggestive but not confirmable | Low (real official data, but not granular enough) |
+| H1 (denominator undercount via differential legal access) | **Plausible mechanism WITH a supporting quantitative signal** — real, citable asymmetry in bilateral legal-migration pathways (Morocco has them since 1996/2001+GECCO, Algeria doesn't); Algeria's 2026 regularization-application share is ~2.5x its existing registered-population share (vs. Morocco's ~0.9x) — consistent with, though not proof of, a larger true undercount for Algeria | Medium (real, sourced applications data; still not a direct undocumented-population census) |
+| H2 (2026 regularization disproportionately surfaced Algerians) | **Yes, disproportionately, by a real margin** — Algeria's application share (3.4%) is ~2.5x its registered-population share (1.4%); Morocco's (13.3%) roughly tracks its own (14.8%). Sensitivity test (T84): even the maximal over-corrected denominator narrows but does not eliminate Algeria's 2024 rate excess over Morocco (2.43x → 1.75x) | Medium (real official data, one process, self-selected applicant pool, 20.5% unattributed residual) |
 | Offense-subtype signal (exploratory) | **No reliable signal extractable** — confounded by a 2022 legal-reclassification break and funnel/granularity mismatches | Low (exploratory only) |
 
-None of the three hypotheses currently resolve *why* Algeria's rate is rising faster than
-Morocco's — if anything, H3 (the strongest a priori candidate) points the *opposite*
-direction once tested with real data. The gap documented in T41 remains real,
-statistically significant, and currently unexplained by population composition,
-legal-pathway-driven undercounting (as far as it can be measured), or the 2026
-regularization data as currently published. This is reported as an open finding, not
-forced into a tidy explanation — consistent with this project's C9 (no fabricated point
+H3 (the strongest a priori candidate) points the *opposite* direction once tested with real
+data — age-adjustment widens, not narrows, the gap. H1/H2 together now provide a real,
+though partial, explanation: Algeria shows a disproportionately large "surfacing" in the
+2026 regularization process relative to its official population, consistent with a
+meaningfully undercounted denominator — but even the most generous correction leaves
+roughly half the original gap (2.43x → 1.75x) unexplained. The residual gap is real,
+statistically significant (per T41), and not fully accounted for by any mechanism tested
+here. This is reported as a partially-explained finding, not forced into either "fully
+resolved" or "fully mysterious" — consistent with this project's C9 (no fabricated point
 estimates) and the "association only" (V9) discipline used throughout.
 
 ## Data/code produced by this report
@@ -228,4 +304,7 @@ estimates) and the "association only" (V9) discipline used throughout.
   → `docs/data/migration.json` keys `stock_age_pyramid_dz_ma`, `dz_ma_working_age_trend`; dashboard
   panels `mi-age-pyramid-dz-ma`, `mi-dz-ma-age-trend` (T76)
 - `src/crime/analyze_offense_subtype_funnel_triangulation.py` → `data/processed/offense_subtype_funnel_triangulation.csv` (T78)
+- `data/raw/regularization_2026.csv` — 2026 regularization application share by nationality, sourced (new)
+- `src/crime/compute_regularization_sensitivity.py` → `data/processed/regularization_sensitivity_test.csv`,
+  `data/processed/regularization_sensitivity.png` (T84)
 - B39 fix to `src/crime/analyze_cohort_crime_rate.py` (ROOT path + stock-series regression)

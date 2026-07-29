@@ -696,6 +696,36 @@ function buildCohort() {
       options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 }, maxRotation: 30 } } }),
     });
   });
+
+  // T84: upper-bound regularization-denominator sensitivity, latest year only
+  // (2024) — original vs. over-corrected rate, one pair of bars per country.
+  register('reg-sensitivity', (cv) => {
+    const rs = DATA.regularization_sensitivity.countries;
+    const names = Object.keys(rs);
+    const latestIdx = (n) => rs[n].years.length - 1;
+    return new Chart(cv, {
+      type: 'bar',
+      data: {
+        labels: names,
+        datasets: [
+          { label: 'Original (registered denominator)', data: names.map(n => rs[n].original_rate_per_100k[latestIdx(n)]), backgroundColor: PALETTE[0] + 'cc', borderColor: PALETTE[0], borderWidth: 1 },
+          { label: 'Over-corrected (upper-bound denominator)', data: names.map(n => rs[n].over_corrected_rate_per_100k[latestIdx(n)]), backgroundColor: PALETTE[2] + 'cc', borderColor: PALETTE[2], borderWidth: 1 },
+        ],
+      },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const n = names[c.dataIndex], i = latestIdx(n);
+            return c.datasetIndex === 1
+              ? `denominator +${rs[n].denom_pct_increase[i]}% · rate ${rs[n].rate_pct_reduction[i]}% lower`
+              : `year ${rs[n].years[i]}`;
+          } } },
+        },
+        y: { title: { display: true, text: 'rate per 100,000 males', color: TICK } },
+      }),
+    });
+  });
 }
 
 /* ── headline KPI cards (kept in sync with the data) ─── */
@@ -739,7 +769,7 @@ function wire() {
 
 /* ── boot ────────────────────────────────────────────── */
 async function main() {
-  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability'];
+  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity'];
   const loaded = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => {
     if (!r.ok) throw new Error(`${n}.json ${r.status}`); return r.json();
   })));

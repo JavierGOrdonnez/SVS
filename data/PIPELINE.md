@@ -52,6 +52,7 @@ were left untouched at the paths above.
 | `src/crime/compute_age_standardized_rate.py` | `ine_condenados_28857_age_nationality.csv`, `population_spain_estimates.csv`, `migration_spain.csv`, `sexual_crimes_mir_2019-2024.json` | `data/processed/age_standardized_rate_test.csv`, `age_standardized_dz_ma_ratio.csv` | T77 | x |
 | `src/crime/analyze_offense_subtype_funnel_triangulation.py` | `ine_condenados_28716_sexual_crimes.csv`, `sexual_crimes_mir_2019-2024.json` | `data/processed/offense_subtype_funnel_triangulation.csv` | T78 | x |
 | `src/crime/compute_victim_vulnerability_rates.py` | `sexual_crimes_mir_2019-2024.json`, `migration_spain.csv` | `data/processed/victim_vulnerability_rates.csv` | T80 | x |
+| `src/crime/compute_regularization_sensitivity.py` | `regularization_2026.csv`, `migration_spain.csv`, `sexual_crimes_mir_2019-2024.json` | `data/processed/regularization_sensitivity_test.csv`, `regularization_sensitivity.png` | T84 | x |
 | `src/analysis/analyze_aggression_profile.py` | `violence_spain.csv` | `data/processed/aggression_profile_summary.txt` | T52 | x |
 | `src/sexual_crimes/plot_sexual_crime_trends.py` | `sexual_crimes_mir_2019-2024.json`, `migration_spain.csv`, `population_spain_midyear_5yr.csv` | `data/processed/sexual_crime_evolution.csv` + 3 charts | T42 | x |
 | `src/mortality/build_dashboard_data.py` | `mortality_rates_key.csv`, `mortality_by_chapter.csv`, `mortality_rates.csv`, `mortality_spain_ine_ecm.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/mortality.json`; legacy stdout-JS `main()` kept for standalone use | T17,T23 | x |
@@ -61,7 +62,7 @@ were left untouched at the paths above.
 | `src/crime/build_dashboard_data.py` | `hate_crimes_mir_2016-2021_2023.json`, `cohort_tenure_period_test.csv`, `cohort_share_test.csv`, `victim_vulnerability_rates.csv` | `build_hate_crimes()`/`build_cohort_tenure()`/`build_victim_vulnerability()` consumed by `src/analysis/build_dashboard.py` → `docs/data/hate_crimes.json`, `docs/data/cohort_tenure.json`, `docs/data/victim_vulnerability.json` | T41,T59,T81 | x |
 | `src/analysis/build_dashboard.py` | calls each domain's `build_dashboard_data.build()` (feminicides, sexual_crimes, crime, migration, mortality) via `importlib` (all 5 modules share the filename `build_dashboard_data.py`, so a plain `import` would only bind the first one loaded) | `docs/data/*.json` (7 files) | T17,T23,T-mig-tab,T81 | x |
 
-27 scripts total (5 parsers + 22 analysis), zero missing a `§T` reference.
+28 scripts total (5 parsers + 23 analysis), zero missing a `§T` reference.
 
 ## Script-level flow
 

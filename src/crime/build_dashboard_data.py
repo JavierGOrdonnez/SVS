@@ -132,3 +132,31 @@ def build_victim_vulnerability():
         "caveat": "victim_count is all reported victims of that nationality (both sexes), not a female-only numerator. rate_per_100k_female divides by female-only stock (V6: victims are predominantly but not exclusively female, so this likely overstates the true female-specific rate slightly); rate_per_100k_total divides by that nationality's total stock (both sexes) instead -- shown side by side, neither is the sole framing. 2020 excluded (B38, source-PDF defect in that year's victim-nationality table). ci_low/ci_high (on rate_per_100k_female) capture Poisson count variance only, not population-denominator uncertainty.",
         "nationalities": dict(by_nat),
     }
+
+
+def build_regularization_sensitivity():
+    """T84: upper-bound denominator sensitivity scenario -- assumes the
+    ENTIRE 2026 regularization-application pool for a nationality was
+    already present throughout 2019-2024, 100% aged 15-59, split male/
+    female per that nationality's real registered sex ratio. Original vs.
+    over-corrected rate_per_100k, by country and year."""
+    rows = read_csv("data/processed/regularization_sensitivity_test.csv")
+
+    by_country = defaultdict(lambda: {
+        "years": [], "original_rate_per_100k": [], "over_corrected_rate_per_100k": [],
+        "denom_pct_increase": [], "rate_pct_reduction": [],
+    })
+    for r in rows:
+        g = by_country[r["country"].title()]
+        g["years"].append(num(r["year"]))
+        g["original_rate_per_100k"].append(num(r["original_rate_per_100k"]))
+        g["over_corrected_rate_per_100k"].append(num(r["over_corrected_rate_per_100k"]))
+        g["denom_pct_increase"].append(num(r["denom_pct_increase"]))
+        g["rate_pct_reduction"].append(num(r["rate_pct_reduction"]))
+
+    return {
+        "source": "data/raw/regularization_2026.csv (application share by nationality) + migration_spain.csv (registered stock) + sexual_crimes_mir_2019-2024.json (perpetrator counts)",
+        "confidence": "medium",
+        "caveat": "Explicit UPPER BOUND, not a best estimate: assumes 100% of that nationality's 2026 regularization applicants were already resident in every year 2019-2024, all aged 15-59. Real correction is smaller since not all applicants arrived that early nor are all working-age. Added population is held constant across years (no data on arrival timing); male/female split borrowed from that nationality's own 2024 registered sex ratio. See reports/algeria_morocco_divergence.md for full discussion.",
+        "countries": dict(by_country),
+    }
