@@ -54,6 +54,7 @@ def main():
     write("sexual_crimes.json", sexual_crimes_mod.build())
     write("hate_crimes.json", crime_mod.build_hate_crimes())
     write("cohort_tenure.json", crime_mod.build_cohort_tenure())
+    write("victim_vulnerability.json", crime_mod.build_victim_vulnerability())
     print("Done.")
 
 

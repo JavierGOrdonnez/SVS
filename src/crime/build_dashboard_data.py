@@ -101,3 +101,34 @@ def build_cohort_tenure():
         "test_a_rate_ratio": dict(test_a),
         "test_c_share": dict(test_c),
     }
+
+
+def build_victim_vulnerability():
+    """T80: victim-side mirror of peligrosity (V15) -- sexual-crime victims
+    per 100k population of the same nationality, not a %-share. Reads
+    compute_victim_vulnerability_rates.py's output, grouped by nationality
+    the same way build_cohort_tenure() groups by group name above."""
+    rows = read_csv("data/processed/victim_vulnerability_rates.csv")
+
+    by_nat = defaultdict(lambda: {
+        "iso2": None, "years": [], "victim_count": [], "female_stock": [], "total_stock": [],
+        "rate_per_100k_female": [], "rate_per_100k_total": [], "ci_low": [], "ci_high": [],
+    })
+    for r in rows:
+        g = by_nat[r["country_name"]]
+        g["iso2"] = r["nationality"]
+        g["years"].append(num(r["year"]))
+        g["victim_count"].append(num(r["victim_count"]))
+        g["female_stock"].append(num(r["female_stock"]))
+        g["total_stock"].append(num(r["total_stock"]))
+        g["rate_per_100k_female"].append(num(r["rate_per_100k_female"]))
+        g["rate_per_100k_total"].append(num(r["rate_per_100k_total"]))
+        g["ci_low"].append(num(r["ci_low"]))
+        g["ci_high"].append(num(r["ci_high"]))
+
+    return {
+        "source": "MIR Informe sobre delitos contra la libertad sexual (victim nationality, T26) + Eurostat migr_pop1ctz via migration_spain.csv (T66 population denominator)",
+        "confidence": "medium",
+        "caveat": "victim_count is all reported victims of that nationality (both sexes), not a female-only numerator. rate_per_100k_female divides by female-only stock (V6: victims are predominantly but not exclusively female, so this likely overstates the true female-specific rate slightly); rate_per_100k_total divides by that nationality's total stock (both sexes) instead -- shown side by side, neither is the sole framing. 2020 excluded (B38, source-PDF defect in that year's victim-nationality table). ci_low/ci_high (on rate_per_100k_female) capture Poisson count variance only, not population-denominator uncertainty.",
+        "nationalities": dict(by_nat),
+    }

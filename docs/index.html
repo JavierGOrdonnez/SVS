@@ -78,6 +78,10 @@
       title="Victim nationality by region" subtitle="2019–2024. Click a region to see its countries.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
     </svs-chart-panel>
+    <svs-chart-panel id="sx-victim-vulnerability-rate" size="full" height="320" confidence="medium"
+      title="Victim rate per 100k, by nationality" subtitle="2019–2024 (2020 excluded, source-PDF defect). Bars = rate per 100k female stock; hover for the total-stock alternative + 95% CI. Rate, not %-share — the victim-side mirror of peligrosity (T80).">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR Informe (victims) + Eurostat migr_pop1ctz" note="Numerator = all reported victims of that nationality (both sexes). Denominator: female-only stock (primary) vs total stock (alternative) — shown both ways, neither is the sole framing. CI captures Poisson count variance only, not denominator uncertainty."></svs-source-cite>
+    </svs-chart-panel>
     <svs-chart-panel id="sx-nationality-perpetrators" size="half" height="320" confidence="medium"
       title="Perpetrator nationality by region" subtitle="2019–2024. Click a region to see its countries.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
@@ -107,6 +111,12 @@
     <svs-chart-panel id="mi-stock-region" size="full" height="320" confidence="high" title="Foreign-national stock by region" subtitle="50 nationalities (94% of foreign stock), 2002–2025. Eurostat migr_pop1ctz. Click a region to see its countries."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid" size="half" height="480" confidence="high" title="Foreign-national age pyramid" subtitle="2024, by region. Males left / females right. Eurostat migr_pop1ctz."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid-es" size="half" height="480" confidence="medium" title="Spanish-national age pyramid" subtitle="2024. Total population minus foreign stock, same age scale."></svs-chart-panel>
+    <svs-chart-panel id="mi-age-pyramid-dz-ma" size="half" height="480" confidence="high" title="Morocco vs Algeria age pyramid" subtitle="2024. Eurostat migr_pop1ctz, country-level (not region-aggregated).">
+      <svs-source-cite slot="source" label="Eurostat migr_pop1ctz" note="age x sex x citizenship cross, MA/DZ, 2002-2025"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="mi-dz-ma-age-trend" size="half" confidence="high" title="Morocco vs Algeria working-age composition, 2002-2025" subtitle="% of male stock aged 15-39 (solid) vs 40-59 (dashed) — the H3 age-composition test.">
+      <svs-source-cite slot="source" label="Eurostat migr_pop1ctz" note="see reports/algeria_morocco_divergence.md for the standardized-rate test this feeds"></svs-source-cite>
+    </svs-chart-panel>
   </div>
 
   <div class="section-intro">

@@ -250,6 +250,66 @@ def _spanish_age_pyramid(rows, year):
     }
 
 
+DZ_MA = ["MA", "DZ"]  # T76: Morocco/Algeria-specific (not region-level) age comparison
+
+
+def _country_age_pyramid(rows, codes, year):
+    """T76: age x sex pyramid for specific countries (not regions) -- Morocco
+    vs Algeria, same 17-band scale/year as the T69/T70 region-level
+    pyramids, built via the same _pyramid_band_value helper so the 80+
+    aggregation (80-84 + 85+) stays consistent across all three panels."""
+    stock = [
+        r for r in rows
+        if r["series"] == "stock_nationality" and int(r["year"]) == year
+        and r["sex"] in ("male", "female") and r["nationality"] in codes
+    ]
+    totals = defaultdict(int)  # (code, sex, age_group) -> value
+    for r in stock:
+        totals[(r["nationality"], r["sex"], r["age_group"])] += int(r["value"])
+
+    def band_values(code, sex):
+        return [_pyramid_band_value(totals, (code, sex), age) for age in PYRAMID_AGES]
+
+    return {
+        "year": year,
+        "ages": PYRAMID_AGES,
+        "countries": {
+            COUNTRY_NAMES.get(code, code): {"male": band_values(code, "male"), "female": band_values(code, "female")}
+            for code in codes
+        },
+    }
+
+
+YOUNG_BANDS = {"15-19", "20-24", "25-29", "30-34", "35-39"}   # 15-39
+OLDER_WORKING_BANDS = {"40-44", "45-49", "50-54", "55-59"}    # 40-59
+
+
+def _working_age_composition_trend(rows, codes, years):
+    """T76: for each country/year, % of male stock aged 15-39 vs 40-59
+    (each as a share of the 15-59 total, excluding minors/retirement age)
+    -- tests the H3 claim directly (does Algeria's population skew younger
+    than Morocco's, and has that shape persisted/changed over time), using
+    the same fine-grained bands as the pyramids (not the coarse '0-14'/'65+'
+    duplicate rows also present in stock_nationality -- see B39-adjacent
+    note in compute_age_standardized_rate.py for why those are avoided)."""
+    stock = [r for r in rows if r["series"] == "stock_nationality" and r["sex"] == "male" and r["nationality"] in codes]
+    totals = defaultdict(int)  # (code, year, age_group) -> value
+    for r in stock:
+        totals[(r["nationality"], int(r["year"]), r["age_group"])] += int(r["value"])
+
+    series = {}
+    for code in codes:
+        young_pct, older_pct = [], []
+        for y in years:
+            young = sum(totals.get((code, y, b), 0) for b in YOUNG_BANDS)
+            older = sum(totals.get((code, y, b), 0) for b in OLDER_WORKING_BANDS)
+            denom = young + older
+            young_pct.append(round(young / denom * 100, 1) if denom else None)
+            older_pct.append(round(older / denom * 100, 1) if denom else None)
+        series[COUNTRY_NAMES.get(code, code)] = {"pct_15_39": young_pct, "pct_40_59": older_pct}
+    return {"years": years, "series": series}
+
+
 def build():
     """Return the migration-tab data blob (also reused by build_dashboard.py)."""
     rows = load_rows(CSV_PATH)
@@ -356,6 +416,12 @@ def build():
     s8 = _stock_age_pyramid(rows, pyramid_year)
     s9 = _spanish_age_pyramid(rows, pyramid_year)
 
+    # 10/11 (T76): Morocco vs Algeria age comparison -- H3 hypothesis test.
+    dz_ma_years = sorted({int(r["year"]) for r in rows
+                           if r["series"] == "stock_nationality" and r["nationality"] in DZ_MA})
+    s10 = _country_age_pyramid(rows, DZ_MA, pyramid_year)
+    s11 = _working_age_composition_trend(rows, DZ_MA, dz_ma_years)
+
     return {
         "annual_inflow": s1,
         "origin_composition": s2,
@@ -366,6 +432,8 @@ def build():
         "stock_by_region": s7,
         "stock_age_pyramid": s8,
         "stock_age_pyramid_es": s9,
+        "stock_age_pyramid_dz_ma": s10,
+        "dz_ma_working_age_trend": s11,
     }
 
 

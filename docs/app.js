@@ -452,6 +452,50 @@ function buildSexual() {
   register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims));
   register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators));
 
+  // T80: victim-vulnerability rate panel — the mirror of peligrosity (co-rateratio's
+  // shape, docs/app.js buildCohort(): x-axis = period/year, one bar series per group)
+  // but for victims, expressed as a per-100k rate rather than a %-share. Data shape is
+  // docs/data/victim_vulnerability.json's `nationalities` map (built by
+  // src/crime/build_dashboard_data.py's build_victim_vulnerability()), not
+  // cohort_tenure.json's `test_a_rate_ratio` shape.
+  register('sx-victim-vulnerability-rate', (cv) => {
+    const vv = DATA.victim_vulnerability.nationalities;
+    const names = Object.keys(vv).sort((a, b) => (vv[b].rate_per_100k_female.at(-1) ?? -1) - (vv[a].rate_per_100k_female.at(-1) ?? -1));
+    // union of years across every nationality (2020 excluded throughout, B38) —
+    // not just the first nationality's own years, since coverage varies per year.
+    const years = [...new Set(names.flatMap(n => vv[n].years))].sort((a, b) => a - b);
+    return new Chart(cv, {
+      type: 'bar',
+      data: {
+        labels: years.map(String),
+        datasets: names.map((n, i) => ({
+          label: n,
+          data: years.map(y => { const idx = vv[n].years.indexOf(y); return idx >= 0 ? vv[n].rate_per_100k_female[idx] : null; }),
+          backgroundColor: PALETTE[i % PALETTE.length] + 'cc', borderColor: PALETTE[i % PALETTE.length], borderWidth: 1,
+        })),
+      },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 8, font: { size: 8 } } },
+          tooltip: {
+            callbacks: {
+              label: (c) => {
+                const n = names[c.datasetIndex];
+                const idx = vv[n].years.indexOf(years[c.dataIndex]);
+                if (idx < 0) return `${n}: no data this year`;
+                const rf = vv[n].rate_per_100k_female[idx], rt = vv[n].rate_per_100k_total[idx];
+                const lo = vv[n].ci_low[idx], hi = vv[n].ci_high[idx];
+                return `${n}: ${rf}/100k (female stock, 95% CI ${lo}–${hi}) · ${rt}/100k (total stock)`;
+              },
+              footer: () => 'Source: MIR Informe (victims) + Eurostat migr_pop1ctz',
+            },
+          },
+        },
+        y: { title: { display: true, text: 'victims per 100,000 (female stock)', color: TICK } },
+      }),
+    });
+  });
+
   register('sx-convictions', (cv) => {
     const c = d.convictions;
     const drop = new Set(['total']);
@@ -582,6 +626,44 @@ function buildMigration() {
     const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
     return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
   });
+
+  // T76: Morocco vs Algeria age pyramid — same shape as mi-age-pyramid but
+  // per-country (s.countries) instead of per-region (s.regions).
+  register('mi-age-pyramid-dz-ma', (cv) => {
+    const s = d.stock_age_pyramid_dz_ma;
+    const ages = [...s.ages].reverse();
+    const countries = Object.keys(s.countries);
+    const datasets = countries.flatMap((country, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      const male = [...s.countries[country].male].reverse().map(v => -v);
+      const female = [...s.countries[country].female].reverse();
+      return [
+        { label: country, data: male, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'male', grouped: false },
+        { label: country, data: female, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'female', grouped: false },
+      ];
+    });
+    const maxAbs = Math.max(...countries.flatMap(c => s.countries[c].male.concat(s.countries[c].female)));
+    return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
+  });
+
+  // T76: % of male stock aged 15-39 vs 40-59, Morocco vs Algeria, over time
+  // — the H3 age-composition-shape test. Solid = 15-39 share, dashed = 40-59.
+  register('mi-dz-ma-age-trend', (cv) => {
+    const s = d.dz_ma_working_age_trend;
+    const names = Object.keys(s.series);
+    const datasets = names.flatMap((name, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      return [
+        { label: `${name} 15–39`, data: s.series[name].pct_15_39, borderColor: color, backgroundColor: color + '33', borderWidth: 2, pointRadius: 2, tension: 0.15 },
+        { label: `${name} 40–59`, data: s.series[name].pct_40_59, borderColor: color, borderDash: [4, 3], backgroundColor: 'transparent', borderWidth: 2, pointRadius: 2, tension: 0.15 },
+      ];
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: s.years, datasets },
+      options: baseOpts({ y: { ticks: { color: TICK, callback: (v) => v + '%' }, grid: { color: GRID } } }),
+    });
+  });
 }
 
 function buildCohort() {
@@ -657,7 +739,7 @@ function wire() {
 
 /* ── boot ────────────────────────────────────────────── */
 async function main() {
-  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure'];
+  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability'];
   const loaded = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => {
     if (!r.ok) throw new Error(`${n}.json ${r.status}`); return r.json();
   })));
