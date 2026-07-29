@@ -115,13 +115,13 @@ const line = (label, data, color, extra = {}) => ({
 // (needed for the stacked group) with region series overriding
 // `type: 'line'` per-dataset — Chart.js 4.x supports this mixed combo
 // natively.
-function regionDrilldownChart(cv, s) {
+function regionDrilldownChart(cv, s, opts = {}) {
+  const drillStyle = opts.drillStyle || 'bar';   // 'bar' (migration stock) | 'line' (peligrosidad)
   let drilled = null; // null = aggregate view, else a region name
   const hasSpain = 'spain' in s;
 
   const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
 
-  // Optional Spain line: white solid, sits at fixed position, excluded from drill-down
   function spainDataset() {
     if (!hasSpain) return null;
     return { type: 'line', label: 'España', data: s.spain,
@@ -130,12 +130,7 @@ function regionDrilldownChart(cv, s) {
       tension: 0.2, _region: 'España', stack: 'spain' };
   }
 
-  // hard y-axis cap sized to the DRILLED region's own bar total, not the
-  // union with the (possibly much larger) dimmed regions — otherwise a
-  // small region renders as a sliver of bars under an axis stretched to fit
-  // a much bigger one. The dimmed lines simply clip at the top if they
-  // exceed this; an accepted tradeoff for keeping the drilled region readable.
-  function barAxisMax(region) {
+  function barAxisMax(region) {   // only used in 'bar' mode
     const bc = s.by_country[region];
     const perYearTotal = s.years.map((_, yi) =>
       bc.countries.reduce((sum, name) => sum + bc.series[name][yi], 0));
@@ -144,12 +139,6 @@ function regionDrilldownChart(cv, s) {
 
   function regionLine(region, extra = {}) {
     const color = regionColor(region);
-    // each line gets its OWN stack id (not left undefined, not shared with
-    // any other dataset): with the y-scale's `stacked` flag on (needed for
-    // the countries bars below), Chart.js sums every dataset sharing a
-    // scale into the axis max unless each has a distinct stack group —
-    // otherwise the dimmed region lines get added together for autoscale,
-    // ballooning the axis far past any actual series value.
     return { type: 'line', label: region, data: s.series[region], borderColor: color,
       backgroundColor: color + '22', borderWidth: 2, tension: 0.25,
       pointRadius: 2, pointHoverRadius: 4, _region: region, stack: `line-${region}`, ...extra };
@@ -161,17 +150,34 @@ function regionDrilldownChart(cv, s) {
       const regions = s.regions.map((r) => regionLine(r));
       return spain ? [...regions, spain] : regions;
     }
+
     const dimmed = s.regions.filter((r) => r !== drilled).map((r) => regionLine(r, {
       borderColor: regionColor(r) + '55', backgroundColor: 'transparent',
       borderWidth: 1, borderDash: [3, 3], pointRadius: 0, order: 1,
     }));
-    // invisible click target carrying the drilled region's own label, so
-    // clicking "the region again" (the chosen back-toggle) always finds a
-    // legend entry with that exact name, in either view.
-    const backHandle = { type: 'line', label: drilled, data: s.years.map(() => null),
-      borderColor: 'transparent', pointRadius: 0, showLine: false, order: 0, _region: drilled,
-      stack: `line-${drilled}-back` };
     const bc = s.by_country[drilled];
+
+    if (drillStyle === 'line') {
+      // Line mode: dashed country lines + solid region reference line.
+      // The drilled region's own line stays as a visual reference; clicking
+      // it in the legend (same _region) toggles back to aggregate view.
+      const reference = regionLine(drilled, { order: 0 });
+      const countries = bc.countries.map((name, i) => ({
+        type: 'line', label: name, data: bc.series[name],
+        borderColor: PALETTE[i % PALETTE.length], backgroundColor: 'transparent',
+        borderWidth: 1.5, borderDash: [4, 3], pointRadius: 1.5, pointHoverRadius: 4,
+        tension: 0.2, order: 2,
+      }));
+      const result = [reference, ...dimmed, ...countries];
+      if (spain) result.push(spain);
+      return result;
+    }
+
+    // Bar mode (default): stacked country bars replace the region line.
+    // A visible "↩" back-handle click target replaces the region's legend entry.
+    const backHandle = { type: 'line', label: '↩ ' + drilled, data: s.years.map(() => null),
+      borderColor: regionColor(drilled), pointRadius: 0, showLine: false,
+      order: 0, _region: drilled, stack: `line-${drilled}-back` };
     const bars = bc.countries.map((name, i) => ({
       type: 'bar', label: name, data: bc.series[name],
       backgroundColor: PALETTE[i % PALETTE.length] + 'cc',
@@ -195,18 +201,16 @@ function regionDrilldownChart(cv, s) {
           onClick: (evt, item, legend) => {
             const ci = legend.chart;
             const ds = ci.data.datasets[item.datasetIndex];
-            if (ds._region && ds._region === 'España') return; // Spain line: no interaction
+            if (ds._region && ds._region === 'España') return;
             if (ds._region) {
               drilled = (drilled === ds._region) ? null : ds._region;
               ci.data.datasets = buildDatasets();
-              ci.options.scales.x.stacked = !!drilled;
-              ci.options.scales.y.stacked = !!drilled;
-              ci.options.scales.y.max = drilled ? barAxisMax(drilled) : undefined;
+              ci.options.scales.x.stacked = !!(drilled && drillStyle === 'bar');
+              ci.options.scales.y.stacked = !!(drilled && drillStyle === 'bar');
+              ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : undefined;
               ci.update();
               return;
             }
-            // non-region entries (a drilled region's country/"Other" bars):
-            // default Chart.js legend behavior, toggle that dataset's visibility.
             const i = item.datasetIndex;
             if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
             else { ci.show(i); item.hidden = false; }
@@ -465,40 +469,11 @@ function buildSexual() {
     });
   });
 
-  // T-sx-nat: line chart per region + Spain line (derived from spanish_pct).
-  function nationalityLineChart(cv, s, title) {
-    const regions = [...s.regions, 'España'];
-    const regionColor = (r) => r === 'España' ? '#fff' : PALETTE[s.regions.indexOf(r) % PALETTE.length];
-    const datasets = regions.map((r) => {
-      const data = r === 'España' ? s.spain : s.series[r];
-      const color = regionColor(r);
-      const is_spain = r === 'España';
-      return {
-        label: r, data,
-        borderColor: color, backgroundColor: color + '22',
-        borderWidth: is_spain ? 3 : 1.5,
-        borderDash: is_spain ? [] : [4, 3],
-        pointRadius: is_spain ? 3 : 1.5,
-        pointHoverRadius: 5,
-        tension: 0.2,
-      };
-    });
-    return new Chart(cv, {
-      type: 'line',
-      data: { labels: s.years.map(String), datasets },
-      options: baseOpts({
-        plugins: {
-          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-          tooltip: { callbacks: { title: () => title } },
-        },
-      }),
-    });
-  }
-  register('sx-nationality-victims', (cv) => nationalityLineChart(cv, d.nationality_victims, 'Victim nationality'));
-  register('sx-nationality-perpetrators', (cv) => nationalityLineChart(cv, d.nationality_perpetrators, 'Perpetrator nationality'));
+  register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims, { drillStyle: 'bar' }));
+  register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators, { drillStyle: 'bar' }));
 
   // Peligrosidad: perpetrators per 1k males 15-59 by nationality (region drill-down)
-  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad));
+  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad, { drillStyle: 'line' }));
 
   register('sx-convictions', (cv) => {
     const c = d.convictions;
