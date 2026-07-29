@@ -1,22 +1,66 @@
 import { expect } from '@playwright/test';
 
-/** Panel IDs that use regionDrilldownChart (drill-down capable) */
+/**
+ * Panel IDs that use regionDrilldownChart (drill-down capable).
+ * `tab` is one of #main-tabs' data-id values: feminicides | sexual-crimes |
+ * migration | hate-crimes. There are no sub-tabs in the current dashboard
+ * (feminicides/sexual-crimes/hate-crimes were split off #main-tabs directly
+ * — see docs/index.html's comment above <svs-confidence-filter>), so panel
+ * entries only need a single `tab` id.
+ *
+ * `regions` is each panel's *actual* region-name set (straight from
+ * docs/data/{sexual_crimes,migration}.json), used by isDrilled()/the
+ * "switch region" test to tell a region-line label apart from a
+ * drilled-in country label. sexual-crimes' two nationality panels and
+ * sx-peligrosidad share one 5-region taxonomy (Africa/America/Asia/Europe/
+ * Other); migration's stock-by-region panel uses a different 6-region set
+ * (Africa/Latin America/Anglo/EU/Non-EU Europe/Asia) — an earlier version of
+ * this file hardcoded one shared whitelist across both, which silently
+ * mismatched migration's names ("Latin America"/"Anglo" vs. the sexual-crime
+ * panels' "America"/"Other") and made isDrilled() report a false "drilled"
+ * even at rest for mi-stock-region.
+ *
+ * `hasSpain` marks whether the panel's data includes a `spain` series (drawn
+ * as the white "España" reference line) — true for both sexual-crimes
+ * panels, false for mi-stock-region (migration's stock_by_region has no
+ * `spain` key at all, so there's no España legend entry to test there).
+ */
 export const DRILL_PANELS = [
-  { id: 'sx-nationality-victims',      style: 'bar',  tab: 'violence',  region: 'Africa',  subTab: 'Sexual' },
-  { id: 'sx-nationality-perpetrators',  style: 'bar',  tab: 'violence',  region: 'Africa',  subTab: 'Sexual' },
-  { id: 'sx-peligrosidad',              style: 'line', tab: 'violence',  region: 'Africa',  subTab: 'Sexual' },
-  { id: 'mi-stock-region',              style: 'bar',  tab: 'migration', region: 'Africa',  subTab: null },
+  { id: 'sx-nationality-victims', style: 'bar', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
+  { id: 'sx-nationality-perpetrators', style: 'bar', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
+  { id: 'sx-peligrosidad', style: 'line', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
+  { id: 'mi-stock-region', style: 'bar', tab: 'migration', region: 'Africa', hasSpain: false,
+    regions: ['Africa', 'Latin America', 'Anglo', 'EU', 'Non-EU Europe', 'Asia'] },
 ];
 
 /** Panel IDs that use vline annotations */
 export const ANNOTATION_PANELS = [
-  { id: 'fem-timeline', label: 'COVID', year: '2020', tab: 'violence' },
-  { id: 'sx-totals',     label: 'LO 10/2022', year: '2022', tab: 'violence', subTab: 'Sexual' },
-  { id: 'sx-clearance',  label: 'LO 10/2022', year: '2022', tab: 'violence', subTab: 'Sexual' },
-  { id: 'sx-categories', label: 'LO 10/2022', year: '2022', tab: 'violence', subTab: 'Sexual' },
-  { id: 'hc-totals',     label: 'no 2022', year: '2022', tab: 'violence', subTab: 'Odio' },
-  { id: 'mi-inflow',     label: 'EVR→EMCR', year: '2008', tab: 'migration' },
+  { id: 'fem-timeline', label: 'COVID',        year: '2020', tab: 'feminicides' },
+  { id: 'sx-totals',     label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
+  { id: 'sx-clearance',  label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
+  { id: 'sx-categories', label: 'LO 10/2022',  year: '2022', tab: 'sexual-crimes' },
+  { id: 'mi-inflow',     label: 'EVR→EMCR',    year: '2008', tab: 'migration' },
+  { id: 'hc-totals',     label: 'no 2022 report', year: '2022', tab: 'hate-crimes' },
 ];
+
+/**
+ * All chart-panel ids per top-level tab, straight off docs/index.html, for
+ * smoke-testing "every panel in this tab actually mounts a chart with data".
+ * Kept here (not derived from the DOM) so a panel silently missing from
+ * app.js's `register()` calls still gets caught instead of the test just
+ * shrinking to whatever happens to mount.
+ */
+export const TAB_PANELS = {
+  feminicides: ['fem-timeline', 'fem-ageband', 'fem-ageband-perp', 'fem-counts', 'fem-rates'],
+  'sexual-crimes': ['sx-totals', 'sx-clearance', 'sx-categories', 'sx-nationality-victims',
+    'sx-nationality-perpetrators', 'sx-peligrosidad', 'sx-convictions'],
+  migration: ['mi-inflow', 'mi-origin', 'mi-sex', 'mi-ageband', 'mi-ageprofile', 'mi-stock',
+    'mi-stock-region', 'mi-age-pyramid', 'mi-age-pyramid-es', 'co-rateratio', 'co-share'],
+  'hate-crimes': ['hc-totals', 'hc-categories'],
+};
 
 /** Switch to a main tab by clicking its button */
 export async function switchTab(page, tabId) {
@@ -24,14 +68,6 @@ export async function switchTab(page, tabId) {
   const btn = tabBar.locator(`button[data-id="${tabId}"]`);
   await btn.click();
   await page.waitForTimeout(500); // allow panels to mount
-}
-
-/** Switch to a sub-tab within the violence section */
-export async function switchSubTab(page, subTabLabel) {
-  const subBar = page.locator('#sub-tabs');
-  const btn = subBar.locator('button', { hasText: subTabLabel });
-  await btn.click();
-  await page.waitForTimeout(500);
 }
 
 /** Assert that a chart panel's canvas has a Chart.js instance */
@@ -95,24 +131,59 @@ export async function clickDataElement(page, panelId, datasetIndex, dataIndex = 
   }, { id: panelId, dsIdx: datasetIndex, di: dataIndex });
 }
 
-/** Check whether the chart seems to be in drilled-down state (has country-level datasets) */
-export async function isDrilled(page, panelId) {
-  return page.evaluate((id) => {
+/**
+ * Check whether the chart seems to be in drilled-down state (has
+ * country-level datasets). `regions` must be the panel's own real region
+ * list (DRILL_PANELS[i].regions) — a label that isn't one of those, isn't
+ * 'España', and isn't a '↩ ' back-handle can only be a drilled-in country.
+ */
+export async function isDrilled(page, panelId, regions) {
+  return page.evaluate(({ id, regions }) => {
     const c = document.getElementById(id)._chart;
     const labels = c.data.datasets.map(d => d.label);
-    // If any dataset label is a known country (not a region, not España, not ↩), we're drilled
-    const regions = ['Africa','America','Asia','Europe','Other','EU','Non-EU Europe',
-      'Latin America & Caribbean','North America & Oceania','Asia & Oceania'];
-    const hasCountry = labels.some(l =>
-      !regions.includes(l) && l !== 'España' && !l.startsWith('↩'));
-    return hasCountry;
+    return labels.some(l => !regions.includes(l) && l !== 'España' && !l.startsWith('↩'));
+  }, { id: panelId, regions });
+}
+
+/**
+ * Wait for the chart panels in the *currently active* tab to mount.
+ * app.js's mountVisible() only builds panels whose `offsetParent` is non-null
+ * (i.e. inside the visible .tab-panel), so panels belonging to other, still
+ * hidden tabs never get a `_chart` — querying every <svs-chart-panel> on the
+ * whole page (regardless of tab) would wait for a state the app never
+ * reaches within a single tab view.
+ */
+export async function waitForCharts(page, timeout = 8000) {
+  await page.waitForFunction(() => {
+    const active = document.querySelector('.tab-panel.active');
+    if (!active) return false;
+    const panels = active.querySelectorAll('svs-chart-panel');
+    return panels.length > 0 && Array.from(panels).every(p => p._chart && p._chart instanceof Chart);
+  }, { timeout });
+}
+
+/**
+ * True if at least one dataset on the chart has at least one real
+ * (non-null/undefined/NaN) data point. Catches a panel that mounts a Chart.js
+ * instance but was fed an empty/all-null series (e.g. a data-key rename that
+ * silently broke a `d.<field>` lookup in app.js, or an upstream JSON that
+ * regenerated with a gap for every year).
+ */
+export async function chartHasData(page, panelId) {
+  return page.evaluate((id) => {
+    const c = document.getElementById(id)._chart;
+    return c.data.datasets.some((ds) => Array.isArray(ds.data) && ds.data.some((v) => {
+      if (v === null || v === undefined) return false;
+      if (typeof v === 'number') return !Number.isNaN(v);
+      return true; // pyramid/object-form points etc.
+    }));
   }, panelId);
 }
 
-/** Wait for all chart panels in the tab to mount */
-export async function waitForCharts(page, timeout = 8000) {
-  await page.waitForFunction(() => {
-    const panels = document.querySelectorAll('svs-chart-panel');
-    return Array.from(panels).every(p => p._chart && p._chart instanceof Chart);
-  }, { timeout });
+/** Get the chart's annotation-plugin `annotations` map (vline markers etc.), or null if none configured. */
+export async function getAnnotations(page, panelId) {
+  return page.evaluate((id) => {
+    const c = document.getElementById(id)._chart;
+    return c.options?.plugins?.annotation?.annotations ?? null;
+  }, panelId);
 }

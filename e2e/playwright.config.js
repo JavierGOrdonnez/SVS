@@ -5,16 +5,19 @@ export default defineConfig({
   timeout: 30000,
   retries: 1,
   use: {
-    baseURL: 'http://192.168.1.22:8088',
+    baseURL: 'http://127.0.0.1:8088',
     headless: true,
     viewport: { width: 1440, height: 900 },
+    launchOptions: {
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH || undefined,
+    },
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } },
   ],
   webServer: {
-    command: '../.venvlnx/bin/python ../src/serve.py --port 8088 --no-auth',
-    url: 'http://192.168.1.22:8088',
+    command: 'python3 src/serve.py --port 8088 --no-auth',
+    url: 'http://127.0.0.1:8088',
     reuseExistingServer: true,
     cwd: '..',
     timeout: 15000,

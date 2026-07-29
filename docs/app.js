@@ -209,6 +209,9 @@ function regionDrilldownChart(cv, s, opts = {}) {
             if (txt.startsWith('↩ ')) {
               drilled = null;
               ci.data.datasets = buildDatasets();
+              ci.options.scales.x.stacked = false;
+              ci.options.scales.y.stacked = false;
+              ci.options.scales.y.max = yMax;
               ci.update();
               return;
             }
