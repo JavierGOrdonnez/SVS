@@ -46,7 +46,11 @@ MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
 OUT_CSV = ROOT / "data" / "processed" / "regularization_sensitivity_test.csv"
 OUT_CHART = ROOT / "data" / "processed" / "regularization_sensitivity.png"
 
-COUNTRIES = {"MA": "MARRUECOS", "DZ": "ARGELIA", "CO": "COLOMBIA", "VE": "VENEZUELA"}
+COUNTRIES = {
+    "MA": "MARRUECOS", "DZ": "ARGELIA", "CO": "COLOMBIA", "VE": "VENEZUELA",
+    "PE": "PERU", "HN": "HONDURAS", "PY": "PARAGUAY", "SN": "SENEGAL",
+    "PK": "PAKISTAN", "AR": "ARGENTINA",
+}  # all 10 individually-named nationalities in data/raw/regularization_2026.csv
 MIR_ALT_NAMES = {"VE": {"VENEZUELA", "VENUZUELA"}}  # spelling varies by report year
 YEARS = [2019, 2021, 2022, 2023, 2024]
 AGE_15_59 = {"15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59"}
@@ -90,11 +94,12 @@ def load_male_perpetrator_counts():
         for alt in MIR_ALT_NAMES.get(iso2, ()):
             name_to_iso2[alt] = iso2
 
-    totals_by_iso2, male_by_iso2 = {}, {}
+    totals_by_iso2, male_by_iso2, report_male_pct = {}, {}, {}
     for report in data["reports"]:
         year = report["year"]
         if year not in YEARS:
             continue
+        report_male_pct[year] = report.get("perp_male_pct")
         for e in report["nationality"]["perpetrators"]["by_country"]:
             iso2 = name_to_iso2.get(e["name"])
             if iso2 is None:
@@ -106,7 +111,17 @@ def load_male_perpetrator_counts():
     result = {}
     for iso2, totals in totals_by_iso2.items():
         known = male_by_iso2.get(iso2, {})
-        avg_male_share = sum(known[y] / totals[y] for y in known) / len(known)
+        if known:
+            avg_male_share = sum(known[y] / totals[y] for y in known) / len(known)
+        else:
+            # No year has this country's own sex breakdown (e.g. a country
+            # that only appears in MIR's top-N list for a year with no
+            # per-country sex split at all) -- fall back to the report-
+            # level (not nationality-specific) male share, same class of
+            # approximation analyze_cohort_crime_rate.py's
+            # load_spanish_perpetrator_counts() already uses.
+            pcts = [p for p in report_male_pct.values() if p is not None]
+            avg_male_share = (sum(pcts) / len(pcts) / 100) if pcts else 0.5
         result[iso2] = {
             y: (known[y] if y in known else round(t * avg_male_share))
             for y, t in totals.items()
@@ -155,8 +170,18 @@ def main():
         w.writerows(rows)
     print(f"Wrote {len(rows)} rows -> {OUT_CSV}")
 
+    print("\n=== Male/female split used per nationality (from that country's own 2024 "
+          f"registered 15-59 sex ratio, applied to its full regularization-application "
+          f"count -- assumption (c) in the module docstring) ===")
+    for iso2, name in COUNTRIES.items():
+        m, fem = stock[iso2][REFERENCE_YEAR]["male"], stock[iso2][REFERENCE_YEAR]["female"]
+        share = m / (m + fem)
+        print(f"  {name:12} 2024 registered 15-59: male={m:>7} female={fem:>7}  "
+              f"male_share={share*100:5.1f}%  regularization_est={reg[iso2]:>8.0f}  "
+              f"-> added_male_15_59={reg[iso2]*share:>8.0f}")
+
     print("\n=== Upper-bound denominator sensitivity (assumes full 2026 regularization pool "
-          "was already present, 100% aged 15-59, every year 2019-2024) ===")
+          "was already present, 100% aged 15-59, every year with MIR data) ===")
     for r in rows:
         print(f"  {r['country']:12} {r['year']}  obs={r['observed_male_perpetrators']:5}  "
               f"registered_denom={r['registered_male_15_59']:>7}  +{r['added_male_15_59_upper_bound']:>6} "
@@ -173,8 +198,11 @@ def make_chart(rows):
     import matplotlib.pyplot as plt
 
     countries = list(dict.fromkeys(r["country"] for r in rows))
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharey=False)
-    for ax, country in zip(axes.flat, countries):
+    ncols = 5
+    nrows = -(-len(countries) // ncols)  # ceil
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4 * ncols, 4 * nrows), sharey=False)
+    axes_flat = axes.flat if hasattr(axes, "flat") else [axes]
+    for ax, country in zip(axes_flat, countries):
         crows = [r for r in rows if r["country"] == country]
         years = [r["year"] for r in crows]
         x = range(len(years))
@@ -184,12 +212,14 @@ def make_chart(rows):
         ax.bar([i + w / 2 for i in x], [r["over_corrected_rate_per_100k"] for r in crows], w,
                label="Over-corrected (upper-bound denom.)", color="#DD8452")
         ax.set_xticks(list(x))
-        ax.set_xticklabels(years)
-        ax.set_title(country.title())
-        ax.set_ylabel("Rate per 100k males")
-    axes.flat[0].legend(loc="upper left", fontsize=8)
+        ax.set_xticklabels(years, fontsize=8)
+        ax.set_title(country.title(), fontsize=10)
+        ax.set_ylabel("Rate per 100k males", fontsize=8)
+    for ax in axes_flat[len(countries):]:
+        ax.axis("off")
+    axes_flat[0].legend(loc="upper left", fontsize=7)
     fig.suptitle("Peligrosity rate: original vs. upper-bound over-corrected denominator\n"
-                 "(assumes full 2026 regularization pool for that nationality was already present, all aged 15-59, every year)")
+                 "(assumes full 2026 regularization pool for that nationality was already present, all aged 15-59, every year with MIR data)")
     fig.tight_layout()
     fig.savefig(OUT_CHART, dpi=150)
     print(f"\nWrote chart -> {OUT_CHART}")

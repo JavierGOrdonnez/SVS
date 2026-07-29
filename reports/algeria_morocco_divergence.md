@@ -221,30 +221,62 @@ unattributed "other" bucket.) N20 in SPEC.md updated to reflect this finding.
 Direct follow-up: if the *entire* regularization-application pool for a nationality (a)
 had already been present in Spain throughout the 2019-2024 crime-data window, just
 uncounted in official stock, (b) were 100% aged 15-59, and (c) split male/female in that
-nationality's own real registered sex ratio — an explicit **upper bound**, not a best
-estimate, per the two most aggressive assumptions — how much would the computed peligrosity
+nationality's own real registered sex ratio (a genuine estimate, not an aggressive
+assumption — see the actual per-country splits used below) — an explicit **upper bound**,
+not a best estimate, per assumptions (a)/(b) — how much would the computed peligrosity
 rate fall? `src/crime/compute_regularization_sensitivity.py` →
 `data/processed/regularization_sensitivity_test.csv` + chart
-(`data/processed/regularization_sensitivity.png`), run for Morocco, Algeria, and (as a
-comparison pair with much larger recent irregular-migration inflows) Colombia and
-Venezuela:
+(`data/processed/regularization_sensitivity.png`), run for all 10 nationalities
+individually named in the regularization breakdown (§H2):
 
-| Country | 2024 registered male 15-59 | + upper-bound addition | Denom. increase | Rate 2024: original → over-corrected |
-|---|---|---|---|---|
-| Morocco | 413,895 | +93,158 | +22.5% | 260.9 → 213.0 /100k (−18.4%) |
-| Algeria | 37,957 | +26,551 | **+69.9%** | 634.9 → 373.6 /100k (**−41.2%**) |
-| Colombia | 218,022 | +139,651 | +64.1% | 281.6 → 171.7 /100k (−39.0%) |
-| Venezuela | 113,963 | +63,941 | +56.1% | 170.2 → 109.0 /100k (−35.9%) |
+**Male/female split used** (each nationality's own 2024 registered 15-59 sex ratio,
+applied to its full regularization-application estimate — not a flat 50/50):
 
-The correction is proportionally far larger for Algeria than Morocco — Algeria's small
+| Country | Male 15-59 (2024) | Female 15-59 (2024) | Male share | Applications (est.) | Added to male denom. |
+|---|---|---|---|---|---|
+| Senegal | 62,039 | 14,428 | 81.1% | 34,074 | +27,645 |
+| Pakistan | 61,492 | 25,412 | 70.8% | 29,374 | +20,785 |
+| Algeria | 37,957 | 19,154 | 66.5% | 39,949 | +26,551 |
+| Morocco | 413,895 | 280,408 | 59.6% | 156,272 | +93,158 |
+| Argentina | 53,526 | 55,165 | 49.2% | 27,024 | +13,308 |
+| Colombia | 218,022 | 256,921 | 45.9% | 304,219 | +139,651 |
+| Venezuela | 113,963 | 133,149 | 46.1% | 138,647 | +63,941 |
+| Peru | 76,951 | 94,765 | 44.8% | 103,398 | +46,336 |
+| Paraguay | 36,318 | 61,924 | 37.0% | 44,649 | +16,506 |
+| Honduras | 43,997 | 95,246 | 31.6% | 56,399 | +17,821 |
+
+**Denominator/rate effect, latest available year** (2024, except Pakistan 2022 — it didn't
+make MIR's top-N cutoff in 2023/2024, see caveat below), sorted by rate reduction:
+
+| Country | Denom. increase | Rate: original → over-corrected |
+|---|---|---|
+| **Algeria** | **+69.9%** | 634.9 → 373.6 /100k (**−41.2%**) |
+| Colombia | +64.1% | 281.6 → 171.7 /100k (−39.0%) |
+| Peru | +60.2% | 371.7 → 232.0 /100k (−37.6%) |
+| Venezuela | +56.1% | 170.2 → 109.0 /100k (−35.9%) |
+| Paraguay | +45.4% | 264.3 → 181.7 /100k (−31.2%) |
+| Senegal | +44.6% | 270.8 → 187.3 /100k (−30.8%) |
+| Honduras | +40.5% | 347.8 → 247.5 /100k (−28.8%) |
+| Pakistan (2022) | +37.4% | 179.8 → 130.9 /100k (−27.2%) |
+| Argentina | +24.9% | 143.9 → 115.2 /100k (−19.9%) |
+| **Morocco** | **+22.5%** | 260.9 → 213.0 /100k (**−18.4%**) |
+
+**Algeria shows the single largest correction of all 10 nationalities; Morocco shows the
+smallest** — not just an Algeria-vs-Morocco artifact, Algeria and Morocco sit at opposite
+ends of the entire distribution. This directly visualizes H1's mechanism: Algeria's small
 existing registered base means the same regularization pool nearly doubles its denominator,
-while Morocco's much larger existing base only grows ~23% — directly visualizing H1's
-mechanism. **But even at this maximal correction, Algeria's 2024 rate is still ~1.75x
-Morocco's** (373.6 vs 213.0/100k), down from 2.43x uncorrected — narrowed substantially,
-not eliminated. The true correction is smaller than this upper bound in reality (not every
-applicant arrived by 2019, not all are 15-59), so the real gap sits somewhere between the
-original and over-corrected figures — but even the extreme end leaves a real residual gap
-between Algeria and Morocco unexplained by this mechanism alone.
+while Morocco's much larger existing base only grows ~23%. **But even at this maximal
+correction, Algeria's 2024 rate is still ~1.75x Morocco's** (373.6 vs 213.0/100k), down from
+2.43x uncorrected — narrowed substantially, not eliminated. The true correction is smaller
+than this upper bound in reality (not every applicant arrived by 2019, not all are 15-59),
+so the real gap sits somewhere between the original and over-corrected figures — but even
+the extreme end leaves a real residual gap between Algeria and Morocco unexplained by this
+mechanism alone.
+
+**Coverage caveat**: Senegal/Paraguay/Argentina/Pakistan only have MIR perpetrator data for
+1-3 of the 5 years (they didn't make every year's top-N reporting cutoff) — smaller sample
+for those rows, not missing/fabricated data; years without MIR data are simply absent from
+the CSV rather than zero-filled.
 
 ## Exploratory: does an offense-subtype signal exist for the "Africa" nationality group? (T78)
 
