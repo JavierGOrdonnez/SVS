@@ -308,16 +308,350 @@ CCAAs one at a time in the foreground. Order and outcome:
   cache. 19 more rows, all partial investment-line slices, presupuestado
   only. Gives Galicia the deepest year-over-year series in the dataset.
 
-## Next steps
+## Sequential foreground pass, round 3 (2026-07-28) — current wildfire crisis, Ávila & Madrid
 
-See `../../SPEC.md` §T. **T10** (rerun the now-resumable Tier-1 Hacienda
-parser — it crashed on the first full run, output was lost, but the
-script now writes incrementally and retries transient errors) is the
-next concrete action. After that: tracing every `confidence=low` row's
-`source_ref` to a live, re-verifiable URL (most of this round's rows were
-either recovered from a crashed-agent cache or cited without a captured
-URL); extending Madrid/Aragón/the remaining CCAAs beyond what real search
-effort already ruled out this round; and T6's few `proyecto`-stage
-total-budget rows (Aragón, Cantabria, Castilla y León, Extremadura)
-should be confirmed against final Cortes/Asamblea approval once
-available.
+Per user request: moved from budget-line micro-data to journalistic/research coverage
+of the actual July 2026 wildfires in Ávila and Madrid, focusing on resources deployed
+by each CCAA and the broader funding context.
+
+### The fires (as of 28 July 2026)
+
+Two fires treated as one single incident by the Government, declared emergencia de interés
+nacional. Combined perimeter ~280 km, >77,000 ha affected across both regions + Toledo
+(Castilla-La Mancha, downgraded to nivel 2 on 28 July).
+
+- **Ávila** (Castilla y León): ~50,000 ha — "el mayor incendio y el más agresivo de la
+  historia de España" (EL PAÍS, 2026-07-28). 16 municipalities evacuated, 3 confined.
+  ~25,087 people evacuated. Origin: person using machinery in a prohibited area (one
+  arrested, one investigated).
+- **Madrid**: ~34,000 ha (Ayuso's figure, 28 July; Interior had been reporting ~25,000).
+  12 municipalities evacuated, 4 confined. ~31,865 evacuated, ~19,262 isolated at home.
+  Critical zone: río Cofio / pantano de San Juan, where both fires nearly confluent.
+- **National total**: 173,651 ha forest land burned year-to-date (MITECO, via EL PAÍS).
+  EFFIS satellite estimate: 157,501 ha (higher than MITECO's slower CCAA-compiled figure).
+- 47 roads cut (Ávila, Castellón, Madrid, Toledo provinces).
+- EU Civil Protection Mechanism activated: Turkey sent 2 Air Tractor Fireboss (to
+  Burgohondo, Ávila); Italy and Greece sent additional aircraft. Portugal sent 100+
+  military personnel to Ávila.
+
+Sources:
+- EL PAÍS, "Carrera contra el fuego en Ávila y Madrid: 24 horas clave" (2026-07-28):
+  https://elpais.com/espana/2026-07-28/carrera-contra-el-fuego-en-avila-y-madrid-24-horas-criticas-antes-de-la-ola-de-calor.html
+- EL PAÍS, directo (2026-07-28):
+  https://elpais.com/espana/2026-07-28/ultima-hora-de-los-incendios-forestales-en-directo.html
+- Europa Press, despliegue (2026-07-25):
+  https://www.europapress.es/sociedad/noticia-desplegados-mas-2700-efectivos-426-medios-terrestres-gobierno-incendio-madrid-avila-20260725145330.html
+- EFE (2026-07-25): https://efe.com/espana/2026-07-25/espana-gobierno-despliega-efectivos-terrestres-aereos-incendio-madrid/
+- masdiario.es (2026-07-26): https://masdiario.es/el-despliegue-de-la-ume-que-combate-el-fuego-en-madrid-y-avila/
+- Europa Press, medios aéreos Turquía (2026-07-26):
+  https://www.europapress.es/sociedad/noticia-espana-recibira-dos-aviones-turcos-extincion-incendios-suman-medios-aereos-grecia-italia-20260726113222.html
+- Diario de León / ICAL (2026-07-28):
+  https://www.diariodeleon.es/castilla-y-leon/260728/2092524/incendio-avila-sigue-control-3-000-profesionales-tres-frentes.html
+
+### State-level deployment (Gobierno central) to the Ávila+Madrid fires
+
+Headline (Europa Press, 25 July): **2,737 efectivos, 426 medios terrestres, 21 medios aéreos**.
+
+Full breakdown per the Gobierno's own balance:
+- **UME**: 1,201 intervinientes, 405 medios terrestres
+- **Guardia Civil**: 1,085 agentes, 60 vehículos, 2 helicópteros (later updated: 1,807
+  agentes, 69 vehículos, 4 helicópteros per masdiario.es 26 July)
+- **Policía Nacional**: 220 agentes, 1 helicóptero
+- **Protección Civil**: 110 efectivos
+- **MITECO**: 103 personas, 4-5 BRIF, 11 aviones, 8 helicópteros, 1 UMAP (Unidad Móvil
+  de Análisis y Planificación)
+- **CSIC**: 18 investigadores asesorando
+- Later (26 July): totals updated to >3,400 efectivos, 23 aeronaves MITECO, 405 medios
+  terrestres UME
+
+### Madrid (Comunidad de Madrid) — INFOMA 2026 resources
+
+**IMPORTANT — re-audit (2026-07-29)**: the 6,110 figure below is the ENTIRE
+INFOMA civil-protection plan (general Bomberos urban+forest, Protección Civil
+volunteers, forest agents, Madrid 112). Wildfire-DEDICATED forces are substantially
+smaller. See corrected breakdown in `wff_operational_resources.csv` line 15
+(`confidence=unverified`). Key corrections:
+- The "1,700 bomberos forestales" label (Europa Press 2026-06-20) = the same 1,680
+  general Bomberos corps (urban + forest), NOT wildfire-dedicated forest brigades.
+- Actual wildfire-dedicated: ~419-450 TRAGSA-managed bomberos forestales (year-round),
+  ~61 public-sector bomberos forestales (currently INACTIVE due to labor dispute),
+  ~220 seasonal hires. Total: ~700-730, minus 61 inactive. See row 15 for full caveats.
+- The 10 helicopters serve the entire INFOMA (including urban), not exclusively wildfire.
+- The "571 efectivos diarios in extinction" figure (published by Comunidad in INFOMA
+  announcement) is the Comunidad's own estimate of daily on-duty extinction personnel
+  across ALL fire services — but the union claims forest-dedicated units in 19 parks
+  had a firetruck + 2-3 crew in prior years vs zero in 2026 (EL PAÍS, 2026-07-26).
+
+Published 2026-06-12 (pre-season) by Consejería de Medio Ambiente, Agricultura e Interior:
+- **Budget**: €52.7M (+3.5% vs 2025). Described as "cifra récord." Madrid claims to be
+  the European region with highest per-hectare investment.
+- **Personnel**: 6,110 professionals + volunteers (+2.3% vs 5,970 in 2025). Includes
+  1,680 Bomberos + 350 Agentes Forestales + 3,420 Protección Civil volunteers (113
+  local groups) + 180 Madrid 112 professionals. 571 efectivos diarios in extinction.
+  Plan Forestal 2026-2030: €160M total over the period, ~€52.8M (10M+/year) for
+  prevention specifically.
+- **Aircraft**: 10 helicopters (8 helipads), of which 3 lots contracted to SKY
+  HELICÓPTEROS, ELIANCE, PEGASUS respectively
+- **Vehicles**: 27 heavy pumps (bombas pesadas), 8 water tanker trucks (camiones
+  nodriza), 49 4x4 transport vehicles, 2 mechanized units
+- **Infrastructure**: 22 fire stations, 25 forest brigade stations, 17 heavy pump
+  stations, 38 watchtowers, 4 cameras, Grupo Especial de Drones
+- **History**: Since 2019, investment +38%, INFOMA personnel +23.5%.
+- **Deployed to the current fire** (Ayuso, 28 July): 300 regional firefighters/bomberos
+  forestales + agentes forestales, 50 ground vehicles, 10 aircraft. Additionally,
+  ≈400 efectivos (Delegado del Gobierno, 28 July) worked the río Cofio line overnight.
+
+Sources:
+- La Razón, "INFOMA 2026: 52 millones de euros y 6.100 efectivos" (2026-06-12):
+  https://www.larazon.es/madrid/infoma-2026-52-millones-euros-6100-efectivos-lucha-fuego_202606126a2bf81bf2a09b63649d0dbf.html
+- Europa Press, "Comunidad invierte más de 52,7 millones" (2026-06-12):
+  https://www.europapress.es/madrid/noticia-comunidad-invierte-mas-527-millones-campana-contra-incendios-forestales-eleva-operativo-6110-efectivos-20260612133851.html
+- El Periódico (2026-07-27): https://www.elperiodico.com/es/politica/20260727/comunidad-madrid-destina-52-7-132851630
+- Europa Press (2026-06-20): https://www.europapress.es/madrid/noticia-comunidad-tomo-nota-incendios-ano-pasado-disenar-plan-infoma-1700-bomberos-mas-formacion-20260620093950.html
+- El Diario de Madrid (2026-06-12): https://www.eldiariodemadrid.es/articulo/medio-ambiente/madrid-prevencion-lucha-incendios-forestales/20260612125940133780.html
+- madridinforma.eldiario.es (2026-06-17): https://madridinforma.eldiario.es/madrid-activa-la-epoca-de-alto-riesgo-de-incendios-forestales-con-6-110-efectivos/
+- Orden 1471/2026, BOCM (2026-04-29), approving the Plan Anual de Prevención, Vigilancia y Extinción de Incendios Forestales 2026:
+  https://bocm.es/boletin/CM_Orden_BOCM/2026/04/29/BOCM-20260429-23.PDF
+
+### Castilla y León (Ávila) — INFOCAL 2026 resources
+
+Published in multiple sources (Junta de Castilla y León, pre-season announcements, Cortes
+appearances, Plan Anual 2026 published in BOCYL):
+- **Budget headline (January 2026)**: €169.63M total for prevención y lucha contra incendios
+  forestales, of which €151M chapters VI+VII (investment), €16M personnel (after extending
+  fijo-discontinuo to full-year), €2.63M to Consejo Comarcal del Bierzo. Later press
+  summaries (June 2026) cite ~€160M for the operativo alone — scope discrepancy likely
+  due to budget year timing (prorogation of 2024 budgets with modifications).
+- **Personnel**: 5,075 professionals (+355 vs 2025), of which 837 puestos fijos-discontinuos
+  converted to fijos in Dec 2025. 129 ground teams (of which 49 transitioning to Tragsa),
+  24 helitransported teams (ELIF), 16 night teams (5 months), 163 watchtower posts. 9 UBA
+  (Unidad de Brigada y Autobomba) units.
+- **Aircraft**: 26 helicopters + 1 ACT (air cargo truck). Plus MITECO contribution: 6 helis,
+  2x 5,000L amphibious, 2x 3,500L amphibious, 1 ACO (coordination/observation). 24
+  ELIF-equipadas helibases during peligro alto.
+- **Ground vehicles**: 94 own fire trucks (autobombas, >3,000L tanks), 28 with night crews
+  year-round; 30 reserve trucks (2025 campaign); 105 in collaboration agreements with
+  municipalities/provinces. 38 pickups with water tanks. 27 new trucks being acquired.
+  20 bulldozer teams (preventive year-round) + 20 more in EPA (high danger). 2+ extra
+  water tankers (>25,000L each). 15 PMA vehicles. 15 drones. 322 surveillance cameras.
+- **Helibases in Ávila province**: El Barco (ELIF), Piedralaves (ELIF), Cebreros (ELIF),
+  Puerto El Pico (BRIF B — MITECO). Rosinos (Zamora) also covers Ávila with 2 ACT.
+- **Transition to Tragsa**: 49 of 111 ground teams transferring to state-owned Tragsa,
+  gradually, with full conversion by 2029, costing an additional €40M/year (54M→101M
+  over the ramp).
+- **Current deployment to Burgohondo fire** (Palencia en la Red, 26 July): INFOCAL
+  deployed 109 medios total (95 terrestres, 14 aéreos), 560 professionals. Breakdown:
+  16 ground teams, 12 helitransported teams, 23 autobombas, 7 bulldozers, plus MITECO
+  reinforcement and convoys from Galicia, Madrid, Extremadura, Murcia, Asturias,
+  Andalucía, and Portugal. 3,000 total professionals deployed across all three active
+  fronts (Diario de León, 28 July).
+
+Sources:
+- Junta de Castilla y León, "Medios de lucha" (official):
+  https://medioambiente.jcyl.es/web/es/medio-natural/incendios-forestales-medios-lucha.html
+- Europa Press, "periodo de riesgo alto" (2026-06-12):
+  https://www.europapress.es/castilla-y-leon/noticia-periodo-riesgo-alto-incendios-inicia-hoy-operativo-cyl-5075-profesionales-35-medios-aereos-20260612130848.html
+- El Debate (2026-06-13): https://www.eldebate.com/espana/castilla-y-leon/20260613/castilla-leon-prepara-otra-temporada-incendios-5000-profesionales-35-medios-aereos_428216.html
+- Servicios Emergencia (2026-02-18): https://serviciosemergencia.es/noticia/4816-castilla-y-leon-refuerza-la-lucha-contra-incendios-forestales-con-27-camiones-autobomba-y-cuatro-cuadrillas-helitransportadas/
+- El Día de Valladolid (2026-02-14): https://www.eldiadevalladolid.com/noticia/za519ab82-e907-4129-b01f2d15635f5ac7/202602/cyl-contara-este-ano-con-medio-millar-de-medios-antiincendios
+- Infobierzo / Palencia en la Red (2026-01-14):
+  https://www.infobierzo.com/castilla-y-leon/castilla-leon-presupuesto-prevencion-incendios-millones-euros_1031681_102.html
+- El Norte de Castilla (2026-06-03): https://www.elnortedecastilla.es/castillayleon/operativo-incendios-junta-suma-355-efectivos-partida-20260603195121-nt.html
+- La Razón (2025-12-23): https://www.larazon.es/castilla-y-leon/junta-castilla-leon-incorporara-sus-compromisos-operativo-incendios-prorroga-presupuestos-2026_20251223694afbd9ea66eb73531d68af.html
+- Diario de Castilla y León (2025-10-14): https://www.diariodecastillayleon.es/castilla-y-leon/251014/102464/lucha-incendios-dispara-gasto-medio-ambiente-presupuestos.html
+- El Día de Valladolid (2026-04-22): https://www.eldiadevalladolid.com/noticia/zff9728e5-f2cc-477e-b4b2cbb1e915a485/202604/la-junta-refuerza-con-otros-15m-el-operativo-antiincendios
+- Palencia en la Red, despliegue actual (2026-07-26): https://www.palenciaenlared.es/el-operativo-infocal-mantiene-desplegados-109-medios-y-560-profesionales-para-combatir-el-incendio-de-burgohondo/
+- Diario de León / ICAL (2026-07-28): https://www.diariodeleon.es/castilla-y-leon/260728/2092524/incendio-avila-sigue-control-3-000-profesionales-tres-frentes.html
+
+### National-level funding context (journalistic findings)
+
+Several investigation pieces from the same week provide the macro context for both regions:
+
+1. **Prevention spend halved (ASEMFO/MITECO data)**:
+   - Prevention investment fell 51% from €364M (2009) to €175.8M (2022) — last year with
+     consolidated data. Never recovered from the 2011 crash (57% single-year cut).
+   - Extinction spend held stable at ~€417M/year over the same period.
+   - Prevention's share of total fire budget: 47% (2009) → 30% (2022).
+   - Target per Plan Forestal Español 2022-2032: 60/40 prevention/extinction ratio.
+     Reality: 12% prevention, 78% extinction per sector analysts.
+   - Sources: Gaceta.es (2026-07-28): https://gaceta.es/espana/la-inversion-publica-en-prevencion-de-incendios-forestales-se-ha-reducido-un-50-en-la-ultima-decada-municipios-llevan-12-anos-sin-hacer-un-cortafuegos-20260728-0113/
+     La Razón (2026-07-21): https://www.larazon.es/sociedad/espana-destina-78-gasto-apagar-fuegos-solo-12-prevenirlos-ano-doble-bosque-calcinado_202607216a5f1f86f172396e89eb4fb0.html
+     El Plural (2026-07-05): https://www.elplural.com/politica/espana/paradoja-incendios-espana-menos-prevencion-mismos-medios-peores-fuegos-historia_394724102
+     El Debate (2025-08-16): https://www.eldebate.com/sociedad/sociedad-medio-ambiente/20250816/tijeretazo-sanchez-gasto-incendios-dispara-diez-terreno-arrasado-fuego_326023.html
+
+2. **EU NextGen funds — only 26.4% executed**:
+   - €401M allocated specifically for forest management / fire prevention within the
+     Component 4 of the PRTR (Plan de Recuperación). As of July 2026, only €105.7M
+     formalized/granted (26.4%) per AIReF. ~295M remain unmobilized.
+   - Of 310+ planned projects, ~120 have started, ~190 are still pending.
+   - CCAA have managed ~58% (€61.6M) of what has been executed; the State directly
+     managed only ~€28M.
+   - MITECO counters with a broader figure: €1,709M in adaptation measures with
+     fire-prevention impact (includes water, ecosystem restoration, etc.).
+   - Sources: El Independiente (2026-07-28): https://www.elindependiente.com/espana/2026/07/28/solo-se-ha-ejecutado-el-26-por-ciento-de-los-401-millones-de-euros-de-fondos-europeos-para-luchar-contra-los-incendios/
+     Vozpópuli (2026-07-11): https://www.vozpopuli.com/economia/el-caos-administrativo-bloquea-312-millones-de-fondos-para-luchar-contra-los-incendios.html
+     OK Diario (2026-07-28): https://okdiario.com/economia/cuentas-publicas/airef-desmonta-propaganda-antiincendios-del-gobierno-solo-gasto-cuarta-parte-fondos-europeos-19082484
+
+3. **State-level PGE (prorogued from 2023) fire budget**:
+   - 2026: €98.7M baseline, expanded to €113.37M (+14.69M, +12% vs 2025).
+   - Prevention component within this: only ~€11.75M executed by May (10.4% of budget,
+     up from 8.2% in 2025).
+   - Government claims: +34% extinction spending 2024-2026, +30% prevention spending,
+   +47% BRIF budget.
+   - Sources: Artículo14 (2026-07-11): https://www.articulo14.es/economia/el-gobierno-solo-ha-destinado-el-10-del-presupuesto-para-la-prevencion-de-incendios-20260711.html
+     EFE (2026-07-28): https://efe.com/espana/2026-07-28/gobierno-gasto-extincion-incendios-entre-2024-2026/
+     20 Minutos (2026-07-28): https://www.20minutos.es/nacional/gobierno-dice-haber-destinado-130-millones-gestion-forestal-aunque-reitera-que-corresponde-las-ccaa-prevenir-incendios_7019753_0.html
+
+4. **Castilla y León chronic under-execution (journalistic evidence)**:
+   - EL PAÍS (2026-06-25) documented: promised helicopter reinforcements not delivered
+     to multiple bases at start of season; El Oterico base partially built (no fence,
+     no kitchen, donated lockers); El Barco de Ávila helicopter missing at campaign
+     start. "Cuadrillas incompletas, falta de helicópteros, camiones parados porque no
+     hay conductores." Only ~50% of promised equipment arrived.
+   - 12 aeronaves MITECO vs 4 de la Junta in León fires (elDiario.es, 2026-06-25).
+   - Source: https://elpais.com/espana/2026-06-25/los-bomberos-de-castilla-y-leon-se-preparan-para-otro-verano-con-falta-de-helicopteros-y-personal.html
+     https://elbierzo.eldiario.es/el-bierzo/12-aeronaves-frente-cuatro-gobierno-vuelve-salir-rescate-junta-emergencia-incendios-leon_1_13332526.html
+
+### Updating this dataset
+
+The data found in this pass is structurally different from the earlier rows in `wff_spending.csv`:
+- Budget figures from press (Junta's own Cortes testimony, budget-law proposals) represent
+  approved/presupuestado amounts, not executed/liquidado — same caveat as C9 for all other
+  rows.
+- Operational resources (personnel, aircraft, vehicles) are press-relayed from each CCAA's
+  own seasonal-device announcements — these are real, but the exact headcounts/counts depend
+  on what each CCAA chooses to disclose.
+- The national-level findings (EU funds, prevention-spend trend) are not CCAA×year rows —
+  they're added to this index as macro context and could feed a separate national-aggregate
+  time series in a future T8 expansion.
+
+See also separate report `reports/wff_2026_crisis_response.md` for a consolidated narrative.
+
+### Next step after round 3
+
+Tracing every `confidence=low` row's `source_ref` to a live, re-verifiable URL
+(most of round 3's rows were either recovered from a crashed-agent cache or
+cited without a captured URL); and T6's few `proyecto`-stage total-budget rows
+(Aragón, Cantabria, Castilla y León, Extremadura) should be confirmed against
+final Cortes/Asamblea approval once available.
+
+## Round 4 (2026-07-29) — Deepened coverage: Cataluña, Canarias, Baleares, Murcia, Cantabria
+
+Four parallel research agents searched for journalistic/news sources in Spanish
+and Catalan for each CCAA. All new sources are documented per-row in
+`wff_spending.csv` and `wff_operational_resources.csv`. Key findings:
+
+### Cataluña
+
+Major revision. The 18M€ figure in the previous pass was the **historical**
+Pla de Prevenció 2022-2025 (4yr, 72M€ total, 18M€/yr, superseded). Current
+spending is substantially larger:
+
+- **387M€** (2026 proposed, program 223, Bombers de la Generalitat — urban + wildfire
+  combined, same scope as existing 2020/2021 rows). 2025 actual executed: 367M€.
+  2026 proposed was 392M€ but not passed (budget withdrawn Mar 2026, approved Jul 2026).
+- **36.8M€/year additional** (new Estratègia Antiincendis, 14 containment axes,
+  professionalization, firebreak strips). Total: 131.8M€ by 2033.
+- **15M€/year** firebreak strips (subset of 36.8M€, 5yr × 15M€ = 75M€, 10x previous).
+- **Academic estimate** (The Conversation 2026-07-27): 327M€ wildfire-specific for
+  Catalonia (excluding urban fire), vs 367-387M€ total program 223.
+- Pla Bombers 2030: target 4,000 professionals.
+- Source key: Cataluña "encara no separa de manera clara la despesa destinada a
+  prevenció i la dedicada a extinció" (still does not separate prevention/extinction).
+
+Sources:
+- Regió7 / La Ciutat (2026-02-27): Interior budget presentation, 387M€ for program 223
+- El Periódico / Empordà (2026-05-05): 367M€ 2025 actual, 392M€ 2026 proposal
+- La Vanguardia (2026-05-11) / Europa Press (2026-05-12): 36.8M€ forest strategy
+- Crónica Global (2026-07-17): 15M€ firebreak strips (replaces earlier misattribution)
+- RTVE Catalunya (2026-06-12): Summer campaign resources
+- The Conversation (2026-07-27): Academic cross-CCAA estimate
+- Govern.cat (2022): Original 72M€ prevention plan (now superseded)
+- Ara.cat (2026-07-10): 131.8M€ containment axes cost by 2033
+
+### Canarias
+
+No single consolidated regional wildfire budget exists — competencies split
+across Gobierno de Canarias + 7 cabildos insulares. Best available figures:
+
+- **EIRIF (regional)**: €11.6M/year (€39M/3yr incl. €15M modernization)
+- **Tenerife**: €26.5M (Servicio Técnico de Gestión Forestal — prevention+extinction)
+- **Gran Canaria**: ~€5M (Céntimo Verde Forestal) + UOFF (undisclosed)
+- **Fuerteventura**: €1.28M (fire service — exempt from INFOCA per Decree 180/2025)
+- **La Gomera**: €2.5M (annual campaign)
+- **Lanzarote**: €9.01M (Consorcio, all emergencies)
+- **El Hierro**: €4.27M (4yr TRAGSA contract)
+- **La Palma**: €620K (prevention+extinction)
+
+Added EIRIF as closest figure to a regional wildfire budget (`confidence=unverified`,
+`coverage=partial` — excludes island-level spending where most competencies sit).
+Island-level budgets documented in notes but not added as rows (would sum to
+a misleading total across inconsistent scope boundaries).
+
+### Islas Baleares
+
+Confirmed no consolidated wildfire total exists. Money split across two agencies:
+- **DGMNGF** (Direcció General de Medi Natural i Gestió Forestal): >60M€ total budget
+  (covers all natural environment, not just fires). Fire-specific sub-lines within:
+  Gestió Forestal ~9M€, Sanitat Forestal 4.3M€.
+- **IBANAT** (Institut Balear de la Natura): ~23M€ total budget (extinction ops +
+  prevention + nature conservation). IBANAT brigades form core of extinction response.
+- Added IBANAT 23M€ row as closest proxy (`coverage=partial`, `confidence=low`),
+  clearly noted as including non-fire costs.
+
+Source: Balears Vadevi (2025-06-08), conseller Simonet Parliament testimony.
+
+### Región de Murcia
+
+Reconciled conflicting figures — they refer to different scope levels/time horizons:
+- **28M€** (El Debate): PROJECTED annual average of the 2028-2032 future contract
+  (140M€/5yr), NOT the current 2026 budget.
+- **~16M€/year** (current 2023-2027 contract: 80M€ total for Servicio de Prevención
+  Selvícola y Defensa del Patrimonio Natural). Covers 350 forest firefighters,
+  rising to 379 in 2028 (+29 posts, 91% 12-month contracts).
+- **21M€ over 20 months**: Additional prevention spending (forest decline treatments).
+- **7.2M€/2yr**: Aerial means (1 coordination aircraft + 3 firefighting helicopters +
+  1 BRIHELI).
+- **450+ daily personnel** (Plan INFOMUR): 19 BRIFOR brigades, 4 BIR, 3 BRIHELI,
+  145 daily professional firefighters, ~700 total plantilla including municipal.
+- The 14M€ figure from earlier pass was NOT found in any source — possible explanation:
+  a narrower scope (e.g., Rural Development ministry's prevention-only budget).
+
+Sources: La Opinión (2026-07-20/27), elDiario.es Murcia (2026-07-20), La Verdad
+(2026-07-20), Totana Noticias (2025-09-19), BORM Plan INFOMUR 2026.
+
+### Cantabria
+
+Reconciled conflicting figures — NOT contradictory, different scope levels:
+- **26.3M€** (official Govt announcement 2026-01-13): TOTAL cross-government wildfire
+  investment (all departments, incl. infrastructure, personnel, ops, equipment).
+- **7M€** (Plan Anual de Incendios Forestales 2026, BOC Dec 2025): Narrower — budget
+  of the Rural Development ministry's statutory annual plan. 2025 version was 8.4M€.
+- **31.5M€** (Presidencia budget): Even broader — total Protección Civil y Emergencias.
+- **3.5M€**: Helicopter contract (Maya Dama/Delta Romeo).
+- Key finding: second helicopter tender (1M€/3yr, for year-round firefighting) went
+  **DESIERTA** June 2026 — no bidders (insufficient budget, rigid specs, no base,
+  no cost-of-living adjustment). Cantabria still lacks a year-round dedicated
+  firefighting helicopter (Delta Romeo is 365-day but lacks water-bombing cert).
+
+Sources: Gobierno de Cantabria (2026-01-13), Europa Press, elDiario Cantabria,
+BOC Plan Anual 2026, Castro Digital (2026-06-25), Europa Press (2026-04-28).
+
+### Operational resources updated
+
+All 5 CCAAs above had their `wff_operational_resources.csv` rows enriched with the
+new findings (personnel breakdowns, aircraft counts, vehicle numbers, fleet contracts).
+See that file for row-level source citations.
+
+### SPEC.md §T update recommendations
+
+- **T2/T3**: Cataluña, Canarias, Baleares, Murcia, Cantabria all now have improved
+  coverage beyond a single sourced figure. Canarias still `coverage=partial` but no
+  longer empty. Cataluña coverage markedly deepened (5 rows now). Gap list narrowed
+  to: Aragón (still `supera los 54M`, no exact figure), La Rioja (20M vs 9.2M
+  unresolved), Navarra (42.7M includes general firefighting).
+- **T8**: Cataluña now has 5 sourced years (2020 liquidado, 2021 presupuestado+liquidado,
+  2025 liquidado, 2026 presupuestado). Murcia now has 4 rows (current + future contract,
+  prevention, aerial means).
+- **T10/T11**: EGIF data + operational resources both updated with Canarias, Murcia,
+  Cataluña, Cantabria, Baleares enrichments.
