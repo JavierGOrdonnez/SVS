@@ -24,16 +24,27 @@ import { expect } from '@playwright/test';
  * as the white "España" reference line) — true for both sexual-crimes
  * panels, false for mi-stock-region (migration's stock_by_region has no
  * `spain` key at all, so there's no España legend entry to test there).
+ *
+ * `dataFile`/`dataKey` locate this panel's raw series in docs/data/*.json —
+ * used by the data-element-click test to independently verify *which*
+ * region got drilled into (not just that *some* drill happened), by
+ * comparing the post-click dataset labels against that region's own
+ * `by_country.countries` list fetched straight from the JSON the app itself
+ * loads.
  */
 export const DRILL_PANELS = [
   { id: 'sx-nationality-victims', style: 'bar', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
-    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'],
+    dataFile: 'sexual_crimes.json', dataKey: 'nationality_victims' },
   { id: 'sx-nationality-perpetrators', style: 'bar', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
-    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'],
+    dataFile: 'sexual_crimes.json', dataKey: 'nationality_perpetrators' },
   { id: 'sx-peligrosidad', style: 'line', tab: 'sexual-crimes', region: 'Africa', hasSpain: true,
-    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'] },
-  { id: 'mi-stock-region', style: 'bar', tab: 'migration', region: 'Africa', hasSpain: false,
-    regions: ['Africa', 'Latin America', 'Anglo', 'EU', 'Non-EU Europe', 'Asia'] },
+    regions: ['Africa', 'America', 'Asia', 'Europe', 'Other'],
+    dataFile: 'sexual_crimes.json', dataKey: 'peligrosidad' },
+  { id: 'mi-stock-region', style: 'bar', tab: 'migration', region: 'Africa', hasSpain: true,
+    regions: ['Africa', 'Latin America', 'Anglo', 'EU', 'Non-EU Europe', 'Asia'],
+    dataFile: 'migration.json', dataKey: 'stock_by_region' },
 ];
 
 /** Panel IDs that use vline annotations */

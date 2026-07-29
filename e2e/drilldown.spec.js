@@ -54,30 +54,70 @@ test.describe('drill-down via legend click', () => {
   }
 });
 
-// No chart in docs/app.js wires up a data-point/element click handler —
-// regionDrilldownChart() only defines `plugins.legend.onClick`. Drilling in
-// by clicking a bar/line point directly is not an interaction the app
-// currently supports, so there is nothing here to test yet. Kept as an
-// explicit skip (not deleted) pending a product decision on whether to add
-// that interaction — see e2e/README.md.
 test.describe('drill-down via data-element click', () => {
 
-  for (const { id, region, tab } of DRILL_PANELS) {
-    test.skip(`[${id}] clicking a data point of "${region}" drills in`, async ({ page }) => {
+  for (const { id, region, tab, regions, dataFile, dataKey } of DRILL_PANELS) {
+    test(`[${id}] clicking a data point of "${region}" drills in`, async ({ page }) => {
       await page.goto('/');
       await switchTab(page, tab);
       await waitForCharts(page);
       await expectChartMounted(page, id);
 
+      expect(await isDrilled(page, id, regions)).toBe(false);
+
+      // find the dataset index for the region
       const dsIdx = await page.evaluate(({ id, r }) => {
         const c = document.getElementById(id)._chart;
         return c.data.datasets.findIndex(d => d.label === r);
       }, { id, r: region });
       expect(dsIdx).toBeGreaterThanOrEqual(0);
 
+      // click the first data point of that region's line
       await clickDataElement(page, id, dsIdx, 0);
       await page.waitForTimeout(300);
+
+      expect(await isDrilled(page, id, regions)).toBe(true);
     });
+
+    // Regression guard against an implementation that drills into "whatever
+    // dataset happens to be first" regardless of which point was actually
+    // clicked. Chart.js's default click handling reports the elements found
+    // by the chart's hover `interaction` mode (here 'index'/intersect:false,
+    // set in baseOpts for tooltips) — that mode returns one element per
+    // dataset at the nearest x-index, not just the element under the
+    // cursor, so naively using its first entry would always drill into
+    // `region` (Africa, coincidentally index 0 in every DRILL_PANELS entry)
+    // even when a different region's line/bar was clicked.
+    const secondRegion = regions.find((r) => r !== region);
+    if (secondRegion) {
+      test(`[${id}] clicking a data point of "${secondRegion}" drills into that region specifically`, async ({ page }) => {
+        await page.goto('/');
+        await switchTab(page, tab);
+        await waitForCharts(page);
+        await expectChartMounted(page, id);
+
+        const dsIdx = await page.evaluate(({ id, r }) => {
+          const c = document.getElementById(id)._chart;
+          return c.data.datasets.findIndex(d => d.label === r);
+        }, { id, r: secondRegion });
+        expect(dsIdx).toBeGreaterThanOrEqual(0);
+
+        await clickDataElement(page, id, dsIdx, 0);
+        await page.waitForTimeout(300);
+
+        expect(await isDrilled(page, id, regions)).toBe(true);
+
+        const expectedCountries = await page.evaluate(async ({ file, key, r }) => {
+          const d = await fetch(`data/${file}`).then((res) => res.json());
+          return d[key].by_country[r].countries;
+        }, { file: dataFile, key: dataKey, r: secondRegion });
+
+        const labels = await getDatasetLabels(page, id);
+        for (const country of expectedCountries) {
+          expect(labels).toContain(country);
+        }
+      });
+    }
   }
 });
 

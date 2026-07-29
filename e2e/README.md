@@ -29,32 +29,49 @@ Three product-level questions surfaced while making the suite actually pass
 in a real browser (the previous version, added in "Add playwright drilldown
 tests", had never been run against one — every one of its tests failed
 outright once executed, for reasons below plus a couple of test-only bugs
-already fixed here). None of these are things a test suite should silently
-decide, so they're flagged rather than papered over:
+already fixed here). None of these were things a test suite should silently
+decide, so they were flagged for the user rather than papered over. Two are
+now resolved:
 
-1. **Confidence filter is a no-op.** The pills (`svs-confidence-filter`,
-   "Show confidence") wire up a `conf-change` event and every mounted panel
-   does receive `refresh()`, but no chart builder in `docs/app.js` actually
-   reads the `activeConf` argument it's given, and `<svs-chart-panel>` never
-   hides itself based on its own `confidence` attribute either. Toggling a
-   tier currently just tears down and rebuilds every chart with identical
-   data — the control has no visible effect. `smoke.spec.js`'s
-   confidence-filter test only checks the pill's own pressed-state/event
-   wiring, not that anything downstream changes, since that behavior doesn't
-   exist yet to test.
-2. **No data-point click-to-drill.** `drilldown.spec.js` had a whole
-   `test.skip`'d describe block ("drill-down via data-element click")
-   asserting that clicking a bar/line point drills in, same as clicking its
-   legend entry. `regionDrilldownChart()` only wires `plugins.legend.onClick`
-   — there's no `options.onClick` at all, so nothing in the app currently
-   supports that interaction. Left as `test.skip` (not deleted) pending a
-   call on whether to build it or drop the tests.
-3. **`mi-stock-region` has no España reference line.** Unlike the two
-   sexual-crimes drill panels, `docs/data/migration.json`'s
-   `stock_by_region` has no `spain` key at all, so there's no "clicking
-   España does nothing" case to test there — that one test is skipped for
-   this panel only (see `hasSpain` in `helpers.js`'s `DRILL_PANELS`). Worth
-   a look at whether that's intentional or just an omission from T68.
+1. **Confidence filter is a no-op — still open.** The pills
+   (`svs-confidence-filter`, "Show confidence") wire up a `conf-change` event
+   and every mounted panel does receive `refresh()`, but no chart builder in
+   `docs/app.js` actually reads the `activeConf` argument it's given, and
+   `<svs-chart-panel>` never hides itself based on its own `confidence`
+   attribute either. Toggling a tier currently just tears down and rebuilds
+   every chart with identical data — the control has no visible effect.
+   `smoke.spec.js`'s confidence-filter test only checks the pill's own
+   pressed-state/event wiring, not that anything downstream changes, since
+   that behavior doesn't exist yet to test.
+2. **~~No data-point click-to-drill.~~ Resolved.** `regionDrilldownChart()`
+   only wired `plugins.legend.onClick`; clicking a bar/line point directly
+   did nothing. Built via TDD (un-skipped the existing test, confirmed it
+   failed, then implemented): a shared `handleRegionClick()` now backs both
+   the legend's `onClick` and a new top-level `onClick` that does its own
+   `getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true)`
+   hit-test — deliberately *not* reusing the `elements` Chart.js's default
+   click handling passes in, since that follows `baseOpts`' hover
+   `interaction: { mode: 'index', intersect: false }` (tuned for tooltips)
+   and would return one element per dataset at the nearest x-index
+   regardless of which one was actually clicked, which would have made
+   every click drill into whichever region happens to be first in the
+   dataset array. `drilldown.spec.js` has a regression test for exactly that
+   failure mode (clicking a *non-first* region's point).
+3. **~~`mi-stock-region` has no España reference line.~~ Resolved** — was an
+   omission, not intentional. Added a `spain` series to `stock_by_region`
+   (`src/migration/build_dashboard_data.py`, `_spain_stock_series()`): INE
+   Padrón total population minus the 50-nationality foreign stock, same
+   subtraction approach the T70 Spanish age pyramid already uses. First cut
+   put it on the shared axis and made every region line unreadable (Spain's
+   ~40M dwarfs any region's ~1-2.5M) — screenshotted and confirmed with the
+   user before proceeding. Now on its own secondary axis
+   (`regionDrilldownChart`'s new `opts.spainSecondaryAxis`, opt-in per panel
+   since the sexual-crimes drill panels' own `spain` series is already the
+   same order of magnitude as their region series and doesn't need this).
+   The user also asked for a %-of-total-population share line; added as a
+   dashed secondary-axis series on `mi-stock` instead (`foreign_pct_of_total`
+   in `stock_trend`), which already had a single raw-count line and room for
+   a normalized companion, rather than on `mi-stock-region`.
 
 One real bug (not just a test-writing bug) *was* fixed as part of getting
 green: `docs/app.js`'s `↩`-back-handle click handler reset `drilled` and

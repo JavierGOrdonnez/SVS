@@ -119,6 +119,14 @@ function regionDrilldownChart(cv, s, opts = {}) {
   const drillStyle = opts.drillStyle || 'bar';   // 'bar' (migration stock) | 'line' (peligrosidad)
   let drilled = null; // null = aggregate view, else a region name
   const hasSpain = 'spain' in s;
+  // mi-stock-region's España line is Spain's total resident population
+  // (~40M) against region lines in the hundreds-of-thousands to low
+  // millions — sharing one axis flattens every region to a line hugging
+  // zero. sexual-crimes' two nationality panels don't have this problem
+  // (their `spain` series is the same unit/order-of-magnitude as the
+  // region series), so the secondary axis is opt-in per panel, not
+  // automatic just because `spain` exists.
+  const spainOnSecondaryAxis = !!opts.spainSecondaryAxis;
   let chart;
 
   const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
@@ -128,7 +136,8 @@ function regionDrilldownChart(cv, s, opts = {}) {
     return { type: 'line', label: 'España', data: s.spain,
       borderColor: '#fff', backgroundColor: '#fff22',
       borderWidth: 3, pointRadius: 3, pointHoverRadius: 5,
-      tension: 0.2, _region: 'España', stack: 'spain' };
+      tension: 0.2, _region: 'España', stack: 'spain',
+      ...(spainOnSecondaryAxis ? { yAxisID: 'y1' } : {}) };
   }
 
   function barAxisMax(region) {   // only used in 'bar' mode
@@ -191,46 +200,79 @@ function regionDrilldownChart(cv, s, opts = {}) {
 
   const yMax = opts.yMax;
 
+  // Shared by the legend-click and data-point-click handlers below: applies
+  // the drill/undrill/back-handle transition for a clicked label. Returns
+  // true if `txt` was one of those (so the caller stops there); false means
+  // it wasn't a region/back-handle label, so the caller can fall through to
+  // whatever it does for a plain dataset label (legend does a show/hide
+  // toggle; a chart-area point click does nothing — a country line isn't
+  // itself drillable).
+  function handleRegionClick(ci, txt) {
+    if (txt === 'España') return true;
+    if (txt.startsWith('↩ ')) {
+      drilled = null;
+      ci.data.datasets = buildDatasets();
+      ci.options.scales.x.stacked = false;
+      ci.options.scales.y.stacked = false;
+      ci.options.scales.y.max = yMax;
+      ci.update();
+      return true;
+    }
+    if (s.regions.includes(txt)) {
+      drilled = (drilled === txt) ? null : txt;
+      ci.data.datasets = buildDatasets();
+      ci.options.scales.x.stacked = !!(drilled && drillStyle === 'bar');
+      ci.options.scales.y.stacked = !!(drilled && drillStyle === 'bar');
+      ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : yMax;
+      ci.update();
+      return true;
+    }
+    return false;
+  }
+
   return new Chart(cv, {
     type: 'bar',
     data: { labels: s.years.map(String), datasets: buildDatasets() },
-    options: baseOpts({
-      x: { stacked: false },
-      y: { stacked: false, beginAtZero: true, max: yMax },
-      plugins: {
-        legend: {
-          display: true,
-          labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
-          onClick: function(evt, item, _legend) {
-            const ci = (_legend && _legend.chart) || (this && this.chart);
-            if (!ci) return;
-            const txt = item.text;
-            if (txt === 'España') return;
-            if (txt.startsWith('↩ ')) {
-              drilled = null;
-              ci.data.datasets = buildDatasets();
-              ci.options.scales.x.stacked = false;
-              ci.options.scales.y.stacked = false;
-              ci.options.scales.y.max = yMax;
-              ci.update();
-              return;
-            }
-            if (s.regions.includes(txt)) {
-              drilled = (drilled === txt) ? null : txt;
-              ci.data.datasets = buildDatasets();
-              ci.options.scales.x.stacked = !!(drilled && drillStyle === 'bar');
-              ci.options.scales.y.stacked = !!(drilled && drillStyle === 'bar');
-              ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : yMax;
-              ci.update();
-              return;
-            }
-            const i = item.datasetIndex;
-            if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
-            else { ci.show(i); item.hidden = false; }
+    options: {
+      ...baseOpts({
+        x: { stacked: false },
+        y: { stacked: false, beginAtZero: true, max: yMax },
+        scales: spainOnSecondaryAxis ? {
+          y1: {
+            position: 'right', beginAtZero: false,
+            grid: { drawOnChartArea: false },
+            ticks: { color: TICK, font: { size: 11 }, callback: (v) => (v / 1e6).toFixed(0) + 'M' },
+          },
+        } : {},
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
+            onClick: function(evt, item, _legend) {
+              const ci = (_legend && _legend.chart) || (this && this.chart);
+              if (!ci) return;
+              if (handleRegionClick(ci, item.text)) return;
+              const i = item.datasetIndex;
+              if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
+              else { ci.show(i); item.hidden = false; }
+            },
           },
         },
+      }),
+      // Clicking a region's line/bar directly (not just its legend entry)
+      // drills in the same way. baseOpts' `interaction: { mode: 'index',
+      // intersect: false }` is tuned for hover tooltips (one element per
+      // dataset at the nearest x, regardless of which one the cursor is
+      // actually over) and would misidentify which region was clicked if
+      // reused here, so this does its own precise hit-test instead of
+      // trusting the `elements` Chart.js passes in.
+      onClick: (evt, _elements, chart) => {
+        const hits = chart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+        if (!hits.length) return;
+        const ds = chart.data.datasets[hits[0].datasetIndex];
+        handleRegionClick(chart, ds.label);
       },
-    }),
+    },
   });
 }
 
@@ -560,11 +602,22 @@ function buildMigration() {
     data: { labels: s.ages, datasets: [{ data: s.values, backgroundColor: ACCENT + 'cc' }] },
     options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 } } } }) }); });
   register('mi-stock', (cv) => { const s = d.stock_trend; return new Chart(cv, { type: 'line',
-    data: { labels: s.years, datasets: [line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true })] },
-    options: baseOpts() }); });
+    data: { labels: s.years, datasets: [
+      line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true }),
+      line('% of total population', s.foreign_pct_of_total, '#fff',
+        { fill: false, borderDash: [5, 4], pointRadius: 1.5, yAxisID: 'y1', spanGaps: false }),
+    ] },
+    options: baseOpts({
+      plugins: { legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } } },
+      scales: { y1: {
+        position: 'right', beginAtZero: true,
+        grid: { drawOnChartArea: false },
+        ticks: { color: TICK, font: { size: 11 }, callback: (v) => v + '%' },
+      } },
+    }) }); });
   // T72: region-drilldown chart (shared with buildSexual()'s two nationality
   // panels — see regionDrilldownChart() below for the interaction).
-  register('mi-stock-region', (cv) => regionDrilldownChart(cv, d.stock_by_region));
+  register('mi-stock-region', (cv) => regionDrilldownChart(cv, d.stock_by_region, { spainSecondaryAxis: true }));
 
   // population pyramids (T69/T70): horizontal bars, males negative/left,
   // females positive/right, oldest band at the top (reverse of PYRAMID_AGES'
