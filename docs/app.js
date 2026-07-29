@@ -497,7 +497,7 @@ function buildSexual() {
       type: 'line',
       data: { labels: p.years.map(String), datasets },
       options: baseOpts({
-        y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK, callback: (v) => v + '/100k' } },
+        y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK, callback: (v) => v + '/1k' } },
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
         },

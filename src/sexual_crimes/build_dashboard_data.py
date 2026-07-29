@@ -278,7 +278,7 @@ PELIGROSITY_AGE_BANDS = ("15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "
 
 
 def _peligrosity(informe, migration_rows):
-    """Per-100k male 15-59 perpetrator rates by nationality (identified
+    """Per-1k male 15-59 perpetrator rates by nationality (identified
     perpetrators from MIR Informe, denominator from migration_spain.csv
     stock_nationality + total population).
 
@@ -357,7 +357,7 @@ def _peligrosity(informe, migration_rows):
         den = pop[iso].get(y)
         if den is None or den == 0:
             return None
-        return round(num / den * 100000, 2)
+        return round(num / den * 1000, 2)
 
     group_label = {
         "ES": "España", "MA": "Marruecos", "RO": "Rumanía", "CO": "Colombia",
