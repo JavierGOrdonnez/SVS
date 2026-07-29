@@ -310,6 +310,64 @@ def _working_age_composition_trend(rows, codes, years):
     return {"years": years, "series": series}
 
 
+REGULARIZATION_CSV = "data/raw/regularization_2026.csv"
+REG_YEARS_BACK = 3  # how many real years of history to show before the projected point
+
+
+def _load_regularization_applications():
+    """{iso2: applications_estimated} for the individually-named nationalities
+    in data/raw/regularization_2026.csv (excludes the unattributed 'OTHER' row)."""
+    out = {}
+    for r in load_rows(REGULARIZATION_CSV):
+        if r["iso2"] != "OTHER":
+            out[r["iso2"]] = float(r["applications_estimated"])
+    return out
+
+
+def _stock_projection_2026(rows):
+    """T85: illustrative-only projection -- takes each regularization-named
+    nationality's most recent REAL registered stock (2025, or 2024 if 2025
+    isn't available for that nationality) and adds its full 2026
+    regularization-application count, as if every application were approved
+    and every applicant were entirely new to the registered stock. This is
+    NOT a forecast: not every application will be approved, and some
+    applicants may already be counted in stock via other channels (e.g. a
+    prior census/padron registration despite irregular immigration status).
+    Rendered as a dashed/shadow extension of the real trend line, clearly
+    flagged `is_projected` per point so the frontend never conflates it with
+    real data (V14-adjacent: never present an estimate as if it were
+    measured)."""
+    applications = _load_regularization_applications()
+    stock_by_code_year = defaultdict(dict)
+    for r in rows:
+        if (r["series"] == "stock_nationality" and r["sex"] == "all" and r["age_group"] == "all"
+                and r["country_of_origin"] in applications):
+            stock_by_code_year[r["country_of_origin"]][int(r["year"])] = int(r["value"])
+
+    series = {}
+    for code, applied in applications.items():
+        by_year = stock_by_code_year.get(code)
+        if not by_year:
+            continue
+        years_sorted = sorted(by_year)
+        latest_year = years_sorted[-1]  # 2025 if present, else falls back to the latest real year (e.g. 2024)
+        shown_years = [y for y in years_sorted if y >= latest_year - REG_YEARS_BACK]
+        projected_stock = by_year[latest_year] + applied
+        series[COUNTRY_NAMES.get(code, code)] = {
+            "years": shown_years + [2026],
+            "stock": [by_year[y] for y in shown_years] + [round(projected_stock)],
+            "is_projected": [False] * len(shown_years) + [True],
+            "base_year": latest_year,
+            "applications_added": round(applied),
+        }
+    return {
+        "source": "migration_spain.csv (registered stock, Eurostat migr_pop1ctz) + data/raw/regularization_2026.csv (2026 regularization application share)",
+        "confidence": "low",
+        "caveat": "ILLUSTRATIVE ONLY, not a forecast. The 2026 point = latest real registered stock (2025, or 2024 where 2025 isn't yet available) + that nationality's FULL estimated regularization-application count, assuming every application is approved and represents someone not already in the registered stock -- neither assumption holds in reality (not all applications will be approved; some applicants may already appear in stock via other registration channels). Shown as a dashed/shadowed final segment, distinct from the solid real-data line.",
+        "series": series,
+    }
+
+
 def build():
     """Return the migration-tab data blob (also reused by build_dashboard.py)."""
     rows = load_rows(CSV_PATH)
@@ -421,6 +479,7 @@ def build():
                            if r["series"] == "stock_nationality" and r["nationality"] in DZ_MA})
     s10 = _country_age_pyramid(rows, DZ_MA, pyramid_year)
     s11 = _working_age_composition_trend(rows, DZ_MA, dz_ma_years)
+    s12 = _stock_projection_2026(rows)
 
     return {
         "annual_inflow": s1,
@@ -434,6 +493,7 @@ def build():
         "stock_age_pyramid_es": s9,
         "stock_age_pyramid_dz_ma": s10,
         "dz_ma_working_age_trend": s11,
+        "stock_projection_2026": s12,
     }
 
 

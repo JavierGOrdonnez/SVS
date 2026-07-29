@@ -664,6 +664,47 @@ function buildMigration() {
       options: baseOpts({ y: { ticks: { color: TICK, callback: (v) => v + '%' }, grid: { color: GRID } } }),
     });
   });
+
+  // T85: registered stock trend with a dashed/shadowed 2026 projection point
+  // (latest real stock + full regularization-application count for that
+  // nationality) -- illustrative only, never presented as measured data.
+  register('mi-stock-2026-projected', (cv) => {
+    const s = d.stock_projection_2026;
+    const names = Object.keys(s.series);
+    const allYears = [...new Set(names.flatMap(n => s.series[n].years))].sort((a, b) => a - b);
+    const datasets = names.map((n, i) => {
+      const g = s.series[n];
+      const color = PALETTE[i % PALETTE.length];
+      const data = allYears.map(y => { const idx = g.years.indexOf(y); return idx >= 0 ? g.stock[idx] : null; });
+      return {
+        label: n, data, borderColor: color, backgroundColor: color + '33', borderWidth: 2, pointRadius: 3, tension: 0,
+        // dash only the final segment (last real year -> 2026 projection)
+        segment: { borderDash: (ctx) => (ctx.p1DataIndex === allYears.length - 1) ? [6, 4] : undefined },
+        pointStyle: (ctx) => {
+          const y = allYears[ctx.dataIndex];
+          const idx = g.years.indexOf(y);
+          return idx >= 0 && g.is_projected[idx] ? 'triangle' : 'circle';
+        },
+      };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const n = names[c.datasetIndex], g = s.series[n];
+            const y = allYears[c.dataIndex], idx = g.years.indexOf(y);
+            return idx >= 0 && g.is_projected[idx]
+              ? `PROJECTED, not real data — base ${g.base_year} stock + ${g.applications_added.toLocaleString()} regularization applications (illustrative upper bound, assumes 100% approval)`
+              : 'real registered stock';
+          } } },
+        },
+        y: { title: { display: true, text: 'registered stock', color: TICK } },
+      }),
+    });
+  });
 }
 
 function buildCohort() {
