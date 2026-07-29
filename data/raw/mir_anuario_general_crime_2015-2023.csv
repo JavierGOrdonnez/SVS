@@ -1,0 +1,154 @@
+year,category,metric,sex,count,source_edition,source_page,notes
+2015,homicide,detenciones_foreign,all,230,2016,303,
+2016,homicide,detenciones_foreign,all,290,2017,174,
+2017,homicide,detenciones_foreign,all,270,2018,174,
+2018,homicide,detenciones_foreign,all,277,2019,186,
+2019,homicide,detenciones_foreign,all,287,2020,156,
+2020,homicide,detenciones_foreign,all,381,2021,153,
+2021,homicide,detenciones_foreign,all,439,2022,124,
+2022,homicide,detenciones_foreign,all,482,2023,121,
+2023,homicide,detenciones_foreign,all,568,2023,121,
+2015,homicide,detenciones_foreign,female,37,2016,303,
+2016,homicide,detenciones_foreign,female,38,2017,174,
+2017,homicide,detenciones_foreign,female,32,2018,174,
+2018,homicide,detenciones_foreign,female,35,2019,186,
+2019,homicide,detenciones_foreign,female,22,2020,156,
+2020,homicide,detenciones_foreign,female,49,2021,153,
+2021,homicide,detenciones_foreign,female,35,2022,124,
+2022,homicide,detenciones_foreign,female,37,2023,121,
+2023,homicide,detenciones_foreign,female,35,2023,121,
+2015,homicide,detenciones_foreign,male,193,2016,303,
+2016,homicide,detenciones_foreign,male,252,2017,174,
+2017,homicide,detenciones_foreign,male,238,2018,174,
+2018,homicide,detenciones_foreign,male,242,2019,186,
+2019,homicide,detenciones_foreign,male,265,2020,156,
+2020,homicide,detenciones_foreign,male,332,2021,153,
+2021,homicide,detenciones_foreign,male,404,2022,124,
+2022,homicide,detenciones_foreign,male,445,2023,121,
+2023,homicide,detenciones_foreign,male,533,2023,121,
+2012,homicide,detenciones_total,all,1325,2016,171,
+2013,homicide,detenciones_total,all,1086,2017,166,
+2014,homicide,detenciones_total,all,1106,2018,166,
+2015,homicide,detenciones_total,all,1076,2019,175,
+2016,homicide,detenciones_total,all,1233,2020,142,
+2017,homicide,detenciones_total,all,1208,2021,139,
+2018,homicide,detenciones_total,all,1204,2022,109,
+2019,homicide,detenciones_total,all,1256,2023,106,
+2020,homicide,detenciones_total,all,1225,2023,106,
+2021,homicide,detenciones_total,all,1312,2023,106,
+2022,homicide,detenciones_total,all,1500,2023,106,
+2023,homicide,detenciones_total,all,1631,2023,106,
+2012,homicide,hechos_conocidos_total,all,1125,2016,167,
+2013,homicide,hechos_conocidos_total,all,964,2017,162,
+2014,homicide,hechos_conocidos_total,all,1048,2018,162,
+2015,homicide,hechos_conocidos_total,all,964,2019,171,
+2016,homicide,hechos_conocidos_total,all,1107,2020,140,
+2017,homicide,hechos_conocidos_total,all,1106,2021,137,
+2018,homicide,hechos_conocidos_total,all,1088,2022,107,
+2019,homicide,hechos_conocidos_total,all,1167,2023,104,
+2020,homicide,hechos_conocidos_total,all,1201,2023,104,
+2021,homicide,hechos_conocidos_total,all,1322,2023,104,
+2022,homicide,hechos_conocidos_total,all,1539,2023,104,
+2023,homicide,hechos_conocidos_total,all,1692,2023,104,
+2015,robbery,detenciones_foreign,all,10598,2016,303,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2016,robbery,detenciones_foreign,all,10694,2017,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2017,robbery,detenciones_foreign,all,9537,2018,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2018,robbery,detenciones_foreign,all,9746,2019,186,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2019,robbery,detenciones_foreign,all,11025,2020,156,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2020,robbery,detenciones_foreign,all,14438,2021,153,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2021,robbery,detenciones_foreign,all,15480,2022,124,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2022,robbery,detenciones_foreign,all,18479,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2023,robbery,detenciones_foreign,all,21221,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2015,robbery,detenciones_foreign,female,821,2016,303,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2016,robbery,detenciones_foreign,female,953,2017,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2017,robbery,detenciones_foreign,female,709,2018,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2018,robbery,detenciones_foreign,female,784,2019,186,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2019,robbery,detenciones_foreign,female,832,2020,156,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2020,robbery,detenciones_foreign,female,814,2021,153,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2021,robbery,detenciones_foreign,female,909,2022,124,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2022,robbery,detenciones_foreign,female,997,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2023,robbery,detenciones_foreign,female,1121,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2015,robbery,detenciones_foreign,male,9777,2016,303,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2016,robbery,detenciones_foreign,male,9741,2017,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2017,robbery,detenciones_foreign,male,8828,2018,174,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2018,robbery,detenciones_foreign,male,8962,2019,186,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2019,robbery,detenciones_foreign,male,10193,2020,156,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2020,robbery,detenciones_foreign,male,13624,2021,153,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2021,robbery,detenciones_foreign,male,14571,2022,124,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2022,robbery,detenciones_foreign,male,17482,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2023,robbery,detenciones_foreign,male,20100,2023,121,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2012,robbery,detenciones_total,all,78948,2016,171,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2013,robbery,detenciones_total,all,78382,2017,166,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2014,robbery,detenciones_total,all,63507,2018,166,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2015,robbery,detenciones_total,all,51864,2019,175,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2016,robbery,detenciones_total,all,48494,2020,142,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2017,robbery,detenciones_total,all,46597,2021,139,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2018,robbery,detenciones_total,all,45805,2022,109,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2019,robbery,detenciones_total,all,47654,2023,106,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2020,robbery,detenciones_total,all,39908,2023,106,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2021,robbery,detenciones_total,all,40830,2023,106,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2022,robbery,detenciones_total,all,46752,2023,106,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2023,robbery,detenciones_total,all,51656,2023,106,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2012,robbery,hechos_conocidos_total,all,502546,2016,167,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2013,robbery,hechos_conocidos_total,all,467811,2017,162,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2014,robbery,hechos_conocidos_total,all,415730,2018,162,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2015,robbery,hechos_conocidos_total,all,387286,2019,171,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2016,robbery,hechos_conocidos_total,all,381116,2020,140,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2017,robbery,hechos_conocidos_total,all,363497,2021,137,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2018,robbery,hechos_conocidos_total,all,362338,2022,107,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2019,robbery,hechos_conocidos_total,all,363972,2023,104,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2020,robbery,hechos_conocidos_total,all,264354,2023,104,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2021,robbery,hechos_conocidos_total,all,282210,2023,104,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2022,robbery,hechos_conocidos_total,all,329293,2023,104,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2023,robbery,hechos_conocidos_total,all,337349,2023,104,robo con fuerza + robo con violencia/intimidacion; excludes hurto (simple theft)
+2015,sexual_assault,detenciones_foreign,all,1496,2016,303,
+2016,sexual_assault,detenciones_foreign,all,1623,2017,174,
+2017,sexual_assault,detenciones_foreign,all,1775,2018,174,
+2018,sexual_assault,detenciones_foreign,all,2230,2019,186,
+2019,sexual_assault,detenciones_foreign,all,2477,2020,156,
+2020,sexual_assault,detenciones_foreign,all,2622,2021,153,
+2021,sexual_assault,detenciones_foreign,all,3605,2022,124,
+2022,sexual_assault,detenciones_foreign,all,4183,2023,121,
+2023,sexual_assault,detenciones_foreign,all,5136,2023,121,
+2015,sexual_assault,detenciones_foreign,female,129,2016,303,
+2016,sexual_assault,detenciones_foreign,female,122,2017,174,
+2017,sexual_assault,detenciones_foreign,female,125,2018,174,
+2018,sexual_assault,detenciones_foreign,female,121,2019,186,
+2019,sexual_assault,detenciones_foreign,female,104,2020,156,
+2020,sexual_assault,detenciones_foreign,female,105,2021,153,
+2021,sexual_assault,detenciones_foreign,female,135,2022,124,
+2022,sexual_assault,detenciones_foreign,female,220,2023,121,
+2023,sexual_assault,detenciones_foreign,female,354,2023,121,
+2015,sexual_assault,detenciones_foreign,male,1367,2016,303,
+2016,sexual_assault,detenciones_foreign,male,1501,2017,174,
+2017,sexual_assault,detenciones_foreign,male,1650,2018,174,
+2018,sexual_assault,detenciones_foreign,male,2109,2019,186,
+2019,sexual_assault,detenciones_foreign,male,2373,2020,156,
+2020,sexual_assault,detenciones_foreign,male,2517,2021,153,
+2021,sexual_assault,detenciones_foreign,male,3470,2022,124,
+2022,sexual_assault,detenciones_foreign,male,3963,2023,121,
+2023,sexual_assault,detenciones_foreign,male,4782,2023,121,
+2012,sexual_assault,detenciones_total,all,6250,2016,171,
+2013,sexual_assault,detenciones_total,all,5827,2017,166,
+2014,sexual_assault,detenciones_total,all,6186,2018,166,
+2015,sexual_assault,detenciones_total,all,6044,2019,175,
+2016,sexual_assault,detenciones_total,all,6363,2020,142,
+2017,sexual_assault,detenciones_total,all,6796,2021,139,
+2018,sexual_assault,detenciones_total,all,8288,2022,109,
+2019,sexual_assault,detenciones_total,all,8983,2023,106,
+2020,sexual_assault,detenciones_total,all,7991,2023,106,
+2021,sexual_assault,detenciones_total,all,10477,2023,106,
+2022,sexual_assault,detenciones_total,all,11699,2023,106,
+2023,sexual_assault,detenciones_total,all,13767,2023,106,
+2012,sexual_assault,hechos_conocidos_total,all,9008,2016,167,
+2013,sexual_assault,hechos_conocidos_total,all,8923,2017,162,
+2014,sexual_assault,hechos_conocidos_total,all,9468,2018,162,
+2015,sexual_assault,hechos_conocidos_total,all,9869,2019,171,
+2016,sexual_assault,hechos_conocidos_total,all,10844,2020,140,
+2017,sexual_assault,hechos_conocidos_total,all,11692,2021,137,
+2018,sexual_assault,hechos_conocidos_total,all,13782,2022,107,
+2019,sexual_assault,hechos_conocidos_total,all,15319,2023,104,
+2020,sexual_assault,hechos_conocidos_total,all,13174,2023,104,
+2021,sexual_assault,hechos_conocidos_total,all,17016,2023,104,
+2022,sexual_assault,hechos_conocidos_total,all,19013,2023,104,
+2023,sexual_assault,hechos_conocidos_total,all,21825,2023,104,

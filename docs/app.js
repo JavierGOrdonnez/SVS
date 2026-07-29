@@ -769,6 +769,65 @@ function buildCohort() {
   });
 }
 
+function buildGeneralCrime() {
+  const d = DATA.general_crime;
+  const catLabel = (c) => c === 'sexual_assault' ? 'Sexual assault' : c[0].toUpperCase() + c.slice(1);
+
+  register('gc-per-capita', (cv) => {
+    const g = d.per_capita;
+    const cats = d.categories.filter(c => g[c]);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.index_base100[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _rates: s, _years: s.years };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._years.indexOf(yr);
+            return idx >= 0 ? `${ds._rates.rate_per_100k[idx]} per 100k (base year ${ds._rates.base_year} = 100)` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'index (base year = 100)', color: TICK } },
+      }),
+    });
+  });
+
+  register('gc-foreign-ratio', (cv) => {
+    const g = d.foreign_spanish_ratio;
+    const cats = d.categories.filter(c => g[c] && g[c].years.length);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.ratio_foreign_over_spanish[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _s: s };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          annotation: { annotations: { base: { type: 'line', yMin: 1, yMax: 1, borderColor: '#fff5', borderWidth: 1, borderDash: [3, 3],
+            label: { display: true, content: 'equal rate = 1.0', color: '#9ba3bf', font: { size: 9 }, position: 'end' } } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._s.years.indexOf(yr);
+            return idx >= 0 ? `Spanish ${ds._s.spanish_rate_per_100k[idx]}/100k · Foreign ${ds._s.foreign_rate_per_100k[idx]}/100k` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'rate ratio (foreign ÷ Spanish)', color: TICK } },
+      }),
+    });
+  });
+}
+
 /* ── headline KPI cards (kept in sync with the data) ─── */
 function setHeadlines() {
   const el = document.getElementById('headlines');
@@ -810,13 +869,13 @@ function wire() {
 
 /* ── boot ────────────────────────────────────────────── */
 async function main() {
-  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity'];
+  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity', 'general_crime'];
   const loaded = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => {
     if (!r.ok) throw new Error(`${n}.json ${r.status}`); return r.json();
   })));
   names.forEach((n, i) => DATA[n] = loaded[i]);
 
-  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort();
+  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort(); buildGeneralCrime();
   setHeadlines();
   wire();
   showTab('feminicides');   // mounts the initially-visible panels

@@ -160,3 +160,71 @@ def build_regularization_sensitivity():
         "caveat": "Explicit UPPER BOUND, not a best estimate: assumes 100% of that nationality's 2026 regularization applicants were already resident in every year 2019-2024, all aged 15-59. Real correction is smaller since not all applicants arrived that early nor are all working-age. Added population is held constant across years (no data on arrival timing); male/female split borrowed from that nationality's own 2024 registered sex ratio. See reports/algeria_morocco_divergence.md for full discussion.",
         "countries": dict(by_country),
     }
+
+
+def build_general_crime():
+    """T83: general (non-nationality-specific) long-run crime trend --
+    homicide, robbery, sexual_assault, Spanish vs. foreign only (no
+    per-country breakdown exists in this source, see T82's own finding).
+    Extends this dashboard's crime coverage back to 2015 using MIR Anuario's
+    general "Seguridad Ciudadana" chapter tables (`parse_anuario_general_
+    crime.py`), independent of the sexual-crimes-specific Informe/Anuario
+    series used elsewhere."""
+    rows = read_csv("data/processed/general_crime_trends.csv")
+    categories = sorted({r["category"] for r in rows})
+
+    # Per-capita (reported crimes, ALL nationalities -- no split available):
+    # indexed to each category's own first available year = 100, since raw
+    # rates differ by orders of magnitude across categories (robbery
+    # ~150-200/100k vs homicide ~2/100k) and wouldn't share a readable axis
+    # otherwise. Raw rate is kept alongside (V14: pair the relative index
+    # with its absolute rate), not shown only as an index.
+    per_capita = {}
+    for cat in categories:
+        sub = sorted((r for r in rows if r["category"] == cat and r["metric"] == "per_capita"),
+                     key=lambda r: num(r["year"]))
+        if not sub:
+            continue
+        base_rate = num(sub[0]["rate_per_100k"])
+        per_capita[cat] = {
+            "years": [num(r["year"]) for r in sub],
+            "rate_per_100k": [num(r["rate_per_100k"]) for r in sub],
+            "index_base100": [round(num(r["rate_per_100k"]) / base_rate * 100, 1) for r in sub],
+            "base_year": num(sub[0]["year"]),
+        }
+
+    # Spanish vs. foreign detenciones/investigados rate + their ratio, per
+    # category. Mirrors this dashboard's peligrosity convention (identified-
+    # perpetrator rate, not reported-crime rate) elsewhere -- NOT directly
+    # comparable to per_capita above (different numerator: detenciones has
+    # a <100% clearance rate against hechos_conocidos).
+    foreign_spanish_ratio = {}
+    for cat in categories:
+        sp = {num(r["year"]): num(r["rate_per_100k"]) for r in rows
+              if r["category"] == cat and r["metric"] == "spanish"}
+        fo = {num(r["year"]): num(r["rate_per_100k"]) for r in rows
+              if r["category"] == cat and r["metric"] == "foreign"}
+        years = sorted(set(sp) & set(fo))
+        foreign_spanish_ratio[cat] = {
+            "years": years,
+            "spanish_rate_per_100k": [sp[y] for y in years],
+            "foreign_rate_per_100k": [fo[y] for y in years],
+            "ratio_foreign_over_spanish": [round(fo[y] / sp[y], 2) if sp[y] else None for y in years],
+        }
+
+    return {
+        "source": ("MIR Anuario Estadistico 2016-2023, 'Seguridad Ciudadana' chapter general infraction "
+                    "tables (not the sexual-crimes-specific Informe/Anuario series used elsewhere) + "
+                    "population_spain_midyear_5yr.csv + migration_spain.csv"),
+        "confidence": "medium",
+        "caveat": ("Spanish-vs-foreign only -- no per-country breakdown exists in this source (T82 checked "
+                   "directly). 'per_capita' = reported crimes (hechos conocidos), all nationalities. "
+                   "'spanish'/'foreign' = detenciones/investigados (identified perpetrators, matching this "
+                   "dashboard's peligrosity convention elsewhere) -- NOT directly comparable to per_capita "
+                   "(clearance rate is well under 100%). 'spanish' rate is derived (total - foreign), not a "
+                   "source-reported figure. sexual_assault's post-2022 values reflect the LO 10/2022 legal "
+                   "reform, same definition-break caveat as the rest of this dashboard."),
+        "categories": categories,
+        "per_capita": per_capita,
+        "foreign_spanish_ratio": foreign_spanish_ratio,
+    }

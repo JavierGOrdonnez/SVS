@@ -56,6 +56,7 @@ def main():
     write("cohort_tenure.json", crime_mod.build_cohort_tenure())
     write("victim_vulnerability.json", crime_mod.build_victim_vulnerability())
     write("regularization_sensitivity.json", crime_mod.build_regularization_sensitivity())
+    write("general_crime.json", crime_mod.build_general_crime())
     print("Done.")
 
 

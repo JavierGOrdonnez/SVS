@@ -147,6 +147,23 @@
       <svs-source-cite slot="source" label="data/raw/regularization_2026.csv + migration_spain.csv + sexual_crimes_mir_2017-2024.json" note="associative, upper-bound scenario"></svs-source-cite>
     </svs-chart-panel>
   </div>
+  <div class="section-intro">
+    <h2>Long-run crime trends <span style="font:400 0.8rem var(--font-body);color:var(--text2)">· Spanish vs. foreign, 2015-2023</span></h2>
+    <p>Extends this dashboard's crime coverage back before the sexual-crimes-specific series (2019+) using MIR
+    Anuario's general "Seguridad Ciudadana" chapter — homicide, robbery, and sexual assault. Spanish-vs-foreign
+    only: no per-country breakdown exists in this source (checked directly, see reports/algeria_morocco_divergence.md's
+    H1/H2 sections for where per-country data does and doesn't exist).</p>
+  </div>
+  <div class="grid">
+    <svs-chart-panel id="gc-per-capita" size="half" confidence="medium"
+      title="Reported crime, per capita" subtitle="Indexed to each category's first available year = 100. Hover for the raw rate.">
+      <svs-source-cite slot="source" label="MIR Anuario Estadístico 2016-2023 + population_spain_midyear_5yr.csv" note="all nationalities, hechos conocidos"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="gc-foreign-ratio" size="half" confidence="medium"
+      title="Foreign ÷ Spanish detention rate" subtitle="Identified-perpetrator rate ratio, by category. Dashed line = equal rate.">
+      <svs-source-cite slot="source" label="MIR Anuario Estadístico 2016-2023 + migration_spain.csv" note="detenciones/investigados, not reported crimes"></svs-source-cite>
+    </svs-chart-panel>
+  </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-mig" heading="Migration & cohorts — caveats"></svs-caveat-list>
   </div>
