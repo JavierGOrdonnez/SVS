@@ -16,9 +16,16 @@ is fine but excluded here too for consistency with the rest of this report) over
 - **Test A** (period rate ratio): both countries' rates rose significantly after 2022, but
   Algeria's rose further — 1.90x by 2024 (p<.0001) vs Morocco's 1.16x (p=.0003), both
   vs the pooled 2019+2021 baseline.
-- **Test B** (cohort decomposition): the rise is **not** clearly concentrated in the
-  newly-arrived cohort specifically for either country — inconclusive on "recent arrivals
-  drove it."
+- **Test B** (cohort decomposition): **REVISED (B42, 2026-07-30)** — the original test had
+  two design flaws (a gross-inflow, not net-stock, cohort proxy that produced an implausibly
+  collapsing implied settled population; and a settled-baseline rate that was a tautological
+  rescaling of the total rate, not an actual estimate — see `reports/cohort_tenure_analysis.md`
+  and SPEC.md's B42 for the full diagnostic). Corrected, Test B now shows the newly-arrived
+  cohort's implied rate **significantly ABOVE** the settled population's for both countries in
+  most years (Marruecos 1.7x-5.1x, Argelia 2.9x-6.5x depending on baseline/year) — the opposite
+  of the original "inconclusive" finding, and a real signal that the rise IS at least partly
+  concentrated in the newly-arrived cohort, not just a broad shift across the whole resident
+  population.
 - **Test E** (vs. the Spanish population's own rate rise): Morocco's increase is
   significantly **smaller** than the Spanish population's own rise in most comparisons;
   Algeria's is significantly **larger**, but only vs. 2024 and the pooled 2022-2024 period
