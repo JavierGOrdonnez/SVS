@@ -16,16 +16,22 @@ is fine but excluded here too for consistency with the rest of this report) over
 - **Test A** (period rate ratio): both countries' rates rose significantly after 2022, but
   Algeria's rose further — 1.90x by 2024 (p<.0001) vs Morocco's 1.16x (p=.0003), both
   vs the pooled 2019+2021 baseline.
-- **Test B** (cohort decomposition): **REVISED (B42, 2026-07-30)** — the original test had
-  two design flaws (a gross-inflow, not net-stock, cohort proxy that produced an implausibly
-  collapsing implied settled population; and a settled-baseline rate that was a tautological
-  rescaling of the total rate, not an actual estimate — see `reports/cohort_tenure_analysis.md`
-  and SPEC.md's B42 for the full diagnostic). Corrected, Test B now shows the newly-arrived
-  cohort's implied rate **significantly ABOVE** the settled population's for both countries in
-  most years (Marruecos 1.7x-5.1x, Argelia 2.9x-6.5x depending on baseline/year) — the opposite
-  of the original "inconclusive" finding, and a real signal that the rise IS at least partly
-  concentrated in the newly-arrived cohort, not just a broad shift across the whole resident
-  population.
+- **Test B** (cohort decomposition): **REVISED TWICE (B42, then B43, both 2026-07-30)** — the
+  original test had two design flaws (a gross-inflow, not net-stock, cohort proxy that produced
+  an implausibly collapsing implied settled population; and a settled-baseline rate that was a
+  tautological rescaling of the total rate, not an actual estimate). B42's fix flipped the
+  headline to "cohort significantly ABOVE settled" but left the ratio implausibly large (4x-6x),
+  because it still froze the settled sub-population's rate at the historical baseline even
+  though Test E (below) shows the Spanish reference population's own rate rose substantially
+  over the same span. B43 fixed this (settled's expected rate now scaled by that same documented
+  trend) and reassigned a related sensitivity adjustment (regularization pool → cohort, not
+  settled — see H2 below). **Current result: not uniform across countries.** Marruecos shows NO
+  significant cohort elevation in any comparison (consistent with Test E's own finding that its
+  overall rate rose *less* than Spain's); Argelia shows a real, moderate, significant cohort
+  elevation specifically by 2024 (ratio ~2.3x-3.6x depending on baseline/regularization
+  adjustment; non-significant 2022-2023) — consistent with Test E's finding that its overall rate
+  rose *more* than Spain's. See `reports/cohort_tenure_analysis.md` and SPEC.md's B42/B43 for the
+  full diagnostic.
 - **Test E** (vs. the Spanish population's own rate rise): Morocco's increase is
   significantly **smaller** than the Spanish population's own rise in most comparisons;
   Algeria's is significantly **larger**, but only vs. 2024 and the pooled 2022-2024 period

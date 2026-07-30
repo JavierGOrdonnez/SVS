@@ -69,55 +69,108 @@ Test B is also now run against a second, deeper baseline
 T82/T86) alongside the original `pre_2022_pooled_2019_2021`, both reported
 side by side.
 
-**RESULT (reversed from the original)**: the recent-arrival cohort's
-implied rate is **significantly ABOVE** the settled-population baseline for
-both countries in most years tested:
+**RESULT after B42 alone (superseded below, kept for the record)**: the
+recent-arrival cohort's implied rate came out **significantly ABOVE** the
+settled-population baseline for both countries in most years, by a factor of
+1.7x-6.5x. This reversed the original (pre-B42) finding, but the magnitude —
+up to 6x — was flagged by the user as implausibly large, prompting a second
+look.
+
+**CORRECTION (B43, 2026-07-30)**, applied the same day: two further issues,
+both raised by the user.
+
+1. **The regularization-sensitivity extension had assigned the hidden
+   population to the wrong bucket.** B42's sensitivity variant (below) added
+   the 2026 regularization-application pool to `settled_pop`, reasoning it
+   was "already resident" per the regularization's eligibility bar. Too
+   weak: that bar (resident before 2026-01-01) is satisfied by someone who
+   arrived weeks earlier just as much as someone who arrived a decade
+   earlier, and Spain's ordinary multi-year residency channels (*arraigo
+   social/laboral*, 2-3 years) already exist for genuinely long-settled
+   undocumented people — an *extraordinary*, lower-bar amnesty more
+   plausibly catches people those ordinary channels miss, i.e. skews toward
+   recent arrivals. Reassigned to `cohort_pop` instead.
+2. **The settled sub-population's rate was still frozen at the historical
+   baseline in every test year** — the residual (non-tautological) fix from
+   B42 assumed nothing changed for settled people at all. But Test E
+   (below) independently shows the *Spanish reference population's own
+   rate* rose 11%-34% over the same span — a broad, non-migration-specific
+   rise (e.g. from the LO10/2022 reform). Freezing settled at the old level
+   while all of Spanish society moved on forced the *entire* societal-wide
+   rise onto the tiny cohort bucket, on top of any real cohort-specific
+   effect — this is what made the ratio implausibly large. Fixed: the
+   settled baseline rate is now scaled by the same trend observed in the
+   Spanish reference population between baseline and test year
+   (`r_expected_settled = r_settled_baseline × spanish_trend`, reusing
+   Test E's already-loaded data).
+
+This second adjustment occasionally makes the trend-adjusted settled
+expectation alone *exceed* the observed total (a negative implied cohort
+rate — not a bug, but a real model-tension signal for Marruecos specifically,
+whose own overall rate rose *less* than Spain's per Test E, so applying the
+*full* Spanish trend to its settled sub-population overshoots). Such rows
+are reported `hypothesis_call="undefined..."` rather than a spuriously
+precise "significantly below baseline".
+
+**RESULT (final, both baselines, unadjusted for regularization)**:
 
 | Group | Baseline | 2022 | 2023 | 2024 |
 |---|---|---|---|---|
-| Marruecos | pre-2022 (2019+2021) | 1.66x, p=.075 | 2.01x, p=.017 | 2.10x, p=.001 |
-| Marruecos | deep pre-2020 (2017-2019) | 4.28x, p<.0001 | 5.09x, p<.0001 | 4.66x, p<.0001 |
-| Argelia | pre-2022 (2019+2021) | 2.93x, p=.112 (ns) | 4.73x, p=.004 | 5.73x, p<.0001 |
-| Argelia | deep pre-2020 (2017-2019) | 3.75x, p=.042 | 5.67x, p=.001 | 6.51x, p<.0001 |
+| Marruecos | pre-2022 (2019+2021) | 0.79x, p=.52 (ns) | undefined (negative residual) | 0.24x, p=.004 (significantly *below*) |
+| Marruecos | deep pre-2020 (2017-2019) | 1.19x, p=.59 (ns) | 0.27x, p=.038 (significantly *below*) | 0.58x, p=.13 (ns) |
+| Argelia | pre-2022 (2019+2021) | 1.88x, p=.42 (ns) | 2.19x, p=.24 (ns) | 3.55x, p=.0008 (H2) |
+| Argelia | deep pre-2020 (2017-2019) | 1.63x, p=.57 (ns) | 1.94x, p=.36 (ns) | 3.35x, p=.002 (H2) |
 
-This is the opposite of what was previously published here ("Marruecos
-significantly BELOW settled baseline all 3 years... Argelia below in 2022
-then not significant 2023-2024"). The deeper baseline (further removed from
-Algeria's own ~2018-2019 surge-onset, per `reports/algeria_morocco_divergence.md`'s
-H3 section) shows an even larger and more consistently significant cohort
-effect than the original pre-2022 baseline, for both countries.
+**Marruecos now shows NO significant cohort elevation in any comparison** —
+consistent with, not contradicting, Test E's own finding that Marruecos's
+overall rate rose *less* than Spain's. **Argelia shows a real, moderate,
+consistently significant cohort elevation specifically by 2024** (ratio
+3.3x-3.6x depending on baseline; non-significant 2022-2023) — consistent
+with Test E's finding that Argelia's overall rate rose *more* than Spain's.
+This ties together far more coherently with Tests A/E than either the
+original (pre-B42) or the B42-only (frozen-baseline) result did.
 
-**Regularization-adjusted sensitivity (new, mirrors T84)**: since MIR/Eurostat
-stock only counts *registered* residents, and Test B's decomposition is
-therefore blind to any undocumented population, a sensitivity variant adds
-the 2026 regularization-application pool for that nationality — assumed (a)
-already resident throughout the whole window, (b) 100% aged 15-59, (c) split
-male/female per that nationality's own real sex ratio, exactly as T84 does
-for the flat peligrosity rate — into the stock series before re-deriving
-cohort_pop/settled_pop/r_base. Because cohort_pop is now a net delta, a
-constant hidden population cancels out of it and lands entirely in
-settled_pop, consistent with "these people were already here the whole
-time." **This makes the cohort effect stronger, not weaker**: Marruecos
-2.00x-2.77x (pre-2022 baseline) / 5.71x-6.99x (deep baseline); Argelia
-5.16x-11.19x / 7.68x-13.59x. Explicit upper bound (V14), association only —
-we have no arrival-year data for regularization applicants, so this is the
-single defensible bucket to place them in, not a claim about true tenure.
+**Regularization-adjusted sensitivity (mirrors T84, corrected B43)**: since
+MIR/Eurostat stock only counts *registered* residents, and Test B's
+decomposition is therefore blind to any undocumented population, a
+sensitivity variant adds the 2026 regularization-application pool for that
+nationality — assumed (a) already present throughout the whole window, (b)
+100% aged 15-59, (c) split male/female per that nationality's own real sex
+ratio, exactly as T84 does for the flat peligrosity rate — to `cohort_pop`
+(not `settled_pop`, see correction above) every year, constant, matching
+T84's own "no arrival-timing data" convention. **This moves the ratio
+toward 1** for both countries (mechanically: the same residual crime count
+is now divided by a larger cohort population): Marruecos 0.65x-0.96x
+(pre-2022 baseline, all ns) / 0.90x-1.22x (deep baseline, all ns — the
+previously-undefined 2023 row now resolves to a valid 0.90x); Argelia
+1.25x-2.28x (pre-2022 baseline) / 1.29x-2.33x (deep baseline) — Argelia's
+2024 signal survives this adjustment
+(remains significant, p<.0001 both baselines), Marruecos's absence of a
+signal is unchanged. Explicit upper bound (V14), association only — we have
+no true arrival-year data for regularization applicants, so this is the
+more defensible of the two buckets to place them in, not a claim about
+actual tenure.
 
-**Synthesis (A vs B), corrected**: Test A shows the *whole* nationality
-group's rate rose significantly after 2022. Test B, once its two design
-flaws are fixed, is now consistent with (not contradicting) a story where
-this rise IS concentrated in the newly-arrived cohort specifically — the
-opposite of what the flawed version implied. This should still be read with
-appropriate caution: Test B's cohort/settled split remains an approximation
-(net-stock-delta absorbs any churn in the pre-existing settled sub-population
-— naturalization, death, re-emigration — into the cohort residual, which can
-understate true recent-arrival volume; a much smaller-order caveat than the
-flaw it replaces, but not zero), and the baseline periods themselves are
-short (2-3 real MIR report years). But there is no longer a "Test B fails to
-confirm this" caveat to attach to Test A's finding.
+**Synthesis (A vs B), corrected twice (B42, then B43)**: Test A shows the
+*whole* nationality group's rate rose significantly after 2022 for both
+countries. Test B, once its three design flaws (gross-inflow cohort proxy,
+tautological settled baseline, frozen settled-rate ignoring the documented
+Spanish-population trend) are fixed, shows this is **not** uniform across
+countries: for Marruecos there's no evidence the rise is cohort-specific
+(consistent with Marruecos's own rise trailing Spain's, per Test E); for
+Argelia there is a real, moderate, cohort-specific signal by 2024
+(consistent with Argelia's rise outpacing Spain's). This should still be
+read with appropriate caution: Test B's cohort/settled split remains an
+approximation (net-stock-delta absorbs any churn in the pre-existing
+settled sub-population — naturalization, death, re-emigration — into the
+cohort residual, which can understate true recent-arrival volume), the
+trend adjustment assumes the settled sub-population's rate moves exactly in
+lockstep with the *whole* Spanish reference population's (no independent
+settled-specific trend exists to check this against), and the baseline
+periods themselves are short (2-3 real MIR report years).
 
 Denominators = settled_pop/cohort_pop, now a net-stock-delta on the real,
-non-extrapolated Eurostat joint cross for MA/DZ (V25, corrected B42).
+non-extrapolated Eurostat joint cross for MA/DZ (V25, corrected B42/B43).
 
 Output: `data/processed/cohort_tenure_period_test.csv` (Test A, 36 rows,
 3 baselines) + `data/processed/cohort_tenure_rates.csv` (Test B, 32 rows,
