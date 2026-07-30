@@ -172,6 +172,92 @@ periods themselves are short (2-3 real MIR report years).
 Denominators = settled_pop/cohort_pop, now a net-stock-delta on the real,
 non-extrapolated Eurostat joint cross for MA/DZ (V25, corrected B42/B43).
 
+## Test F — fixed-cutoff cohort/settled split (added 2026-07-30, user request)
+
+Test B's rolling 3-year window redefines "recent arrival" relative to
+*every* observation year — it doesn't literally match this investigation's
+original framing ("modern stock vs. the pre-2020/2022 population"). Test F
+uses a single, fixed calendar cutoff instead: `settled_pop` is pinned ONCE
+at `stock(cutoff_year − 1)` and held fixed for every test year at/after the
+cutoff (not recomputed per year); `cohort_pop = stock(year) − settled_pop`.
+Run for two cutoffs, each with the deepest available pre-cutoff baseline
+(every real MIR year strictly before that cutoff, 2020 excluded per B38) and
+the same Spanish-population trend adjustment as Test B:
+
+- **cutoff=2022** ("arrived 2022 onward" vs. "everyone here before 2022"):
+  test years 2022, 2023, 2024 — `cohort_pop` grows each year as more time
+  accumulates since the cutoff. Baseline: 2017-2019+2021 (Marruecos),
+  2018-2019+2021 (Argelia, no 2017 row).
+- **cutoff=2024** ("arrived 2024 onward" vs. "everyone here before 2024"):
+  test year 2024 only — the narrowest, most literal "just the newest
+  arrivals" comparison, with the deepest possible baseline (everything
+  through 2023 counts as "before"). Baseline: 2017-2019+2021-2023
+  (Marruecos), 2018-2019+2021-2023 (Argelia).
+
+**RESULT (unadjusted)**:
+
+| Group | cutoff=2022, test=2022 | test=2023 | test=2024 | cutoff=2024, test=2024 |
+|---|---|---|---|---|
+| Marruecos | 2.46x, p=.58 (ns) | undefined (negative residual) | 0.57x, p=.10 (ns) | 0.05x, p=.08 (ns) |
+| Argelia | **52.16x, p=.36 (ns, see caveat)** | 2.67x, p=.19 (ns) | 3.61x, p=.0002 (H2) | 4.59x, p=.0003 (H2) |
+
+**Marruecos shows no significant elevation under any cutoff** — a third
+independent confirmation (alongside Test B and Test E) that Marruecos's rise
+isn't concentrated in recent arrivals specifically. **Argelia shows a real,
+significant elevation at both of the two "deep-accumulation" cells**
+(cutoff=2022/test=2024: 3.61x; cutoff=2024/test=2024: 4.59x) — this is a
+meaningful convergence: Test B (rolling window) and Test F (fixed cutoff)
+are two genuinely different ways of drawing the cohort/settled line, and
+both independently land on a significant ~3-5x Argelia-specific 2024 signal,
+which is good evidence this isn't an artifact of either particular windowing
+choice.
+
+**Caveat — the cutoff=2022/test=2022 cell is unstable, not a real 52x
+finding.** Only one year (2022) has elapsed since the settled_pop reference
+point (stock at end of 2021), so `cohort_pop` is tiny: 66 people for
+Argelia, 5,532 for Marruecos. Dividing a Poisson-noisy residual by a
+denominator that small produces a wildly unstable point estimate (Argelia's
+52.16x, still correctly reported as non-significant, p=.36, but the point
+estimate itself shouldn't be read as a real effect size) — flagged directly
+on the chart (log-scale y-axis, each bar annotated with its own `cohort_pop`
+and a "(tiny — unstable)" note where n<500) rather than hidden or silently
+trusted (C9).
+
+**Regularization-adjusted variant (assumed to have arrived at/after the
+cutoff)**: mirrors T84/B43's reasoning, now anchored to whichever specific
+cutoff is being tested. Because Test F's accumulation windows are much
+shorter than Test B's rolling 3-year window, adding the same-sized
+regularization pool implies an extreme share of that period's true net
+growth was undocumented — e.g. for Argelia cutoff=2022/test=2022, the
+regularization pool (26,551) against a raw `cohort_pop` of just 66 implies
+99.75% of that single year's net growth was undocumented; even the deepest
+cell (cutoff=2024/test=2024) implies 86.6% (Argelia) / 79.1% (Marruecos)
+undocumented. These are far more extreme than Test B's own regularization
+variant (which spreads the same pool over a 3-year window) and should be
+read as an outer, not-very-plausible upper bound (V14) rather than a
+considered estimate — consistent with this reading, nearly every
+regularization-adjusted cell here reports "significantly BELOW baseline"
+(ratios 0.01x-0.77x), a mechanical consequence of diluting a fixed residual
+crime count over a hugely inflated cohort denominator, not a genuine finding
+that new arrivals under-offend.
+
+**Synthesis (A vs B vs F)**: three independently-designed tests (Test A's
+direct whole-group rate ratio, Test B's rolling-window decomposition, Test
+F's fixed-cutoff decomposition) now agree: Marruecos's post-2022 rate rise
+shows no evidence of being concentrated in recent arrivals specifically;
+Argelia's does, specifically by 2024, at a broadly consistent magnitude
+(Test B: 3.3x-3.6x; Test F: 3.6x-4.6x). This convergence across genuinely
+different methodological choices is the strongest evidence this project has
+for a real (not methodology-dependent) recent-arrival-specific signal for
+Argelia — still association only (V9), not causal, and still resting on the
+same reference-population-trend and net-stock-delta approximations flagged
+throughout this report.
+
+Output: `data/processed/cohort_tenure_fixed_cutoff_test.csv` (12 rows, both
+cutoffs) + `data/processed/cohort_tenure_fixed_cutoff_regularization_sensitivity.csv`
+(12 rows) + `data/processed/cohort_tenure_fixed_cutoff_test.png` (log-scale,
+cohort_pop-annotated), visually verified.
+
 Output: `data/processed/cohort_tenure_period_test.csv` (Test A, 36 rows,
 3 baselines) + `data/processed/cohort_tenure_rates.csv` (Test B, 32 rows,
 2 baselines) + `data/processed/cohort_tenure_regularization_sensitivity.csv`

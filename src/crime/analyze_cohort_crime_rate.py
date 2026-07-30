@@ -161,6 +161,34 @@ EXTENSION -- regularization-adjusted sensitivity (Test B only, T84-style):
     tenure. This is an explicit UPPER BOUND, not a best estimate (V14);
     present alongside, never instead of, the unadjusted result.
 
+TEST F -- fixed-cutoff cohort/settled split (added 2026-07-30, per user
+    request): Test B's rolling 3-year window redefines "recent arrival"
+    relative to every observation year, which doesn't literally match the
+    original framing of this whole investigation ("modern stock vs the
+    pre-2020/2022 population"). Test F instead uses a single, fixed
+    calendar cutoff: settled_pop is pinned ONCE at stock(cutoff_year - 1)
+    and held fixed for every test year at/after the cutoff (not recomputed
+    per year); cohort_pop = stock(year) - settled_pop. Run for two cutoffs:
+      - cutoff=2022: "arrived 2022 onward" vs "everyone here before 2022"
+        (test years 2022, 2023, 2024 -- cohort_pop grows each year as more
+        time accumulates since the cutoff).
+      - cutoff=2024: "arrived 2024 onward" vs "everyone here before 2024"
+        (test year 2024 only -- the narrowest, most literal "just the
+        newest arrivals" comparison, with the deepest possible baseline,
+        since everything through 2023 counts as "before").
+    The baseline rate is estimated from EVERY available real MIR year
+    strictly before that specific cutoff (not a fixed 2-3-year pooled set
+    as in Test B) -- deeper for cutoff=2024 (2017-2023, 2020 excluded per
+    B38) than for cutoff=2022 (2017-2019+2021). Settled's expected rate is
+    trend-adjusted against the Spanish reference population exactly as in
+    Test B (same reasoning: don't let the whole of Spanish society's own
+    documented rate rise get misattributed to the tiny cohort bucket).
+    Also run with a regularization-adjusted variant: the 2026
+    regularization-application pool is assumed to have arrived at/after
+    whichever cutoff is being tested (added to cohort_pop, same reasoning
+    as Test B's B43 correction) -- explicit upper bound, not a best
+    estimate (V14).
+
 South America / EU-Europe (Test C only): the user asked to run the same
     comparison for South Americans and non-Spanish Europeans (EU/non-EU).
     Only Test C (share of total crimes) is computable for these groups --
@@ -242,6 +270,9 @@ Output:
   data/processed/cohort_vs_spanish_test.csv            -- Test E (vs Spanish population)
   data/processed/cohort_tenure_rate_ratio.png          -- all tests, grid (MA/DZ)
   data/processed/cohort_tenure_regularization_sensitivity.png -- Test B sensitivity chart
+  data/processed/cohort_tenure_fixed_cutoff_test.csv   -- Test F (fixed-cutoff, both cutoffs)
+  data/processed/cohort_tenure_fixed_cutoff_regularization_sensitivity.csv -- Test F, regularization-adjusted
+  data/processed/cohort_tenure_fixed_cutoff_test.png   -- Test F chart
   data/processed/cohort_share_test_all_groups.png      -- Test C, all groups incl.
                                                           South America/EU-Europe
 """
@@ -263,6 +294,9 @@ OUT_CSV_VS_SPANISH = ROOT / "data" / "processed" / "cohort_vs_spanish_test.csv"
 OUT_CHART = ROOT / "data" / "processed" / "cohort_tenure_rate_ratio.png"
 OUT_CHART_REG_SENSITIVITY = ROOT / "data" / "processed" / "cohort_tenure_regularization_sensitivity.png"
 OUT_CHART_SHARE_ALL = ROOT / "data" / "processed" / "cohort_share_test_all_groups.png"
+OUT_CSV_FIXED_CUTOFF = ROOT / "data" / "processed" / "cohort_tenure_fixed_cutoff_test.csv"
+OUT_CSV_FIXED_CUTOFF_REG = ROOT / "data" / "processed" / "cohort_tenure_fixed_cutoff_regularization_sensitivity.csv"
+OUT_CHART_FIXED_CUTOFF = ROOT / "data" / "processed" / "cohort_tenure_fixed_cutoff_test.png"
 
 MIR_NAME = {"MA": "MARRUECOS", "DZ": "ARGELIA"}
 # Extension groups (Test C only -- see module docstring "EXTENSION").
@@ -673,6 +707,36 @@ def spanish_rate_for_years(years, spanish_data, spanish_male_pop):
     return c / n
 
 
+def trend_adjusted_cohort_stat(c_year, s_year, p_year, r_base, trend, var_r_base):
+    """Shared statistic for Test B (rolling window) and Test F (fixed
+    cutoff): given one year's settled/cohort split (s_year/p_year), the
+    pre-surge settled rate r_base + its Poisson variance var_r_base, and a
+    reference-population trend adjustment, compute the trend-adjusted
+    settled expectation, the implied cohort rate, the rate ratio, and a
+    z/p-value via the delta method (B43). Returns a dict; hypothesis_call
+    is left to the caller (both tests use the same negative-residual
+    "undefined" guard, but the exact label differs slightly)."""
+    r_expected_settled = r_base * trend
+    residual = c_year - r_expected_settled * s_year
+    r_cohort = residual / p_year
+    rate_ratio = r_cohort / r_expected_settled
+
+    d_dC = 1 / (r_expected_settled * p_year)
+    d_drbase = -c_year * trend / (p_year * r_expected_settled ** 2)
+    var_ratio = (d_dC ** 2) * poisson_var(c_year) + (d_drbase ** 2) * var_r_base
+    se = math.sqrt(var_ratio)
+    z = (rate_ratio - 1) / se
+    p_value = math.erfc(abs(z) / math.sqrt(2))
+    return {
+        "r_expected_settled": r_expected_settled, "r_cohort_implied": r_cohort,
+        "rate_ratio": rate_ratio, "z": z, "p_value": p_value,
+    }
+
+
+UNDEFINED_NEGATIVE_RESIDUAL = ("undefined (implied cohort rate negative -- trend-adjusted "
+                               "settled expectation exceeds observed total; not a valid rate, see B43 caveat)")
+
+
 def run_test_b(group_name, code, stock_by_year, crime_by_year, baseline_years_raw, baseline_label,
                spanish_data, spanish_male_pop, extra_stock=0):
     """extra_stock (B43, revised from B42): a constant hypothetical hidden
@@ -731,34 +795,10 @@ def run_test_b(group_name, code, stock_by_year, crime_by_year, baseline_years_ra
     for y in TEST_YEARS:
         c_year, conf = crime_by_year[y]
         s_year, p_year = settled_by_year[y], cohort_by_year[y]
-        spanish_rate_year = spanish_rate_for_years([y], spanish_data, spanish_male_pop)
-        trend = spanish_rate_year / spanish_rate_base
-        r_expected_settled = r_base * trend
-
-        residual = c_year - r_expected_settled * s_year
-        r_cohort = residual / p_year
-        rate_ratio = r_cohort / r_expected_settled
-
-        d_dC = 1 / (r_expected_settled * p_year)
-        d_drbase = -c_year * trend / (p_year * r_expected_settled ** 2)
-        var_ratio = (d_dC ** 2) * poisson_var(c_year) + (d_drbase ** 2) * var_r_base
-        se = math.sqrt(var_ratio)
-        z = (rate_ratio - 1) / se
-        p_value = math.erfc(abs(z) / math.sqrt(2))
-
-        if r_cohort < 0:
-            # The trend-adjusted settled expectation alone already exceeds the
-            # observed total -- residual, and therefore the implied cohort
-            # rate, is negative, which isn't a valid rate. This is a real
-            # model-tension signal (most likely for a group whose own
-            # Test A/E rate rose LESS than the Spanish reference population's,
-            # e.g. Marruecos -- scaling settled by the full Spanish trend then
-            # overshoots) rather than a bug; report the numbers but don't
-            # dress a negative rate up as "significantly below baseline".
-            hyp_call = ("undefined (implied cohort rate negative -- trend-adjusted "
-                        "settled expectation exceeds observed total; not a valid rate, see B43 caveat)")
-        else:
-            hyp_call = classify(rate_ratio, p_value)
+        trend = (spanish_rate_for_years([y], spanish_data, spanish_male_pop) / spanish_rate_base)
+        stat = trend_adjusted_cohort_stat(c_year, s_year, p_year, r_base, trend, var_r_base)
+        hyp_call = (UNDEFINED_NEGATIVE_RESIDUAL if stat["r_cohort_implied"] < 0
+                    else classify(stat["rate_ratio"], stat["p_value"]))
 
         rows.append({
             "group": group_name, "country_code": code, "baseline": baseline_label, "year": y,
@@ -769,8 +809,71 @@ def run_test_b(group_name, code, stock_by_year, crime_by_year, baseline_years_ra
             "cohort_window": f"{y - COHORT_WINDOW_YEARS}->{y} (net delta)",
             "regularization_added_male_15_59": extra_stock,
             "r_settled_baseline": r_base, "spanish_trend_adjustment": trend,
-            "r_expected_settled": r_expected_settled,
-            "r_cohort_implied": r_cohort, "rate_ratio": rate_ratio, "z": z, "p_value": p_value,
+            **stat,
+            "hypothesis_call": hyp_call,
+        })
+    return rows
+
+
+# ── Test F: fixed-cutoff cohort/settled split (vs Test B's rolling window) ─
+
+FIXED_COHORT_CUTOFFS = [2022, 2024]  # user-requested (2026-07-30): treat "new
+    # cohort" as everyone who arrived at/after this year, everyone before it
+    # as the settled baseline population -- a single, literal before/after
+    # split matching the original "modern stock vs pre-2020/2022 population"
+    # framing directly, as opposed to Test B's rolling 3-year trailing
+    # window (which redefines "recent" relative to every observation year).
+
+BAD_CRIME_YEARS = {2020}  # B38: victim-side data corrupted that year;
+    # perpetrator-side is fine but excluded for consistency, matching the
+    # rest of this module's convention.
+
+
+def run_test_f(group_name, code, stock_by_year, crime_by_year, cutoff_year,
+                spanish_data, spanish_male_pop, extra_stock=0):
+    """Fixed-cutoff cohort/settled split: settled_pop is pinned ONCE at
+    stock(cutoff_year - 1) and held fixed for every test year >=
+    cutoff_year (unlike Test B, where settled_pop is recomputed every year
+    via a rolling trailing window); cohort_pop = stock(year) - settled_pop
+    (+ extra_stock, assumed to have arrived at/after the cutoff -- same
+    reasoning as B43's regularization reassignment, just anchored to an
+    explicit cutoff instead of a rolling window). The baseline rate is
+    estimated from EVERY available real MIR year strictly before the
+    cutoff (not just a pooled 2-3-year set) -- the deepest, most literal
+    "before" period this data supports for that specific cutoff. Settled's
+    expected rate is trend-adjusted against the Spanish reference
+    population exactly as in Test B (same reasoning, same helper,
+    trend_adjusted_cohort_stat())."""
+    baseline_years_candidates = [y for y in range(2017, cutoff_year) if y not in BAD_CRIME_YEARS]
+    baseline_years = available_years(baseline_years_candidates, crime_by_year)
+    test_years = [y for y in TEST_YEARS if y >= cutoff_year]
+
+    c_base = sum(crime_by_year[y][0] for y in baseline_years)
+    n_base_total = sum(stock_by_year[y] for y in baseline_years)
+    r_base = c_base / n_base_total
+    var_r_base = poisson_var(c_base) / n_base_total ** 2
+    spanish_rate_base = spanish_rate_for_years(baseline_years, spanish_data, spanish_male_pop)
+
+    settled_pop = stock_by_year[cutoff_year - 1]
+
+    rows = []
+    for y in test_years:
+        c_year, conf = crime_by_year[y]
+        cohort_pop = stock_by_year[y] - settled_pop + extra_stock
+        trend = (spanish_rate_for_years([y], spanish_data, spanish_male_pop) / spanish_rate_base)
+        stat = trend_adjusted_cohort_stat(c_year, settled_pop, cohort_pop, r_base, trend, var_r_base)
+        hyp_call = (UNDEFINED_NEGATIVE_RESIDUAL if stat["r_cohort_implied"] < 0
+                    else classify(stat["rate_ratio"], stat["p_value"]))
+
+        rows.append({
+            "group": group_name, "country_code": code, "cutoff_year": cutoff_year, "year": y,
+            "baseline_years_used": ",".join(map(str, baseline_years)),
+            "crime_male": c_year, "crime_confidence": conf,
+            "settled_pop_male_15_59_fixed": settled_pop,
+            "cohort_pop_male_15_59": cohort_pop,
+            "regularization_added_male_15_59": extra_stock,
+            "r_settled_baseline": r_base, "spanish_trend_adjustment": trend,
+            **stat,
             "hypothesis_call": hyp_call,
         })
     return rows
@@ -898,6 +1001,7 @@ def main():
     reg_added["MA+DZ"] = reg_added["MA"] + reg_added["DZ"]
 
     rows_a, rows_b, rows_b_reg, rows_c, rows_e = [], [], [], [], []
+    rows_f, rows_f_reg = [], []
     for code, g in per_group.items():
         rows_a += run_test_a(g["name"], code, g["stock"], g["crime"])
         rows_b += run_test_b(g["name"], code, g["stock"], g["crime"],
@@ -914,6 +1018,11 @@ def main():
                                   spanish_data, spanish_male_pop, extra_stock=reg_added[code])
         rows_c += run_test_c(g["name"], code, g["crime_total"], spanish_data)
         rows_e += run_test_e(g["name"], code, g["stock"], g["crime"], spanish_male_pop, spanish_data)
+        for cutoff in FIXED_COHORT_CUTOFFS:
+            rows_f += run_test_f(g["name"], code, g["stock"], g["crime"], cutoff,
+                                  spanish_data, spanish_male_pop)
+            rows_f_reg += run_test_f(g["name"], code, g["stock"], g["crime"], cutoff,
+                                      spanish_data, spanish_male_pop, extra_stock=reg_added[code])
 
     # Extension: South America / EU-Europe -- Test C only, no stock/flow time
     # series exists for these groups (see module docstring EXTENSION).
@@ -953,6 +1062,18 @@ def main():
         w.writerows(rows_e)
     print(f"Wrote {len(rows_e)} rows -> {OUT_CSV_VS_SPANISH}")
 
+    with open(OUT_CSV_FIXED_CUTOFF, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows_f[0].keys()))
+        w.writeheader()
+        w.writerows(rows_f)
+    print(f"Wrote {len(rows_f)} rows -> {OUT_CSV_FIXED_CUTOFF}")
+
+    with open(OUT_CSV_FIXED_CUTOFF_REG, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows_f_reg[0].keys()))
+        w.writeheader()
+        w.writerows(rows_f_reg)
+    print(f"Wrote {len(rows_f_reg)} rows -> {OUT_CSV_FIXED_CUTOFF_REG}")
+
     print("\nTEST A -- period-level (whole nationality group, recent stock vs original stock):")
     for r in rows_a:
         print(f"  {r['group']:20} {r['baseline']:26} vs {r['test_period']:16} "
@@ -983,8 +1104,20 @@ def main():
               f"group_RR={r['group_rate_ratio']:.2f}  spanish_RR={r['spanish_rate_ratio']:.2f}  "
               f"ratio_of_ratios={r['ratio_of_ratios']:.2f}  z={r['z']:+.2f}  p={r['p_value']:.4f}  {r['hypothesis_call']}")
 
+    print("\nTEST F -- fixed-cutoff cohort/settled split (unadjusted):")
+    for r in rows_f:
+        print(f"  {r['group']:20} cutoff={r['cutoff_year']} {r['year']}  rate_ratio={r['rate_ratio']:.2f}  "
+              f"z={r['z']:+.2f}  p={r['p_value']:.4f}  {r['hypothesis_call']}")
+
+    print("\nTEST F (regularization-adjusted, assumed to have arrived at/after the cutoff):")
+    for r in rows_f_reg:
+        print(f"  {r['group']:20} cutoff={r['cutoff_year']} {r['year']}  "
+              f"+{r['regularization_added_male_15_59']:.0f} cohort  rate_ratio={r['rate_ratio']:.2f}  "
+              f"z={r['z']:+.2f}  p={r['p_value']:.4f}  {r['hypothesis_call']}")
+
     make_chart(rows_a, rows_b, rows_c, rows_e)
     make_reg_sensitivity_chart(rows_b, rows_b_reg)
+    make_fixed_cutoff_chart(rows_f, rows_f_reg)
     make_share_chart_all_groups(rows_c)
 
 
@@ -1114,6 +1247,67 @@ def make_reg_sensitivity_chart(rows_b, rows_b_reg):
     fig.tight_layout()
     fig.savefig(OUT_CHART_REG_SENSITIVITY, dpi=150)
     print(f"Wrote chart -> {OUT_CHART_REG_SENSITIVITY}")
+
+
+TINY_COHORT_POP_THRESHOLD = 500  # below this, a single year's net-stock-delta
+    # is so small the rate ratio is dominated by noise, not signal (e.g.
+    # Argelia cutoff=2022/test=2022: cohort_pop=66, rate_ratio=52x on a
+    # single extra year of accumulation since the cutoff -- flagged, not
+    # hidden, since it's still a real (if unstable) computation from real
+    # data (C9), but must not be allowed to swamp the chart's scale.
+
+
+def make_fixed_cutoff_chart(rows_f, rows_f_reg):
+    """Test F: fixed-cutoff cohort/settled split, unadjusted vs
+    regularization-adjusted, one panel per group, bars grouped by
+    (cutoff_year, test_year) -- cutoff=2022 has 3 test years (2022-2024),
+    cutoff=2024 has only 1 (2024 itself). Log y-scale: the very first test
+    year after a cutoff can have a tiny cohort_pop (barely any time has
+    accumulated since the split), making its rate ratio wildly noisy and,
+    on a linear scale, visually swamp every other (far more stable) bar --
+    see TINY_COHORT_POP_THRESHOLD. Each bar is annotated with its own
+    cohort_pop so the instability is visible directly on the chart, not
+    just in the caveat text."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    groups = ["MARRUECOS", "ARGELIA", "MARRUECOS+ARGELIA"]
+
+    fig, axes = plt.subplots(1, len(groups), figsize=(5 * len(groups), 4.5), sharey=True)
+    for ax, g in zip(axes, groups):
+        orig = [r for r in rows_f if r["group"] == g]
+        adj = {(r["cutoff_year"], r["year"]): r for r in rows_f_reg if r["group"] == g}
+        labels = [f"cutoff={r['cutoff_year']}\ntest={r['year']}" for r in orig]
+        x = list(range(len(orig)))
+        w = 0.35
+        bars_orig = ax.bar([i - w / 2 for i in x], [max(r["rate_ratio"], 1e-3) for r in orig], w,
+                            label="Unadjusted", color="#4C72B0")
+        adj_rows = [adj[(r["cutoff_year"], r["year"])] for r in orig]
+        bars_adj = ax.bar([i + w / 2 for i in x], [max(r["rate_ratio"], 1e-3) for r in adj_rows], w,
+                           label="+ regularization pool (upper bound)", color="#DD8452")
+        for bar, r in zip(bars_orig, orig):
+            note = f"n={r['cohort_pop_male_15_59']}"
+            if r["hypothesis_call"].startswith("undefined"):
+                note += " (undefined)"
+            elif r["cohort_pop_male_15_59"] < TINY_COHORT_POP_THRESHOLD:
+                note += " (tiny -- unstable)"
+            ax.annotate(note, (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                        fontsize=6, ha="center", va="bottom", rotation=90,
+                        xytext=(0, 2), textcoords="offset points")
+        ax.set_yscale("log")
+        ax.axhline(1.0, color="gray", linestyle="--", linewidth=1)
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, fontsize=7)
+        ax.set_title(g.title(), fontsize=10)
+        ax.set_ylabel("implied cohort/settled rate ratio (log scale)", fontsize=8)
+    axes[0].legend(fontsize=7, loc="upper left")
+    fig.suptitle("Test F -- fixed-cutoff cohort/settled split (\"arrived at/after cutoff\" vs \"everyone before\")\n"
+                 "settled_pop pinned at stock(cutoff-1), Spanish-population trend-adjusted; log scale -- annotations show "
+                 "cohort_pop (n); association only, upper-bound (V14)")
+    fig.tight_layout()
+    fig.savefig(OUT_CHART_FIXED_CUTOFF, dpi=150)
+    print(f"Wrote chart -> {OUT_CHART_FIXED_CUTOFF}")
 
 
 def make_share_chart_all_groups(rows_c):
