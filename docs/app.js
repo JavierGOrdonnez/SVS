@@ -482,6 +482,21 @@ function buildHate() {
       options: baseOpts(),
     });
   });
+
+  register('hc-nationality', (cv) => {
+    const n = d.nationality;
+    return new Chart(cv, {
+      type: 'line',
+      data: {
+        labels: n.years.map(String),
+        datasets: [
+          line('Detained/investigated — % Spanish', n.detainees.overall.pct_spanish, PALETTE[0]),
+          line('Victims — % Spanish', n.victims.overall.pct_spanish, PALETTE[3]),
+        ],
+      },
+      options: baseOpts({ y: { min: 0, max: 100, ticks: { callback: (v) => v + '%' } } }),
+    });
+  });
 }
 
 function buildMortality() {

@@ -132,7 +132,9 @@
   <div class="section-intro">
     <h2>Hate & xenophobic crime</h2>
     <p>MIR hate-crime reports, 2016–2023. There is no 2022 edition (publication gap), and a 2017
-    methodology change makes the disability series discontinuous — both flagged on the charts.</p>
+    methodology change makes the disability series discontinuous — both flagged on the charts.
+    Nationality of detainees/investigated and victims, 2021–2024, comes from a separate source:
+    the Interior Ministry's own statistical portal, not the PDF reports.</p>
   </div>
   <div class="grid">
     <svs-chart-panel id="hc-totals" size="half" confidence="high"
@@ -141,6 +143,10 @@
     </svs-chart-panel>
     <svs-chart-panel id="hc-categories" size="half" confidence="high"
       title="By motive category" subtitle="Top six categories by latest-year count."></svs-chart-panel>
+    <svs-chart-panel id="hc-nationality" size="half" confidence="high"
+      title="Nationality — % Spanish, 2021–2024" subtitle="Detained/investigated vs. victims, all motive categories combined.">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html" label="Portal Estadístico de Criminalidad (SES/MIR), tablas 06019 y 06013" note="detained/investigated ≠ convicted"></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-hate" heading="Hate crime — caveats"></svs-caveat-list>
@@ -189,6 +195,8 @@
     'cav-hate': [
       { label: '2022 gap', text: 'No MIR hate-crime report was published for 2022 — the line breaks, it is not zero.' },
       { label: 'Methodology break', text: '2017 “discapacidad”→“diversidad funcional” change caused a structural −91% drop, not a real decline; “antigitanismo” was added in 2019.' },
+      { label: 'Nationality coverage', text: 'The nationality chart only covers 2021–2024 — the SES portal’s queryable microdata for hate crimes (this is the only source with a nationality breakdown) does not go back further, confirmed against a second, non-nationality table from the same portal that is also 2021–2024-only. It is a separate source from the 2016–2023 typology series above and is not affected by that series’ 2022 gap.' },
+      { label: 'Detained ≠ convicted', text: 'This is police-recorded detentions/investigations (detenidos/investigados), not convictions. No official annual conviction series exists for hate crimes by nationality — checked directly against INE’s full statistical-operations catalogue and against the Balance de Criminalidad reports, both come up empty. The closest available data point is a one-off academic judicial-sentencing study (Giménez-Salinas Framis et al., OBERAXE 2023), not an official series.' },
     ],
     'cav-mort': [
       { label: 'Competing risks', text: 'Lifetime probabilities must use a competing-risks model, not naive annual-rate multiplication — events are not independent across years.' },

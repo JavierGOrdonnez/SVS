@@ -44,6 +44,7 @@ were left untouched at the paths above.
 | `src/mortality/compute_mortality_rates.py` | `mortality_spain_ine_ecm.csv`, `population_spain_midyear_5yr.csv` | `data/processed/mortality_rates.csv`, `mortality_rates_key.csv`, `mortality_rates_all_cause_by_age.csv` | T7 | x |
 | `src/feminicides/compute_feminicide_rates.py` | `feminicidios_delegacion_2003-2026.json` (2006-2024 reports, victim+perpetrator counts), `population_spain_midyear_5yr.csv` (female+male), `migration_spain.csv` (foreign-resident stock, female+male share) | `data/processed/feminicide_rates_2006-2024.csv` (per-origin × per-role, 4 rows/year) | T24,T60 | x |
 | `src/crime/parse_ine_tabla28716.py` | INE table 28716 CSV, fetched live from `ine.es` | `data/processed/ine_condenados_28716_sexual_crimes.csv`, `ine_condenados_28716_nationality_pct.csv` | T26,T30 | ~ |
+| `src/crime/parse_ses_odio_nationality.py` | SES portal megatablas 06019 (detenidos)/06013 (víctimas), fetched live from `estadisticasdecriminalidad.ses.mir.es`, national-level rows only | `data/raw/hate_crimes_ses_nacionalidad_{detenidos,victimas}_2021-2024.csv`, `..._summary_2021-2024.csv` | T76 | x |
 | `src/migration/parse_eurostat_migration_cohort.py` | Eurostat bulk TSV `migr_imm1ctz`/`migr_pop1ctz` (manual download, not in `data/raw/`) | appends to `data/raw/migration_spain.csv` | T11,T43,T44 | ~ |
 | `src/crime/analyze_cohort_crime_rate.py` | `migration_spain.csv`, `sexual_crimes_mir_2019-2024.json`, `population_spain_midyear_5yr.csv` | `data/processed/cohort_tenure_*.csv` (4 files) + 2 PNGs | T41 | x |
 | `src/crime/analyze_mir_migration_correlation.py` | hardcoded MIR/migration constants (documented inline; not read from a live CSV) | `data/processed/mir_migration_rates.csv` | T50 | x |
@@ -54,10 +55,10 @@ were left untouched at the paths above.
 | `src/migration/build_dashboard_data.py` (formerly `build_migration_dashboard_data.py`) | `migration_spain.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/migration.json`; legacy stdout-JS `main()` kept for standalone use | T-mig-tab | x |
 | `src/feminicides/build_dashboard_data.py` | `feminicidios_delegacion_2003-2026.json` (all years, incl. 2003-2005 stub reports), `feminicide_rates_2006-2024.csv` (full 2006-2024 series) | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/feminicides.json` (`timeline` 2003-present w/ age-band breakdown + provisional flag, `rates` w/ `years`/`latest_year`/full `rows` series, static `milestones`; `regional`/`age_origin` removed) | T23,T24,T60,T61 | x |
 | `src/sexual_crimes/build_dashboard_data.py` | `sexual_crimes_mir_2019-2024.json`, `sexual_crime_evolution.csv`, `ine_condenados_28716_sexual_crimes.csv` | `build()` consumed by `src/analysis/build_dashboard.py` → `docs/data/sexual_crimes.json` | T3,T21,T22 | x |
-| `src/crime/build_dashboard_data.py` | `hate_crimes_mir_2016-2021_2023.json`, `cohort_tenure_period_test.csv`, `cohort_share_test.csv` | `build_hate_crimes()`/`build_cohort_tenure()` consumed by `src/analysis/build_dashboard.py` → `docs/data/hate_crimes.json`, `docs/data/cohort_tenure.json` | T41,T59 | x |
+| `src/crime/build_dashboard_data.py` | `hate_crimes_mir_2016-2021_2023.json`, `hate_crimes_ses_nacionalidad_{detenidos,victimas}_summary_2021-2024.csv`, `cohort_tenure_period_test.csv`, `cohort_share_test.csv` | `build_hate_crimes()`/`build_cohort_tenure()` consumed by `src/analysis/build_dashboard.py` → `docs/data/hate_crimes.json`, `docs/data/cohort_tenure.json` | T41,T59,T76 | x |
 | `src/analysis/build_dashboard.py` | calls each domain's `build_dashboard_data.build()` (feminicides, sexual_crimes, crime, migration, mortality) via `importlib` (all 5 modules share the filename `build_dashboard_data.py`, so a plain `import` would only bind the first one loaded) | `docs/data/*.json` (6 files) | T17,T23,T-mig-tab | x |
 
-23 scripts total (5 parsers + 18 analysis), zero missing a `§T` reference.
+24 scripts total (6 parsers + 18 analysis), zero missing a `§T` reference.
 
 ## Script-level flow
 
