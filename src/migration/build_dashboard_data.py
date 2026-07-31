@@ -128,6 +128,39 @@ def _region_country_breakdown(by_country_year, region_codes, years):
     return {"countries": list(series.keys()), "series": series}
 
 
+def _total_population_by_year():
+    """INE Padrón midyear total population (all residents, Spanish + foreign),
+    summed across age bands, per year. Backs both _spain_stock_series() below
+    and _stock_trend()'s foreign_pct_of_total. Only runs through 2024."""
+    pop_rows = load_rows(POPULATION_CSV)
+    total_pop_by_year = defaultdict(int)
+    for r in pop_rows:
+        if r["sex"] != "all":
+            continue
+        total_pop_by_year[int(r["year"])] += int(r["population_july1"])
+    return total_pop_by_year
+
+
+def _spain_stock_series(years, by_region_year, total_pop_by_year):
+    """Spanish-national population per year, same subtraction approach as
+    T70's _spanish_age_pyramid (INE Padrón midyear total minus foreign
+    stock) but summed as a single yearly total rather than by age band, so
+    mi-stock-region can carry a `spain` reference line like the two
+    sexual-crimes drill panels already do (V44-adjacent: derived from the
+    same rows the region series themselves sum, so it's consistent with
+    them, not an independent estimate). population_spain_midyear_5yr.csv
+    only runs through 2024, one year short of stock_nationality's 2025 —
+    left as a genuine null gap for any year without population data rather
+    than carrying the last known total forward."""
+    def spain_value(year):
+        if year not in total_pop_by_year:
+            return None
+        foreign_total = sum(by_region_year[region].get(year, 0) for region in REGIONS)
+        return total_pop_by_year[year] - foreign_total
+
+    return [spain_value(y) for y in years]
+
+
 def _stock_by_region(rows):
     """T68: foreign-national stock summed per display region, over time.
     T72: also carries each region's per-country breakdown (by_country) for
@@ -155,6 +188,7 @@ def _stock_by_region(rows):
     return {
         "years": years,
         "regions": REGIONS,
+        "spain": _spain_stock_series(years, by_region_year, _total_population_by_year()),
         "by_country": {
             region: _region_country_breakdown(by_country_year, codes_by_region[region], years)
             for region in REGIONS
@@ -340,9 +374,20 @@ def build():
         (r for r in rows if r["series"] == "stock_foreign_born"),
         key=lambda r: int(r["year"]),
     )
+    # foreign_nationality's own share of total resident population, per year
+    # (INE Padrón midyear total) — the normalized companion to that raw
+    # count: is the *share* of foreign residents rising, not just the count.
+    # Only available through 2024 (population_spain_midyear_5yr.csv's last
+    # year); 2025 is a genuine null gap, not carried forward.
+    total_pop_by_year = _total_population_by_year()
     s6 = {
         "years": [int(r["year"]) for r in stock_nat],
         "foreign_nationality": [int(r["value"]) for r in stock_nat],
+        "foreign_pct_of_total": [
+            round(int(r["value"]) / total_pop_by_year[int(r["year"])] * 100, 2)
+            if int(r["year"]) in total_pop_by_year else None
+            for r in stock_nat
+        ],
         "foreign_born_years": [int(r["year"]) for r in stock_born],
         "foreign_born": [int(r["value"]) for r in stock_born],
     }
