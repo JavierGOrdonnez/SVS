@@ -8,7 +8,12 @@ out of src/analysis/build_dashboard.py.
 
 import csv
 import json
+import sys
 from collections import defaultdict
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from src.parsers.mir_parser import classify_odio_category
 
 
 def read_csv(path):
@@ -30,6 +35,39 @@ def num(x):
         return int(f) if f.is_integer() else f
     except ValueError:
         return None
+
+
+def _nationality_block(csv_path):
+    """Read a hate_crimes_ses_nacionalidad_*_summary CSV -> {years, overall,
+    by_category}, keyed by the same normalized category keys as `categories`
+    (via classify_odio_category), so app.js can share one category legend
+    across the typology and nationality charts."""
+    rows = read_csv(csv_path)
+    years = sorted({int(r["anyo"]) for r in rows})
+
+    overall = {"espana": {}, "foreign": {}, "pct_spanish": {}}
+    by_cat = defaultdict(lambda: {"espana": {}, "foreign": {}, "pct_spanish": {}})
+    for r in rows:
+        year = int(r["anyo"])
+        espana, foreign, pct = num(r["espana"]), num(r["foreign"]), num(r["pct_spanish"])
+        if r["ambito"] == "TOTAL ámbito":
+            overall["espana"][year] = espana
+            overall["foreign"][year] = foreign
+            overall["pct_spanish"][year] = pct
+        else:
+            key = classify_odio_category(r["ambito"]) or r["ambito"]
+            by_cat[key]["espana"][year] = espana
+            by_cat[key]["foreign"][year] = foreign
+            by_cat[key]["pct_spanish"][year] = pct
+
+    return {
+        "years": years,
+        "overall": {k: [v.get(y) for y in years] for k, v in overall.items()},
+        "categories": {
+            cat: {k: [v.get(y) for y in years] for k, v in series.items()}
+            for cat, series in by_cat.items()
+        },
+    }
 
 
 def build_hate_crimes():
@@ -55,6 +93,12 @@ def build_hate_crimes():
         "series": {c: [by_cat[c].get(y) for y in years] for c in ranked},
     }
 
+    nationality = {
+        "years": [2021, 2022, 2023, 2024],
+        "detainees": _nationality_block("data/raw/hate_crimes_ses_nacionalidad_detenidos_summary_2021-2024.csv"),
+        "victims": _nationality_block("data/raw/hate_crimes_ses_nacionalidad_victimas_summary_2021-2024.csv"),
+    }
+
     return {
         "source": "Ministerio del Interior — Informe sobre la evolución de los delitos de odio en España",
         "source_url": "https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/delitos-de-odio/",
@@ -66,6 +110,10 @@ def build_hate_crimes():
         },
         "totals": totals,
         "categories": categories,
+        "nationality": nationality,
+        "nationality_source": "Portal Estadístico de Criminalidad (SES/MIR), tablas 06019 (detenidos/investigados) y 06013 (victimizaciones), nivel nacional",
+        "nationality_source_url": "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html",
+        "nationality_caveat": "Solo 2021-2024 (el sistema de consulta del portal no tiene datos anteriores para delitos de odio, ni siquiera para series sin desglose de nacionalidad). Detenidos/investigados no equivale a condenados: no existe una serie oficial de condenas por delito de odio y nacionalidad.",
     }
 
 
@@ -104,7 +152,7 @@ def build_cohort_tenure():
 
 
 def build_victim_vulnerability():
-    """T80: victim-side mirror of peligrosity (V15) -- sexual-crime victims
+    """T81: victim-side mirror of peligrosity (V15) -- sexual-crime victims
     per 100k population of the same nationality, not a %-share. Reads
     compute_victim_vulnerability_rates.py's output, grouped by nationality
     the same way build_cohort_tenure() groups by group name above."""
@@ -135,7 +183,7 @@ def build_victim_vulnerability():
 
 
 def build_regularization_sensitivity():
-    """T84: upper-bound denominator sensitivity scenario -- assumes the
+    """T85: upper-bound denominator sensitivity scenario -- assumes the
     ENTIRE 2026 regularization-application pool for a nationality was
     already present throughout 2019-2024, 100% aged 15-59, split male/
     female per that nationality's real registered sex ratio. Original vs.
@@ -163,9 +211,9 @@ def build_regularization_sensitivity():
 
 
 def build_general_crime():
-    """T83: general (non-nationality-specific) long-run crime trend --
+    """T84: general (non-nationality-specific) long-run crime trend --
     homicide, robbery, sexual_assault, Spanish vs. foreign only (no
-    per-country breakdown exists in this source, see T82's own finding).
+    per-country breakdown exists in this source, see T83's own finding).
     Extends this dashboard's crime coverage back to 2015 using MIR Anuario's
     general "Seguridad Ciudadana" chapter tables (`parse_anuario_general_
     crime.py`), independent of the sexual-crimes-specific Informe/Anuario
@@ -217,7 +265,7 @@ def build_general_crime():
                     "tables (not the sexual-crimes-specific Informe/Anuario series used elsewhere) + "
                     "population_spain_midyear_5yr.csv + migration_spain.csv"),
         "confidence": "medium",
-        "caveat": ("Spanish-vs-foreign only -- no per-country breakdown exists in this source (T82 checked "
+        "caveat": ("Spanish-vs-foreign only -- no per-country breakdown exists in this source (T83 checked "
                    "directly). 'per_capita' = reported crimes (hechos conocidos), all nationalities. "
                    "'spanish'/'foreign' = detenciones/investigados (identified perpetrators, matching this "
                    "dashboard's peligrosity convention elsewhere) -- NOT directly comparable to per_capita "

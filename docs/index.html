@@ -41,7 +41,7 @@
 <section id="tab-feminicides" class="tab-panel active">
   <div class="grid">
     <svs-chart-panel id="fem-timeline" size="full" confidence="high"
-      title="Partner & ex-partner feminicides, 2003–2025" subtitle="Stacked by victim age band, dashed white line = 5-year moving average. Dashed vertical lines: COVID and legal milestones.">
+      title="Partner & ex-partner feminicides, 2003–2025" subtitle="Stacked by victim age band, dashed white line = 5-year moving average. Shaded band: COVID (2020). Dashed vertical lines: legal milestones.">
       <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género"></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="fem-ageband" size="full" height="220" confidence="high"
@@ -75,16 +75,21 @@
     <svs-chart-panel id="sx-categories" size="half" confidence="high"
       title="By category, 2019–2024" subtitle="All categories, pre/post-LO10/2022 naming unified. Stacked counts."></svs-chart-panel>
     <svs-chart-panel id="sx-nationality-victims" size="half" height="320" confidence="medium"
-      title="Victim nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      title="Victim nationality by region" subtitle="White line: Spain (derived from spanish_pct). Click a region to see country-level stacked bars. 2019–2024.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-victim-vulnerability-rate" size="full" height="320" confidence="medium"
-      title="Victim rate per 100k, by nationality" subtitle="2019–2024 (2020 excluded, source-PDF defect). Bars = rate per 100k female stock; hover for the total-stock alternative + 95% CI. Rate, not %-share — the victim-side mirror of peligrosity (T80).">
+      title="Victim rate per 100k, by nationality" subtitle="2019–2024 (2020 excluded, source-PDF defect). Bars = rate per 100k female stock; hover for the total-stock alternative + 95% CI. Rate, not %-share — the victim-side mirror of peligrosity (T81).">
       <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR Informe (victims) + Eurostat migr_pop1ctz" note="Numerator = all reported victims of that nationality (both sexes). Denominator: female-only stock (primary) vs total stock (alternative) — shown both ways, neither is the sole framing. CI captures Poisson count variance only, not denominator uncertainty."></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-nationality-perpetrators" size="half" height="320" confidence="medium"
-      title="Perpetrator nationality by region" subtitle="2019–2024. Click a region to see its countries.">
+      title="Perpetrator nationality by region" subtitle="White line: Spain (derived from spanish_pct). Click a region to see country-level stacked bars. 2019–2024.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-peligrosidad" size="full" height="320" confidence="medium"
+      title="Peligrosidad — identified perpetrators % males 15–59 by nationality"
+      subtitle="Solid line = region total; dashed lines = individual countries. Click a region in the legend to drill into its countries; click the same region again to return to the aggregate view. White line: Spain. Denominators: Eurostat migr_pop1ctz + INE Padrón.">
+      <svs-source-cite slot="source" label="MIR Informe perpetrators × Eurostat migr_pop1ctz / INE Padrón" note="Upper-bound (identified, not convicted): annual probability that a given male 15–59 resident of that nationality is identified as a potential perpetrator of a sexual crime. Not a conviction rate, not a lifetime risk. Foreign male 15-59 pop scaled by year-specific coverage factor; Spanish male 15-59 pop = INE Padrón total male 15-59 minus corrected foreign stock."></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="sx-convictions" size="half" confidence="high"
       title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
@@ -107,8 +112,8 @@
     <svs-chart-panel id="mi-sex" size="half" confidence="high" title="Inflow sex split" subtitle="Male vs female."></svs-chart-panel>
     <svs-chart-panel id="mi-ageband" size="half" confidence="medium" title="Inflow by age band" subtitle="Stacked, over time."></svs-chart-panel>
     <svs-chart-panel id="mi-ageprofile" size="half" confidence="medium" title="Inflow age profile, latest year" subtitle="5-year bands."></svs-chart-panel>
-    <svs-chart-panel id="mi-stock" size="half" confidence="high" title="Foreign-national stock" subtitle="Resident foreign nationals, 2000–2025."></svs-chart-panel>
-    <svs-chart-panel id="mi-stock-region" size="full" height="320" confidence="high" title="Foreign-national stock by region" subtitle="50 nationalities (94% of foreign stock), 2002–2025. Eurostat migr_pop1ctz. Click a region to see its countries."></svs-chart-panel>
+    <svs-chart-panel id="mi-stock" size="half" confidence="high" title="Foreign-national stock" subtitle="Resident foreign nationals, 2000–2025. Dashed line: share of total resident population (right axis)."></svs-chart-panel>
+    <svs-chart-panel id="mi-stock-region" size="full" height="320" confidence="high" title="Foreign-national stock by region" subtitle="50 nationalities (94% of foreign stock), 2002–2025. Eurostat migr_pop1ctz. White line: Spain (INE Padrón total minus foreign stock). Click a region to see its countries."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid" size="half" height="480" confidence="high" title="Foreign-national age pyramid" subtitle="2024, by region. Males left / females right. Eurostat migr_pop1ctz."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid-es" size="half" height="480" confidence="medium" title="Spanish-national age pyramid" subtitle="2024. Total population minus foreign stock, same age scale."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid-dz-ma" size="half" height="480" confidence="high" title="Morocco vs Algeria age pyramid" subtitle="2024. Eurostat migr_pop1ctz, country-level (not region-aggregated).">
@@ -174,7 +179,9 @@
   <div class="section-intro">
     <h2>Hate & xenophobic crime</h2>
     <p>MIR hate-crime reports, 2016–2023. There is no 2022 edition (publication gap), and a 2017
-    methodology change makes the disability series discontinuous — both flagged on the charts.</p>
+    methodology change makes the disability series discontinuous — both flagged on the charts.
+    Nationality of detainees/investigated and victims, 2021–2024, comes from a separate source:
+    the Interior Ministry's own statistical portal, not the PDF reports.</p>
   </div>
   <div class="grid">
     <svs-chart-panel id="hc-totals" size="half" confidence="high"
@@ -183,6 +190,10 @@
     </svs-chart-panel>
     <svs-chart-panel id="hc-categories" size="half" confidence="high"
       title="By motive category" subtitle="Top six categories by latest-year count."></svs-chart-panel>
+    <svs-chart-panel id="hc-nationality" size="half" confidence="high"
+      title="Nationality — % Spanish, 2021–2024" subtitle="Detained/investigated vs. victims, all motive categories combined.">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html" label="Portal Estadístico de Criminalidad (SES/MIR), tablas 06019 y 06013" note="detained/investigated ≠ convicted"></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-hate" heading="Hate crime — caveats"></svs-caveat-list>
@@ -223,6 +234,8 @@
       { label: 'Three sources blended', text: 'Reported totals blend three MIR publications: Anuario (2016–2018, before Informe existed), Informe (2019–2024, most detailed, used for categories/nationality), Balance de Criminalidad (2025, provisional quarterly). Balance’s own totals diverge 7–9% from Anuario/Informe in 2022+ — shown as a dashed overlay, not hidden; the source itself flags these years “pending consolidation.”' },
       { label: 'Nationality', text: 'MIR publishes nationality × sex only at report level — there is no nationality × crime-type cross. Its own region groupings changed in 2024 (EU-only “Unión Europea” broadened to all-Europe), so the Europe line is not perfectly continuous across that year. Convictions (INE 28716) are a separate judicial funnel, not the same as police reports.' },
       { label: '2020 data gap', text: 'The 2020 Informe’s own victim-nationality table sums to 429 people — about 30x too small for that year’s 13,174 reported crimes, confirmed as a defect in the source PDF itself (not a parsing error). That year is shown as a gap, not a fake near-zero dip, in the victim-nationality panel only (perpetrator nationality that year is unaffected).' },
+      { label: 'Peligrosidad — Nigeria & Senegal only in 2024', text: 'MIR did not itemize Nigeria or Senegal separately before 2024 — they were hidden inside a residual "RESTO" category. Their high 2024 rates reflect MIR expanding its country-level reporting, not a sudden crime surge. Same issue affects smaller American countries (Paraguay, Argentina, Rep. Dominicana) that drift in and out of MIR\'s itemized list, producing artifact dips/spikes in the America "Other" category.' },
+      { label: 'Peligrosidad — tourist bias (European rates)', text: 'Denominators (Eurostat migr_pop1ctz) count usual residents only (≥12 months). Tourists, holidaymakers, and short-term visitors who commit crimes appear in the numerator but not the denominator, inflating rates for nationalities with high tourist-to-resident ratios (UK, Germany, France — especially when many residents are older retirees unlikely to be perpetrators). Cannot be corrected with current data; would need a visitor-adjusted denominator or a tourist-crime flag in MIR reporting.' },
     ],
     'cav-fem': [
       { label: 'Scope', text: 'Delegación counts intimate-partner / ex-partner homicides only — narrower than all female homicides (INE MNP) or judicial records (CGPJ).' },
@@ -231,13 +244,15 @@
     'cav-hate': [
       { label: '2022 gap', text: 'No MIR hate-crime report was published for 2022 — the line breaks, it is not zero.' },
       { label: 'Methodology break', text: '2017 “discapacidad”→“diversidad funcional” change caused a structural −91% drop, not a real decline; “antigitanismo” was added in 2019.' },
+      { label: 'Nationality coverage', text: 'The nationality chart only covers 2021–2024 — the SES portal’s queryable microdata for hate crimes (this is the only source with a nationality breakdown) does not go back further, confirmed against a second, non-nationality table from the same portal that is also 2021–2024-only. It is a separate source from the 2016–2023 typology series above and is not affected by that series’ 2022 gap.' },
+      { label: 'Detained ≠ convicted', text: 'This is police-recorded detentions/investigations (detenidos/investigados), not convictions. No official annual conviction series exists for hate crimes by nationality — checked directly against INE’s full statistical-operations catalogue and against the Balance de Criminalidad reports, both come up empty. The closest available data point is a one-off academic judicial-sentencing study (Giménez-Salinas Framis et al., OBERAXE 2023), not an official series.' },
     ],
     'cav-mort': [
       { label: 'Competing risks', text: 'Lifetime probabilities must use a competing-risks model, not naive annual-rate multiplication — events are not independent across years.' },
       { label: 'Source', text: 'INE Estadística de Causas de Muerte (table 7947), 2000–2024, joined to INE Padrón population.' },
     ],
     'cav-mig': [
-      { label: 'Age stratification', text: 'Real 5-yr age×sex×nationality denominators now cover 50 nationalities (T43/T44/T66), ~94% of foreign stock. The Spanish-national age pyramid is a derived subtraction (total population minus foreign stock) and mixes a July 1 population reference date with Eurostat’s January 1 stock date.' },
+      { label: 'Age stratification', text: 'Real 5-yr age×sex×nationality denominators now cover 50 nationalities (T43/T44/T66), ~94% of foreign stock. The Spanish-national age pyramid is a derived subtraction (total population minus foreign stock) and mixes a July 1 population reference date with Eurostat’s January 1 stock date. The stock-by-region chart’s España line uses the same subtraction (INE Padrón total minus the 50-nationality foreign stock) collapsed to one yearly total rather than by age band, and stops at 2024 — one year short of the region lines’ 2025 — since INE’s midyear population series doesn’t yet cover that year.' },
       { label: 'Causality', text: 'All cohort tests are associative and descriptive. Correlations with inflow are computed on 4–5 points — indicative, not causal.' },
       { label: 'Breaks', text: '2008 (EVR→EMCR) and 2021 methodology changes are flagged; the 2024 EU-Europe region redefinition undercounts that group.' },
     ],

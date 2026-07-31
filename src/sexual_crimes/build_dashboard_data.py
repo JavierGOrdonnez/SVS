@@ -12,6 +12,7 @@ INFORME_JSON = "data/raw/sexual_crimes_mir_2017-2024.json"
 ANUARIO_JSON = "data/raw/sexual_crimes_mir_anuario_2016-2023.json"
 BALANCE_JSON = "data/raw/sexual_crimes_mir_balance_2019-2025.json"
 CONVICTIONS_CSV = "data/processed/ine_condenados_28716_sexual_crimes.csv"
+MIGRATION_CSV = "data/raw/migration_spain.csv"
 
 # LO 10/2022 renamed categories mid-series (V24) — pre/post variants unified
 # into one continuous series each; every other category name is stable
@@ -168,6 +169,39 @@ def _unified_categories(informe):
 BAD_NATIONALITY_YEARS = {"victims": {2020}, "perpetrators": set()}
 
 
+def _compute_spania(informe, side):
+    """Derive Spain victim/perpetrator counts from spanish_pct and foreign total.
+
+    MIR nationality tables only list foreign countries/regions; Spain (domestic)
+    is given only as `spanish_pct`. We compute Spain's absolute count as:
+
+        total = region_sum / (foreign_pct / 100)
+        spain = total * spanish_pct / 100
+
+    2020 is nulled on the victims side (B38)."""
+    excluded = BAD_NATIONALITY_YEARS[side]
+    years = sorted(r["year"] for r in informe)
+    spain_data = {}
+    for r in informe:
+        y = r["year"]
+        if y in excluded:
+            spain_data[y] = None
+            continue
+        nat = r["nationality"][side]
+        sp = nat.get("spanish_pct")
+        fp = nat.get("foreign_pct")
+        if sp is None or fp is None or fp == 0:
+            spain_data[y] = None
+            continue
+        region_sum = sum(
+            c.get("total") or 0 for c in nat.get("by_country", [])
+            if c.get("is_region_total")
+        )
+        total = region_sum / (fp / 100)
+        spain_data[y] = round(total * sp / 100)
+    return [spain_data.get(y) for y in years]
+
+
 def _nationality_breakdown(informe, side):
     """T-sx-nat: region totals + top-N-country-plus-Other drill-down for
     `side` ('victims' or 'perpetrators'), mirroring migration's T68/T72
@@ -178,8 +212,8 @@ def _nationality_breakdown(informe, side):
     but still carry country totals)."""
     excluded = BAD_NATIONALITY_YEARS[side]
     years = sorted(r["year"] for r in informe)
-    region_totals = defaultdict(lambda: defaultdict(int))       # region -> year -> total
-    country_totals = defaultdict(lambda: defaultdict(int))      # (region, name) -> year -> total
+    region_totals = defaultdict(lambda: defaultdict(int))
+    country_totals = defaultdict(lambda: defaultdict(int))
     for r in informe:
         y = r["year"]
         if y in excluded:
@@ -191,10 +225,6 @@ def _nationality_breakdown(informe, side):
             if row["is_region_total"]:
                 region_totals[region][y] += row.get("total") or 0
             elif not row["name"].upper().startswith(RESIDUAL_ROW_PREFIXES):
-                # MIR's own within-region residual row is excluded from the
-                # named-country pool — its value falls through into our own
-                # subtraction-based "Other" bucket below instead of
-                # duplicating it as a second, redundant "other" entry.
                 name = COUNTRY_NAME_NORMALIZE.get(row["name"].upper(), row["name"].upper())
                 country_totals[(region, name.title())][y] += row.get("total") or 0
 
@@ -219,12 +249,281 @@ def _nationality_breakdown(informe, side):
         ]
         by_country[region] = {"countries": list(series.keys()), "series": series}
 
+    spain_series = _compute_spania(informe, side)
+
     return {
         "years": years,
         "regions": REGIONS,
         "series": {region: [val(region_totals[region], y) for y in years] for region in REGIONS},
         "by_country": by_country,
+        "spain": spain_series,
     }
+
+
+# MIR country names → ISO 3166-1 alpha-2 codes for migration population join
+MIR_COUNTRY_ISO = {
+    "ALEMANIA": "DE", "ARGELIA": "DZ", "ARGENTINA": "AR", "BELGICA": "BE",
+    "BOLIVIA": "BO", "BRASIL": "BR", "BULGARIA": "BG",
+    "CHINA": "CN", "CHINA POPULAR": "CN",
+    "COLOMBIA": "CO",
+    "DOMINICANA": "DO", "DOMINICANA REP.": "DO", "R. DOMINICANA": "DO",
+    "REP. DOMINICANA": "DO", "REPUBLICA DOMINICANA": "DO",
+    "ECUADOR": "EC",
+    "FILIPINAS": "PH", "FRANCIA": "FR",
+    "GEORGIA": "GE", "GUINEA ECUATORIAL": "GQ",
+    "HOLANDA": "NL", "HONDURAS": "HN",
+    "INDIA": "IN", "IRLANDA": "IE", "ITALIA": "IT",
+    "MARRUECOS": "MA",
+    "NICARAGUA": "NI", "NIGERIA": "NG",
+    "PAKISTAN": "PK", "PAQUISTAN": "PK", "PARAGUAY": "PY", "PERU": "PE",
+    "POLONIA": "PL", "PORTUGAL": "PT",
+    "REINO UNIDO": "UK", "RUMANIA": "RO", "RUSIA": "RU",
+    "SENEGAL": "SN", "SUECIA": "SE",
+    "UCRANIA": "UA",
+    "VENEZUELA": "VE", "VENUZUELA": "VE",
+}
+
+PELIGROSITY_AGE_BANDS = ("15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59")
+
+
+def _coverage_factor(migration_rows):
+    """Compute year-specific correction for the ~14% foreign-stock gap.
+
+    `stock_nationality` covers only 50 nationalities — about 86% of INE ECP
+    foreign stock. Returns a dict year → multiplier to scale up foreign male
+    15-59 pop to full foreign-stock coverage.
+
+    factor = total_foreign_stock(INE) / sum_foreign_stock(50_nationalities)
+    """
+    # Total foreign stock from INE Padrón (stock_foreign_nationality)
+    total_foreign = defaultdict(float)
+    for r in migration_rows:
+        if r["series"] == "stock_foreign_nationality" and r["age_group"] == "all" and r["sex"] == "all":
+            total_foreign[int(r["year"])] += float(r["value"]) if r["value"] else 0
+
+    # Sum of all foreign stock from Eurostat 50-nationality dataset
+    sum_50 = defaultdict(float)
+    for r in migration_rows:
+        if r["series"] == "stock_nationality" and r["nationality"] != "ES" and r["age_group"] == "all" and r["sex"] == "all":
+            sum_50[int(r["year"])] += float(r["value"]) if r["value"] else 0
+
+    factors = {}
+    for y in sorted(total_foreign):
+        if sum_50.get(y, 0) > 0:
+            factors[y] = total_foreign[y] / sum_50[y]
+    return factors
+
+
+def _peligrosity(informe, migration_rows):
+    """Annual % male 15-59 perpetrator rates by nationality, same region +
+    country drill-down shape as nationality_victims/perpetrators.
+
+    Returns {years, regions, series (region→rate), spain, by_country (region→{countries, series})}
+    where values are percentages, not absolute counts.
+
+    Spanish rate uses total male 15-59 pop (INE Padrón) minus corrected foreign
+    stock; foreign rates use per-nationality denominators from Eurostat
+    migr_pop1ctz, scaled by a year-specific coverage factor so the ~14%
+    small-nationality gap doesn't bias rates upward.
+
+    MIR's RESTO/OTROS residual rows (perpetrators not attributed to a specific
+    country) are folded into both the region-level rate and the "Other" drill-down
+    category. Their population denominator is estimated by distributing the
+    residual foreign stock (total corrected foreign minus sum of ISO-mapped pops)
+    across regions proportionally to each region's share of RESTO perpetrators.
+    """
+    # ── coverage correction ──
+    cov = _coverage_factor(migration_rows)
+
+    # ── population denominators ──
+    pop = defaultdict(lambda: defaultdict(int))  # iso_code -> year -> male 15-59 pop
+    foreign_male_15_59 = defaultdict(int)          # year -> raw (uncorrected) sum
+    for r in migration_rows:
+        if r["age_group"] not in PELIGROSITY_AGE_BANDS or r["sex"] != "male":
+            continue
+        code = r["nationality"]
+        val = int(r["value"]) if r["value"] else 0
+        pop[code][int(r["year"])] += val
+        if code != "ES":
+            foreign_male_15_59[int(r["year"])] += val
+
+    # Total male 15-59 from INE Padrón
+    TOTAL_POP_CSV = "data/processed/population_spain_midyear_5yr.csv"
+    with open(TOTAL_POP_CSV, encoding="utf-8") as f:
+        total_rows = list(csv.DictReader(f))
+    total_male_15_59_all = defaultdict(int)
+    for r in total_rows:
+        if r["age_group"] in PELIGROSITY_AGE_BANDS and r["sex"] == "male":
+            total_male_15_59_all[int(r["year"])] += int(r["population_july1"]) if r["population_july1"] else 0
+
+    # Corrected foreign male 15-59 (scale up by coverage factor)
+    corrected_foreign_per_year = {}
+    for y in foreign_male_15_59:
+        f = cov.get(y, 1.0)
+        corrected_foreign = round(foreign_male_15_59[y] * f)
+        corrected_foreign_per_year[y] = corrected_foreign
+        es_pop = total_male_15_59_all.get(y, 0) - corrected_foreign
+        if es_pop > 0:
+            pop["ES"][y] = es_pop
+
+    # ── numerator: perpetrator counts by country + RESTO residual ──
+    years = sorted(r["year"] for r in informe)
+    spain_by_year = dict(zip(years, _compute_spania(informe, "perpetrators")))
+
+    perp_by_iso = defaultdict(lambda: defaultdict(int))   # iso -> year -> count
+    resto_perp = defaultdict(lambda: defaultdict(int))     # region -> year -> count
+    iso_to_region = {}                                     # iso -> canonical region
+    for r in informe:
+        y = r["year"]
+        for row in r["nationality"]["perpetrators"].get("by_country", []):
+            if row.get("is_region_total"):
+                continue
+            if row["name"].upper().startswith(RESIDUAL_ROW_PREFIXES):
+                region = REGION_LABEL_MAP.get(row["region"], row["region"])
+                if region in REGIONS:
+                    resto_perp[region][y] += row.get("total") or 0
+                continue
+            name = COUNTRY_NAME_NORMALIZE.get(row["name"].upper(), row["name"].upper())
+            iso = MIR_COUNTRY_ISO.get(name)
+            if not iso:
+                continue
+            perp_by_iso[iso][y] += row.get("total") or 0
+            if iso not in iso_to_region:
+                region = REGION_LABEL_MAP.get(row["region"], row["region"])
+                iso_to_region[iso] = region if region in REGIONS else "Other"
+
+    # ── estimate RESTO population per region ──
+    # Sum of ISO-mapped foreign male 15-59 pop per year
+    sum_iso_foreign = defaultdict(int)
+    for iso in perp_by_iso:
+        if iso == "ES": continue
+        for y in years:
+            sum_iso_foreign[y] += pop[iso].get(y, 0)
+
+    # Distribute residual foreign stock (corrected − sum ISO) across regions
+    # by each region's share of total RESTO perpetrators
+    resto_pop_est = defaultdict(lambda: defaultdict(float))
+    for region in REGIONS:
+        for y in years:
+            if y not in corrected_foreign_per_year:
+                continue
+            remaining = corrected_foreign_per_year[y] - sum_iso_foreign.get(y, 0)
+            if remaining <= 0:
+                continue
+            total_resto = sum(resto_perp[r][y] for r in REGIONS)
+            if total_resto > 0:
+                share = resto_perp[region][y] / total_resto
+            else:
+                share = 1.0 / max(len(REGIONS), 1)
+            resto_pop_est[region][y] = remaining * share
+
+    # ── compute rates ──
+    def rate(iso, y):
+        num = spain_by_year.get(y) if iso == "ES" else perp_by_iso[iso].get(y)
+        if not num:
+            return None
+        den = pop[iso].get(y)
+        if not den:
+            return None
+        return round(num / den * 100, 2)
+
+    # Region-level rates: ISO-mapped countries + RESTO residual
+    region_perp_iso = defaultdict(lambda: defaultdict(int))
+    region_pop_iso = defaultdict(lambda: defaultdict(int))
+    for iso in perp_by_iso:
+        region = iso_to_region.get(iso, "Other")
+        for y in years:
+            region_perp_iso[region][y] += perp_by_iso[iso].get(y, 0)
+            region_pop_iso[region][y] += pop[iso].get(y, 0)
+
+    # Redistribute residual foreign pop by ISO-mapped pop share (not RESTO perp
+    # share — that would make the RESTO rate identical across all regions since
+    # the ratio cancels: perps / (pop * perps/total_perps) = total_perps / pop)
+    for region in REGIONS:
+        for y in years:
+            if y not in corrected_foreign_per_year:
+                continue
+            remaining = corrected_foreign_per_year[y] - sum_iso_foreign.get(y, 0)
+            if remaining <= 0:
+                continue
+            total_iso_pop = sum(region_pop_iso[r][y] for r in REGIONS)
+            if total_iso_pop > 0:
+                share = region_pop_iso[region][y] / total_iso_pop
+                resto_pop_est[region][y] = remaining * share
+
+    # Fold RESTO into region totals
+    region_perp = defaultdict(lambda: defaultdict(int))
+    region_pop = defaultdict(lambda: defaultdict(int))
+    for region in REGIONS:
+        for y in years:
+            region_perp[region][y] = region_perp_iso[region].get(y, 0) + resto_perp[region].get(y, 0)
+            region_pop[region][y] = region_pop_iso[region].get(y, 0) + round(resto_pop_est[region].get(y, 0))
+
+    region_rates = {}
+    for region in REGIONS:
+        region_rates[region] = [
+            None if y in BAD_NATIONALITY_YEARS["perpetrators"]
+            else round(region_perp[region].get(y, 0) / region_pop[region].get(y, 0) * 100, 2)
+            if region_pop[region].get(y, 0) > 0 else None
+            for y in years
+        ]
+
+    # Country-level rates per region, top N + computed "Other" (incl. RESTO)
+    def val_or_none(v, y):
+        return None if y in BAD_NATIONALITY_YEARS["perpetrators"] else v
+
+    by_country = {}
+    for region in REGIONS:
+        countries_in_region = [iso for iso in perp_by_iso if iso_to_region.get(iso) == region]
+        ranked = sorted(countries_in_region, key=lambda iso: perp_by_iso[iso].get(years[-1], 0), reverse=True)
+        top = ranked[:TOP_N_COUNTRY]
+
+        series = {}
+        for iso in top:
+            label = COUNTRY_LABEL.get(iso, iso)
+            series[label] = [val_or_none(rate(iso, y), y) for y in years]
+
+        # Computed "Other": remaining ISO-mapped countries + RESTO residual
+        top_set = set(top)
+        other_perp = [
+            sum(perp_by_iso[iso].get(y, 0) for iso in ranked if iso not in top_set)
+            + resto_perp[region].get(y, 0)
+            for y in years
+        ]
+        other_pop = [
+            sum(pop[iso].get(y, 0) for iso in ranked if iso not in top_set)
+            + round(resto_pop_est[region].get(y, 0))
+            for y in years
+        ]
+        series["Other"] = [
+            None if y in BAD_NATIONALITY_YEARS["perpetrators"] or other_pop[i] == 0
+            else round(other_perp[i] / other_pop[i] * 100, 2)
+            for i, y in enumerate(years)
+        ]
+        by_country[region] = {"countries": list(series.keys()), "series": series}
+
+    spain_series = [rate("ES", y) for y in years]
+
+    return {
+        "years": years,
+        "regions": REGIONS,
+        "series": region_rates,
+        "by_country": by_country,
+        "spain": spain_series,
+    }
+
+
+COUNTRY_LABEL = {
+    "ES": "España", "MA": "Marruecos", "RO": "Rumanía", "CO": "Colombia",
+    "VE": "Venezuela", "EC": "Ecuador", "DZ": "Argelia", "PE": "Perú",
+    "BO": "Bolivia", "DO": "Rep. Dominicana", "BR": "Brasil", "HN": "Honduras",
+    "PK": "Pakistán", "BG": "Bulgaria", "IT": "Italia", "FR": "Francia",
+    "DE": "Alemania", "PT": "Portugal", "PL": "Polonia", "CN": "China",
+    "PH": "Filipinas", "NG": "Nigeria", "PY": "Paraguay", "UK": "Reino Unido",
+    "AR": "Argentina", "BE": "Bélgica", "NL": "Holanda", "RU": "Rusia",
+    "UA": "Ucrania", "SN": "Senegal", "NI": "Nicaragua", "GE": "Georgia",
+    "GQ": "Guinea Ecuatorial", "IN": "India", "IE": "Irlanda", "SE": "Suecia",
+}
 
 
 def build():
@@ -252,6 +551,10 @@ def build():
         "series": {g: [round(conv[y].get(g, 0)) for y in conv_years] for g in conv_groups},
     }
 
+    # Peligrosity: per-100k male 15-59 perpetrator rates by nationality
+    migration_rows = read_csv(MIGRATION_CSV)
+    peligrosidad = _peligrosity(informe, migration_rows)
+
     return {
         "source": "Ministerio del Interior — Informe/Anuario/Balance sobre delitos contra la libertad sexual; INE Estadística de Condenados (t.28716)",
         "source_url": "https://estadisticasdecriminalidad.ses.mir.es/",
@@ -262,6 +565,7 @@ def build():
         "nationality_victims": nationality_victims,
         "nationality_perpetrators": nationality_perpetrators,
         "convictions": convictions,
+        "peligrosidad": peligrosidad,
     }
 
 

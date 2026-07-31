@@ -11,7 +11,7 @@ Breakdown: sex × age (9 bands: 18-20, 21-25, 26-30, 31-35, 36-40, 41-50,
 from this table) × year.
 
 This is the general-population reference age-specific offending-rate curve
-used by `compute_age_standardized_rate.py` (T77) for the H3 age-composition
+used by `compute_age_standardized_rate.py` (T78) for the H3 age-composition
 hypothesis test: the "Total"/"Total" (all sexes, all nationalities) row set
 gives Spain's overall age-specific sexual-crime conviction count, which
 combined with single-year population-by-age (`population_spain_estimates.csv`)

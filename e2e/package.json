@@ -1,0 +1,14 @@
+{
+  "name": "svs-e2e",
+  "private": true,
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:drilldown": "npx playwright test drilldown.spec.js",
+    "test:smoke": "npx playwright test smoke.spec.js",
+    "test:annotation": "npx playwright test annotation.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.0"
+  }
+}

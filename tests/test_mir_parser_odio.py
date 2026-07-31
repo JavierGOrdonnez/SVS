@@ -3,10 +3,12 @@
 Covers:
   - classify_odio_category: label-normalization across the series' renames
     (DISCAPACIDAD -> DIVERSIDAD FUNCIONAL -> PERSONA CON DISCAPACIDAD ->
-    DELITOS DE ODIO CONTRA PERSONAS CON DISCAPACIDAD) and additions
-    (ANTIGITANISMO 2019+, DISCRIMINACION GENERACIONAL/ENFERMEDAD 2018+),
-    plus the 3-tier total structure (TOTAL DELITOS / INFRAC. ADM. / TOTAL
-    DELITOS E INCIDENTES) introduced in 2019.
+    DELITOS DE ODIO CONTRA PERSONAS CON DISCAPACIDAD -> DISFOBIA, 2021+ SES
+    portal label) and additions (ANTIGITANISMO 2019+, DISCRIMINACION
+    GENERACIONAL/ENFERMEDAD 2018+, ISLAMOFOBIA 2024+ as its own category,
+    not folded into DISFOBIA/discapacidad), plus the 3-tier total structure
+    (TOTAL DELITOS / INFRAC. ADM. / TOTAL DELITOS E INCIDENTES) introduced
+    in 2019.
   - OdioParser._cluster_rows: the y-tolerance row reconstruction that
     re-joins a label+numbers row split across two word-clusters ~1-2pt
     apart, without merging distinct ámbito rows (always >=10pt apart).
@@ -38,6 +40,8 @@ SOURCES_DIR = Path(__file__).resolve().parent.parent / "data" / "sources"
     ("DIVERSIDAD FUNCIONAL", "discapacidad"),
     ("PERSONA CON DISCAPACIDAD", "discapacidad"),
     ("DELITOS DE ODIO CONTRA PERSONAS CON DISCAPACIDAD", "discapacidad"),
+    ("DISFOBIA", "discapacidad"),
+    ("ISLAMOFOBIA", "islamofobia"),
     ("ANTIGITANISMO", "antigitanismo"),
     ("ANTISEMITISMO", "antisemitismo"),
     ("APOROFOBIA", "aporofobia"),
