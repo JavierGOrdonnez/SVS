@@ -1,0 +1,2460 @@
+{
+  "reports": [
+    {
+      "year": 2014,
+      "total_count": 1285,
+      "clearance_rate": 65.6,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1285,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 24,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 63,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 199,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 513,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 475,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2014.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 11,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2015,
+      "total_count": 1328,
+      "clearance_rate": 51.7,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1328,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "VALIDATION: sum(ambitos)=996 vs TOTAL DELITOS=1328"
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 9,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 17,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 70,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 226,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 169,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 505,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2015.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 13,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2016,
+      "total_count": 1272,
+      "clearance_rate": 64.2,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1272,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 7,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 10,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 47,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 262,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 230,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 416,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 259,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 41,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2016.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 14,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2017,
+      "total_count": 1419,
+      "clearance_rate": 60.5,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1419,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 6,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 103,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 23,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 271,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 524,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 446,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 35,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2017.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 12,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2018,
+      "total_count": 1598,
+      "clearance_rate": 55.4,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1598,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 9,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 14,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 69,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 25,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 259,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 531,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 596,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 71,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 16,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 8,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2018.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 11,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2019,
+      "total_count": 1706,
+      "clearance_rate": 57.9,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1598,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 108,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 5,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 12,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 66,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 26,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 278,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 515,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 596,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 69,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 9,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 8,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 14,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Nuevo ambito introducido en el informe de 2019 (no desglosado en anos anteriores)."
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2019.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 10,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2020,
+      "total_count": 1401,
+      "clearance_rate": 66.2,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1334,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 67,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 3,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 10,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 45,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 44,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 277,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 485,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 326,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 99,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 10,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 13,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 22,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2020.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 17,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2021,
+      "total_count": 1802,
+      "clearance_rate": 62.9,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1724,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 78,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 10,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 63,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 28,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 466,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 639,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 326,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 107,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 35,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 21,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 18,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2021.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 14,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2022,
+      "total_count": 1869,
+      "clearance_rate": 62.9,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1796,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 73,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 22,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 13,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 17,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 47,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 23,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 15,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 189,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 245,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 459,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 755,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2022.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 13,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2023,
+      "total_count": 2268,
+      "clearance_rate": 68.1,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 2150,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 118,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 37,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 23,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 18,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 55,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 49,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 21,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 206,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 352,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 522,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 856,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2023.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 12,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2024,
+      "total_count": 1955,
+      "clearance_rate": 71.9,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 1869,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes). VALIDATION: sum(ambitos)=1854 vs TOTAL DELITOS=1869"
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 86,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 18,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 37,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 24,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 59,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 31,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 16,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 9,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 181,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 147,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 528,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 804,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2024.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 9,
+      "verified": false,
+      "notes": ""
+    },
+    {
+      "year": 2025,
+      "total_count": 2417,
+      "clearance_rate": 65.6,
+      "victims_minor_pct": null,
+      "perp_male_pct": null,
+      "categories": [
+        {
+          "category": "total_delitos",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 2242,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Subtotal: solo delitos (excluye infracciones administrativas y resto de incidentes)."
+        },
+        {
+          "category": "infracciones_administrativas",
+          "legal_article": "n/a",
+          "count": 175,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Infracciones administrativas y resto de incidentes de odio, no tipificados como delito."
+        },
+        {
+          "category": "antigitanismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 20,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "antisemitismo",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 69,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "aporofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 29,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "creencias_practicas_religiosas",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 75,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_generacional",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 11,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_enfermedad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 15,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discriminacion_sexo_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 183,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "discapacidad",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 59,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": "Ambito historicamente inestable: \"DISCAPACIDAD\" (2016) fue renombrado \"DIVERSIDAD FUNCIONAL\" en el informe de 2017 con una nueva metodologia de computo explicitamente senalada en el propio informe (la caida de 262 a 23, -91,2%, es un artefacto metodologico, no un descenso real); paso a llamarse \"PERSONA CON DISCAPACIDAD\" desde 2018. Tratar comparaciones que crucen 2016/2017/2018+ con cautela."
+        },
+        {
+          "category": "ideologia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 241,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "racismo_xenofobia",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 969,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        },
+        {
+          "category": "orientacion_identidad_sexual_genero",
+          "legal_article": "Art.22.4 CP (agravante)",
+          "count": 571,
+          "victims": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "perpetrators": {
+            "female": null,
+            "male": null,
+            "unknown": null
+          },
+          "notes": ""
+        }
+      ],
+      "nationality": {
+        "victims": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        },
+        "perpetrators": {
+          "spanish_pct": null,
+          "foreign_pct": null,
+          "by_country": []
+        }
+      },
+      "source_document": "MIR_InformeDelitosOdio_2025.pdf",
+      "source_table": "Hechos conocidos registrados (delitos de odio)",
+      "source_page": 9,
+      "verified": false,
+      "notes": ""
+    }
+  ]
+}

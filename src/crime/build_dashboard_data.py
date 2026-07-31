@@ -71,9 +71,9 @@ def _nationality_block(csv_path):
 
 
 def build_hate_crimes():
-    reports = read_json("data/raw/hate_crimes_mir_2016-2021_2023.json")["reports"]
+    reports = read_json("data/raw/hate_crimes_mir_2014-2016_2017-2021_2023-2025.json")["reports"]
     reports.sort(key=lambda r: r["year"])
-    years = [r["year"] for r in reports]  # note: 2022 absent (publication gap)
+    years = [r["year"] for r in reports]
 
     totals = {"years": years, "total": [r.get("total_count") for r in reports]}
 

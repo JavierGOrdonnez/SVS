@@ -12,9 +12,9 @@ Covers:
   - OdioParser._cluster_rows: the y-tolerance row reconstruction that
     re-joins a label+numbers row split across two word-clusters ~1-2pt
     apart, without merging distinct ámbito rows (always >=10pt apart).
-  - OdioParser end-to-end against the real 2016 and 2023 source PDFs
-    (skipped if the PDFs aren't present), cross-checked against
-    hand-verified totals from data/sources/MIR_InformeDelitosOdio_*.pdf.
+     - OdioParser end-to-end against the real 2016 and 2023 source PDFs
+     (skipped if the PDFs aren't present), cross-checked against
+     hand-verified totals from data/sources/odio/informes-mir/MIR_InformeDelitosOdio_*.pdf.
 """
 import sys
 from pathlib import Path
@@ -30,7 +30,7 @@ from src.parsers.mir_parser import (
     run_odio_batch,
 )
 
-SOURCES_DIR = Path(__file__).resolve().parent.parent / "data" / "sources"
+SOURCES_DIR = Path(__file__).resolve().parent.parent / "data" / "sources" / "odio" / "informes-mir"
 
 
 # ── classify_odio_category ──
@@ -41,7 +41,7 @@ SOURCES_DIR = Path(__file__).resolve().parent.parent / "data" / "sources"
     ("PERSONA CON DISCAPACIDAD", "discapacidad"),
     ("DELITOS DE ODIO CONTRA PERSONAS CON DISCAPACIDAD", "discapacidad"),
     ("DISFOBIA", "discapacidad"),
-    ("ISLAMOFOBIA", "islamofobia"),
+    ("ISLAMOFOBIA", "racismo_xenofobia"),
     ("ANTIGITANISMO", "antigitanismo"),
     ("ANTISEMITISMO", "antisemitismo"),
     ("APOROFOBIA", "aporofobia"),
@@ -138,6 +138,11 @@ def test_2016_end_to_end_matches_hand_verified_totals():
     assert sum(v for k, v in by_cat.items() if k not in ("total_hate_crimes", "total_delitos")) == 1272
 
 
+def test_2013_report_is_explicitly_skipped():
+    records = run_odio(_pdf("MIR_InformeDelitosOdio_2013.pdf"), 2013)
+    assert records == []
+
+
 def test_2023_end_to_end_matches_hand_verified_totals_and_3tier_structure():
     records = run_odio(_pdf("MIR_InformeDelitosOdio_2023.pdf"), 2023)
     by_cat = {r.crime_category: r.count for r in records}
@@ -161,13 +166,19 @@ def test_no_validation_warnings_emitted_for_any_year(capsys):
     assert "VALIDATION" not in captured.err
 
 
-def test_run_odio_batch_skips_2022_gap_and_names_file_with_visible_gap(tmp_path):
+def test_2025_supports_islamofobia_category():
+    records = run_odio(_pdf("MIR_InformeDelitosOdio_2025.pdf"), 2025)
+    by_cat = {r.crime_category: r.count for r in records}
+    assert by_cat["racismo_xenofobia"] == 969
+
+
+def test_run_odio_batch_names_file_with_continuous_years(tmp_path):
     import re
     pdfs = sorted(SOURCES_DIR.glob("MIR_InformeDelitosOdio_*.pdf"))
     if len(pdfs) < 2:
         pytest.skip("not enough MIR_InformeDelitosOdio_*.pdf present")
     out = run_odio_batch(pdfs, tmp_path)
     assert out.exists()
-    assert not re.search(r"(?<!\d)2022(?!\d)", out.stem)  # 2022 has no dedicated PDF
+    assert re.search(r"(?<!\d)2025(?!\d)", out.stem)
     files = list(tmp_path.glob("*.json"))
     assert len(files) == 1

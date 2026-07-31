@@ -1398,7 +1398,7 @@ def classify_odio_category(raw_label: str) -> str | None:
     if "DISFOBIA" in norm:
         return "discapacidad"
     if "ISLAMOFOBIA" in norm:
-        return "islamofobia"
+        return "racismo_xenofobia"
     if "ORIENTAC" in norm and ("SEXUAL" in norm or "IDENTIDAD" in norm or "IDENT" in norm):
         return "orientacion_identidad_sexual_genero"
     if "RACISMO" in norm or "XENOFOB" in norm:
@@ -1425,11 +1425,12 @@ def classify_odio_category(raw_label: str) -> str | None:
 class OdioParser:
     """
     MIR "Informe sobre la evolucion de los delitos de odio en España"
-    (annual, 2016-2021 + 2023; no PDF published/available for 2022 -- see
-    below). Locate the target page by CONTENT ("HECHOS CONOCIDOS
-    REGISTRADOS" + "RACISMO" both present), not a fixed page number: the
-    table's page varies by year (2016:p14, 2017:p12, 2018:p11, 2019:p10,
-    2020:p17, 2021:p14, 2023:p12).
+    (annual, 2014-2025 with gaps; 2013 is a different/unsupported layout,
+    2022 has no dedicated PDF -- see below). Locate the target page by
+    CONTENT ("HECHOS CONOCIDOS REGISTRADOS" + "RACISMO" both present), not
+    a fixed page number: the table's page varies by year (2014:p?, 2015:p?,
+    2016:p14, 2017:p12, 2018:p11, 2019:p10, 2020:p17, 2021:p14, 2023:p12,
+    2024:p?, 2025:p?).
 
     This table is rendered as an infographic/chart, not a ruled table:
     both `pdftotext -layout` (scrambles reading order) and pdfplumber's
@@ -1475,13 +1476,12 @@ class OdioParser:
     parse each year from its own dedicated report, never from a later
     report's prior-year comparison column.
 
-    2022 GAP: no dedicated PDF for 2022 was published/is available, so no
-    2022 MIRReport is emitted. The 2023 report's own table happens to
-    retroactively include a full 2022 column (TOTAL DELITOS=1796, TOTAL
-    DELITOS E INCIDENTES=1869) purely as its own prior-year comparison --
-    this is NOT synthesized into a 2022 record here (would conflate a
-    primary-sourced year with a secondary-sourced one); it is documented
-    as a footnote only (see data/sources/mir_delitos_odio.md).
+    2013 GAP: the archived 2013 PDF is not the annual typology report shape
+    this parser expects. Skip it loudly instead of trying to coerce it into
+    the series.
+
+    2022 is now parsed from its own dedicated PDF, so there is no gap in the
+    supported annual series.
 
     Zero-record guard (B25-class, mirrors run_balance_batch): if the table
     can't be located or extraction yields no ámbito rows, `parse()`
@@ -1502,6 +1502,9 @@ class OdioParser:
         self.records: list[MIRRecord] = []
 
     def parse(self) -> list[MIRRecord]:
+        if self.year == 2013:
+            print(f"  ⚠ 2013: unsupported hate-crime report layout in {self.source}; skipping", file=sys.stderr)
+            return []
         with pdfplumber.open(self.pdf_path) as pdf:
             page_no, page = self._locate_page(pdf)
             if page is None:
@@ -1571,7 +1574,11 @@ class OdioParser:
             count_tokens = [w["text"] for w in row if self.INT_TOKEN_RE.match(w["text"])]
             if len(count_tokens) < n_cols:
                 continue
-            out[key] = [parse_es_number(t) for t in count_tokens[:n_cols]]
+            values = [parse_es_number(t) for t in count_tokens[:n_cols]]
+            if key in out:
+                out[key] = [a + b for a, b in zip(out[key], values)]
+            else:
+                out[key] = values
             if key in ("total_delitos", "total_con_incidentes"):
                 hit_total = True
         return out
@@ -1963,9 +1970,9 @@ def main():
     if args.mode == "odio":
         if not args.pdf_dir:
             ap.error("--mode odio requires --pdf-dir")
-        pdfs = sorted(args.pdf_dir.glob("MIR_InformeDelitosOdio_*.pdf"))
+        pdfs = sorted((args.pdf_dir / "odio" / "informes-mir").glob("MIR_InformeDelitosOdio_*.pdf"))
         if not pdfs:
-            sys.exit(f"No MIR_InformeDelitosOdio_*.pdf found in {args.pdf_dir}")
+            sys.exit(f"No MIR_InformeDelitosOdio_*.pdf found in {args.pdf_dir / 'odio' / 'informes-mir'}")
         run_odio_batch(pdfs, args.out_dir)
         return
 
