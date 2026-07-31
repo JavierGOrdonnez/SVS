@@ -283,8 +283,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.parent
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
+POPULATION_NATIONALITY_CSV = ROOT / "data" / "processed" / "population_spain_nationality.csv"
 MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
-POPULATION_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
 REGULARIZATION_CSV = ROOT / "data" / "raw" / "regularization_2026.csv"
 OUT_CSV_PERIOD = ROOT / "data" / "processed" / "cohort_tenure_period_test.csv"
 OUT_CSV_COHORT = ROOT / "data" / "processed" / "cohort_tenure_rates.csv"
@@ -469,46 +469,22 @@ def load_spanish_perpetrator_counts():
     return result
 
 
-def load_population_totals():
-    """Return ({year: male_15_59_pop}, {year: total_all_pop}) from the
-    general (all-nationality) mid-year population estimates. No row carries
-    age_group=='all' -- total_all is the sum across every age band for
-    sex=='all'."""
-    male_15_59, total_all = {}, {}
-    with open(POPULATION_CSV, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            year = int(r["year"])
-            pop = float(r["population_july1"])
-            if r["sex"] == "male" and r["age_group"] in AGE_BANDS_15_59:
-                male_15_59[year] = male_15_59.get(year, 0) + pop
-            if r["sex"] == "all":
-                total_all[year] = total_all.get(year, 0) + pop
-    return male_15_59, total_all
-
-
-def load_foreign_stock_total():
-    """Return {year: total foreign-nationality stock, all ages, all sex,
-    all countries of origin combined}."""
-    stock = {}
-    with open(MIGRATION_CSV, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if (r["series"] == "stock_foreign_nationality" and r["country_of_origin"] == "all"
-                    and r["nationality"] == "foreign" and r["age_group"] == "all" and r["sex"] == "all"):
-                stock[int(r["year"])] = int(r["value"])
-    return stock
-
-
 def estimate_spanish_male_15_59(years):
-    """Approximate Spanish-only male 15-59 population per year. See module
-    docstring Test E for the approximation and its bias direction."""
-    male_15_59, total_all = load_population_totals()
-    foreign_stock = load_foreign_stock_total()
-    result = {}
-    for y in years:
-        working_age_share = male_15_59[y] / total_all[y]
-        foreign_male_15_59_est = foreign_stock[y] * working_age_share
-        result[y] = male_15_59[y] - foreign_male_15_59_est
-    return result
+    """Spanish-only male 15-59 population per year, read directly from INE
+    t.56936 (T94/B44/V46). Previously this approximated Spanish population
+    as `male_15_59_total - foreign_stock * working_age_share` -- a cruder,
+    doubly-derived estimate (used the OVERALL population's working-age
+    share as a proxy for the foreign population's own working-age share,
+    then subtracted from a total sourced on a different reference date
+    than the foreign figure). Covers 2002+ only (V46, no pre-2002
+    backfill) -- callers requesting earlier years get no entry for them."""
+    spanish_male_15_59 = {}
+    with open(POPULATION_NATIONALITY_CSV, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["nationality"] == "spanish" and r["sex"] == "male" and r["age_group"] in AGE_BANDS_15_59:
+                y = int(r["year"])
+                spanish_male_15_59[y] = spanish_male_15_59.get(y, 0) + float(r["population_july1"])
+    return {y: spanish_male_15_59[y] for y in years if y in spanish_male_15_59}
 
 
 def load_regularization_added_male_15_59(codes, reference_year=REGULARIZATION_REFERENCE_YEAR):

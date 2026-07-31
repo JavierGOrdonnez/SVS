@@ -116,17 +116,27 @@ precise "significantly below baseline".
 
 | Group | Baseline | 2022 | 2023 | 2024 |
 |---|---|---|---|---|
-| Marruecos | pre-2022 (2019+2021) | 0.79x, p=.52 (ns) | undefined (negative residual) | 0.24x, p=.004 (significantly *below*) |
-| Marruecos | deep pre-2020 (2017-2019) | 1.19x, p=.59 (ns) | 0.27x, p=.038 (significantly *below*) | 0.58x, p=.13 (ns) |
-| Argelia | pre-2022 (2019+2021) | 1.88x, p=.42 (ns) | 2.19x, p=.24 (ns) | 3.55x, p=.0008 (H2) |
-| Argelia | deep pre-2020 (2017-2019) | 1.63x, p=.57 (ns) | 1.94x, p=.36 (ns) | 3.35x, p=.002 (H2) |
+| Marruecos | pre-2022 (2019+2021) | 0.71x, p=.38 (ns) | undefined (negative residual) | 0.13x, p=.0009 (significantly *below*) |
+| Marruecos | deep pre-2020 (2017-2019) | 1.08x, p=.83 (ns) | 0.13x, p=.012 (significantly *below*) | 0.44x, p=.040 (significantly *below*) |
+| Argelia | pre-2022 (2019+2021) | 1.78x, p=.47 (ns) | 2.07x, p=.29 (ns) | 3.43x, p=.0011 (H2) |
+| Argelia | deep pre-2020 (2017-2019) | 1.52x, p=.63 (ns) | 1.80x, p=.43 (ns) | 3.21x, p=.0036 (H2) |
+
+(Updated 2026-07-31, B44/T94: Spanish reference population switched from a
+derived total-minus-foreign-stock estimate to INE t.56936's direct
+nationality series — see SPEC.md B44/V46. Every cell's number moved
+slightly; the deep-baseline Marruecos/2024 cell additionally crossed the
+p=.05 threshold, from "ns" to "significantly *below* baseline" — this
+*strengthens*, not reverses, the existing "Marruecos shows no cohort
+elevation" reading below. No Argelia cell changed its call.)
 
 **Marruecos now shows NO significant cohort elevation in any comparison** —
-consistent with, not contradicting, Test E's own finding that Marruecos's
-overall rate rose *less* than Spain's. **Argelia shows a real, moderate,
-consistently significant cohort elevation specifically by 2024** (ratio
-3.3x-3.6x depending on baseline; non-significant 2022-2023) — consistent
-with Test E's finding that Argelia's overall rate rose *more* than Spain's.
+if anything the opposite: 2 of its 4 test-year cells now read significantly
+*below* the trend-adjusted settled baseline — consistent with, not
+contradicting, Test E's own finding that Marruecos's overall rate rose
+*less* than Spain's. **Argelia shows a real, moderate, consistently
+significant cohort elevation specifically by 2024** (ratio 3.2x-3.4x
+depending on baseline; non-significant 2022-2023) — consistent with Test
+E's finding that Argelia's overall rate rose *more* than Spain's.
 This ties together far more coherently with Tests A/E than either the
 original (pre-B42) or the B42-only (frozen-baseline) result did.
 
@@ -140,13 +150,14 @@ ratio, exactly as T85 does for the flat peligrosity rate — to `cohort_pop`
 (not `settled_pop`, see correction above) every year, constant, matching
 T85's own "no arrival-timing data" convention. **This moves the ratio
 toward 1** for both countries (mechanically: the same residual crime count
-is now divided by a larger cohort population): Marruecos 0.65x-0.96x
-(pre-2022 baseline, all ns) / 0.90x-1.22x (deep baseline, all ns — the
-previously-undefined 2023 row now resolves to a valid 0.90x); Argelia
-1.25x-2.28x (pre-2022 baseline) / 1.29x-2.33x (deep baseline) — Argelia's
-2024 signal survives this adjustment
-(remains significant, p<.0001 both baselines), Marruecos's absence of a
-signal is unchanged. Explicit upper bound (V14), association only — we have
+is now divided by a larger cohort population): Marruecos 0.61x-0.93x
+(pre-2022 baseline — updated 2026-07-31/B44: the 2024 cell now also reads
+significantly *below* baseline, alongside 2023; no longer "all ns") /
+0.85x-1.17x (deep baseline, all ns); Argelia 1.23x-2.23x (pre-2022
+baseline) / 1.26x-2.27x (deep baseline) — Argelia's 2024 signal survives
+this adjustment (remains significant, p=.0001 both baselines), Marruecos's
+absence of an *elevation* signal is unchanged (it now reads *below*
+baseline in more cells, not toward elevation). Explicit upper bound (V14), association only — we have
 no true arrival-year data for regularization applicants, so this is the
 more defensible of the two buckets to place them in, not a claim about
 actual tenure.
@@ -198,26 +209,33 @@ the same Spanish-population trend adjustment as Test B:
 
 | Group | cutoff=2022, test=2022 | test=2023 | test=2024 | cutoff=2024, test=2024 |
 |---|---|---|---|---|
-| Marruecos | 2.46x, p=.58 (ns) | undefined (negative residual) | 0.57x, p=.10 (ns) | 0.05x, p=.08 (ns) |
-| Argelia | **52.16x, p=.36 (ns, see caveat)** | 2.67x, p=.19 (ns) | 3.61x, p=.0002 (H2) | 4.59x, p=.0003 (H2) |
+| Marruecos | 1.60x, p=.82 (ns) | undefined (negative residual) | 0.44x, p=.027 (significantly *below*) | undefined (negative residual) |
+| Argelia | **46.29x, p=.41 (ns, see caveat)** | 2.49x, p=.24 (ns) | 3.47x, p=.0004 (H2) | 4.43x, p=.0004 (H2) |
+
+(Updated 2026-07-31, B44/T94, same denominator fix as Test B above. Two
+Marruecos cells crossed into new readings: cutoff=2022/test=2024 flipped
+"ns" → significantly *below* baseline; cutoff=2024/test=2024 flipped "ns"
+→ undefined-negative-residual (same B43 model-tension class as the
+cutoff=2022/test=2023 cell). Both moves are further evidence *against*
+elevation, not toward it — Argelia's cells all kept their prior calls.)
 
 **Marruecos shows no significant elevation under any cutoff** — a third
 independent confirmation (alongside Test B and Test E) that Marruecos's rise
 isn't concentrated in recent arrivals specifically. **Argelia shows a real,
 significant elevation at both of the two "deep-accumulation" cells**
-(cutoff=2022/test=2024: 3.61x; cutoff=2024/test=2024: 4.59x) — this is a
+(cutoff=2022/test=2024: 3.47x; cutoff=2024/test=2024: 4.43x) — this is a
 meaningful convergence: Test B (rolling window) and Test F (fixed cutoff)
 are two genuinely different ways of drawing the cohort/settled line, and
 both independently land on a significant ~3-5x Argelia-specific 2024 signal,
 which is good evidence this isn't an artifact of either particular windowing
 choice.
 
-**Caveat — the cutoff=2022/test=2022 cell is unstable, not a real 52x
+**Caveat — the cutoff=2022/test=2022 cell is unstable, not a real 46x
 finding.** Only one year (2022) has elapsed since the settled_pop reference
 point (stock at end of 2021), so `cohort_pop` is tiny: 66 people for
 Argelia, 5,532 for Marruecos. Dividing a Poisson-noisy residual by a
 denominator that small produces a wildly unstable point estimate (Argelia's
-52.16x, still correctly reported as non-significant, p=.36, but the point
+46.29x, still correctly reported as non-significant, p=.41, but the point
 estimate itself shouldn't be read as a real effect size) — flagged directly
 on the chart (log-scale y-axis, each bar annotated with its own `cohort_pop`
 and a "(tiny — unstable)" note where n<500) rather than hidden or silently
@@ -237,9 +255,10 @@ variant (which spreads the same pool over a 3-year window) and should be
 read as an outer, not-very-plausible upper bound (V14) rather than a
 considered estimate — consistent with this reading, nearly every
 regularization-adjusted cell here reports "significantly BELOW baseline"
-(ratios 0.01x-0.77x), a mechanical consequence of diluting a fixed residual
-crime count over a hugely inflated cohort denominator, not a genuine finding
-that new arrivals under-offend.
+or "undefined" (ratios ~0.09x-0.74x where defined), a mechanical
+consequence of diluting a fixed residual crime count over a hugely
+inflated cohort denominator, not a genuine finding that new arrivals
+under-offend.
 
 **Synthesis (A vs B vs F)**: three independently-designed tests (Test A's
 direct whole-group rate ratio, Test B's rolling-window decomposition, Test

@@ -19,6 +19,60 @@ Padrón series starts 1996; annual at 1 January each year.
 
 ---
 
+## 1b. INE table 56936 — direct Spanish/foreign nationality split (T89, fixes B44)
+
+**Used for:** Spanish-national population, wherever a Spanish/foreign population
+denominator split is needed repo-wide (migration dashboard's Spain line +
+Spanish age pyramid, peligrosidad, feminicide rates, general crime trends,
+cohort crime rate). Table 31304 above was originally flagged as the intended
+source for this but never actually built against; table 56936 was chosen
+instead because it's the *same ECP product family* as table 56934 (already
+used for total population, `parse_ine_population.py`) — same quarterly
+cadence, same July-1 midyear reference date — so pairing them needs no
+date-alignment guesswork.
+
+| Resource | URL |
+|---|---|
+| Table 56936 (browser UI) | https://www.ine.es/jaxiT3/Tabla.htm?t=56936 |
+| CSV download | https://www.ine.es/jaxiT3/files/t/es/csv_bdsc/56936.csv?nocab=1 |
+
+Coverage: 2002–2025 (quarterly; some quarters suppressed pre-2021, same
+pattern as t.56934). `Nacionalidad` column reports `Española`/`Extranjera`/
+`Total` directly, cross-tabbed with sex and 5-year age bands. Parsed by
+`src/analysis/parse_ine_population_nationality.py` → `data/processed/
+population_spain_nationality.csv` (July-1 rows only, 2002+, per V46).
+
+### Why this replaced a derived subtraction (B44)
+
+Every consumer of "Spanish-national population" in this repo used to
+compute `total_population(t.56934) − foreign_stock(Eurostat migr_pop1ctz,
+top ~50 nationalities)`. That mixed a July-1 total with a January-1 foreign
+figure covering a shifting ~86–94% of foreign residents — the uncounted
+foreign residents got misattributed into "Spain," producing a
+non-constant, spurious wiggle. Comparing the two series directly:
+
+| Year | Derived (total − Eurostat foreign) | Primary (t.56936 "Española") | Gap |
+|---|---|---|---|
+| 2002 | 39,754,683 | 39,364,640 | +390,043 |
+| 2005 | 40,351,859 | 39,950,570 | +401,289 |
+| 2008 | 41,063,808 | 40,717,715 | +346,093 |
+| 2010 | 41,339,579 | 41,208,701 | +130,878 |
+| 2013 | 41,696,486 | 41,718,434 | −21,948 |
+| 2016 | 42,187,184 | 42,041,287 | +145,897 |
+| 2019 | 42,457,538 | 42,054,137 | +403,401 |
+| 2020 | 42,349,026 | 41,999,670 | +349,356 |
+| 2021 | 42,203,084 | 41,978,121 | +224,963 |
+| 2022 | 42,542,830 | 41,994,341 | +548,489 |
+| 2023 | 42,533,747 | 42,034,958 | +498,789 |
+| 2024 | 42,645,149 | 42,169,185 | +475,964 |
+
+The gap swings from −22K to +548K with no stable pattern — an artifact of
+the method, not of real Spanish demography. The real (t.56936) series is
+materially smoother year-to-year than the derived one. See `SPEC.md` §B44
+and §V46.
+
+---
+
 ## 2. Estadística de Condenados — Adult & Minor Offenders
 
 **Used for:** conviction counts by crime type, sex, nationality

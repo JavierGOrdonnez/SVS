@@ -9,18 +9,21 @@ categories: homicide, robbery, sexual_assault) into rates:
   (b) Spanish-vs-foreign detention/investigation rate: detenciones_total
       minus detenciones_foreign (='spanish', derived -- not a source-
       reported figure) and detenciones_foreign directly, each divided by
-      its own population (Spanish = total - foreign stock; foreign = total
-      foreign stock) * 100k. Mirrors this repo's existing peligrosity
-      convention (V15: [convicted, identified] bracket, arrests/investigated
-      as numerator) rather than hechos_conocidos (reported crimes, which
-      has no nationality split in this source at all).
+      its own population (Spanish = INE t.56936 direct nationality series,
+      T89/B44/V46; foreign = total foreign stock) * 100k. Mirrors this
+      repo's existing peligrosity convention (V15: [convicted, identified]
+      bracket, arrests/investigated as numerator) rather than
+      hechos_conocidos (reported crimes, which has no nationality split in
+      this source at all).
 
 Denominators: data/processed/population_spain_midyear_5yr.csv (total, all
-years summed across age bands, sex='all') and data/raw/migration_spain.csv
-stock_foreign_nationality/country_of_origin=all/nationality=foreign/sex=all/
-age_group=all (foreign stock total) -- both already continuous well beyond
-this task's 2015-2023 window (population back to 1971, foreign stock to
-2000), so no coverage gaps here.
+years summed across age bands, sex='all'), data/processed/
+population_spain_nationality.csv (Spanish population, T89/B44/V46; covers
+2002+ only) and data/raw/migration_spain.csv stock_foreign_nationality/
+country_of_origin=all/nationality=foreign/sex=all/age_group=all (foreign
+stock total) -- population back to 1971, foreign stock to 2000, Spanish
+nationality split to 2002, so no coverage gaps within this task's
+2015-2023 window.
 
 Confidence: 'medium' throughout (a real MIR count over a real population
 denominator, not a directly-published rate) -- never 'high' (C16).
@@ -35,6 +38,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent.parent
 RAW_CSV = ROOT / "data" / "raw" / "mir_anuario_general_crime_2015-2023.csv"
 POP_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
+POPULATION_NATIONALITY_CSV = ROOT / "data" / "processed" / "population_spain_nationality.csv"
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
 OUT_CSV = ROOT / "data" / "processed" / "general_crime_trends.csv"
 
@@ -49,6 +53,18 @@ def load_total_population() -> dict[int, float]:
                 continue
             y = int(r["year"])
             pop[y] = pop.get(y, 0.0) + float(r["population_july1"])
+    return pop
+
+
+def load_spanish_population() -> dict[int, float]:
+    """Spanish-national population by year, direct from INE t.56936
+    (T89/B44/V46) -- replaces the retired total-minus-foreign-stock
+    subtraction. Covers 2002+ only (V46, no pre-2002 backfill)."""
+    pop = {}
+    with open(POPULATION_NATIONALITY_CSV, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["nationality"] == "spanish" and r["age_group"] == "all" and r["sex"] == "all":
+                pop[int(r["year"])] = float(r["population_july1"])
     return pop
 
 
@@ -70,6 +86,7 @@ def load_raw() -> list[dict]:
 def build_rows():
     raw = load_raw()
     total_pop = load_total_population()
+    spanish_pop = load_spanish_population()
     foreign_pop = load_foreign_stock()
 
     conocidos = {}   # (year, category) -> count
@@ -108,17 +125,17 @@ def build_rows():
         if for_count is None:
             continue
         sp_count = total - for_count
-        sp_pop = total_pop.get(y)
+        sp_pop_adj = spanish_pop.get(y)
         for_pop = foreign_pop.get(y)
-        if sp_pop is not None and for_pop is not None:
-            sp_pop_adj = sp_pop - for_pop  # Spanish-only population = total - foreign stock
+        if sp_pop_adj is not None and for_pop is not None:
             rows.append({
                 "year": y, "category": cat, "metric": "spanish",
                 "rate_per_100k": round(sp_count / sp_pop_adj * 100_000, 2),
                 "count": sp_count, "population": round(sp_pop_adj), "confidence": "medium",
                 "notes": ("detenciones/investigados attributed to Spanish nationals, DERIVED as "
                           "detenciones_total - detenciones_foreign (not a source-reported figure). "
-                          "Denominator = total population - foreign stock."),
+                          "Denominator = INE t.56936 direct Spanish-nationality population "
+                          "(T89/B44/V46), not derived by subtraction."),
             })
             rows.append({
                 "year": y, "category": cat, "metric": "foreign",

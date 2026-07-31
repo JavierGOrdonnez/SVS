@@ -39,6 +39,7 @@ were left untouched at the paths above.
 | script | reads | writes | §T task | status |
 |---|---|---|---|---|
 | `src/analysis/parse_ine_population.py` | INE API table 56934 (population estimates) | `data/processed/population_spain_estimates.csv`, `data/processed/population_spain_midyear_5yr.csv` | T6 | x |
+| `src/analysis/parse_ine_population_nationality.py` | INE table 56936 CSV (population by date/sex/age/nationality) | `data/processed/population_spain_nationality.csv` | T89 | x |
 | `src/mortality/parse_ine_mortality.py` | INE API table 7947 JSON dump (input/output paths via argv) | CSV named via argv → `data/processed/mortality_spain_ine_ecm.csv` | T49 | x |
 | `src/mortality/summarize_mortality.py` | `mortality_spain_ine_ecm.csv` | `data/processed/mortality_by_chapter.csv`, `mortality_by_age_sex.csv`, `mortality_key_causes.csv` | T49 | x |
 | `src/mortality/compute_mortality_rates.py` | `mortality_spain_ine_ecm.csv`, `population_spain_midyear_5yr.csv` | `data/processed/mortality_rates.csv`, `mortality_rates_key.csv`, `mortality_rates_all_cause_by_age.csv` | T7 | x |
@@ -77,6 +78,7 @@ flowchart LR
     PDF_MIRV[MIR_ViolenceWomen<br/>2015-2019.pdf]
     PDF_GRP[MIR_GroupSexualViolence_2023.pdf<br/>+ reference PDFs]
     API_POP[INE API t.56934]
+    API_POPNAT[INE CSV t.56936]
     API_MORT[INE API t.7947]
     URL_28716[INE CSV t.28716]
     TSV_EURO[Eurostat migr_imm1ctz/<br/>migr_pop1ctz TSV]
@@ -87,14 +89,14 @@ flowchart LR
   PDF_MIRV --> mir_violence_parser.py --> mir_violence_extractor.py --> CSV_MIRV[(mir_violence_sexual_2015-2019.csv)]
   PDF_GRP --> mir_migrant_nationality_parser.py --> CSV_MIG[(migrant_crime_numerator.csv)]
   API_POP --> parse_ine_population.py --> CSV_POP[(population_spain_midyear_5yr.csv)]
+  API_POPNAT --> parse_ine_population_nationality.py --> CSV_POPNAT[(population_spain_nationality.csv)]
   API_MORT --> parse_ine_mortality.py --> CSV_ECM[(mortality_spain_ine_ecm.csv)]
   CSV_ECM --> summarize_mortality.py --> CSV_MORTSUM[(mortality_by_chapter/age_sex/key_causes.csv)]
   URL_28716 --> parse_ine_tabla28716.py --> CSV_28716[(ine_condenados_28716_*.csv)]
   TSV_EURO --> parse_eurostat_migration_cohort.py --> CSV_MIGR[(migration_spain.csv)]
 
   JSON_FEM --> compute_feminicide_rates.py
-  CSV_POP --> compute_feminicide_rates.py
-  CSV_MIGR --> compute_feminicide_rates.py
+  CSV_POPNAT --> compute_feminicide_rates.py
   compute_feminicide_rates.py --> CSV_FEMRATE[(feminicide_rates_2006-2024.csv)]
 
   CSV_ECM --> compute_mortality_rates.py
@@ -107,6 +109,7 @@ flowchart LR
   MORT_BUILD --> ORCH[analysis/build_dashboard.py]
 
   CSV_MIGR --> MIGR_BUILD[migration/build_dashboard_data.py] --> ORCH
+  CSV_POPNAT --> MIGR_BUILD
 
   ORCH --> DASH1[docs/data/*.json<br/>fetched by docs/index.html]
 
@@ -118,6 +121,7 @@ flowchart LR
   JSON_MIR --> analyze_cohort_crime_rate.py
   CSV_MIGR --> analyze_cohort_crime_rate.py
   CSV_POP --> analyze_cohort_crime_rate.py
+  CSV_POPNAT --> analyze_cohort_crime_rate.py
   analyze_cohort_crime_rate.py --> CSV_COHORT[(cohort_tenure_*.csv)]
 
   CSV_28716 --> analyze_rape_trend_nationality.py

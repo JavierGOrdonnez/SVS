@@ -65,6 +65,13 @@ FOREIGN_STOCK = {
     2023: 6089620, 2024: 6502282,
 }
 
+# Spanish-national population, 2023 (T95/B44/V46): INE t.56936's directly
+# reported "Española" nationality figure, NOT total-minus-FOREIGN_STOCK
+# (that subtraction mixed a July-1/January-1 reference-date pair and a
+# shifting foreign-coverage gap -- see SPEC.md B44). Source: data/processed/
+# population_spain_nationality.csv, year=2023, sex=all, age_group=all.
+SPANISH_POP_2023 = 42034958
+
 # Annual immigration inflows (all nationalities) — EMCR
 # Source: migration_spain.csv — series flow_immigration_from_abroad
 INFLOW_ALL = {
@@ -223,7 +230,7 @@ def print_report():
 
     total_pop_2023 = TOTAL_POP[2023]
     foreign_pop_2023 = FOREIGN_STOCK[2023]
-    spanish_pop_2023 = total_pop_2023 - foreign_pop_2023
+    spanish_pop_2023 = SPANISH_POP_2023
 
     # Use male population (perpetrators are ~93% male, denominator should be males)
     # Approximate: male ≈ 49% of total population
