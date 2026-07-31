@@ -1,0 +1,11 @@
+country,code,year,observed_count,expected_count_age_standardized,sir,sir_ci_low,sir_ci_high,total_male_pop_15plus_approx,crude_rate_per_100k,note
+MARRUECOS,MA,2019,744,56.4,13.2,12.285,14.184,323577,229.9,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+MARRUECOS,MA,2021,787,76.8,10.247,9.556,10.989,365623,215.2,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+MARRUECOS,MA,2022,889,78.6,11.313,10.594,12.082,372419,238.7,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+MARRUECOS,MA,2023,975,73.8,13.215,12.411,14.071,400856,243.2,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+MARRUECOS,MA,2024,1072,106.5,10.068,9.483,10.689,429041,249.9,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+ARGELIA,DZ,2019,94,4.5,20.886,17.063,25.566,28092,334.6,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+ARGELIA,DZ,2021,100,6.2,16.115,13.247,19.605,31648,316.0,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+ARGELIA,DZ,2022,126,6.2,20.313,17.058,24.188,31688,397.6,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+ARGELIA,DZ,2023,163,6.0,27.055,23.205,31.544,34959,466.3,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone
+ARGELIA,DZ,2024,240,9.3,25.69,22.637,29.154,39460,608.2,SIR=1 means the age-standardized reference rate fully explains the observed count; >1 means an excess remains after adjusting for age composition alone

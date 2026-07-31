@@ -284,6 +284,124 @@ def _spanish_age_pyramid(rows, year):
     }
 
 
+DZ_MA = ["MA", "DZ"]  # T77: Morocco/Algeria-specific (not region-level) age comparison
+
+
+def _country_age_pyramid(rows, codes, year):
+    """T77: age x sex pyramid for specific countries (not regions) -- Morocco
+    vs Algeria, same 17-band scale/year as the T69/T70 region-level
+    pyramids, built via the same _pyramid_band_value helper so the 80+
+    aggregation (80-84 + 85+) stays consistent across all three panels."""
+    stock = [
+        r for r in rows
+        if r["series"] == "stock_nationality" and int(r["year"]) == year
+        and r["sex"] in ("male", "female") and r["nationality"] in codes
+    ]
+    totals = defaultdict(int)  # (code, sex, age_group) -> value
+    for r in stock:
+        totals[(r["nationality"], r["sex"], r["age_group"])] += int(r["value"])
+
+    def band_values(code, sex):
+        return [_pyramid_band_value(totals, (code, sex), age) for age in PYRAMID_AGES]
+
+    return {
+        "year": year,
+        "ages": PYRAMID_AGES,
+        "countries": {
+            COUNTRY_NAMES.get(code, code): {"male": band_values(code, "male"), "female": band_values(code, "female")}
+            for code in codes
+        },
+    }
+
+
+YOUNG_BANDS = {"15-19", "20-24", "25-29", "30-34", "35-39"}   # 15-39
+OLDER_WORKING_BANDS = {"40-44", "45-49", "50-54", "55-59"}    # 40-59
+
+
+def _working_age_composition_trend(rows, codes, years):
+    """T77: for each country/year, % of male stock aged 15-39 vs 40-59
+    (each as a share of the 15-59 total, excluding minors/retirement age)
+    -- tests the H3 claim directly (does Algeria's population skew younger
+    than Morocco's, and has that shape persisted/changed over time), using
+    the same fine-grained bands as the pyramids (not the coarse '0-14'/'65+'
+    duplicate rows also present in stock_nationality -- see B39-adjacent
+    note in compute_age_standardized_rate.py for why those are avoided)."""
+    stock = [r for r in rows if r["series"] == "stock_nationality" and r["sex"] == "male" and r["nationality"] in codes]
+    totals = defaultdict(int)  # (code, year, age_group) -> value
+    for r in stock:
+        totals[(r["nationality"], int(r["year"]), r["age_group"])] += int(r["value"])
+
+    series = {}
+    for code in codes:
+        young_pct, older_pct = [], []
+        for y in years:
+            young = sum(totals.get((code, y, b), 0) for b in YOUNG_BANDS)
+            older = sum(totals.get((code, y, b), 0) for b in OLDER_WORKING_BANDS)
+            denom = young + older
+            young_pct.append(round(young / denom * 100, 1) if denom else None)
+            older_pct.append(round(older / denom * 100, 1) if denom else None)
+        series[COUNTRY_NAMES.get(code, code)] = {"pct_15_39": young_pct, "pct_40_59": older_pct}
+    return {"years": years, "series": series}
+
+
+REGULARIZATION_CSV = "data/raw/regularization_2026.csv"
+REG_YEARS_BACK = 3  # how many real years of history to show before the projected point
+
+
+def _load_regularization_applications():
+    """{iso2: applications_estimated} for the individually-named nationalities
+    in data/raw/regularization_2026.csv (excludes the unattributed 'OTHER' row)."""
+    out = {}
+    for r in load_rows(REGULARIZATION_CSV):
+        if r["iso2"] != "OTHER":
+            out[r["iso2"]] = float(r["applications_estimated"])
+    return out
+
+
+def _stock_projection_2026(rows):
+    """T86: illustrative-only projection -- takes each regularization-named
+    nationality's most recent REAL registered stock (2025, or 2024 if 2025
+    isn't available for that nationality) and adds its full 2026
+    regularization-application count, as if every application were approved
+    and every applicant were entirely new to the registered stock. This is
+    NOT a forecast: not every application will be approved, and some
+    applicants may already be counted in stock via other channels (e.g. a
+    prior census/padron registration despite irregular immigration status).
+    Rendered as a dashed/shadow extension of the real trend line, clearly
+    flagged `is_projected` per point so the frontend never conflates it with
+    real data (V14-adjacent: never present an estimate as if it were
+    measured)."""
+    applications = _load_regularization_applications()
+    stock_by_code_year = defaultdict(dict)
+    for r in rows:
+        if (r["series"] == "stock_nationality" and r["sex"] == "all" and r["age_group"] == "all"
+                and r["country_of_origin"] in applications):
+            stock_by_code_year[r["country_of_origin"]][int(r["year"])] = int(r["value"])
+
+    series = {}
+    for code, applied in applications.items():
+        by_year = stock_by_code_year.get(code)
+        if not by_year:
+            continue
+        years_sorted = sorted(by_year)
+        latest_year = years_sorted[-1]  # 2025 if present, else falls back to the latest real year (e.g. 2024)
+        shown_years = [y for y in years_sorted if y >= latest_year - REG_YEARS_BACK]
+        projected_stock = by_year[latest_year] + applied
+        series[COUNTRY_NAMES.get(code, code)] = {
+            "years": shown_years + [2026],
+            "stock": [by_year[y] for y in shown_years] + [round(projected_stock)],
+            "is_projected": [False] * len(shown_years) + [True],
+            "base_year": latest_year,
+            "applications_added": round(applied),
+        }
+    return {
+        "source": "migration_spain.csv (registered stock, Eurostat migr_pop1ctz) + data/raw/regularization_2026.csv (2026 regularization application share)",
+        "confidence": "low",
+        "caveat": "ILLUSTRATIVE ONLY, not a forecast. The 2026 point = latest real registered stock (2025, or 2024 where 2025 isn't yet available) + that nationality's FULL estimated regularization-application count, assuming every application is approved and represents someone not already in the registered stock -- neither assumption holds in reality (not all applications will be approved; some applicants may already appear in stock via other registration channels). Shown as a dashed/shadowed final segment, distinct from the solid real-data line.",
+        "series": series,
+    }
+
+
 def build():
     """Return the migration-tab data blob (also reused by build_dashboard.py)."""
     rows = load_rows(CSV_PATH)
@@ -401,6 +519,13 @@ def build():
     s8 = _stock_age_pyramid(rows, pyramid_year)
     s9 = _spanish_age_pyramid(rows, pyramid_year)
 
+    # 10/11 (T77): Morocco vs Algeria age comparison -- H3 hypothesis test.
+    dz_ma_years = sorted({int(r["year"]) for r in rows
+                           if r["series"] == "stock_nationality" and r["nationality"] in DZ_MA})
+    s10 = _country_age_pyramid(rows, DZ_MA, pyramid_year)
+    s11 = _working_age_composition_trend(rows, DZ_MA, dz_ma_years)
+    s12 = _stock_projection_2026(rows)
+
     return {
         "annual_inflow": s1,
         "origin_composition": s2,
@@ -411,6 +536,9 @@ def build():
         "stock_by_region": s7,
         "stock_age_pyramid": s8,
         "stock_age_pyramid_es": s9,
+        "stock_age_pyramid_dz_ma": s10,
+        "dz_ma_working_age_trend": s11,
+        "stock_projection_2026": s12,
     }
 
 

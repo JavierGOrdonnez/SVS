@@ -554,6 +554,50 @@ function buildSexual() {
   // Peligrosidad: perpetrators % males 15-59 by nationality (region drill-down)
   register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad, { drillStyle: 'line', yMax: 0.5 }));
 
+  // T81: victim-vulnerability rate panel — the mirror of peligrosity (co-rateratio's
+  // shape, docs/app.js buildCohort(): x-axis = period/year, one bar series per group)
+  // but for victims, expressed as a per-100k rate rather than a %-share. Data shape is
+  // docs/data/victim_vulnerability.json's `nationalities` map (built by
+  // src/crime/build_dashboard_data.py's build_victim_vulnerability()), not
+  // cohort_tenure.json's `test_a_rate_ratio` shape.
+  register('sx-victim-vulnerability-rate', (cv) => {
+    const vv = DATA.victim_vulnerability.nationalities;
+    const names = Object.keys(vv).sort((a, b) => (vv[b].rate_per_100k_female.at(-1) ?? -1) - (vv[a].rate_per_100k_female.at(-1) ?? -1));
+    // union of years across every nationality (2020 excluded throughout, B38) —
+    // not just the first nationality's own years, since coverage varies per year.
+    const years = [...new Set(names.flatMap(n => vv[n].years))].sort((a, b) => a - b);
+    return new Chart(cv, {
+      type: 'bar',
+      data: {
+        labels: years.map(String),
+        datasets: names.map((n, i) => ({
+          label: n,
+          data: years.map(y => { const idx = vv[n].years.indexOf(y); return idx >= 0 ? vv[n].rate_per_100k_female[idx] : null; }),
+          backgroundColor: PALETTE[i % PALETTE.length] + 'cc', borderColor: PALETTE[i % PALETTE.length], borderWidth: 1,
+        })),
+      },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 8, font: { size: 8 } } },
+          tooltip: {
+            callbacks: {
+              label: (c) => {
+                const n = names[c.datasetIndex];
+                const idx = vv[n].years.indexOf(years[c.dataIndex]);
+                if (idx < 0) return `${n}: no data this year`;
+                const rf = vv[n].rate_per_100k_female[idx], rt = vv[n].rate_per_100k_total[idx];
+                const lo = vv[n].ci_low[idx], hi = vv[n].ci_high[idx];
+                return `${n}: ${rf}/100k (female stock, 95% CI ${lo}–${hi}) · ${rt}/100k (total stock)`;
+              },
+              footer: () => 'Source: MIR Informe (victims) + Eurostat migr_pop1ctz',
+            },
+          },
+        },
+        y: { title: { display: true, text: 'victims per 100,000 (female stock)', color: TICK } },
+      }),
+    });
+  });
+
   register('sx-convictions', (cv) => {
     const c = d.convictions;
     const drop = new Set(['total']);
@@ -716,6 +760,85 @@ function buildMigration() {
     const maxAbs = Math.max(...s.ages.map((_, i) => Math.max(s.male[i], s.female[i])));
     return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
   });
+
+  // T77: Morocco vs Algeria age pyramid — same shape as mi-age-pyramid but
+  // per-country (s.countries) instead of per-region (s.regions).
+  register('mi-age-pyramid-dz-ma', (cv) => {
+    const s = d.stock_age_pyramid_dz_ma;
+    const ages = [...s.ages].reverse();
+    const countries = Object.keys(s.countries);
+    const datasets = countries.flatMap((country, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      const male = [...s.countries[country].male].reverse().map(v => -v);
+      const female = [...s.countries[country].female].reverse();
+      return [
+        { label: country, data: male, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'male', grouped: false },
+        { label: country, data: female, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, stack: 'female', grouped: false },
+      ];
+    });
+    const maxAbs = Math.max(...countries.flatMap(c => s.countries[c].male.concat(s.countries[c].female)));
+    return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
+  });
+
+  // T77: % of male stock aged 15-39 vs 40-59, Morocco vs Algeria, over time
+  // — the H3 age-composition-shape test. Solid = 15-39 share, dashed = 40-59.
+  register('mi-dz-ma-age-trend', (cv) => {
+    const s = d.dz_ma_working_age_trend;
+    const names = Object.keys(s.series);
+    const datasets = names.flatMap((name, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      return [
+        { label: `${name} 15–39`, data: s.series[name].pct_15_39, borderColor: color, backgroundColor: color + '33', borderWidth: 2, pointRadius: 2, tension: 0.15 },
+        { label: `${name} 40–59`, data: s.series[name].pct_40_59, borderColor: color, borderDash: [4, 3], backgroundColor: 'transparent', borderWidth: 2, pointRadius: 2, tension: 0.15 },
+      ];
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: s.years, datasets },
+      options: baseOpts({ y: { ticks: { color: TICK, callback: (v) => v + '%' }, grid: { color: GRID } } }),
+    });
+  });
+
+  // T86: registered stock trend with a dashed/shadowed 2026 projection point
+  // (latest real stock + full regularization-application count for that
+  // nationality) -- illustrative only, never presented as measured data.
+  register('mi-stock-2026-projected', (cv) => {
+    const s = d.stock_projection_2026;
+    const names = Object.keys(s.series);
+    const allYears = [...new Set(names.flatMap(n => s.series[n].years))].sort((a, b) => a - b);
+    const datasets = names.map((n, i) => {
+      const g = s.series[n];
+      const color = PALETTE[i % PALETTE.length];
+      const data = allYears.map(y => { const idx = g.years.indexOf(y); return idx >= 0 ? g.stock[idx] : null; });
+      return {
+        label: n, data, borderColor: color, backgroundColor: color + '33', borderWidth: 2, pointRadius: 3, tension: 0,
+        // dash only the final segment (last real year -> 2026 projection)
+        segment: { borderDash: (ctx) => (ctx.p1DataIndex === allYears.length - 1) ? [6, 4] : undefined },
+        pointStyle: (ctx) => {
+          const y = allYears[ctx.dataIndex];
+          const idx = g.years.indexOf(y);
+          return idx >= 0 && g.is_projected[idx] ? 'triangle' : 'circle';
+        },
+      };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const n = names[c.datasetIndex], g = s.series[n];
+            const y = allYears[c.dataIndex], idx = g.years.indexOf(y);
+            return idx >= 0 && g.is_projected[idx]
+              ? `PROJECTED, not real data — base ${g.base_year} stock + ${g.applications_added.toLocaleString()} regularization applications (illustrative upper bound, assumes 100% approval)`
+              : 'real registered stock';
+          } } },
+        },
+        y: { title: { display: true, text: 'registered stock', color: TICK } },
+      }),
+    });
+  });
 }
 
 function buildCohort() {
@@ -746,6 +869,95 @@ function buildCohort() {
       data: { labels: names, datasets: periods.map((p, pi) => ({
         label: p, data: names.map(n => g[n].share_test_pct[pi]), backgroundColor: PALETTE[pi % PALETTE.length] + 'cc' })) },
       options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 }, maxRotation: 30 } } }),
+    });
+  });
+
+  // T85: upper-bound regularization-denominator sensitivity, latest year only
+  // (2024) — original vs. over-corrected rate, one pair of bars per country.
+  register('reg-sensitivity', (cv) => {
+    const rs = DATA.regularization_sensitivity.countries;
+    const names = Object.keys(rs);
+    const latestIdx = (n) => rs[n].years.length - 1;
+    return new Chart(cv, {
+      type: 'bar',
+      data: {
+        labels: names,
+        datasets: [
+          { label: 'Original (registered denominator)', data: names.map(n => rs[n].original_rate_per_100k[latestIdx(n)]), backgroundColor: PALETTE[0] + 'cc', borderColor: PALETTE[0], borderWidth: 1 },
+          { label: 'Over-corrected (upper-bound denominator)', data: names.map(n => rs[n].over_corrected_rate_per_100k[latestIdx(n)]), backgroundColor: PALETTE[2] + 'cc', borderColor: PALETTE[2], borderWidth: 1 },
+        ],
+      },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const n = names[c.dataIndex], i = latestIdx(n);
+            return c.datasetIndex === 1
+              ? `denominator +${rs[n].denom_pct_increase[i]}% · rate ${rs[n].rate_pct_reduction[i]}% lower`
+              : `year ${rs[n].years[i]}`;
+          } } },
+        },
+        y: { title: { display: true, text: 'rate per 100,000 males', color: TICK } },
+      }),
+    });
+  });
+}
+
+function buildGeneralCrime() {
+  const d = DATA.general_crime;
+  const catLabel = (c) => c === 'sexual_assault' ? 'Sexual assault' : c[0].toUpperCase() + c.slice(1);
+
+  register('gc-per-capita', (cv) => {
+    const g = d.per_capita;
+    const cats = d.categories.filter(c => g[c]);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.index_base100[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _rates: s, _years: s.years };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._years.indexOf(yr);
+            return idx >= 0 ? `${ds._rates.rate_per_100k[idx]} per 100k (base year ${ds._rates.base_year} = 100)` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'index (base year = 100)', color: TICK } },
+      }),
+    });
+  });
+
+  register('gc-foreign-ratio', (cv) => {
+    const g = d.foreign_spanish_ratio;
+    const cats = d.categories.filter(c => g[c] && g[c].years.length);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.ratio_foreign_over_spanish[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _s: s };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          annotation: { annotations: { base: { type: 'line', yMin: 1, yMax: 1, borderColor: '#fff5', borderWidth: 1, borderDash: [3, 3],
+            label: { display: true, content: 'equal rate = 1.0', color: '#9ba3bf', font: { size: 9 }, position: 'end' } } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._s.years.indexOf(yr);
+            return idx >= 0 ? `Spanish ${ds._s.spanish_rate_per_100k[idx]}/100k · Foreign ${ds._s.foreign_rate_per_100k[idx]}/100k` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'rate ratio (foreign ÷ Spanish)', color: TICK } },
+      }),
     });
   });
 }
@@ -791,13 +1003,13 @@ function wire() {
 
 /* ── boot ────────────────────────────────────────────── */
 async function main() {
-  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure'];
+  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity', 'general_crime'];
   const loaded = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => {
     if (!r.ok) throw new Error(`${n}.json ${r.status}`); return r.json();
   })));
   names.forEach((n, i) => DATA[n] = loaded[i]);
 
-  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort();
+  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort(); buildGeneralCrime();
   setHeadlines();
   wire();
   showTab('feminicides');   // mounts the initially-visible panels

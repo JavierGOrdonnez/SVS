@@ -23,7 +23,7 @@ import pandas as pd
 from pathlib import Path
 from io import StringIO
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 OUT_DIR = ROOT / "data" / "processed"
 
 INE_URL = "https://www.ine.es/jaxiT3/files/t/es/csv_bdsc/28716.csv?nocab=1"

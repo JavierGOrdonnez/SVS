@@ -8,7 +8,7 @@ import csv
 import json
 from collections import defaultdict
 
-INFORME_JSON = "data/raw/sexual_crimes_mir_2019-2024.json"
+INFORME_JSON = "data/raw/sexual_crimes_mir_2017-2024.json"
 ANUARIO_JSON = "data/raw/sexual_crimes_mir_anuario_2016-2023.json"
 BALANCE_JSON = "data/raw/sexual_crimes_mir_balance_2019-2025.json"
 CONVICTIONS_CSV = "data/processed/ine_condenados_28716_sexual_crimes.csv"
@@ -88,12 +88,15 @@ def num(x):
 
 def _merge_totals(informe, anuario, balance):
     """Reported-totals timeline: Anuario backfills 2016-2018 (Informe's
-    earliest year is 2019); Balance extends one year past Informe's latest
-    (2025, not yet in Informe/Anuario) and is also carried in full as a
-    separate `balance_total` overlay — Balance's own totals diverge 7-9%
-    from Anuario/Informe in 2022+ (B24, self-flagged "pending consolidation"
-    in the source), a real cross-publication discrepancy worth showing
-    rather than hiding behind a single merged number."""
+    2017/2018 editions have no reliably-parseable headline typology table —
+    see mir_parser.py InformeParser._extract_typology docstring — so their
+    total_count is None despite those years now contributing nationality
+    data elsewhere); Balance extends one year past Informe's latest (2025,
+    not yet in Informe/Anuario) and is also carried in full as a separate
+    `balance_total` overlay — Balance's own totals diverge 7-9% from
+    Anuario/Informe in 2022+ (B24, self-flagged "pending consolidation" in
+    the source), a real cross-publication discrepancy worth showing rather
+    than hiding behind a single merged number."""
     by_year = {}
     for r in anuario:
         if r["year"] < 2019:
@@ -102,6 +105,12 @@ def _merge_totals(informe, anuario, balance):
                 "perp_male_pct": r.get("perp_male_pct"), "source": "anuario",
             }
     for r in informe:
+        if r["total_count"] is None:
+            # 2017/2018: nationality data is real (see below) but this
+            # edition's own headline total isn't parseable — keep the
+            # Anuario-sourced total already set above rather than clobbering
+            # it with None.
+            continue
         by_year[r["year"]] = {
             "total": r["total_count"], "clearance_rate": r.get("clearance_rate"),
             "perp_male_pct": r.get("perp_male_pct"), "source": "informe",

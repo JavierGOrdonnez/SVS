@@ -21,7 +21,8 @@ correlation here is a low-n descriptive Pearson r, not a statistical test --
 report association only, no causal claims (V9).
 
 Data sources:
-  data/raw/sexual_crimes_mir_2019-2024.json   (T26)
+  data/raw/sexual_crimes_mir_2017-2024.json   (T26; 2017/2018 lack a
+                                                 total_count -- see load_mir())
   data/raw/migration_spain.csv                (T11/V25)
   data/processed/population_spain_midyear_5yr.csv
 
@@ -32,8 +33,8 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
-MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2019-2024.json"
+ROOT = Path(__file__).parent.parent.parent
+MIR_JSON = ROOT / "data" / "raw" / "sexual_crimes_mir_2017-2024.json"
 MIGRATION_CSV = ROOT / "data" / "raw" / "migration_spain.csv"
 POP_CSV = ROOT / "data" / "processed" / "population_spain_midyear_5yr.csv"
 OUT_CSV = ROOT / "data" / "processed" / "sexual_crime_evolution.csv"
@@ -158,7 +159,12 @@ def main():
     migration = load_migration_totals()
     population = load_population()
 
-    total_crime_by_year = {rep["year"]: rep["total_count"] for rep in reports}
+    # 2017/2018 Informe editions carry no reliably-parseable headline total
+    # (see mir_parser.py InformeParser._extract_typology docstring) --
+    # excluded here rather than feeding None into the correlation/chart code
+    # below. Their nationality-breakdown data (build_nationality_series) is
+    # unaffected and still contributes.
+    total_crime_by_year = {rep["year"]: rep["total_count"] for rep in reports if rep["total_count"] is not None}
 
     category_series = build_category_series(reports)
     spanish_series, foreign_series, country_perp_series = build_nationality_series(reports)

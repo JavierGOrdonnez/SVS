@@ -78,6 +78,10 @@
       title="Victim nationality by region" subtitle="White line: Spain (derived from spanish_pct). Click a region to see country-level stacked bars. 2019–2024.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
     </svs-chart-panel>
+    <svs-chart-panel id="sx-victim-vulnerability-rate" size="full" height="320" confidence="medium"
+      title="Victim rate per 100k, by nationality" subtitle="2019–2024 (2020 excluded, source-PDF defect). Bars = rate per 100k female stock; hover for the total-stock alternative + 95% CI. Rate, not %-share — the victim-side mirror of peligrosity (T81).">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR Informe (victims) + Eurostat migr_pop1ctz" note="Numerator = all reported victims of that nationality (both sexes). Denominator: female-only stock (primary) vs total stock (alternative) — shown both ways, neither is the sole framing. CI captures Poisson count variance only, not denominator uncertainty."></svs-source-cite>
+    </svs-chart-panel>
     <svs-chart-panel id="sx-nationality-perpetrators" size="half" height="320" confidence="medium"
       title="Perpetrator nationality by region" subtitle="White line: Spain (derived from spanish_pct). Click a region to see country-level stacked bars. 2019–2024.">
       <svs-source-cite slot="source" label="MIR Informe — nationality × sex, no per-category cross" note="associative only"></svs-source-cite>
@@ -112,6 +116,15 @@
     <svs-chart-panel id="mi-stock-region" size="full" height="320" confidence="high" title="Foreign-national stock by region" subtitle="50 nationalities (94% of foreign stock), 2002–2025. Eurostat migr_pop1ctz. White line: Spain (INE Padrón total minus foreign stock). Click a region to see its countries."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid" size="half" height="480" confidence="high" title="Foreign-national age pyramid" subtitle="2024, by region. Males left / females right. Eurostat migr_pop1ctz."></svs-chart-panel>
     <svs-chart-panel id="mi-age-pyramid-es" size="half" height="480" confidence="medium" title="Spanish-national age pyramid" subtitle="2024. Total population minus foreign stock, same age scale."></svs-chart-panel>
+    <svs-chart-panel id="mi-age-pyramid-dz-ma" size="half" height="480" confidence="high" title="Morocco vs Algeria age pyramid" subtitle="2024. Eurostat migr_pop1ctz, country-level (not region-aggregated).">
+      <svs-source-cite slot="source" label="Eurostat migr_pop1ctz" note="age x sex x citizenship cross, MA/DZ, 2002-2025"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="mi-dz-ma-age-trend" size="half" confidence="high" title="Morocco vs Algeria working-age composition, 2002-2025" subtitle="% of male stock aged 15-39 (solid) vs 40-59 (dashed) — the H3 age-composition test.">
+      <svs-source-cite slot="source" label="Eurostat migr_pop1ctz" note="see reports/algeria_morocco_divergence.md for the standardized-rate test this feeds"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="mi-stock-2026-projected" size="full" height="320" confidence="low" title="Registered stock with an illustrative 2026 projection" subtitle="Dashed/triangle final point = base year stock + full regularization-application count (assumes 100% approval, none previously counted). NOT a forecast — hover for details.">
+      <svs-source-cite slot="source" label="migration_spain.csv + data/raw/regularization_2026.csv" note="illustrative upper bound only, not a confirmed or predicted figure"></svs-source-cite>
+    </svs-chart-panel>
   </div>
 
   <div class="section-intro">
@@ -126,6 +139,35 @@
     </svs-chart-panel>
     <svs-chart-panel id="co-share" size="half" confidence="medium"
       title="Test C — share of all identified perpetrators" subtitle="Post-2022 test periods, % of total."></svs-chart-panel>
+  </div>
+  <div class="section-intro">
+    <h2>Regularization-denominator sensitivity <span style="font:400 0.8rem var(--font-body);color:var(--text2)">· upper bound, not an estimate</span></h2>
+    <p>If a nationality's ENTIRE 2026 regularization-application pool had already been resident every year
+    2019-2024, all aged 15-59 — the most generous denominator-undercount correction possible — how much
+    would the rate fall? Morocco, Algeria, Colombia, Venezuela, 2024.</p>
+  </div>
+  <div class="grid">
+    <svs-chart-panel id="reg-sensitivity" size="full" height="320" confidence="medium"
+      title="Peligrosity rate: registered denominator vs. upper-bound over-corrected denominator" subtitle="2024. Bars: blue = original, orange = over-corrected.">
+      <svs-source-cite slot="source" label="data/raw/regularization_2026.csv + migration_spain.csv + sexual_crimes_mir_2017-2024.json" note="associative, upper-bound scenario"></svs-source-cite>
+    </svs-chart-panel>
+  </div>
+  <div class="section-intro">
+    <h2>Long-run crime trends <span style="font:400 0.8rem var(--font-body);color:var(--text2)">· Spanish vs. foreign, 2015-2023</span></h2>
+    <p>Extends this dashboard's crime coverage back before the sexual-crimes-specific series (2019+) using MIR
+    Anuario's general "Seguridad Ciudadana" chapter — homicide, robbery, and sexual assault. Spanish-vs-foreign
+    only: no per-country breakdown exists in this source (checked directly, see reports/algeria_morocco_divergence.md's
+    H1/H2 sections for where per-country data does and doesn't exist).</p>
+  </div>
+  <div class="grid">
+    <svs-chart-panel id="gc-per-capita" size="half" confidence="medium"
+      title="Reported crime, per capita" subtitle="Indexed to each category's first available year = 100. Hover for the raw rate.">
+      <svs-source-cite slot="source" label="MIR Anuario Estadístico 2016-2023 + population_spain_midyear_5yr.csv" note="all nationalities, hechos conocidos"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="gc-foreign-ratio" size="half" confidence="medium"
+      title="Foreign ÷ Spanish detention rate" subtitle="Identified-perpetrator rate ratio, by category. Dashed line = equal rate.">
+      <svs-source-cite slot="source" label="MIR Anuario Estadístico 2016-2023 + migration_spain.csv" note="detenciones/investigados, not reported crimes"></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-mig" heading="Migration & cohorts — caveats"></svs-caveat-list>
