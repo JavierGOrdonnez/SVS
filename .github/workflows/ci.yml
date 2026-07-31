@@ -38,6 +38,14 @@ jobs:
       - name: Install Python dependencies
         run: uv sync --dev
 
+      - name: Put the uv venv on PATH
+        # playwright.config.js boots the dashboard via bare `python3
+        # src/serve.py`, whose live-rebuild hook shells out to bare
+        # `python3 src/analysis/build_dashboard.py` -- both need pandas/
+        # pydantic/pdfplumber, which only exist in the uv venv, not
+        # whatever system Python `python3` resolves to by default.
+        run: echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
