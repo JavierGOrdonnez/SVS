@@ -1395,6 +1395,10 @@ def classify_odio_category(raw_label: str) -> str | None:
         return "discapacidad"
     if "DISCAPACIDAD" in norm:
         return "discapacidad"
+    if "DISFOBIA" in norm:
+        return "discapacidad"
+    if "ISLAMOFOBIA" in norm:
+        return "islamofobia"
     if "ORIENTAC" in norm and ("SEXUAL" in norm or "IDENTIDAD" in norm or "IDENT" in norm):
         return "orientacion_identidad_sexual_genero"
     if "RACISMO" in norm or "XENOFOB" in norm:

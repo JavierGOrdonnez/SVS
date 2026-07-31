@@ -10,7 +10,7 @@ Association only throughout (⊥ causal, V9).
 Whole nationality group's total crime-count ÷ total male-15-59-stock rate in
 each post-surge year (+ pooled 2022-2024) vs three baselines — pre-2022
 (pooled 2019+2021), pre-2019 (2019 alone), and (added B42) a deeper
-pre-2020 (pooled 2017-2019, real per-country data since T82/T86; Algeria has
+pre-2020 (pooled 2017-2019, real per-country data since T83/T87; Algeria has
 no 2017 row, so its deep baseline is effectively 2018+2019). Directly
 testable, no cohort-split assumption.
 
@@ -66,7 +66,7 @@ group's own observed total pre-surge rate** (identical to Test A's
 `rate_baseline` for the same years), not a settled-only reconstruction.
 Test B is also now run against a second, deeper baseline
 (`pre_2020_pooled_2017_2019`, real per-country MIR data available since
-T82/T86) alongside the original `pre_2022_pooled_2019_2021`, both reported
+T83/T87) alongside the original `pre_2022_pooled_2019_2021`, both reported
 side by side.
 
 **RESULT after B42 alone (superseded below, kept for the record)**: the
@@ -130,15 +130,15 @@ with Test E's finding that Argelia's overall rate rose *more* than Spain's.
 This ties together far more coherently with Tests A/E than either the
 original (pre-B42) or the B42-only (frozen-baseline) result did.
 
-**Regularization-adjusted sensitivity (mirrors T84, corrected B43)**: since
+**Regularization-adjusted sensitivity (mirrors T85, corrected B43)**: since
 MIR/Eurostat stock only counts *registered* residents, and Test B's
 decomposition is therefore blind to any undocumented population, a
 sensitivity variant adds the 2026 regularization-application pool for that
 nationality — assumed (a) already present throughout the whole window, (b)
 100% aged 15-59, (c) split male/female per that nationality's own real sex
-ratio, exactly as T84 does for the flat peligrosity rate — to `cohort_pop`
+ratio, exactly as T85 does for the flat peligrosity rate — to `cohort_pop`
 (not `settled_pop`, see correction above) every year, constant, matching
-T84's own "no arrival-timing data" convention. **This moves the ratio
+T85's own "no arrival-timing data" convention. **This moves the ratio
 toward 1** for both countries (mechanically: the same residual crime count
 is now divided by a larger cohort population): Marruecos 0.65x-0.96x
 (pre-2022 baseline, all ns) / 0.90x-1.22x (deep baseline, all ns — the
@@ -224,7 +224,7 @@ and a "(tiny — unstable)" note where n<500) rather than hidden or silently
 trusted (C9).
 
 **Regularization-adjusted variant (assumed to have arrived at/after the
-cutoff)**: mirrors T84/B43's reasoning, now anchored to whichever specific
+cutoff)**: mirrors T85/B43's reasoning, now anchored to whichever specific
 cutoff is being tested. Because Test F's accumulation windows are much
 shorter than Test B's rolling 3-year window, adding the same-sized
 regularization pool implies an extreme share of that period's true net

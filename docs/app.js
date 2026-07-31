@@ -52,6 +52,28 @@ function vline(x, label, color = ACCENT) {
   return { type: 'line', xMin: x, xMax: x, borderColor: color, borderWidth: 1, borderDash: [4, 4],
     label: { display: true, content: label, color, backgroundColor: 'rgba(15,17,23,0.85)', font: { size: 9 }, position: 'start' } };
 }
+// Shade an entire calendar year's category-column width (index ± 0.5 on the
+// category x-scale, not just a single vline down its center) — used for
+// 2020 across every year-indexed chart that covers it. COVID made 2020
+// anomalous almost everywhere in this dataset (lockdowns, reporting gaps,
+// activity swings), worth flagging visually on every timeline, not just the
+// couple of panels that already had an explicit marker for it. `years` must
+// be the exact array backing that chart's x-axis labels (chart.js's
+// category scale accepts numeric xMin/xMax as fractional index positions,
+// which is what makes the half-index offsets shade the full column instead
+// of collapsing to a zero-width line). Returns null if `year` isn't in
+// range, so callers can skip charts that don't cover it.
+function yearBand(years, year, text = 'COVID', color = '#60a5fa') {
+  const idx = years.indexOf(year);
+  if (idx === -1) return null;
+  return {
+    type: 'box', xMin: idx - 0.5, xMax: idx + 0.5,
+    backgroundColor: color + '1a', borderColor: color + '55', borderWidth: 1, borderDash: [2, 2],
+    drawTime: 'beforeDatasetsDraw', // behind the data, not drawn over it
+    label: { display: true, content: text, color, backgroundColor: 'rgba(15,17,23,0.85)',
+      font: { size: 9 }, position: { x: 'center', y: 'start' } },
+  };
+}
 // dim a '#rrggbb' color to a lower alpha, e.g. for provisional/not-yet-consolidated bars
 function fadeAlpha(hex, factor = 0.35) {
   const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
@@ -115,17 +137,32 @@ const line = (label, data, color, extra = {}) => ({
 // (needed for the stacked group) with region series overriding
 // `type: 'line'` per-dataset — Chart.js 4.x supports this mixed combo
 // natively.
-function regionDrilldownChart(cv, s) {
+function regionDrilldownChart(cv, s, opts = {}) {
+  const drillStyle = opts.drillStyle || 'bar';   // 'bar' (migration stock) | 'line' (peligrosidad)
   let drilled = null; // null = aggregate view, else a region name
+  const hasSpain = 'spain' in s;
+  // mi-stock-region's España line is Spain's total resident population
+  // (~40M) against region lines in the hundreds-of-thousands to low
+  // millions — sharing one axis flattens every region to a line hugging
+  // zero. sexual-crimes' two nationality panels don't have this problem
+  // (their `spain` series is the same unit/order-of-magnitude as the
+  // region series), so the secondary axis is opt-in per panel, not
+  // automatic just because `spain` exists.
+  const spainOnSecondaryAxis = !!opts.spainSecondaryAxis;
+  let chart;
 
   const regionColor = (region) => PALETTE[s.regions.indexOf(region) % PALETTE.length];
 
-  // hard y-axis cap sized to the DRILLED region's own bar total, not the
-  // union with the (possibly much larger) dimmed regions — otherwise a
-  // small region renders as a sliver of bars under an axis stretched to fit
-  // a much bigger one. The dimmed lines simply clip at the top if they
-  // exceed this; an accepted tradeoff for keeping the drilled region readable.
-  function barAxisMax(region) {
+  function spainDataset() {
+    if (!hasSpain) return null;
+    return { type: 'line', label: 'España', data: s.spain,
+      borderColor: '#fff', backgroundColor: '#fff22',
+      borderWidth: 3, pointRadius: 3, pointHoverRadius: 5,
+      tension: 0.2, _region: 'España', stack: 'spain',
+      ...(spainOnSecondaryAxis ? { yAxisID: 'y1' } : {}) };
+  }
+
+  function barAxisMax(region) {   // only used in 'bar' mode
     const bc = s.by_country[region];
     const perYearTotal = s.years.map((_, yi) =>
       bc.countries.reduce((sum, name) => sum + bc.series[name][yi], 0));
@@ -134,69 +171,131 @@ function regionDrilldownChart(cv, s) {
 
   function regionLine(region, extra = {}) {
     const color = regionColor(region);
-    // each line gets its OWN stack id (not left undefined, not shared with
-    // any other dataset): with the y-scale's `stacked` flag on (needed for
-    // the countries bars below), Chart.js sums every dataset sharing a
-    // scale into the axis max unless each has a distinct stack group —
-    // otherwise the dimmed region lines get added together for autoscale,
-    // ballooning the axis far past any actual series value.
     return { type: 'line', label: region, data: s.series[region], borderColor: color,
       backgroundColor: color + '22', borderWidth: 2, tension: 0.25,
       pointRadius: 2, pointHoverRadius: 4, _region: region, stack: `line-${region}`, ...extra };
   }
 
   function buildDatasets() {
-    if (!drilled) return s.regions.map((r) => regionLine(r));
+    const spain = spainDataset();
+    if (!drilled) {
+      const regions = s.regions.map((r) => regionLine(r));
+      return spain ? [...regions, spain] : regions;
+    }
+
     const dimmed = s.regions.filter((r) => r !== drilled).map((r) => regionLine(r, {
       borderColor: regionColor(r) + '55', backgroundColor: 'transparent',
       borderWidth: 1, borderDash: [3, 3], pointRadius: 0, order: 1,
     }));
-    // invisible click target carrying the drilled region's own label, so
-    // clicking "the region again" (the chosen back-toggle) always finds a
-    // legend entry with that exact name, in either view.
-    const backHandle = { type: 'line', label: drilled, data: s.years.map(() => null),
-      borderColor: 'transparent', pointRadius: 0, showLine: false, order: 0, _region: drilled,
-      stack: `line-${drilled}-back` };
     const bc = s.by_country[drilled];
+
+    if (drillStyle === 'line') {
+      // Line mode: dashed country lines + solid region reference line.
+      // The drilled region's own line stays as a visual reference; clicking
+      // it in the legend (same _region) toggles back to aggregate view.
+      const reference = regionLine(drilled, { order: 0 });
+      const countries = bc.countries.map((name, i) => ({
+        type: 'line', label: name, data: bc.series[name],
+        borderColor: PALETTE[i % PALETTE.length], backgroundColor: 'transparent',
+        borderWidth: 1.5, borderDash: [4, 3], pointRadius: 1.5, pointHoverRadius: 4,
+        tension: 0.2, order: 2,
+      }));
+      const result = [reference, ...dimmed, ...countries];
+      if (spain) result.push(spain);
+      return result;
+    }
+
+    // Bar mode (default): stacked country bars replace the region line.
+    // A visible "↩" back-handle click target replaces the region's legend entry.
+    const backHandle = { type: 'line', label: '↩ ' + drilled, data: s.years.map(() => null),
+      borderColor: regionColor(drilled), pointRadius: 0, showLine: false,
+      order: 0, _region: drilled, stack: `line-${drilled}-back` };
     const bars = bc.countries.map((name, i) => ({
       type: 'bar', label: name, data: bc.series[name],
       backgroundColor: PALETTE[i % PALETTE.length] + 'cc',
       borderColor: PALETTE[i % PALETTE.length], borderWidth: 1, stack: 'countries', order: 2,
     }));
-    return [backHandle, ...dimmed, ...bars];
+    const result = [backHandle, ...dimmed, ...bars];
+    if (spain) result.push(spain);
+    return result;
+  }
+
+  const yMax = opts.yMax;
+
+  // Shared by the legend-click and data-point-click handlers below: applies
+  // the drill/undrill/back-handle transition for a clicked label. Returns
+  // true if `txt` was one of those (so the caller stops there); false means
+  // it wasn't a region/back-handle label, so the caller can fall through to
+  // whatever it does for a plain dataset label (legend does a show/hide
+  // toggle; a chart-area point click does nothing — a country line isn't
+  // itself drillable).
+  function handleRegionClick(ci, txt) {
+    if (txt === 'España') return true;
+    if (txt.startsWith('↩ ')) {
+      drilled = null;
+      ci.data.datasets = buildDatasets();
+      ci.options.scales.x.stacked = false;
+      ci.options.scales.y.stacked = false;
+      ci.options.scales.y.max = yMax;
+      ci.update();
+      return true;
+    }
+    if (s.regions.includes(txt)) {
+      drilled = (drilled === txt) ? null : txt;
+      ci.data.datasets = buildDatasets();
+      ci.options.scales.x.stacked = !!(drilled && drillStyle === 'bar');
+      ci.options.scales.y.stacked = !!(drilled && drillStyle === 'bar');
+      ci.options.scales.y.max = (drilled && drillStyle === 'bar') ? barAxisMax(drilled) : yMax;
+      ci.update();
+      return true;
+    }
+    return false;
   }
 
   return new Chart(cv, {
     type: 'bar',
     data: { labels: s.years.map(String), datasets: buildDatasets() },
-    options: baseOpts({
-      x: { stacked: false },
-      y: { stacked: false, beginAtZero: true },
-      plugins: {
-        legend: {
-          display: true,
-          labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
-          onClick: (evt, item, legend) => {
-            const ci = legend.chart;
-            const ds = ci.data.datasets[item.datasetIndex];
-            if (ds._region) {
-              drilled = (drilled === ds._region) ? null : ds._region;
-              ci.data.datasets = buildDatasets();
-              ci.options.scales.x.stacked = !!drilled;
-              ci.options.scales.y.stacked = !!drilled;
-              ci.options.scales.y.max = drilled ? barAxisMax(drilled) : undefined;
-              ci.update();
-              return;
-            }
-            // non-region entries (a drilled region's country/"Other" bars):
-            // default Chart.js legend behavior, toggle that dataset's visibility.
-            const i = item.datasetIndex;
-            if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
-            else { ci.show(i); item.hidden = false; }
+    options: {
+      ...baseOpts({
+        x: { stacked: false },
+        y: { stacked: false, beginAtZero: true, max: yMax },
+        scales: spainOnSecondaryAxis ? {
+          y1: {
+            position: 'right', beginAtZero: false,
+            grid: { drawOnChartArea: false },
+            ticks: { color: TICK, font: { size: 11 }, callback: (v) => (v / 1e6).toFixed(0) + 'M' },
           },
+        } : {},
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: TICK, boxWidth: 10, font: { size: 10 } },
+            onClick: function(evt, item, _legend) {
+              const ci = (_legend && _legend.chart) || (this && this.chart);
+              if (!ci) return;
+              if (handleRegionClick(ci, item.text)) return;
+              const i = item.datasetIndex;
+              if (ci.isDatasetVisible(i)) { ci.hide(i); item.hidden = true; }
+              else { ci.show(i); item.hidden = false; }
+            },
+          },
+          annotation: { annotations: { covid: yearBand(s.years, 2020) } },
         },
+      }),
+      // Clicking a region's line/bar directly (not just its legend entry)
+      // drills in the same way. baseOpts' `interaction: { mode: 'index',
+      // intersect: false }` is tuned for hover tooltips (one element per
+      // dataset at the nearest x, regardless of which one the cursor is
+      // actually over) and would misidentify which region was clicked if
+      // reused here, so this does its own precise hit-test instead of
+      // trusting the `elements` Chart.js passes in.
+      onClick: (evt, _elements, chart) => {
+        const hits = chart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+        if (!hits.length) return;
+        const ds = chart.data.datasets[hits[0].datasetIndex];
+        handleRegionClick(chart, ds.label);
       },
-    }),
+    },
   });
 }
 
@@ -270,7 +369,7 @@ function buildFeminicides() {
       borderDash: [6, 3], pointRadius: 0, tension: 0.2, order: -1, stack: 'ma5',
     };
 
-    const annotations = { covid: vline(String(2020), 'COVID', '#60a5fa') };
+    const annotations = { covid: yearBand(years, 2020) };
     d.milestones.forEach((m, i) => { annotations['ms' + i] = vline(String(m.year), m.label, '#a855f7'); });
 
     return new Chart(cv, {
@@ -321,7 +420,7 @@ function buildFeminicides() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-          annotation: { annotations: { covid: vline(String(2020), 'COVID', '#60a5fa') } },
+          annotation: { annotations: { covid: yearBand(years, 2020) } },
         },
       }),
     });
@@ -360,6 +459,7 @@ function buildFeminicides() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations: { covid: yearBand(FEM_AXIS_YEARS, 2020) } },
           tooltip: { callbacks: { afterLabel: (c) => {
             const o = origins[Math.floor(c.datasetIndex / 2)], role = roles[c.datasetIndex % 2];
             const row = byKey[`${FEM_AXIS_YEARS[c.dataIndex]}|${o}|${role}`];
@@ -403,7 +503,7 @@ function buildSexual() {
       options: baseOpts({
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
-          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(t.years, 2020) } },
           tooltip: { callbacks: { footer: (items) => `Source: ${sourceLabel[t.source[items[0]?.dataIndex]]}` } },
         },
       }),
@@ -422,7 +522,7 @@ function buildSexual() {
       data: { labels: years.map(String), datasets: [line('Clearance rate', rates, PALETTE[1], { fill: true })] },
       options: baseOpts({
         y: { min: 0, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
-        plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } } },
+        plugins: { annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(years, 2020) } } },
       }),
     });
   });
@@ -442,17 +542,19 @@ function buildSexual() {
         x: { stacked: true }, y: { stacked: true, beginAtZero: true },
         plugins: {
           legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
-          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low), covid: yearBand(d.categories.years, 2020) } },
         },
       }),
     });
   });
 
-  // T-sx-nat: region-drilldown (shared with migration's mi-stock-region).
-  register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims));
-  register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators));
+  register('sx-nationality-victims', (cv) => regionDrilldownChart(cv, d.nationality_victims, { drillStyle: 'bar' }));
+  register('sx-nationality-perpetrators', (cv) => regionDrilldownChart(cv, d.nationality_perpetrators, { drillStyle: 'bar' }));
 
-  // T80: victim-vulnerability rate panel — the mirror of peligrosity (co-rateratio's
+  // Peligrosidad: perpetrators % males 15-59 by nationality (region drill-down)
+  register('sx-peligrosidad', (cv) => regionDrilldownChart(cv, d.peligrosidad, { drillStyle: 'line', yMax: 0.5 }));
+
+  // T81: victim-vulnerability rate panel — the mirror of peligrosity (co-rateratio's
   // shape, docs/app.js buildCohort(): x-axis = period/year, one bar series per group)
   // but for victims, expressed as a per-100k rate rather than a %-share. Data shape is
   // docs/data/victim_vulnerability.json's `nationalities` map (built by
@@ -504,7 +606,8 @@ function buildSexual() {
       type: 'bar',
       data: { labels: c.years, datasets: groups.map((g, i) => ({
         label: g.replace(/_/g, ' '), data: c.series[g], backgroundColor: PALETTE[i % PALETTE.length] + 'cc', stack: 's' })) },
-      options: baseOpts({ x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }),
+      options: baseOpts({ x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+        plugins: { annotation: { annotations: { covid: yearBand(c.years, 2020) } } } }),
     });
   });
 }
@@ -515,7 +618,7 @@ function buildHate() {
   register('hc-totals', (cv) => new Chart(cv, {
     type: 'line',
     data: { labels: d.totals.years.map(String), datasets: [line('Hate crimes reported', d.totals.total, CONF.low, { fill: true, spanGaps: false })] },
-    options: baseOpts({ plugins: { annotation: { annotations: { gap: vline(String(d.gap_year), 'no 2022 report', TICK) } } } }),
+    options: baseOpts({ plugins: { annotation: { annotations: { gap: vline(String(d.gap_year), 'no 2022 report', TICK), covid: yearBand(d.totals.years, 2020) } } } }),
   }));
 
   register('hc-categories', (cv) => {
@@ -523,7 +626,22 @@ function buildHate() {
     return new Chart(cv, {
       type: 'line',
       data: { labels: d.categories.years, datasets: keys.map((k, i) => line(k.replace(/_/g, ' '), s[k], PALETTE[i % PALETTE.length])) },
-      options: baseOpts(),
+      options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.categories.years, 2020) } } } }),
+    });
+  });
+
+  register('hc-nationality', (cv) => {
+    const n = d.nationality;
+    return new Chart(cv, {
+      type: 'line',
+      data: {
+        labels: n.years.map(String),
+        datasets: [
+          line('Detained/investigated — % Spanish', n.detainees.overall.pct_spanish, PALETTE[0]),
+          line('Victims — % Spanish', n.victims.overall.pct_spanish, PALETTE[3]),
+        ],
+      },
+      options: baseOpts({ y: { min: 0, max: 100, ticks: { callback: (v) => v + '%' } } }),
     });
   });
 }
@@ -532,19 +650,20 @@ function buildMortality() {
   const d = DATA.mortality;
   register('mo-allcause', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.all_cause_by_sex.years, datasets: [line('Male', d.all_cause_by_sex.male, PALETTE[4]), line('Female', d.all_cause_by_sex.female, PALETTE[3])] },
-    options: baseOpts() }));
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.all_cause_by_sex.years, 2020) } } } }) }));
   register('mo-chapter', (cv) => { const s = d.female_chapter_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.chapters.map((c, i) => line(c, s.series[c], PALETTE[i % PALETTE.length], { fill: true, stack: 's', tension: 0.2 })) },
-    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }) }); });
+    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+      plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-ageprofile', (cv) => { const s = d.female_age_profile_latest; return new Chart(cv, { type: 'line',
     data: { labels: s.ages, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
     options: baseOpts({ x: { grid: { color: GRID }, ticks: { color: TICK, font: { size: 9 } } } }) }); });
   register('mo-external', (cv) => { const s = d.female_external_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-repro', (cv) => { const s = d.female_repro_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: Object.keys(s.series).map((k, i) => line(k, s.series[k], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mo-young', (cv) => { const s = d.female_young_top_causes; return new Chart(cv, { type: 'bar',
     data: { labels: s.labels, datasets: [{ data: s.deaths, backgroundColor: PALETTE.map(c => c + 'cc') }] },
     options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 }, maxRotation: 60 } } }) }); });
@@ -554,25 +673,40 @@ function buildMigration() {
   const d = DATA.migration;
   register('mi-inflow', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.annual_inflow.years.map(String), datasets: [line('Immigration inflow', d.annual_inflow.values, ACCENT, { fill: true })] },
-    options: baseOpts({ plugins: { annotation: { annotations: { br: vline(String(2008), 'EVR→EMCR', TICK) } } } }) }));
+    options: baseOpts({ plugins: { annotation: { annotations: { br: vline(String(2008), 'EVR→EMCR', TICK), covid: yearBand(d.annual_inflow.years, 2020) } } } }) }));
   register('mi-origin', (cv) => { const s = d.origin_composition; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.origins.map((o, i) => line(o, s.series[o], PALETTE[i % PALETTE.length])) },
-    options: baseOpts() }); });
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mi-sex', (cv) => new Chart(cv, { type: 'line',
     data: { labels: d.sex_split.years, datasets: [line('Male', d.sex_split.male, PALETTE[4]), line('Female', d.sex_split.female, PALETTE[3])] },
-    options: baseOpts() }));
+    options: baseOpts({ plugins: { annotation: { annotations: { covid: yearBand(d.sex_split.years, 2020) } } } }) }));
   register('mi-ageband', (cv) => { const s = d.age_band_over_time; return new Chart(cv, { type: 'line',
     data: { labels: s.years, datasets: s.bands.map((b) => line(b, s.series[b], ageColor(ageMidpoint(b)), { fill: true, stack: 's', tension: 0.2 })) },
-    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } } }) }); });
+    options: baseOpts({ y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
+      plugins: { annotation: { annotations: { covid: yearBand(s.years, 2020) } } } }) }); });
   register('mi-ageprofile', (cv) => { const s = d.age_profile_latest; return new Chart(cv, { type: 'bar',
     data: { labels: s.ages, datasets: [{ data: s.values, backgroundColor: ACCENT + 'cc' }] },
     options: baseOpts({ x: { grid: { display: false }, ticks: { color: TICK, font: { size: 9 } } } }) }); });
   register('mi-stock', (cv) => { const s = d.stock_trend; return new Chart(cv, { type: 'line',
-    data: { labels: s.years, datasets: [line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true })] },
-    options: baseOpts() }); });
+    data: { labels: s.years, datasets: [
+      line('Foreign nationals (stock)', s.foreign_nationality, ACCENT, { fill: true }),
+      line('% of total population', s.foreign_pct_of_total, '#fff',
+        { fill: false, borderDash: [5, 4], pointRadius: 1.5, yAxisID: 'y1', spanGaps: false }),
+    ] },
+    options: baseOpts({
+      plugins: {
+        legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+        annotation: { annotations: { covid: yearBand(s.years, 2020) } },
+      },
+      scales: { y1: {
+        position: 'right', beginAtZero: true,
+        grid: { drawOnChartArea: false },
+        ticks: { color: TICK, font: { size: 11 }, callback: (v) => v + '%' },
+      } },
+    }) }); });
   // T72: region-drilldown chart (shared with buildSexual()'s two nationality
   // panels — see regionDrilldownChart() below for the interaction).
-  register('mi-stock-region', (cv) => regionDrilldownChart(cv, d.stock_by_region));
+  register('mi-stock-region', (cv) => regionDrilldownChart(cv, d.stock_by_region, { spainSecondaryAxis: true }));
 
   // population pyramids (T69/T70): horizontal bars, males negative/left,
   // females positive/right, oldest band at the top (reverse of PYRAMID_AGES'
@@ -627,7 +761,7 @@ function buildMigration() {
     return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
   });
 
-  // T76: Morocco vs Algeria age pyramid — same shape as mi-age-pyramid but
+  // T77: Morocco vs Algeria age pyramid — same shape as mi-age-pyramid but
   // per-country (s.countries) instead of per-region (s.regions).
   register('mi-age-pyramid-dz-ma', (cv) => {
     const s = d.stock_age_pyramid_dz_ma;
@@ -646,7 +780,7 @@ function buildMigration() {
     return new Chart(cv, { type: 'bar', data: { labels: ages, datasets }, options: pyramidOpts(maxAbs) });
   });
 
-  // T76: % of male stock aged 15-39 vs 40-59, Morocco vs Algeria, over time
+  // T77: % of male stock aged 15-39 vs 40-59, Morocco vs Algeria, over time
   // — the H3 age-composition-shape test. Solid = 15-39 share, dashed = 40-59.
   register('mi-dz-ma-age-trend', (cv) => {
     const s = d.dz_ma_working_age_trend;
@@ -665,7 +799,7 @@ function buildMigration() {
     });
   });
 
-  // T85: registered stock trend with a dashed/shadowed 2026 projection point
+  // T86: registered stock trend with a dashed/shadowed 2026 projection point
   // (latest real stock + full regularization-application count for that
   // nationality) -- illustrative only, never presented as measured data.
   register('mi-stock-2026-projected', (cv) => {
@@ -738,7 +872,7 @@ function buildCohort() {
     });
   });
 
-  // T84: upper-bound regularization-denominator sensitivity, latest year only
+  // T85: upper-bound regularization-denominator sensitivity, latest year only
   // (2024) — original vs. over-corrected rate, one pair of bars per country.
   register('reg-sensitivity', (cv) => {
     const rs = DATA.regularization_sensitivity.countries;
@@ -764,6 +898,65 @@ function buildCohort() {
           } } },
         },
         y: { title: { display: true, text: 'rate per 100,000 males', color: TICK } },
+      }),
+    });
+  });
+}
+
+function buildGeneralCrime() {
+  const d = DATA.general_crime;
+  const catLabel = (c) => c === 'sexual_assault' ? 'Sexual assault' : c[0].toUpperCase() + c.slice(1);
+
+  register('gc-per-capita', (cv) => {
+    const g = d.per_capita;
+    const cats = d.categories.filter(c => g[c]);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.index_base100[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _rates: s, _years: s.years };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._years.indexOf(yr);
+            return idx >= 0 ? `${ds._rates.rate_per_100k[idx]} per 100k (base year ${ds._rates.base_year} = 100)` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'index (base year = 100)', color: TICK } },
+      }),
+    });
+  });
+
+  register('gc-foreign-ratio', (cv) => {
+    const g = d.foreign_spanish_ratio;
+    const cats = d.categories.filter(c => g[c] && g[c].years.length);
+    const allYears = [...new Set(cats.flatMap(c => g[c].years))].sort((a, b) => a - b);
+    const datasets = cats.map((c, i) => {
+      const s = g[c];
+      const data = allYears.map(y => { const idx = s.years.indexOf(y); return idx >= 0 ? s.ratio_foreign_over_spanish[idx] : null; });
+      return { ...line(catLabel(c), data, PALETTE[i % PALETTE.length]), _s: s };
+    });
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: allYears.map(String), datasets },
+      options: baseOpts({
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          annotation: { annotations: { base: { type: 'line', yMin: 1, yMax: 1, borderColor: '#fff5', borderWidth: 1, borderDash: [3, 3],
+            label: { display: true, content: 'equal rate = 1.0', color: '#9ba3bf', font: { size: 9 }, position: 'end' } } } },
+          tooltip: { callbacks: { afterLabel: (c) => {
+            const ds = datasets[c.datasetIndex], yr = allYears[c.dataIndex];
+            const idx = ds._s.years.indexOf(yr);
+            return idx >= 0 ? `Spanish ${ds._s.spanish_rate_per_100k[idx]}/100k · Foreign ${ds._s.foreign_rate_per_100k[idx]}/100k` : '';
+          } } },
+        },
+        y: { title: { display: true, text: 'rate ratio (foreign ÷ Spanish)', color: TICK } },
       }),
     });
   });
@@ -810,13 +1003,13 @@ function wire() {
 
 /* ── boot ────────────────────────────────────────────── */
 async function main() {
-  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity'];
+  const names = ['mortality', 'migration', 'feminicides', 'sexual_crimes', 'hate_crimes', 'cohort_tenure', 'victim_vulnerability', 'regularization_sensitivity', 'general_crime'];
   const loaded = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => {
     if (!r.ok) throw new Error(`${n}.json ${r.status}`); return r.json();
   })));
   names.forEach((n, i) => DATA[n] = loaded[i]);
 
-  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort();
+  buildFeminicides(); buildSexual(); buildHate(); buildMortality(); buildMigration(); buildCohort(); buildGeneralCrime();
   setHeadlines();
   wire();
   showTab('feminicides');   // mounts the initially-visible panels

@@ -92,7 +92,94 @@ Two other PDFs live alongside the annual series in `data/sources/` but are **not
 
 ## Category list (normalized keys, via `classify_odio_category`)
 
-`total_hate_crimes` (report headline) / `total_delitos` (sum of ámbitos) / `infracciones_administrativas` (2019+) / `racismo_xenofobia` / `orientacion_identidad_sexual_genero` / `ideologia` / `discapacidad` / `discriminacion_sexo_genero` / `creencias_practicas_religiosas` / `aporofobia` / `antisemitismo` / `antigitanismo` (2019+) / `discriminacion_generacional` (2018+) / `discriminacion_enfermedad` (2018+)
+`total_hate_crimes` (report headline) / `total_delitos` (sum of ámbitos) / `infracciones_administrativas` (2019+) / `racismo_xenofobia` / `orientacion_identidad_sexual_genero` / `ideologia` / `discapacidad` (label renamed again to `DISFOBIA` in the 2021+ SES portal data, see below — same key, same rename lineage as `DISCAPACIDAD`→`DIVERSIDAD FUNCIONAL`) / `discriminacion_sexo_genero` / `creencias_practicas_religiosas` / `aporofobia` / `antisemitismo` / `antigitanismo` (2019+) / `discriminacion_generacional` (2018+) / `discriminacion_enfermedad` (2018+) / `islamofobia` (2024+, its own category — first year Islamophobia was broken out separately per the 2024 report's own prose)
+
+## Nationality data: a separate source (SES portal megatablas, 2021-2024), and two closed leads
+
+The PDF reports parsed above (`OdioParser`) give the typology/ámbito series but
+carry **no nationality breakdown** — that table exists, but only in the
+PDFs' own charts (not machine-extracted here) and only for 2021-2024
+editions. Nationality (Spanish vs. per-country) by ámbito, for both
+detainees/investigated and victims, is instead sourced from a **different,
+much better** place, found and validated in this session:
+
+**Source: the Interior Ministry's own statistics portal**,
+`estadisticasdecriminalidad.ses.mir.es` — not a PDF, a live queryable
+PC-Axis "megatabla" system, downloadable as CSV with no auth and no
+Cloudflare block (unlike interior.gob.es, the PDF host). It hosts a family
+of 20 tables (`06001`-`06020`) covering hechos-conocidos/esclarecidos,
+victimizaciones, and detenciones/investigados, each at CCAA-or-provincia
+granularity. This project uses two, at national level only:
+
+| Table | Content | Download |
+|---|---|---|
+| `06019` | Detenidos/investigados × nacionalidad × ámbito × sexo × período | `https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/Datos6/l0/06019.px_bdsc` |
+| `06013` | Victimizaciones × nacionalidad × ámbito × sexo × período | `https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/Datos6/l0/06013.px_bdsc` |
+
+Parsed by `src/crime/parse_ses_odio_nationality.py` → `data/raw/hate_crimes_ses_nacionalidad_{detenidos,victimas}_2021-2024.csv` (full per-country detail, national rows only) and `..._summary_2021-2024.csv` (per year/ámbito: España count, total, foreign, % Spanish). Tested in `tests/test_ses_odio_nationality.py`.
+
+**Coverage is 2021-2024 only — confirmed empirically, not assumed.** A
+second, non-nationality table from the same family (`06001`, hechos
+conocidos — the same metric `OdioParser` already gets from PDFs back to
+2016) is *also* 2021-2024-only when queried through this portal system, so
+the cutoff is a portal-wide limitation, not specific to the nationality
+tables. Two candidate sources that might explain *why* (a
+`Metodologia_estadistica_ONDOD.pdf` methodology doc, and an "Interior
+moderniza su Portal Estadístico de Criminalidad" press article) were both
+unreachable (503 / Cloudflare 403) when checked — so the reason is not
+independently confirmed from an official document, only the empirical
+cutoff itself.
+
+**Validated against known figures** (exact matches, both independent of
+each other): 2023 detainees, all ámbitos, national: 1,161 total / 914
+España = **78.7%** Spanish (matches the previously prose-only "78.73%"
+figure in `discurso_odio_inmigracion_espana.md` §2.1). 2023 victims, all
+ámbitos: **62.2%** Spanish (matches that same doc's "62.15%"). 2024
+detainees total = 901 (matches the "905 arrested/investigated" prose
+figure, small rounding difference).
+
+**New finding, not previously known in this repo:** querying `06019` for
+`Ámbito = ORIENTACIÓN SEXUAL E IDENTIDAD DE GÉNERO` (2023, national) gives
+**194 Spanish / 269 total = 72.1% Spanish** — a real, national,
+OSIG-specific aggressor-nationality figure. No PDF or press source
+surfaces this breakdown; it only exists in this raw portal table.
+
+### Two leads chased and closed (so they aren't re-checked)
+
+- **`MIR_BalanceCriminalidad_*.pdf`** (the quarterly "Balance de
+  Criminalidad" series, used elsewhere in this repo for sexual crimes'
+  row 5/5.1/5.2 via `BalanceParser`): the 2023 Q4 edition (501 pages) was
+  full-text scanned directly for "nacionalidad" and "delitos de odio" —
+  **zero matches**. It is a pure region/province × general-crime-type-count
+  series; no nationality breakdown, no hate-crime row, anywhere.
+- **INE's numbered "Condenados" table family** (operation 213, the same
+  family as table `28716` already used for sexual crimes in
+  `src/crime/parse_ine_tabla28716.py`): its general (non-sexual-specific)
+  sibling, table **26014** ("Delitos según nacionalidad"), was fetched live
+  — its crime-type hierarchy (`nivel2`) has no "Contra la Constitución"
+  (Título XXI CP, where the hate aggravante and Art. 510 CP hate-speech
+  offense live) category at all; it is absorbed into an undifferentiated
+  "Resto de delitos" bucket with no way to isolate it. INE's full catalog
+  of 112 statistical operations (`OPERACIONES_DISPONIBLES` API) was also
+  checked directly: the only justice-adjacent ones are Juzgados de Paz,
+  Población Condenada Adulta/Menor, and Violencia Doméstica/Género — **no
+  dedicated hate-crime operation exists at INE.**
+
+### No official conviction (condenados) series exists for hate crimes
+
+Confirmed from three independent angles: the INE check above (no operation,
+no category); the SES portal (which only publishes police-recorded
+hechos/víctimas/detenidos-investigados — a judicial outcome is simply not
+what this system tracks); and prior research on the OSIG ámbito
+specifically that reached the same conclusion. The closest available data
+point is a one-off academic study — Giménez-Salinas Framis, A. et al.,
+*"Análisis de casos y sentencias en materia de racismo, xenofobia,
+LGTBIfobia y otras formas de intolerancia 2018-2022"* (OBERAXE/Ministerio de
+Inclusión, 2023) — which analyzed 177 court sentences nationwide and found,
+among 26 OSIG-motivated defendants with known nationality, 18 (69.2%)
+Spanish. This is a small, sentencing-stage-filtered sample spanning five
+years, not an official annual series — cite it as indicative, not as "the"
+hate-crime conviction rate by nationality.
 
 ## Critical caveats
 

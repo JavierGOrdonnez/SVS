@@ -1,6 +1,6 @@
 # Algeria/Morocco peligrosity divergence — why is Algeria's rate higher and rising while Morocco's is stable?
 
-Synthesizes T41's cohort-tenure tests with three follow-up hypotheses (T76-T79, T84, N20)
+Synthesizes T41's cohort-tenure tests with three follow-up hypotheses (T77-T80, T85, N20)
 prompted by the observation that Algeria's sexual-crime perpetrator rate looks high and
 rising over the last ~4 years while Morocco's — a "culturally similar" country — looks
 comparatively stable. Association only throughout (V9); every number below cites its
@@ -70,7 +70,7 @@ sexuales según sexo, edad y nacionalidad") and table 28709 — but both stop at
 cannot be isolated from either. So a direct age-standardized numerator for Morocco/Algeria
 specifically is not achievable with any data source currently available.
 
-**What is achievable — indirect standardization (T76/T77)**: apply a general-population
+**What is achievable — indirect standardization (T77/T78)**: apply a general-population
 reference age-specific conviction-rate curve (built from INE table 28857's `nationality=total`
 rows over Spain's exact single-year population,
 `data/processed/population_spain_estimates.csv`) to each country's own age *distribution*
@@ -101,7 +101,7 @@ shared by both countries and largely cancels in a ratio-of-ratios:
 composition using a common reference curve **widens**, not narrows, Algeria's gap over
 Morocco — the opposite of what H3 predicts. **H3 does not explain the divergence.**
 
-**Population-side confirmation (T76) — real, country-level Eurostat data, not an
+**Population-side confirmation (T77) — real, country-level Eurostat data, not an
 estimate.** To be unambiguous about what does and doesn't exist here: the CRIME numerator
 (MIR perpetrator counts) has no age breakdown, full stop — that's the actual gap. The
 POPULATION denominator absolutely does have real age×sex×country data for Morocco and
@@ -229,7 +229,7 @@ the "resident before 2026-01-01" eligibility bar and chose to apply; it is not a
 census of the full irregular population, and 20.5% of applications remain in an
 unattributed "other" bucket.) N20 in SPEC.md updated to reflect this finding.
 
-### Sensitivity scenario: how much would this shrink the peligrosity rate? (T84)
+### Sensitivity scenario: how much would this shrink the peligrosity rate? (T85)
 
 Direct follow-up: if the *entire* regularization-application pool for a nationality (a)
 had already been present in Spain throughout the 2019-2024 crime-data window, just
@@ -291,7 +291,7 @@ mechanism alone.
 for those rows, not missing/fabricated data; years without MIR data are simply absent from
 the CSV rather than zero-filled.
 
-## Exploratory: does an offense-subtype signal exist for the "Africa" nationality group? (T78)
+## Exploratory: does an offense-subtype signal exist for the "Africa" nationality group? (T79)
 
 The user asked whether INE's convicted-offender data (finer offense-subtype detail,
 region-level nationality only) could be cross-referenced against MIR's investigated data
@@ -326,7 +326,7 @@ drawn from currently available data.
 |---|---|---|
 | H3 (age composition explains the gap) | **Not supported** — age-adjustment widens, not narrows, the gap in every year tested; population age-shares converged exactly when the rate gap was largest | Medium (real data, but funnel-stage-mismatched reference curve) |
 | H1 (denominator undercount via differential legal access) | **Plausible mechanism WITH a supporting quantitative signal** — real, citable asymmetry in bilateral legal-migration pathways (Morocco has them since 1996/2001+GECCO, Algeria doesn't); Algeria's 2026 regularization-application share is ~2.5x its existing registered-population share (vs. Morocco's ~0.9x) — consistent with, though not proof of, a larger true undercount for Algeria | Medium (real, sourced applications data; still not a direct undocumented-population census) |
-| H2 (2026 regularization disproportionately surfaced Algerians) | **Yes, disproportionately, by a real margin** — Algeria's application share (3.4%) is ~2.5x its registered-population share (1.4%); Morocco's (13.3%) roughly tracks its own (14.8%). Sensitivity test (T84): even the maximal over-corrected denominator narrows but does not eliminate Algeria's 2024 rate excess over Morocco (2.43x → 1.75x) | Medium (real official data, one process, self-selected applicant pool, 20.5% unattributed residual) |
+| H2 (2026 regularization disproportionately surfaced Algerians) | **Yes, disproportionately, by a real margin** — Algeria's application share (3.4%) is ~2.5x its registered-population share (1.4%); Morocco's (13.3%) roughly tracks its own (14.8%). Sensitivity test (T85): even the maximal over-corrected denominator narrows but does not eliminate Algeria's 2024 rate excess over Morocco (2.43x → 1.75x) | Medium (real official data, one process, self-selected applicant pool, 20.5% unattributed residual) |
 | Offense-subtype signal (exploratory) | **No reliable signal extractable** — confounded by a 2022 legal-reclassification break and funnel/granularity mismatches | Low (exploratory only) |
 
 H3 (the strongest a priori candidate) points the *opposite* direction once tested with real
@@ -342,14 +342,14 @@ estimates) and the "association only" (V9) discipline used throughout.
 
 ## Data/code produced by this report
 
-- `src/crime/parse_ine_tabla28857.py` → `data/processed/ine_condenados_28857_age_nationality.csv` (T76)
+- `src/crime/parse_ine_tabla28857.py` → `data/processed/ine_condenados_28857_age_nationality.csv` (T77)
 - `src/crime/compute_age_standardized_rate.py` → `data/processed/age_standardized_rate_test.csv`,
-  `data/processed/age_standardized_dz_ma_ratio.csv` (T77)
+  `data/processed/age_standardized_dz_ma_ratio.csv` (T78)
 - `src/migration/build_dashboard_data.py`: `_country_age_pyramid()`, `_working_age_composition_trend()`
   → `docs/data/migration.json` keys `stock_age_pyramid_dz_ma`, `dz_ma_working_age_trend`; dashboard
-  panels `mi-age-pyramid-dz-ma`, `mi-dz-ma-age-trend` (T76)
-- `src/crime/analyze_offense_subtype_funnel_triangulation.py` → `data/processed/offense_subtype_funnel_triangulation.csv` (T78)
+  panels `mi-age-pyramid-dz-ma`, `mi-dz-ma-age-trend` (T77)
+- `src/crime/analyze_offense_subtype_funnel_triangulation.py` → `data/processed/offense_subtype_funnel_triangulation.csv` (T79)
 - `data/raw/regularization_2026.csv` — 2026 regularization application share by nationality, sourced (new)
 - `src/crime/compute_regularization_sensitivity.py` → `data/processed/regularization_sensitivity_test.csv`,
-  `data/processed/regularization_sensitivity.png` (T84)
+  `data/processed/regularization_sensitivity.png` (T85)
 - B39 fix to `src/crime/analyze_cohort_crime_rate.py` (ROOT path + stock-series regression)

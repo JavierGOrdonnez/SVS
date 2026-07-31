@@ -1,4 +1,4 @@
-"""T78 -- exploratory funnel triangulation: does INE's convicted-offense-
+"""T79 -- exploratory funnel triangulation: does INE's convicted-offense-
 subtype mix for the "Africa" nationality group (region-level, the finest
 nationality granularity 28716 offers) skew toward a particular sexual-crime
 subtype (e.g. violacion vs agresion_sexual sin penetracion) relative to
@@ -32,7 +32,7 @@ currently in this repo:
      breakdown.
 
 Association only (V9). Present as a signal to investigate further if a
-country-level subtype x nationality source is ever found (see T76's INE
+country-level subtype x nationality source is ever found (see T77's INE
 28857/28709 catalogue check for why finer sources weren't available),
 never as resolving the offense-subtype question.
 

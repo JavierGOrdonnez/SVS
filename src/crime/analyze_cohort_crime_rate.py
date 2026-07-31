@@ -135,7 +135,7 @@ TEST E -- is the group's rate INCREASE significantly different from the
         stable 2019-2024. Flagged explicitly; treat Test E as lower
         confidence than Tests A-C.
 
-EXTENSION -- regularization-adjusted sensitivity (Test B only, T84-style):
+EXTENSION -- regularization-adjusted sensitivity (Test B only, T85-style):
     Test B's settled/cohort split is entirely blind to undocumented
     migrants -- MIR/Eurostat stock only counts REGISTERED residents. Spain's
     2026 extraordinary regularization process surfaced applicants whose only
@@ -149,12 +149,12 @@ EXTENSION -- regularization-adjusted sensitivity (Test B only, T84-style):
     population was long-settled -- and added it to settled_pop. Revised: the
     hidden population is now assumed RECENT (the more defensible read of why
     an extraordinary, lower-bar amnesty was needed at all) and added to
-    cohort_pop instead. Mirrors T84's three assumptions exactly: (a) the
+    cohort_pop instead. Mirrors T85's three assumptions exactly: (a) the
     entire regularization-application pool for that nationality was already
     present throughout the whole 2019-2024 crime-data window, just
     uncounted, (b) 100% aged 15-59, (c) split male/female per that
     nationality's own real 2024 registered 15-59 sex ratio; held CONSTANT
-    across every year (baseline and test alike), matching T84's own "no
+    across every year (baseline and test alike), matching T85's own "no
     arrival-timing data, so hold constant" convention -- association only,
     we have no true arrival-year data for applicants, so this is the more
     defensible of the two buckets to place them in, not a claim about actual
@@ -253,19 +253,19 @@ Data sources:
                                                           spanish/foreign
                                                           split, perp_male_pct
                                                           (T26, extended to
-                                                          2017-2018 by T82/T86)
+                                                          2017-2018 by T83/T87)
   data/processed/population_spain_midyear_5yr.csv    -- general (all
                                                           nationality) mid-year
                                                           population by age x
                                                           sex
   data/raw/regularization_2026.csv                   -- 2026 regularization
                                                           application share by
-                                                          nationality (N20/T84)
+                                                          nationality (N20/T85)
 
 Output:
   data/processed/cohort_tenure_period_test.csv        -- Test A + D (period-level, incl. per-100k)
   data/processed/cohort_tenure_rates.csv               -- Test B (cohort-specific, both baselines)
-  data/processed/cohort_tenure_regularization_sensitivity.csv -- Test B, regularization-adjusted (B42/T84)
+  data/processed/cohort_tenure_regularization_sensitivity.csv -- Test B, regularization-adjusted (B42/T85)
   data/processed/cohort_share_test.csv                 -- Test C (share of total crimes)
   data/processed/cohort_vs_spanish_test.csv            -- Test E (vs Spanish population)
   data/processed/cohort_tenure_rate_ratio.png          -- all tests, grid (MA/DZ)
@@ -308,7 +308,7 @@ COHORT_WINDOW_YEARS = 3          # trailing window (V25, net-stock-delta per B42
 BASELINE_PRE2022 = [2019, 2021]  # pooled pre-2022-surge MIR report years
 BASELINE_PRE2019 = [2019]        # earliest available single MIR report year
 BASELINE_PRE2020_DEEP = [2017, 2018, 2019]  # NEW (B42): deeper pre-surge
-    # baseline, real per-country data since T82/T86, further removed from the
+    # baseline, real per-country data since T83/T87, further removed from the
     # divergence report's own ~2018-2019 surge-onset estimate for Algeria
     # than the pre-2022 baseline's 2021 component. Algeria has no 2017 row
     # (wasn't in that year's MIR top-N) -- available_years() restricts
@@ -317,7 +317,7 @@ BASELINE_PRE2020_DEEP = [2017, 2018, 2019]  # NEW (B42): deeper pre-surge
     # baseline_years_used records exactly which years were pooled per row.
 TEST_YEARS = [2022, 2023, 2024]
 AGE_BANDS_15_59 = {"15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59"}
-REGULARIZATION_REFERENCE_YEAR = 2024  # sex-split reference, matches T84
+REGULARIZATION_REFERENCE_YEAR = 2024  # sex-split reference, matches T85
 
 
 def load_migration_totals():
@@ -448,7 +448,7 @@ def load_spanish_perpetrator_counts():
     (foreign_total from summed by_country region totals, divided by
     foreign_pct); spanish_male_count then applies the report-level (not
     nationality-specific) perp_male_pct -- an approximation, see module
-    docstring Test E. 2017/2018 reports (added T82/T86) carry the same
+    docstring Test E. 2017/2018 reports (added T83/T87) carry the same
     foreign_pct/perp_male_pct/region-total fields as 2019+, so this works
     unchanged for the deeper baseline."""
     with open(MIR_JSON, encoding="utf-8") as f:
@@ -512,13 +512,13 @@ def estimate_spanish_male_15_59(years):
 
 
 def load_regularization_added_male_15_59(codes, reference_year=REGULARIZATION_REFERENCE_YEAR):
-    """{country_code: added_male_15_59} -- T84-style upper-bound regularization
+    """{country_code: added_male_15_59} -- T85-style upper-bound regularization
     sensitivity (see module docstring EXTENSION): the entire 2026
     regularization-application pool for that nationality, assumed (a)
     already resident throughout the whole 2019-2024 window, (b) 100% aged
     15-59, (c) split male/female per that nationality's own real
     reference-year registered 15-59 sex ratio (not a flat 50/50). Mirrors
-    compute_regularization_sensitivity.py (T84) exactly, applied here to
+    compute_regularization_sensitivity.py (T85) exactly, applied here to
     Test B's stock series instead of the flat peligrosity denominator."""
     reg = {}
     with open(REGULARIZATION_CSV, encoding="utf-8") as f:
@@ -744,7 +744,7 @@ def run_test_b(group_name, code, stock_by_year, crime_by_year, baseline_years_ra
     2026 regularización's own eligibility bar and the fact that its purpose
     was to catch people ordinary multi-year residency-based channels
     (arraigo) miss -- to be RECENT arrivals, not long-settled: it is added to
-    cohort_pop every year (constant, matching T84's own "no arrival-timing
+    cohort_pop every year (constant, matching T85's own "no arrival-timing
     data, so hold constant across years" convention), not to settled_pop.
     settled_pop stays the raw registered stock from `window` years ago,
     untouched by this adjustment.
@@ -1085,7 +1085,7 @@ def main():
             print(f"  {r['group']:20} [{r['baseline']}] {r['year']}  rate_ratio={r['rate_ratio']:.2f}  "
                   f"z={r['z']:+.2f}  p={r['p_value']:.4f}  {r['hypothesis_call']}")
 
-    print("\nTEST B (regularization-adjusted sensitivity, upper bound per T84 assumptions):")
+    print("\nTEST B (regularization-adjusted sensitivity, upper bound per T85 assumptions):")
     for r in rows_b_reg:
         if r["role"] == "test":
             print(f"  {r['group']:20} [{r['baseline']}] {r['year']}  +{r['regularization_added_male_15_59']:.0f} "
@@ -1213,7 +1213,7 @@ def make_chart(rows_a, rows_b, rows_c, rows_e):
 
 
 def make_reg_sensitivity_chart(rows_b, rows_b_reg):
-    """Test B, unadjusted vs regularization-adjusted (B42/T84 extension) --
+    """Test B, unadjusted vs regularization-adjusted (B42/T85 extension) --
     how much does assuming the full regularization-application pool was
     already-settled shift the implied cohort/settled rate ratio."""
     import matplotlib
@@ -1242,7 +1242,7 @@ def make_reg_sensitivity_chart(rows_b, rows_b_reg):
         ax.set_title(g.title(), fontsize=10)
         ax.set_ylabel("implied cohort/settled rate ratio", fontsize=8)
     axes[0].legend(fontsize=7, loc="upper left")
-    fig.suptitle("Test B sensitivity: adding the 2026 regularization pool to cohort_pop (B43/T84)\n"
+    fig.suptitle("Test B sensitivity: adding the 2026 regularization pool to cohort_pop (B43/T85)\n"
                  f"baseline={baseline_label}; upper bound, not a best estimate (V14) -- association only")
     fig.tight_layout()
     fig.savefig(OUT_CHART_REG_SENSITIVITY, dpi=150)

@@ -1,4 +1,4 @@
-"""T77 -- indirect age-standardization test for the Morocco/Algeria peligrosity
+"""T78 -- indirect age-standardization test for the Morocco/Algeria peligrosity
 divergence (H3): does Algeria's resident population skew younger than
 Morocco's, and does that alone explain part of the gap in T41's raw
 (unadjusted) rate ratios?
@@ -9,7 +9,7 @@ age field at all), so a direct age-standardized numerator is not possible.
 What IS possible is INDIRECT standardization (a standard epidemiological
 technique for exactly this situation): build a reference age-specific
 offending-RATE curve from a population where age and offending ARE crossed
-(INE table 28857, T76 -- age x sex x nationality-REGION, but region-level
+(INE table 28857, T77 -- age x sex x nationality-REGION, but region-level
 only, so DZ/MA cannot be isolated from 28857 itself), apply that reference
 curve to each country's own age DISTRIBUTION (which IS available at
 country level, from Eurostat's real age x sex x citizenship cross in
@@ -42,7 +42,7 @@ Caveats (state prominently in any report using this output):
 
 Data sources:
   data/processed/ine_condenados_28857_age_nationality.csv -- reference
-      age-specific conviction counts (T76, parse_ine_tabla28857.py)
+      age-specific conviction counts (T77, parse_ine_tabla28857.py)
   data/processed/population_spain_estimates.csv            -- single-year
       general population, used to build the reference age-specific RATE
       (exact, no reallocation)
