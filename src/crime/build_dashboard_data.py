@@ -121,8 +121,15 @@ def build_cohort_tenure():
     def call(row):
         return (row.get("hypothesis_call") or "").strip()
 
-    # Test A — whole-group rate ratio vs pre-2022 baseline.
-    period = read_csv("data/processed/cohort_tenure_period_test.csv")
+    # Test A — whole-group rate ratio vs pre-2022 baseline. B42 added two more
+    # baseline options (pre_2019_only, pre_2020_pooled_2017_2019) to the same
+    # CSV -- filtered to the original baseline here so the dashboard keeps
+    # exactly one row per test_period (co-rateratio's `periods` array assumes
+    # that); the fuller comparison lives in the CSV/reports for anyone who
+    # wants it, not (yet) surfaced in this panel.
+    DASHBOARD_BASELINE = "pre_2022_pooled_2019_2021"
+    period = [r for r in read_csv("data/processed/cohort_tenure_period_test.csv")
+              if r["baseline"] == DASHBOARD_BASELINE]
     test_a = defaultdict(lambda: {"periods": [], "rate_ratio": [], "p_value": [], "call": []})
     for r in period:
         g = test_a[r["group"]]
@@ -131,8 +138,9 @@ def build_cohort_tenure():
         g["p_value"].append(num(r["p_value"]))
         g["call"].append(call(r))
 
-    # Test C — share of all identified perpetrators vs baseline.
-    share = read_csv("data/processed/cohort_share_test.csv")
+    # Test C — share of all identified perpetrators vs baseline (same filter).
+    share = [r for r in read_csv("data/processed/cohort_share_test.csv")
+             if r["baseline"] == DASHBOARD_BASELINE]
     test_c = defaultdict(lambda: {"periods": [], "share_baseline_pct": [], "share_test_pct": [], "p_value": [], "call": []})
     for r in share:
         g = test_c[r["group"]]
