@@ -5,23 +5,21 @@ Compute per-origin victim and perpetrator feminicide rates, 2006-2024.
 Data sources:
 - Feminicide victim/perpetrator counts (2006-2024) from Delegación del
   Gobierno (T19/T20 output), data/raw/feminicidios_delegacion_2003-2026.json
-- Total female population (victim-rate denominator, 2006-2024) and total
-  male population (perpetrator-rate denominator, 2006-2024) from INE Padrón
-  midyear estimates, data/processed/population_spain_midyear_5yr.csv
-- Foreign-resident population stock (2006-2024) by sex from INE Padrón,
-  via data/raw/migration_spain.csv's `stock_nationality` series (Eurostat
-  migr_pop1ctz, per-year per-nationality sex-specific rows summed).
+- Spanish/foreign-resident population by sex (2006-2024), read directly
+  from INE t.56936, data/processed/population_spain_nationality.csv
+  (T89/B44/V46) -- no subtraction across mismatched sources. Previously
+  this file derived the Spanish figure as total population (INE Padrón)
+  minus Eurostat migr_pop1ctz foreign stock, which mixed a July-1/January-1
+  reference-date pair and a shifting ~86-94% foreign-coverage gap; see
+  SPEC.md B44.
 """
 
 import csv
 import json
 import sys
 
-import pandas as pd
-
 FEMINICIDE_JSON = 'data/raw/feminicidios_delegacion_2003-2026.json'
-POPULATION_CSV = 'data/processed/population_spain_midyear_5yr.csv'
-MIGRATION_CSV = 'data/raw/migration_spain.csv'
+POPULATION_NATIONALITY_CSV = 'data/processed/population_spain_nationality.csv'
 OUTPUT_CSV = 'data/processed/feminicide_rates_2006-2024.csv'
 
 YEARS = range(2006, 2025)  # 2006-2024: T19's "modern-format" PDF coverage,
@@ -52,81 +50,31 @@ def load_feminicide_data():
     return data
 
 
-def load_total_female_population():
-    """Total female population (all ages, summed across age groups) by
-    year, from INE Padrón midyear estimates."""
-    totals = {}
-    with open(POPULATION_CSV, encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row['sex'] != 'female':
-                continue
-            year = int(row['year'])
-            if year not in YEARS:
-                continue
-            totals[year] = totals.get(year, 0) + int(row['population_july1'])
-    return totals
-
-
-def load_total_male_population():
-    """Total male population (all ages, summed across age groups) by
-    year, from INE Padrón midyear estimates."""
-    totals = {}
-    with open(POPULATION_CSV, encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row['sex'] != 'male':
-                continue
-            year = int(row['year'])
-            if year not in YEARS:
-                continue
-            totals[year] = totals.get(year, 0) + int(row['population_july1'])
-    return totals
-
-
-def load_foreign_stock_by_sex():
-    """Per-year foreign-resident stock by sex, summed across all
-    nationalities from Eurostat migr_pop1ctz (stock_nationality series).
-
-    Returns dict[year] -> dict['female'|'male'|'all'] -> int.
-    """
-    df = pd.read_csv(MIGRATION_CSV)
-    mask = (
-        (df['series'] == 'stock_nationality')
-        & (df['age_group'] == 'all')
-        & (df['sex'].isin(['female', 'male', 'all']))
-    )
-    sub = df.loc[mask, ['year', 'sex', 'value']].copy()
-    sub['year'] = sub['year'].astype(int)
-    sub['value'] = sub['value'].astype(int)
-    piv = sub.groupby(['year', 'sex'])['value'].sum().unstack(fill_value=0)
+def load_population_by_nationality():
+    """{(year, sex, nationality): population}, sex in female/male,
+    nationality in spanish/foreign/total, age_group=all, read directly from
+    INE t.56936 (T89/B44/V46) -- no subtraction."""
     result = {}
-    for year in piv.index:
-        if year not in YEARS:
-            continue
-        result[year] = {
-            'female': int(piv.loc[year, 'female']) if 'female' in piv.columns else 0,
-            'male': int(piv.loc[year, 'male']) if 'male' in piv.columns else 0,
-            'all': int(piv.loc[year, 'all']) if 'all' in piv.columns else 0,
-        }
+    with open(POPULATION_NATIONALITY_CSV, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            if row['age_group'] != 'all' or row['sex'] not in ('female', 'male'):
+                continue
+            year = int(row['year'])
+            if year not in YEARS:
+                continue
+            result[(year, row['sex'], row['nationality'])] = int(row['population_july1'])
     return result
 
 
-def estimate_nationality_population(year, total_by_year, foreign_by_sex, sex):
+def estimate_nationality_population(year, pop_by_key, sex):
     """
     Population (for a given sex) by origin (Spanish resident vs foreign
-    resident) for `year`, from real INE Padrón + Eurostat data.
-
-    total(year)   : INE Padrón midyear population for the given sex, all ages.
-    foreign(year) : Eurostat stock_nationality total for the given sex, all
-                    nationalities summed, for `year`.
-    spanish(year) : total(year) - foreign(year) -- Padrón population counts
-                    include foreign residents, they are not additional on
-                    top of the total.
+    resident) for `year`, read directly from INE t.56936 (T89/B44/V46) --
+    no derivation, both figures are source-reported.
     """
-    total = total_by_year[year]
-    foreign = foreign_by_sex[year][sex]
-    spanish = total - foreign
+    spanish = pop_by_key[(year, sex, 'spanish')]
+    foreign = pop_by_key[(year, sex, 'foreign')]
+    total = pop_by_key.get((year, sex, 'total'), spanish + foreign)
 
     return {
         'españa': spanish,
@@ -140,26 +88,20 @@ def compute_rates():
     for every year in YEARS that has both a feminicide report
     and population data."""
     fem_data = load_feminicide_data()
-    total_female_by_year = load_total_female_population()
-    total_male_by_year = load_total_male_population()
-    foreign_by_sex = load_foreign_stock_by_sex()
+    pop_by_key = load_population_by_nationality()
 
-    pop_by_role = {
-        'victim': (total_female_by_year, 'female'),
-        'perpetrator': (total_male_by_year, 'male'),
-    }
+    sex_by_role = {'victim': 'female', 'perpetrator': 'male'}
 
     results = []
     for year in YEARS:
-        if year not in fem_data or year not in foreign_by_sex:
-            continue
-        if year not in total_female_by_year or year not in total_male_by_year:
+        if year not in fem_data:
             continue
 
         for role in ROLES:
-            total_by_year, sex = pop_by_role[role]
-            pop_data = estimate_nationality_population(
-                year, total_by_year, foreign_by_sex, sex)
+            sex = sex_by_role[role]
+            if (year, sex, 'spanish') not in pop_by_key or (year, sex, 'foreign') not in pop_by_key:
+                continue
+            pop_data = estimate_nationality_population(year, pop_by_key, sex)
 
             for origin in ['españa', 'otro_pais']:
                 count = fem_data[year].get(ORIGIN_LABELS[origin], {}).get(role, 0)
@@ -179,10 +121,9 @@ def compute_rates():
                     'confidence': 'medium',
                     'notes': (
                         f'{origin} {year} {role} — counts: Delegación del Gobierno '
-                        f'(high confidence); population: INE Padrón total {sex_label} '
-                        f'minus Eurostat migr_pop1ctz foreign-resident {sex_label} stock '
-                        f'(stock_nationality series, per-year per-nationality, ~86% of '
-                        f'INE ECP total foreign stock)'
+                        f'(high confidence); population: INE t.56936, direct '
+                        f'Spanish/foreign {sex_label} nationality split (T89/B44/V46), '
+                        f'not derived by subtraction'
                     ),
                 })
 

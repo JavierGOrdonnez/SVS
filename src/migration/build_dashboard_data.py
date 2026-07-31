@@ -13,6 +13,10 @@ from collections import defaultdict
 
 CSV_PATH = "data/raw/migration_spain.csv"
 POPULATION_CSV = "data/processed/population_spain_midyear_5yr.csv"
+# T89/B44: direct INE t.56936 Spanish/foreign nationality split -- source of
+# truth for Spanish-national population (V46), replacing the total-minus-
+# foreign-stock derivation this file used to compute itself.
+POPULATION_NATIONALITY_CSV = "data/processed/population_spain_nationality.csv"
 
 # nationality -> display region, for the T68 stock-by-region panel and the
 # T69/T70 age-pyramid regional breakdown. Covers all 50 non-ES codes carried
@@ -141,24 +145,29 @@ def _total_population_by_year():
     return total_pop_by_year
 
 
-def _spain_stock_series(years, by_region_year, total_pop_by_year):
-    """Spanish-national population per year, same subtraction approach as
-    T70's _spanish_age_pyramid (INE Padrón midyear total minus foreign
-    stock) but summed as a single yearly total rather than by age band, so
-    mi-stock-region can carry a `spain` reference line like the two
-    sexual-crimes drill panels already do (V44-adjacent: derived from the
-    same rows the region series themselves sum, so it's consistent with
-    them, not an independent estimate). population_spain_midyear_5yr.csv
-    only runs through 2024, one year short of stock_nationality's 2025 —
-    left as a genuine null gap for any year without population data rather
-    than carrying the last known total forward."""
-    def spain_value(year):
-        if year not in total_pop_by_year:
-            return None
-        foreign_total = sum(by_region_year[region].get(year, 0) for region in REGIONS)
-        return total_pop_by_year[year] - foreign_total
+def _spanish_national_population_by_year():
+    """{year: population} for nationality=spanish, age_group=all, sex=all,
+    from the direct INE t.56936 series (T89/B44/V46) -- 2002-2024."""
+    rows = load_rows(POPULATION_NATIONALITY_CSV)
+    return {
+        int(r["year"]): int(r["population_july1"])
+        for r in rows
+        if r["nationality"] == "spanish" and r["age_group"] == "all" and r["sex"] == "all"
+    }
 
-    return [spain_value(y) for y in years]
+
+def _spain_stock_series(years, spanish_pop_by_year):
+    """Spanish-national population per year, read directly from t.56936
+    (T89/B44) so mi-stock-region can carry a `spain` reference line like
+    the two sexual-crimes drill panels already do. Fixes B44: this used to
+    be a total-minus-foreign-stock subtraction mixing INE's July-1 total
+    with Eurostat's January-1 foreign figure (~86-94% nationality
+    coverage) -- gap swung -22K..+548K/yr vs the real value. t.56936 only
+    covers 2002+ (V46, no pre-2002 backfill) and currently through 2024,
+    one year short of stock_nationality's 2025 -- left as a genuine null
+    gap for any year without population data rather than carrying the
+    last known total forward."""
+    return [spanish_pop_by_year.get(y) for y in years]
 
 
 def _stock_by_region(rows):
@@ -188,7 +197,7 @@ def _stock_by_region(rows):
     return {
         "years": years,
         "regions": REGIONS,
-        "spain": _spain_stock_series(years, by_region_year, _total_population_by_year()),
+        "spain": _spain_stock_series(years, _spanish_national_population_by_year()),
         "by_country": {
             region: _region_country_breakdown(by_country_year, codes_by_region[region], years)
             for region in REGIONS
@@ -235,46 +244,26 @@ def _stock_age_pyramid(rows, year):
     }
 
 
-# population_spain_midyear_5yr.csv's native age bins -> the shared 17-band
-# pyramid scale (PYRAMID_AGES).
-POP_TO_PYRAMID_AGE = {
-    "<1": "0-4", "1-4": "0-4", "5-9": "5-9",
-    "10-14": "10-14", "15-19": "15-19", "20-24": "20-24", "25-29": "25-29",
-    "30-34": "30-34", "35-39": "35-39", "40-44": "40-44", "45-49": "45-49",
-    "50-54": "50-54", "55-59": "55-59", "60-64": "60-64",
-    "65-69": "65-69", "70-74": "70-74", "75-79": "75-79",
-    "80-84": "80+", "85-89": "80+", "90-94": "80+", "95+": "80+",
-}
-
-
-def _spanish_age_pyramid(rows, year):
-    """T70: Spanish-national age x sex pyramid = total population (INE
-    midyear estimate) minus foreign stock (Eurostat), same 17-band scale
-    and year as the T69 foreign pyramid."""
-    pop_rows = load_rows(POPULATION_CSV)
-    pop_totals = defaultdict(int)  # (sex, pyramid_age) -> value
+def _spanish_age_pyramid(year):
+    """T70: Spanish-national age x sex pyramid, read directly from INE
+    t.56936 (T89/B44) -- same 17-band scale and year as the T69 foreign
+    pyramid. Fixes B44: this used to derive Spanish population as total
+    population (INE midyear estimate) minus foreign stock (Eurostat), an
+    approximation now replaced by the direct source (V46). t.56936's own
+    age bands already match PYRAMID_AGES exactly (parse_ine_population_
+    nationality.py collapses 80-84/85-89/90+ into 80+ at ingestion), so no
+    POP_TO_PYRAMID_AGE remapping is needed here."""
+    pop_rows = load_rows(POPULATION_NATIONALITY_CSV)
+    spanish_totals = defaultdict(int)  # (sex, pyramid_age) -> value
     for r in pop_rows:
         if int(r["year"]) != year or r["sex"] not in ("male", "female"):
             continue
-        pyramid_age = POP_TO_PYRAMID_AGE.get(r["age_group"])
-        if pyramid_age is None:
+        if r["nationality"] != "spanish" or r["age_group"] == "all":
             continue
-        pop_totals[(r["sex"], pyramid_age)] += int(r["population_july1"])
-
-    foreign_stock = [
-        r for r in rows
-        if r["series"] == "stock_nationality" and int(r["year"]) == year
-        and r["sex"] in ("male", "female") and r["nationality"] in REGION_MAP
-    ]
-    foreign_totals = defaultdict(int)  # (sex, age_group) -> value
-    for r in foreign_stock:
-        foreign_totals[(r["sex"], r["age_group"])] += int(r["value"])
+        spanish_totals[(r["sex"], r["age_group"])] += int(r["population_july1"])
 
     def spanish_values(sex):
-        return [
-            pop_totals[(sex, age)] - _pyramid_band_value(foreign_totals, (sex,), age)
-            for age in PYRAMID_AGES
-        ]
+        return [spanish_totals[(sex, age)] for age in PYRAMID_AGES]
 
     return {
         "year": year,
@@ -515,9 +504,9 @@ def build():
 
     # 8/9. Age pyramids (T69/T70) — share the latest year covered by the
     # Spanish population estimates (2024) so both charts sit on the same year.
-    pyramid_year = max(int(r["year"]) for r in load_rows(POPULATION_CSV))
+    pyramid_year = max(int(r["year"]) for r in load_rows(POPULATION_NATIONALITY_CSV))
     s8 = _stock_age_pyramid(rows, pyramid_year)
-    s9 = _spanish_age_pyramid(rows, pyramid_year)
+    s9 = _spanish_age_pyramid(pyramid_year)
 
     # 10/11 (T77): Morocco vs Algeria age comparison -- H3 hypothesis test.
     dz_ma_years = sorted({int(r["year"]) for r in rows

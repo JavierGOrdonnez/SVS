@@ -13,6 +13,10 @@ ANUARIO_JSON = "data/raw/sexual_crimes_mir_anuario_2016-2023.json"
 BALANCE_JSON = "data/raw/sexual_crimes_mir_balance_2019-2025.json"
 CONVICTIONS_CSV = "data/processed/ine_condenados_28716_sexual_crimes.csv"
 MIGRATION_CSV = "data/raw/migration_spain.csv"
+# T91/B44: direct INE t.56936 Spanish-nationality series (V46) -- replaces
+# the total-minus-foreign-stock derivation this file used to compute for
+# the peligrosidad Spanish male 15-59 denominator.
+POPULATION_NATIONALITY_CSV = "data/processed/population_spain_nationality.csv"
 
 # LO 10/2022 renamed categories mid-series (V24) — pre/post variants unified
 # into one continuous series each; every other category name is stable
@@ -347,24 +351,20 @@ def _peligrosity(informe, migration_rows):
         if code != "ES":
             foreign_male_15_59[int(r["year"])] += val
 
-    # Total male 15-59 from INE Padrón
-    TOTAL_POP_CSV = "data/processed/population_spain_midyear_5yr.csv"
-    with open(TOTAL_POP_CSV, encoding="utf-8") as f:
-        total_rows = list(csv.DictReader(f))
-    total_male_15_59_all = defaultdict(int)
-    for r in total_rows:
-        if r["age_group"] in PELIGROSITY_AGE_BANDS and r["sex"] == "male":
-            total_male_15_59_all[int(r["year"])] += int(r["population_july1"]) if r["population_july1"] else 0
-
-    # Corrected foreign male 15-59 (scale up by coverage factor)
+    # Corrected foreign male 15-59 (scale up by coverage factor) -- still
+    # needed below for the RESTO residual-foreign-population estimate.
     corrected_foreign_per_year = {}
     for y in foreign_male_15_59:
         f = cov.get(y, 1.0)
-        corrected_foreign = round(foreign_male_15_59[y] * f)
-        corrected_foreign_per_year[y] = corrected_foreign
-        es_pop = total_male_15_59_all.get(y, 0) - corrected_foreign
-        if es_pop > 0:
-            pop["ES"][y] = es_pop
+        corrected_foreign_per_year[y] = round(foreign_male_15_59[y] * f)
+
+    # Spanish male 15-59 population, read directly from INE t.56936
+    # (T91/B44) instead of total_male_15_59_all - corrected_foreign.
+    with open(POPULATION_NATIONALITY_CSV, encoding="utf-8") as f:
+        nat_rows = list(csv.DictReader(f))
+    for r in nat_rows:
+        if r["nationality"] == "spanish" and r["sex"] == "male" and r["age_group"] in PELIGROSITY_AGE_BANDS:
+            pop["ES"][int(r["year"])] += int(r["population_july1"])
 
     # ── numerator: perpetrator counts by country + RESTO residual ──
     years = sorted(r["year"] for r in informe)

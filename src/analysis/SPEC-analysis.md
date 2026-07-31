@@ -16,6 +16,7 @@ orchestrator itself.
 file: data/raw/population_spain.csv                    → INE female population by age/year
 file: data/processed/population_spain_estimates.csv    → full long-form population series (all Jan/Apr/Jul/Oct snapshots 1971-2025) (T6)
 file: data/processed/population_spain_midyear_5yr.csv  → mid-year (July 1) population binned to 5yr age groups 2000-2025, shared denominator feeding mortality/feminicide/peligrosity rate computations (T6)
+file: data/processed/population_spain_nationality.csv  → mid-year (July 1) Spanish/foreign/total nationality split, by sex × 17-band pyramid age scale + all-ages total, 2002-2025 — direct INE t.56936 source (V46), shared Spanish-population denominator feeding migration/feminicide/peligrosity/crime-trend/cohort rate computations, replacing the retired total-minus-foreign-stock derivation (T89, B44)
 file: data/processed/rates.csv                         → derived incidence rates (generated)
 file: data/processed/lifetable.csv                     → cumulative probability output (generated) (T8)
 file: data/processed/covariate_data.csv                → political & immigration series (generated) (T10)
@@ -25,6 +26,7 @@ file: data/raw/gbv_funnel.csv, data/processed/gbv_funnel_rates.csv → GBV non-s
 file: data/processed/aggression_profile_summary.txt    → four-dimension aggression profile (cifra oculta, known/unknown perp, relationship+location context, single/multi perp) (T52)
 file: data/raw/eu_gbv_survey_{countries}.csv           → Eurostat EU-GBV survey `gbv_*` pull, ES + comparators (T56, planned)
 cmd:  `uv run python src/analysis/parse_ine_population.py`   → INE table 56934 → `population_spain_estimates.csv`, `population_spain_midyear_5yr.csv` (T6)
+cmd:  `uv run python src/analysis/parse_ine_population_nationality.py <csv_path>` → INE table 56936 CSV → `population_spain_nationality.csv` (T89)
 cmd:  `python src/parsers/mir_violence_parser.py <pdf_path>`     → parse "Informe evolución violencia mujer" 2015-2019 PDF (5 tables incl. victim-perp relationship + location of offense), stdout summary only — available, untapped input for T32
 cmd:  `python src/parsers/mir_violence_extractor.py <pdf_dir_or_file>` → extract same PDF's 5 tables → `data/raw/mir_violence_sexual_2015-2019.csv`
 cmd:  `uv run python src/analysis/analyze_aggression_profile.py` → `violence_spain.csv` → `data/processed/aggression_profile_summary.txt` (T52)
@@ -56,6 +58,7 @@ V36: ∀ Spain-vs-other-EU-country comparison using EIGE/FRA/Eurostat GBV data �
 | T10 | . | C | Collect covariate series: far-right vote share (Vox/PP far-right component) per year from CIS / electoral results | V10,C8 |
 | T12 | . | C | Covariate regression: multivariate OLS + BSTS on violence-rate ~ covariates; report associations not causal claims | C8,V9 |
 | T13 | . | C | Scenario projections: vary covariates ±10/20%, recompute expected rates | C8 |
+| T89 | x | infra | New `parse_ine_population_nationality.py`: parse INE t.56936 CSV (Española/Extranjera/Total × 5yr age bands × sex × quarterly, 2002-2025) → `data/processed/population_spain_nationality.csv` (year,sex,age_group[0-4..80+,all],nationality,population_july1), July-1 rows only, age bands collapsed to the existing 17-band pyramid scale (`80-84`/`85-89`/`90 y más años`→`80+`), reusing `parse_ine_population.py`'s SEX_MAP/PERIOD_MONTH/parse_value/parse_periodo (T6). Fixes B44: replaces the total−foreign subtraction used repo-wide for Spanish-national population with INE's own directly-reported nationality series. Extended `data/sources/ine_poblacion_femicidios.md` (already pointed at t.31304 for this but never built it) with t.56936 as the implemented source + a derived-vs-primary comparison table. Test: `tests/test_parse_ine_population_nationality.py` | V46,V6 |
 | T14 | . | A | Re-verify all `confidence=unverified` rows from prior AI conversation against primary sources | C9,V5 |
 | T15 | . | infra | Write `reports/methodology.md` — definitions, legal changes, dark-figure approach, model spec; per-source extraction table + composition DAG (mermaid) + peligrosity/relationship/funnel definitions | V9,C3,C4 |
 | T16 | . | infra | Write `reports/results.md` — probability estimates + CIs + scenario table | V9 |
@@ -72,4 +75,4 @@ V36: ∀ Spain-vs-other-EU-country comparison using EIGE/FRA/Eurostat GBV data �
 
 ## Related bugs
 
-B5, B16, B17, B20, B27 — see `SPEC.md` §B for full text.
+B5, B16, B17, B20, B27, B44 — see `SPEC.md` §B for full text.
