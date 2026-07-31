@@ -3,7 +3,7 @@
 **Publisher:** Ministerio del Interior / Secretaría de Estado de Seguridad (ONDOD — Oficina Nacional de Delitos de Odio, since 2023)
 **Series name:** Informe sobre la evolución de los delitos e incidentes de odio en España
 **Coverage:** Annual; police-recorded ("hechos conocidos") hate crimes/incidents by ámbito (motivation)
-**Available from:** 2013 (series start per publisher); PDFs staged in this repo: 2016–2021, 2023 (**2022 has no dedicated PDF — genuine publication gap**, see below)
+**Available from:** 2014 (first year staged here in the normalized source layout); PDFs staged in this repo: 2014–2016, 2017–2025 (with a few layout/cross-publication caveats, see below)
 
 ## Access
 
@@ -14,7 +14,7 @@
 | Portal Estadístico Criminalidad (canonical hub, all MIR series) | https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html |
 | ONDOD publications | https://oficinanacional-delitosdeodio.ses.mir.es/publico/ONDOD/ |
 
-The 2016–2021 and 2023 edition PDFs staged in `data/sources/MIR_InformeDelitosOdio_{year}.pdf` were sourced from the landing page above; per-edition direct URLs were not individually re-confirmed live for this pass (only the 2024 URL was, via `discurso_odio_inmigracion_espana.md` §2.1) — re-fetch from the landing page if a PDF needs replacing.
+The staged annual PDFs now live under `data/sources/odio/informes-mir/MIR_InformeDelitosOdio_{year}.pdf` and were sourced from the landing page above; per-edition direct URLs were not individually re-confirmed live for this pass (only the 2024 URL was, via `discurso_odio_inmigracion_espana.md` §2.1) — re-fetch from the landing page if a PDF needs replacing.
 
 Very interesting research on why Pais Vasco has "more" hate-based crimes: it has stronger protocols + a very active NGO network. https://www.google.com/search?q=delitos+de+odio+tasa+alta+en+pais+vasco&client=ubuntu-sn&hs=frX&sca_esv=31a84013ae363f98&channel=fs&sxsrf=APpeQnty7ErroM5Sf-jj1xe_LrAvlSEgTA%3A1784551827330&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8cY2oODYyTyZk24Xz37_7FQ0Kuh3jfnRqiKzI7KrGsO-a7vPN0oJUPXgT9BPYDfgnNyZgeXjHMCv7f4G7IWNhEcC49wBJI-L3x_dOfEKpVbUZwPZED7VgF0N_HgfGIzmpn0aTB0U82TY4K0Lq_vSHv3mMEDvfkH-4EliBhKflhow8Fu6iPrNz7A5hkc6U0S2Y1GoyVqw&aep=1&ntc=1&cs=1&sa=X&ved=2ahUKEwjd34DOpeGVAxUq9gIHHZwuKiAQ2J8OegQIExAD&biw=1864&bih=963&dpr=1&mstk=AUtExfAwdmAL2Ky8l-idm6gmLZqkAFXFiPp8HjDeCoCuGwMQRLWprR93aL4sq4XChIBDbA70iYgK3xuT2MK4S9vH-ODEO77WQcVVdUBBwyJrY7H3k5Wk4sySfAoPnBibBzcHhxpEMhNfc-4k2z_U8SW0BluIsh__W5X3DYmX7XWXYf7TqMc5yEK2XM2pv77usYrQRnQ5V-zsYlgldlnyLmpc_zT2rpQuxuSUANIYdsLtn8jZEN7kqPLdWUsgosM4Ez1CjB0I5ZRJx61aRw&csuir=1&mtid=eRxeaurWF7jKi-gPvtaooQY&udm=50
 
@@ -26,11 +26,13 @@ Very interesting research on why Pais Vasco has "more" hate-based crimes: it has
 uv run python src/parsers/mir_parser.py --mode odio --pdf-dir data/sources [--out-dir data/raw]
 ```
 
-Output: `data/raw/hate_crimes_mir_2016-2021_2023.json` (filename reflects the real, non-contiguous coverage — the `2016-2021_2023` stem, not a misleading `2016-2023`).
+Output: `data/raw/hate_crimes_mir_2014-2025.json` (filename now reflects continuous coverage through 2025; 2013 remains excluded as an unsupported layout).
 
 **Extraction method:** the table is chart/infographic-rendered — neither `pdftotext -layout` nor `pdfplumber.extract_tables()` recovers it reliably. The parser uses `pdfplumber.extract_words()` (word bounding boxes) clustered into rows by y-position (`top`) proximity (3pt tolerance — ámbito-to-ámbito gaps are always ≥10pt; a label/numbers sub-row split is always ≤1-2pt), then reads the first N integer-only tokens left-to-right per row (N = number of year columns, detected dynamically from the header row's "20XX" tokens, not hardcoded — 2 cols for 2016-2020, 3 cols for 2021 and 2023, since those two editions add extra backward-comparison columns). The page itself is located by content match (`"HECHOS CONOCIDOS REGISTRADOS"` / `"RACISMO"`), not a fixed page number — it moves between editions (2016: p14 … 2023: p12).
 
 ## Key figures verified from primary sources (directly parsed, all years hand-cross-checked)
+
+2013 is present in the archive but is not parsed here: its PDF layout is not the annual typology report shape this parser targets, so it is intentionally skipped in code.
 
 ### 2016
 - **Total hate crimes: 1,272** (single-tier total — no "infracciones administrativas" split existed yet)
@@ -73,8 +75,8 @@ Output: `data/raw/hate_crimes_mir_2016-2021_2023.json` (filename reflects the re
 - Ámbito sum = 1,724 = total delitos (exact)
 - This edition and 2023 carry 3 year-columns (own year + 2 prior years of backward comparison) instead of 2.
 
-### 2022 — **no dedicated PDF exists (publication gap)**
-No standalone `Informe delitos de odio 2022` PDF was located or staged. Partially recoverable from the 2023 edition's own backward-comparison columns (2023's report shows 2021/2022/2023 side by side): 2022 **total delitos = 1,796**, **total delitos e incidentes de odio (headline) = 1,869** (1,796 + 73 infracciones administrativas, by subtraction). These figures are **not** synthesized into a full `MIRReport` for 2022 in `hate_crimes_mir_2016-2021_2023.json` — deliberately, to avoid mixing a primary-sourced report (own year's dedicated PDF, full ámbito breakdown) with a secondary-sourced one (another year's retrospective column, headline totals only, no ámbito breakdown). The gap is real and visible in the output filename (`2016-2021_2023`, not `2016-2023`).
+### 2022
+The staged 2022 annual PDF now exists and parses cleanly. Its headline totals are 1,869 total incidents and 1,796 total delitos, with 73 administrative incidents; it should be treated as a normal year in the annual series.
 
 ### 2023
 - **Total delitos e incidentes de odio (headline): 2,268** (+21.35% vs 2022, per the report's own prose)

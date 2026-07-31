@@ -9,6 +9,7 @@
 
 | Year | Direct PDF URL |
 |---|---|
+| 2025 | Not yet available by 31st July 2026. Should show up here: https://cpage.mpr.gob.es/publicaciones/?q=Informe+sobre+Delitos+contra+la+Libertad+Sexual+en+Espa%C3%B1a&nipo=&autor=&tipologia=&materia=&ministerio=&unidad_editora=&ano=&lengua=&soporte=&serie=&encuadernacion= . 
 | 2024 | https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/Informe_DelitosSexuales24_v111225_ACC.pdf |
 | 2023 | https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2023/INFORME-DELITOS-CONTRA-LA-LIBERTAD-SEXUAL-2023.pdf |
 | 2022 | https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2022/INFORME-DELITOS-CONTRA-LA-LIBERTAD-SEXUAL-2022.pdf |
