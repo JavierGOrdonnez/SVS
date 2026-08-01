@@ -1,3 +1,11 @@
+> **Archived 2026-08-01**: this predates `data/sources/SOURCES_INDEX.md`'s
+> consolidation and was never linked from it. Its "Files Generated" table
+> (§7) is superseded by the live, done T27/T50 rows in
+> `src/crime/SPEC-crime.md`, and it references a `data/sources/
+> reference_documents/` path that no longer exists (the real files live in
+> `data/sources/reference/`). Kept for the research trail, not a current
+> source doc.
+
 # MIR Reports × Migration Correlation Analysis
 ## Sexual Crime Data (2023–2024) vs Migrant Fluxes — Spain
 
