@@ -26,8 +26,8 @@ Illes..."); only the (unambiguous, whitespace-separated) numeric values
 are actually parsed out of the PDF text.
 
 Usage:
-    python src/parsers/feminicide_parser.py --pdf-dir data/sources/
-    python src/parsers/feminicide_parser.py --pdf data/sources/VMujeres_2024.pdf
+    python src/parsers/feminicide_parser.py --pdf-dir data/sources/feminicidios/
+    python src/parsers/feminicide_parser.py --pdf data/sources/feminicidios/VMujeres_2024.pdf
 
 Output: one consolidated data/raw/feminicidios_delegacion_{min}-{max}.json,
 Pydantic-validated FeminicideDataset -> FeminicideReport (one per year).
