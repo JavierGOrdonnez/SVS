@@ -178,14 +178,14 @@
 <section id="tab-hate-crimes" class="tab-panel">
   <div class="section-intro">
     <h2>Hate & xenophobic crime</h2>
-    <p>MIR hate-crime reports, 2016–2023. There is no 2022 edition (publication gap), and a 2017
+    <p>MIR hate-crime reports, 2014–2025. There is no 2022 edition (publication gap), and a 2017
     methodology change makes the disability series discontinuous — both flagged on the charts.
     Nationality of detainees/investigated and victims, 2021–2024, comes from a separate source:
     the Interior Ministry's own statistical portal, not the PDF reports.</p>
   </div>
   <div class="grid">
     <svs-chart-panel id="hc-totals" size="half" confidence="high"
-      title="Total hate crimes reported, 2016–2023" subtitle="Gap at 2022 — no report published that year.">
+      title="Total hate crimes reported, 2014–2025" subtitle="Gap at 2022 — no report published that year.">
       <svs-source-cite slot="source" href="https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/delitos-de-odio/" label="MIR — Informe delitos de odio"></svs-source-cite>
     </svs-chart-panel>
     <svs-chart-panel id="hc-categories" size="half" confidence="high"
@@ -244,8 +244,9 @@
     'cav-hate': [
       { label: '2022 gap', text: 'No MIR hate-crime report was published for 2022 — the line breaks, it is not zero.' },
       { label: 'Methodology break', text: '2017 “discapacidad”→“diversidad funcional” change caused a structural −91% drop, not a real decline; “antigitanismo” was added in 2019.' },
-      { label: 'Nationality coverage', text: 'The nationality chart only covers 2021–2024 — the SES portal’s queryable microdata for hate crimes (this is the only source with a nationality breakdown) does not go back further, confirmed against a second, non-nationality table from the same portal that is also 2021–2024-only. It is a separate source from the 2016–2023 typology series above and is not affected by that series’ 2022 gap.' },
+      { label: 'Nationality coverage', text: 'The nationality chart only covers 2021–2024 — the SES portal’s queryable microdata for hate crimes (this is the only source with a nationality breakdown) does not go back further, confirmed against a second, non-nationality table from the same portal that is also 2021–2024-only. It is a separate source from the 2014–2025 typology series above and is not affected by that series’ 2022 gap.' },
       { label: 'Detained ≠ convicted', text: 'This is police-recorded detentions/investigations (detenidos/investigados), not convictions. No official annual conviction series exists for hate crimes by nationality — checked directly against INE’s full statistical-operations catalogue and against the Balance de Criminalidad reports, both come up empty. The closest available data point is a one-off academic judicial-sentencing study (Giménez-Salinas Framis et al., OBERAXE 2023), not an official series.' },
+      { label: '2024 −13.8% dip may be reporting suppression, not a real decline', text: 'The final July 2025 report gives no cause for 2024’s drop. But at the March 2025 provisional-data presentation, Interior officials went on record blaming victims being deterred from reporting by normalized xenophobic political rhetoric ("la presión social... disuade de la denuncia") — their own analysts opened an internal causes review whose result is not published anywhere found so far. The same year, Fiscalía’s indictments for hate/discrimination offences rose ~40% (210→293) even as this police-recorded total fell — a real, if funnel-stage-mismatched, divergence. Not yet independently confirmed against victimization-survey data (tracked as an open task).', href: 'https://elpais.com/espana/2025-03-24/interior-atribuye-a-los-mensajes-politicos-xenofobos-el-descenso-de-denuncias-por-delitos-de-odio.html' },
     ],
     'cav-mort': [
       { label: 'Competing risks', text: 'Lifetime probabilities must use a competing-risks model, not naive annual-rate multiplication — events are not independent across years.' },
