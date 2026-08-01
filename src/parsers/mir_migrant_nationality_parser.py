@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from utils import extract_text, write_csv_rows
 
 
-REFERENCE_DIR = Path("data/sources")
+REFERENCE_DIR = Path("data/sources/reference")
 OUTPUT_CSV = Path("data/raw/migrant_crime_numerator.csv")
 
 FIELDNAMES = [
