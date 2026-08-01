@@ -23,7 +23,7 @@ CSV-writing/argv-guard helpers don't apply).
 | `mir_parser.py` | MIR Informe (2017-2024, nationality data; total_count only 2019+) + Anuario (2000-2021) PDFs, via `pdfplumber` | `data/raw/sexual_crimes_mir_{min_year}-{max_year}.json` | T21,T22 | ~ |
 | `mir_violence_parser.py` | `MIR_ViolenceWomen_2015-2019.pdf` (pages 52-57 by default) | stdout summary only — parsing-logic module, no file output of its own | T32 (input, untapped) | . |
 | `mir_violence_extractor.py` | same PDF, via `mir_violence_parser.parse_pdf()` | `data/raw/mir_violence_sexual_2015-2019.csv` | T32 (input, untapped) | . |
-| `mir_migrant_nationality_parser.py` | `MIR_GroupSexualViolence_2023.pdf` + `data/sources/` reference PDFs | `data/raw/migrant_crime_numerator.csv` | T27 | ~ |
+| `mir_migrant_nationality_parser.py` | `MIR_GroupSexualViolence_2023.pdf` + `data/sources/reference/` PDFs | `data/raw/migrant_crime_numerator.csv` | T27 | ~ |
 
 Both `mir_violence_parser.py`/`mir_violence_extractor.py` currently extract
 **0 rows** against the default page range — a pre-existing (not caused by
