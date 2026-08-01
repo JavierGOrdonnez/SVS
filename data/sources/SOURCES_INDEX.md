@@ -7,10 +7,12 @@ comparing series. For verification workflow and spot-check values, see `../../VE
 **Where MIR PDFs come from:** `https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html`
 is the canonical hub for essentially all Ministerio del Interior crime-statistics publications —
 Anuario Estadístico, Informe sobre Delitos contra la Libertad e Indemnidad Sexual, Balance de
-Criminalidad (quarterly), and Informes de Delitos de Odio all live there. `data/sources/` now holds
-PDFs from all four families (Anuario 2021-2023, Balance de Criminalidad quarterlies 2016 Q1-2026 Q1,
-Informes/Encuesta/Plan de Acción de Delitos de Odio) — Anuario, Informe-sexual-crimes, Balance de
-Criminalidad, and Informe de Delitos de Odio all now have a parser + dedicated doc below (T21/T55/T59).
+Criminalidad (quarterly), and Informes de Delitos de Odio all live there. `data/sources/` sorts
+PDFs from each family into its own subfolder — `anuario-estadistico/`, `informes-delitos-sexuales/`,
+`balance-criminalidad/`, `odio/{informes-mir,encuesta,plan-accion}/`, `feminicidios/`, `reference/`
+(unparsed/methodology-only PDFs) — while every `.md` source doc below stays flat directly under
+`data/sources/`. Anuario, Informe-sexual-crimes, Balance de Criminalidad, and Informe de Delitos de
+Odio all now have a parser + dedicated doc below (T21/T55/T59).
 
 | Doc | Scope | Confidence of key figures | Known issues to watch |
 |---|---|---|---|
