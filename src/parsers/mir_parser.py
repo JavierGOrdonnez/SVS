@@ -1961,9 +1961,9 @@ def main():
     if args.mode == "balance":
         if not args.pdf_dir:
             ap.error("--mode balance requires --pdf-dir (needs all 4 quarters per year)")
-        pdfs = sorted(args.pdf_dir.glob("*.pdf"))
+        pdfs = sorted((args.pdf_dir / "balance-criminalidad").glob("*.pdf"))
         if not pdfs:
-            sys.exit(f"No PDFs found in {args.pdf_dir}")
+            sys.exit(f"No PDFs found in {args.pdf_dir / 'balance-criminalidad'}")
         run_balance_batch(pdfs, args.out_dir)
         return
 
@@ -1978,12 +1978,16 @@ def main():
 
     parse_fn = run_informe if args.mode == "informe" else run_anuario
     filename_tag = "anuario" if args.mode == "anuario" else ""
-    # data/sources/ mixes Informe/Anuario/Odio/Balance PDFs together; a bare
-    # "*.pdf" glob would feed the wrong parser wrong-format files (and can
-    # trip run_batch's V22 year-collision guard, since e.g. an Anuario and an
-    # Informe PDF for the same year both infer that year). Filter by each
-    # mode's own filename prefix, same pattern odio mode already uses.
-    dir_glob = {"informe": "MIR_Informe_DelitosSexuales*.pdf", "anuario": "MIR_AnuarioEstadistico*.pdf"}
+    # data/sources/ sorts each MIR PDF family into its own subfolder
+    # (informes-delitos-sexuales/, anuario-estadistico/, balance-criminalidad/,
+    # odio/informes-mir/); look inside the mode's own subfolder rather than a
+    # bare "*.pdf" glob, which would feed the wrong parser wrong-format files
+    # (and can trip run_batch's V22 year-collision guard, since e.g. an
+    # Anuario and an Informe PDF for the same year both infer that year).
+    dir_map = {
+        "informe": ("informes-delitos-sexuales", "MIR_Informe_DelitosSexuales*.pdf"),
+        "anuario": ("anuario-estadistico", "MIR_AnuarioEstadistico*.pdf"),
+    }
 
     if args.pdf:
         year = args.year or infer_year(args.pdf)
@@ -1992,9 +1996,11 @@ def main():
         run_batch([(args.pdf, year)], parse_fn, args.out_dir, filename_tag)
 
     elif args.pdf_dir:
-        pdfs = sorted(args.pdf_dir.glob(dir_glob.get(args.mode, "*.pdf")))
+        subdir, glob_pattern = dir_map.get(args.mode, (".", "*.pdf"))
+        pdf_dir = args.pdf_dir / subdir
+        pdfs = sorted(pdf_dir.glob(glob_pattern))
         if not pdfs:
-            sys.exit(f"No PDFs found in {args.pdf_dir}")
+            sys.exit(f"No PDFs found in {pdf_dir}")
         pairs = []
         for pdf in pdfs:
             year = infer_year(pdf)
