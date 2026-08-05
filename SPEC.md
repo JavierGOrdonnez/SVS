@@ -8,6 +8,7 @@ interfaces live in each module's own spec, co-located with its code:
 
 - [`src/feminicides/SPEC-feminicides.md`](src/feminicides/SPEC-feminicides.md)
 - [`src/sexual_crimes/SPEC-sexual-crimes.md`](src/sexual_crimes/SPEC-sexual-crimes.md)
+- [`src/sexual_crimes/SPEC-macroencuesta-expansion.md`](src/sexual_crimes/SPEC-macroencuesta-expansion.md) (planned-only — Macroencuesta chapters beyond what T98/T99 already parse: partner-violence prevalence/nationality, reporting behavior, and outside-partner sociodemographics/context/consequences)
 - [`src/crime/SPEC-crime.md`](src/crime/SPEC-crime.md) (nationality/peligrosity, hate-speech-migration correlation, hate crimes)
 - [`src/migration/SPEC-migration.md`](src/migration/SPEC-migration.md)
 - [`src/mortality/SPEC-mortality.md`](src/mortality/SPEC-mortality.md)
@@ -154,8 +155,9 @@ spec, not here:
 
 | module spec | owns |
 |---|---|
-| [SPEC-feminicides.md](src/feminicides/SPEC-feminicides.md) | T1, T19, T20, T23, T24 |
-| [SPEC-sexual-crimes.md](src/sexual_crimes/SPEC-sexual-crimes.md) | T3, T21, T22, T42, T55 |
+| [SPEC-feminicides.md](src/feminicides/SPEC-feminicides.md) | T1, T19, T20, T23, T24, T97 |
+| [SPEC-sexual-crimes.md](src/sexual_crimes/SPEC-sexual-crimes.md) | T3, T21, T22, T42, T55, T98, T99 |
+| [SPEC-macroencuesta-expansion.md](src/sexual_crimes/SPEC-macroencuesta-expansion.md) | T100-T106 (all planned, none started) |
 | [SPEC-crime.md](src/crime/SPEC-crime.md) | T4, T26-T31, T37-T41, T45-T48, T50, T51, T59, T76-T88 |
 | [SPEC-migration.md](src/migration/SPEC-migration.md) | T11, T-mig-tab, T43, T44 |
 | [SPEC-mortality.md](src/mortality/SPEC-mortality.md) | T2, T7, T49 |

@@ -69,9 +69,10 @@ export const ANNOTATION_PANELS = [
  * shrinking to whatever happens to mount.
  */
 export const TAB_PANELS = {
-  feminicides: ['fem-timeline', 'fem-ageband', 'fem-ageband-perp', 'fem-counts', 'fem-rates'],
+  feminicides: ['fem-timeline', 'fem-ageband', 'fem-ageband-perp', 'fem-counts', 'fem-rates', 'fem-relationship'],
   'sexual-crimes': ['sx-totals', 'sx-clearance', 'sx-categories', 'sx-nationality-victims',
-    'sx-nationality-perpetrators', 'sx-peligrosidad', 'sx-convictions'],
+    'sx-nationality-perpetrators', 'sx-peligrosidad', 'sx-convictions',
+    'sx-relationship', 'sx-relationship-known', 'sx-relationship-survey'],
   migration: ['mi-inflow', 'mi-origin', 'mi-sex', 'mi-ageband', 'mi-ageprofile', 'mi-stock',
     'mi-stock-region', 'mi-age-pyramid', 'mi-age-pyramid-es', 'co-rateratio', 'co-share'],
   'hate-crimes': ['hc-totals', 'hc-categories'],

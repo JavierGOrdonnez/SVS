@@ -73,6 +73,7 @@ class MIRRecord:
     perp_foreign_pct: float | None = None
     perp_by_country: list | None = None
     clearance_rate: float | None = None
+    relationship: list | None = None
     source_document: str = ""
     source_table: str = ""
     source_page: int | None = None
@@ -605,6 +606,154 @@ def _locate_nationality_table(pdf, keywords: list[str], start: int = 0):
 
 
 # ──────────────────────────────────────────────────────────────
+# "Relación víctima/autor" table extraction (T-sx-rel)
+#
+# Every "Informe sobre Delitos..." edition (2017-2024) carries a table
+# profiling each victimization's relationship to its perpetrator -- pareja/
+# expareja, family, acquaintance, or stranger. It's report-total-level only
+# (never crossed with crime category), same as nationality.
+#
+# pdfplumber's extract_tables() returns this table as a spreadsheet-
+# template-bleed mess in every year but 2024 (glued multi-line cells, stray
+# "Columna1..16" artifacts -- the same corruption class already handled for
+# the 2022/2023 typology table, see _dedupe_glued_number/_COLUMNA_RE).
+# page.extract_text(), by contrast, prints this specific table one category
+# per line, consistently, in every edition -- verified by direct extraction
+# against all 8 years -- so it's parsed by line-regex instead, the same
+# strategy AnuarioParser already uses for its own no-ruling-lines table.
+#
+# Two on-page formats, detected per line by how many numeric tokens follow
+# the label (not by a page-level flag -- MASCULINO/FEMENINO also appear in
+# 2024's unrelated sex-split bar-chart legend elsewhere on the same page,
+# which would misdetect the format if checked page-wide):
+#   - 2017: "LABEL MASC FEM DESCON TOTAL" in raw counts (plus one stray
+#     trailing duplicate token per line, a chart-legend bleed -- ignored,
+#     only the first 4 tokens are used).
+#   - 2018-2023: same 4-column layout, but as percentages.
+#   - 2024: "LABEL COUNT PCT%" -- no sex breakdown in this leaf-level table
+#     (2024 moved the sex split to a separate, coarser chart covering only
+#     the 4 group-level rows -- not extracted here since it wouldn't line
+#     up with the other years' leaf-level figures).
+# `pct` is always populated: read directly off the page for every year but
+# 2017 (counts only, no %), where it's derived from the four mutually-
+# exclusive group-level counts once every row is collected.
+# ──────────────────────────────────────────────────────────────
+
+# (key, group, is_group_total, [label regexes, matched via re.match against
+# an accent-stripped/lowercased line -- unanchored except where a short
+# leaf label like "pareja" could otherwise match inside a longer one).
+_REL_ROWS = [
+    ("violencia_genero_pareja", "violencia_genero_pareja", True,
+     [r"violencia\s+(?:de\s+genero|genero)\s*/?\s*(?:en\s+la\s+)?pareja"]),
+    ("conyuge", "violencia_genero_pareja", False, [r"^conyuge\b"]),
+    ("pareja", "violencia_genero_pareja", False, [r"^pareja\b"]),
+    ("expareja", "violencia_genero_pareja", False, [r"^expareja\b"]),
+    ("separado_divorciado", "violencia_genero_pareja", False, [r"^separado\s*/\s*divorciado"]),
+
+    ("violencia_domestica", "violencia_domestica", True,
+     [r"violencia\s+en\s+el\s+ambito\s+domestico", r"violencia\s+familiar\s+exc\.?\s+vdg\s+y\s+pareja"]),
+    ("progenitores", "violencia_domestica", False, [r"^progenitores\b", r"^padre\s*/\s*madre"]),
+    ("hijos", "violencia_domestica", False, [r"^hijo\s*(?:e|/)?\s*hija"]),
+    ("resto_familiar", "violencia_domestica", False,
+     [r"otras\s+relaciones\s+familiares", r"resto\s+violencia\s+familiar"]),
+
+    ("otras_relaciones", "otras_relaciones", True,
+     [r"otro\s+tipo\s+de\s+relaciones", r"^otras\s+relaciones\b"]),
+    ("conocido_vecindad", "otras_relaciones", False, [r"^conocido\s*/\s*vecindad"]),
+    ("amistad", "otras_relaciones", False, [r"^amistad\b"]),
+    ("laboral_comercial", "otras_relaciones", False, [r"^laboral\s*/\s*comercial"]),
+    ("escolar", "otras_relaciones", False, [r"^escolar\b"]),
+    ("otra_relacion", "otras_relaciones", False, [r"^otra\s+relacion\b"]),
+
+    # No leaf breakdown for "unknown" -- it's a single row every year, but
+    # still flagged is_group_total so it's included in the 2017 grand-total
+    # derivation below (it's one of the 4 mutually-exclusive top buckets).
+    ("relacion_desconocida", "relacion_desconocida", True,
+     [r"relacion\s+desconocida", r"ninguna\s*/\s*desconocida"]),
+]
+
+_REL_TOKEN_RE = re.compile(r"(\d{1,3}(?:\.\d{3})*(?:,\d+)?)(\s*%)?")
+
+
+def _classify_relationship_label(norm_line: str) -> tuple[str, str, bool, int] | None:
+    """Match `norm_line` (already accent-stripped/lowercased) against
+    `_REL_ROWS`; returns (key, group, is_group_total, match_end) for the
+    first pattern that matches at the start of the line, or None."""
+    for key, group, is_group_total, patterns in _REL_ROWS:
+        for pat in patterns:
+            m = re.match(pat, norm_line)
+            if m:
+                return key, group, is_group_total, m.end()
+    return None
+
+
+def _relationship_row_tokens(remainder: str) -> list[tuple[float, bool]]:
+    """Every (value, is_pct) numeric token in `remainder` (the line after
+    its label), in order."""
+    out = []
+    for m in _REL_TOKEN_RE.finditer(remainder):
+        num = parse_es_number(m.group(1))
+        if num is not None:
+            out.append((num, bool(m.group(2))))
+    return out
+
+
+def parse_relationship_rows(text: str) -> list[dict]:
+    """Parse the 'relación víctima/autor' table from one page's raw text
+    into one dict per category (see _REL_ROWS for the key/group vocab).
+    Returns [] if the page doesn't actually contain the table."""
+    rows, seen = [], set()
+    for line in text.splitlines():
+        norm = strip_accents(line).lower().strip()
+        cls = _classify_relationship_label(norm)
+        if not cls or cls[0] in seen:
+            continue
+        key, group, is_group_total, end = cls
+        toks = _relationship_row_tokens(norm[end:])
+
+        row = {"key": key, "group": group, "is_group_total": is_group_total,
+               "count": None, "pct": None, "male_pct": None, "female_pct": None, "unknown_pct": None}
+        if len(toks) >= 4 and all(t[1] for t in toks[:4]):
+            # 2018-2023: MASC%, FEM%, DESCON%, TOTAL% (percentages).
+            row["male_pct"], row["female_pct"], row["unknown_pct"], row["pct"] = (t[0] for t in toks[:4])
+        elif len(toks) >= 4 and not any(t[1] for t in toks[:4]):
+            # 2017: MASC, FEM, DESCON, TOTAL (raw counts) -- pct derived below.
+            row["count"] = int(toks[3][0])
+        elif len(toks) >= 2 and not toks[0][1] and toks[1][1]:
+            # 2024: COUNT, PCT% -- no sex split in this table.
+            row["count"], row["pct"] = int(toks[0][0]), toks[1][0]
+        else:
+            continue
+        rows.append(row)
+        seen.add(key)
+
+    # 2017 only: table gives raw counts, not %; derive pct from the four
+    # mutually-exclusive group-level counts once every row is in hand.
+    if rows and all(r["pct"] is None for r in rows if r["is_group_total"]) and any(r["count"] for r in rows):
+        grand_total = sum(r["count"] for r in rows if r["is_group_total"] and r["count"])
+        if grand_total:
+            for r in rows:
+                if r["count"] is not None:
+                    r["pct"] = round(r["count"] / grand_total * 100, 2)
+    return rows
+
+
+def _locate_relationship_rows(pdf) -> tuple[int, list[dict]] | None:
+    """Find the page carrying the 'relación víctima/autor' table and return
+    (page_index, rows); None if not found (16 rows expected in a good
+    parse -- gate at 8 so a partial/misdetected page isn't silently kept)."""
+    for i, page in enumerate(pdf.pages):
+        text = page.extract_text() or ""
+        upper = strip_accents(text).upper()
+        if "RELACION" not in upper or "AUTOR" not in upper or "DESCONOCID" not in upper:
+            continue
+        rows = parse_relationship_rows(text)
+        if len(rows) >= 8:
+            return i, rows
+    return None
+
+
+# ──────────────────────────────────────────────────────────────
 # Per-country nationality breakdown table extraction (T26)
 #
 # Below the Spanish/foreign aggregate, the same table breaks foreigners down
@@ -797,6 +946,7 @@ class InformeParser:
             self._extract_typology(pdf)
             self._extract_sex_breakdown(pdf)
             self._extract_nationality(pdf)
+            self._extract_relationship(pdf)
         self._validate()
         return self.records
 
@@ -929,6 +1079,18 @@ class InformeParser:
         rows = [row for table in page.extract_tables() for row in table]
         col_order_hint = _detect_sex_col_order_from_text(page.extract_text() or "")
         return parse_country_breakdown_table(rows, col_order_hint)
+
+    def _extract_relationship(self, pdf):
+        """Report-total-level 'relación víctima/autor' breakdown (T-sx-rel) --
+        see _locate_relationship_rows/parse_relationship_rows docstrings for
+        the table's format history and why this is text-regex-based rather
+        than pdfplumber table-object-based like the other _extract_* methods."""
+        located = _locate_relationship_rows(pdf)
+        if located is None:
+            print(f"  ⚠ {self.year}: could not locate 'relación víctima/autor' table", file=sys.stderr)
+            return
+        _page, rows = located
+        self._update_field("total_sexual_crimes", "relationship", rows)
 
     def _upsert(self, category: str, article: str, count: int | None, page_no: int | None, note: str = ""):
         for r in self.records:
@@ -1688,6 +1850,17 @@ class NationalitySplit(BaseModel):
     perpetrators: NationalityBreakdown = NationalityBreakdown()
 
 
+class RelationshipCount(BaseModel):
+    key: str
+    group: str
+    is_group_total: bool = False
+    count: int | None = None
+    pct: float | None = None
+    male_pct: float | None = None
+    female_pct: float | None = None
+    unknown_pct: float | None = None
+
+
 class CategorySexBreakdown(BaseModel):
     category: str
     legal_article: str
@@ -1705,6 +1878,7 @@ class MIRReport(BaseModel):
     perp_male_pct: float | None = None
     categories: list[CategorySexBreakdown] = []
     nationality: NationalitySplit = NationalitySplit()
+    relationship: list[RelationshipCount] = []
     source_document: str
     source_table: str = ""
     source_page: int | None = None
@@ -1741,6 +1915,10 @@ def records_to_report(records: list[MIRRecord], year: int, source_document: str,
             by_country=total_rec.perp_by_country if total_rec and total_rec.perp_by_country else [],
         ),
     )
+    relationship = (
+        [RelationshipCount(**r) for r in total_rec.relationship]
+        if total_rec and total_rec.relationship else []
+    )
     return MIRReport(
         year=year,
         total_count=total_rec.count if total_rec else None,
@@ -1749,6 +1927,7 @@ def records_to_report(records: list[MIRRecord], year: int, source_document: str,
         perp_male_pct=total_rec.perp_male_pct if total_rec else None,
         categories=categories,
         nationality=nationality,
+        relationship=relationship,
         source_document=source_document,
         source_table=total_rec.source_table if total_rec else "",
         source_page=total_rec.source_page if total_rec else None,

@@ -161,11 +161,27 @@ def build():
         ],
     }
 
+    # Victim-perpetrator relationship (pareja vs. expareja) + cohabitation at
+    # time of the killing, full 2003-present series -- parsed by
+    # feminicide_parser.py's _extract_relationship_table (Tabla 2.4 of each
+    # annual report) but not previously surfaced on the dashboard. Unlike
+    # age_breakdown, every year 2003-2026 has this field (even the legacy
+    # 2003-2005 stub reports), so no has_relationship_breakdown flag is
+    # needed -- a None entry only occurs if a future report edition changes
+    # this table's layout enough that the parser can't find it.
+    relationship = {
+        "years": [r["year"] for r in reports],
+        "type_breakdown": [r.get("relationship_type") or None for r in reports],
+        "cohabitation_breakdown": [r.get("cohabitation") or None for r in reports],
+        "provisional": [r["year"] == PROVISIONAL_YEAR for r in reports],
+    }
+
     return {
         "source": "Delegación del Gobierno contra la Violencia de Género — víctimas mortales por violencia de pareja",
         "source_url": "https://violenciagenero.igualdad.gob.es/",
         "confidence": CONF_DELEGACION,
         "timeline": timeline,
         "rates": rates,
+        "relationship": relationship,
         "milestones": MILESTONES,
     }

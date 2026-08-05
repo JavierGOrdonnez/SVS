@@ -541,6 +541,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": 373,
+          "pct": 3.91,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 33,
+          "pct": 0.35,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 147,
+          "pct": 1.54,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 176,
+          "pct": 1.85,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 17,
+          "pct": 0.18,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": 730,
+          "pct": 7.65,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 110,
+          "pct": 1.15,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 261,
+          "pct": 2.74,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 359,
+          "pct": 3.76,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": 1473,
+          "pct": 15.45,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 122,
+          "pct": 1.28,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 402,
+          "pct": 4.22,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 174,
+          "pct": 1.82,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 112,
+          "pct": 1.17,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 663,
+          "pct": 6.95,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": 6961,
+          "pct": 72.99,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2017.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": null,
@@ -1088,6 +1250,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 4.4,
+          "male_pct": 0.1,
+          "female_pct": 4.3,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.4,
+          "male_pct": 0.0,
+          "female_pct": 0.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.9,
+          "male_pct": 0.1,
+          "female_pct": 1.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.9,
+          "male_pct": 0.0,
+          "female_pct": 1.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.2,
+          "male_pct": 0.0,
+          "female_pct": 0.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 8.3,
+          "male_pct": 1.3,
+          "female_pct": 7.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.1,
+          "male_pct": 0.2,
+          "female_pct": 0.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 3.0,
+          "male_pct": 0.5,
+          "female_pct": 2.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.2,
+          "male_pct": 0.7,
+          "female_pct": 3.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 17.7,
+          "male_pct": 2.5,
+          "female_pct": 15.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.8,
+          "male_pct": 0.3,
+          "female_pct": 1.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.6,
+          "male_pct": 0.7,
+          "female_pct": 3.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.6,
+          "male_pct": 0.1,
+          "female_pct": 2.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.6,
+          "male_pct": 0.4,
+          "female_pct": 1.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 7.2,
+          "male_pct": 0.9,
+          "female_pct": 6.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 69.6,
+          "male_pct": 10.4,
+          "female_pct": 59.1,
+          "unknown_pct": 0.1
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2018.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": null,
@@ -1812,6 +2136,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 4.5,
+          "male_pct": 0.1,
+          "female_pct": 4.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.5,
+          "male_pct": 0.0,
+          "female_pct": 0.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.1,
+          "male_pct": 0.0,
+          "female_pct": 2.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.9,
+          "male_pct": 0.0,
+          "female_pct": 1.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.1,
+          "male_pct": 0.0,
+          "female_pct": 0.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 8.0,
+          "male_pct": 1.2,
+          "female_pct": 6.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.9,
+          "male_pct": 0.1,
+          "female_pct": 0.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 3.0,
+          "male_pct": 0.5,
+          "female_pct": 2.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.2,
+          "male_pct": 0.6,
+          "female_pct": 3.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 18.5,
+          "male_pct": 2.3,
+          "female_pct": 16.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.3,
+          "male_pct": 0.2,
+          "female_pct": 1.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 5.2,
+          "male_pct": 0.7,
+          "female_pct": 4.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.6,
+          "male_pct": 0.2,
+          "female_pct": 2.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.5,
+          "male_pct": 0.5,
+          "female_pct": 1.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 7.8,
+          "male_pct": 0.9,
+          "female_pct": 6.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 69.0,
+          "male_pct": 11.1,
+          "female_pct": 57.8,
+          "unknown_pct": 0.1
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2019.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 7,
@@ -2316,6 +2802,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 5.5,
+          "male_pct": 0.1,
+          "female_pct": 5.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.5,
+          "male_pct": 0.0,
+          "female_pct": 0.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.2,
+          "male_pct": 0.0,
+          "female_pct": 2.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.7,
+          "male_pct": 0.1,
+          "female_pct": 2.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.1,
+          "male_pct": 0.0,
+          "female_pct": 0.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 10.2,
+          "male_pct": 1.5,
+          "female_pct": 8.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.1,
+          "male_pct": 0.2,
+          "female_pct": 1.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.0,
+          "male_pct": 0.6,
+          "female_pct": 3.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 5.0,
+          "male_pct": 0.7,
+          "female_pct": 4.3,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 19.6,
+          "male_pct": 2.2,
+          "female_pct": 17.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.3,
+          "male_pct": 0.2,
+          "female_pct": 1.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 6.5,
+          "male_pct": 0.7,
+          "female_pct": 5.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.7,
+          "male_pct": 0.2,
+          "female_pct": 2.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.4,
+          "male_pct": 0.3,
+          "female_pct": 1.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 7.7,
+          "male_pct": 0.9,
+          "female_pct": 6.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 64.7,
+          "male_pct": 11.4,
+          "female_pct": 53.2,
+          "unknown_pct": 0.1
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2020.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 7,
@@ -3040,6 +3688,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 3.9,
+          "male_pct": 0.1,
+          "female_pct": 3.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.3,
+          "male_pct": 0.0,
+          "female_pct": 0.3,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.6,
+          "male_pct": 0.0,
+          "female_pct": 1.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.9,
+          "male_pct": 0.0,
+          "female_pct": 1.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.2,
+          "male_pct": 0.0,
+          "female_pct": 0.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 8.2,
+          "male_pct": 1.2,
+          "female_pct": 7.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.1,
+          "male_pct": 0.2,
+          "female_pct": 0.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.4,
+          "male_pct": 0.5,
+          "female_pct": 1.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.7,
+          "male_pct": 0.6,
+          "female_pct": 4.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 15.4,
+          "male_pct": 1.8,
+          "female_pct": 13.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.9,
+          "male_pct": 0.1,
+          "female_pct": 0.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.9,
+          "male_pct": 0.5,
+          "female_pct": 4.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.8,
+          "male_pct": 0.2,
+          "female_pct": 1.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.9,
+          "male_pct": 0.1,
+          "female_pct": 0.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 6.9,
+          "male_pct": 0.9,
+          "female_pct": 6.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 72.5,
+          "male_pct": 10.7,
+          "female_pct": 61.6,
+          "unknown_pct": 0.2
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2021.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 7,
@@ -3732,6 +4542,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 4.2,
+          "male_pct": 0.1,
+          "female_pct": 4.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.4,
+          "male_pct": 0.0,
+          "female_pct": 0.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.6,
+          "male_pct": 0.0,
+          "female_pct": 1.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.1,
+          "male_pct": 0.0,
+          "female_pct": 2.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.1,
+          "male_pct": 0.0,
+          "female_pct": 0.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 7.0,
+          "male_pct": 1.0,
+          "female_pct": 6.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.8,
+          "male_pct": 0.2,
+          "female_pct": 0.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.6,
+          "male_pct": 0.4,
+          "female_pct": 2.2,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 3.6,
+          "male_pct": 0.4,
+          "female_pct": 3.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 14.3,
+          "male_pct": 1.8,
+          "female_pct": 12.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.8,
+          "male_pct": 0.1,
+          "female_pct": 0.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 3.7,
+          "male_pct": 0.4,
+          "female_pct": 3.3,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.8,
+          "male_pct": 0.1,
+          "female_pct": 1.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.2,
+          "male_pct": 0.2,
+          "female_pct": 1.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 6.7,
+          "male_pct": 0.9,
+          "female_pct": 5.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 74.5,
+          "male_pct": 11.4,
+          "female_pct": 63.0,
+          "unknown_pct": 0.1
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2022.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 7,
@@ -4440,6 +5412,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": null,
+          "pct": 4.7,
+          "male_pct": 0.1,
+          "female_pct": 4.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.4,
+          "male_pct": 0.0,
+          "female_pct": 0.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.8,
+          "male_pct": 0.0,
+          "female_pct": 1.8,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.4,
+          "male_pct": 0.1,
+          "female_pct": 2.3,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.2,
+          "male_pct": 0.0,
+          "female_pct": 0.1,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": null,
+          "pct": 6.3,
+          "male_pct": 0.9,
+          "female_pct": 5.4,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.0,
+          "male_pct": 0.1,
+          "female_pct": 0.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 2.3,
+          "male_pct": 0.3,
+          "female_pct": 1.9,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": null,
+          "pct": 3.0,
+          "male_pct": 0.4,
+          "female_pct": 2.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": null,
+          "pct": 14.3,
+          "male_pct": 1.8,
+          "female_pct": 12.5,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 0.8,
+          "male_pct": 0.1,
+          "female_pct": 0.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 4.0,
+          "male_pct": 0.5,
+          "female_pct": 3.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.8,
+          "male_pct": 0.1,
+          "female_pct": 1.7,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 1.4,
+          "male_pct": 0.4,
+          "female_pct": 1.0,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": null,
+          "pct": 6.3,
+          "male_pct": 0.8,
+          "female_pct": 5.6,
+          "unknown_pct": 0.0
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": null,
+          "pct": 74.7,
+          "male_pct": 11.5,
+          "female_pct": 63.1,
+          "unknown_pct": 0.1
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2023.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 7,
@@ -5448,6 +6582,168 @@
           ]
         }
       },
+      "relationship": [
+        {
+          "key": "violencia_genero_pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": true,
+          "count": 1137,
+          "pct": 5.0,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "conyuge",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 90,
+          "pct": 0.4,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "pareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 431,
+          "pct": 1.89,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "expareja",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 588,
+          "pct": 2.59,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "separado_divorciado",
+          "group": "violencia_genero_pareja",
+          "is_group_total": false,
+          "count": 28,
+          "pct": 0.12,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "violencia_domestica",
+          "group": "violencia_domestica",
+          "is_group_total": true,
+          "count": 1242,
+          "pct": 5.72,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "progenitores",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 109,
+          "pct": 0.48,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "hijos",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 479,
+          "pct": 2.11,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "resto_familiar",
+          "group": "violencia_domestica",
+          "is_group_total": false,
+          "count": 712,
+          "pct": 3.13,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "otras_relaciones",
+          "group": "otras_relaciones",
+          "is_group_total": true,
+          "count": 3469,
+          "pct": 14.72,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "conocido_vecindad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 198,
+          "pct": 0.87,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "amistad",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 880,
+          "pct": 3.86,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "laboral_comercial",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 492,
+          "pct": 2.16,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "escolar",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 301,
+          "pct": 1.32,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "otra_relacion",
+          "group": "otras_relaciones",
+          "is_group_total": false,
+          "count": 1482,
+          "pct": 6.51,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        },
+        {
+          "key": "relacion_desconocida",
+          "group": "relacion_desconocida",
+          "is_group_total": true,
+          "count": 16930,
+          "pct": 74.56,
+          "male_pct": null,
+          "female_pct": null,
+          "unknown_pct": null
+        }
+      ],
       "source_document": "MIR_Informe_DelitosSexuales2024.pdf",
       "source_table": "tipologia_penal_table",
       "source_page": 14,
