@@ -475,6 +475,64 @@ function buildFeminicides() {
 
   register('fem-rates', (cv) => buildOriginRoleChart(cv, 'rate_per_100k',
     (row, roleLabel) => `${row.count} ${roleLabel} / ${(row.population / 1e6).toFixed(1)}M`));
+
+  // T-fem-rel: pareja vs. expareja (stacked counts) + "no convivían" % as a
+  // dashed overlay on a secondary axis — every year 2003-2026 has both
+  // fields (no source gap the way age_breakdown has for 2003-2005), clipped
+  // to the same 2003-2025 shared axis as the other feminicide panels.
+  register('fem-relationship', (cv) => {
+    const rel = d.relationship;
+    const idxByYear = {};
+    rel.years.forEach((y, i) => { idxByYear[y] = i; });
+
+    const findPct = (breakdown, matchLabel) => {
+      if (!breakdown) return null;
+      const row = breakdown.find(r => r.label === matchLabel || r.label.startsWith(matchLabel));
+      return row ? row.pct : null;
+    };
+    const findCount = (breakdown, matchLabel) => {
+      if (!breakdown) return null;
+      const row = breakdown.find(r => r.label === matchLabel || r.label.startsWith(matchLabel));
+      return row ? row.count : null;
+    };
+
+    const parejaData = FEM_AXIS_YEARS.map(y => { const i = idxByYear[y]; return i == null ? null : findCount(rel.type_breakdown[i], 'Pareja'); });
+    const exparejaData = FEM_AXIS_YEARS.map(y => { const i = idxByYear[y]; return i == null ? null : findCount(rel.type_breakdown[i], 'Expareja'); });
+    const noConviviaPct = FEM_AXIS_YEARS.map(y => { const i = idxByYear[y]; return i == null ? null : findPct(rel.cohabitation_breakdown[i], 'No convivían'); });
+    const provisional = FEM_AXIS_YEARS.map(y => { const i = idxByYear[y]; return i != null && rel.provisional[i]; });
+    const provFactor = 0.35;
+
+    const bars = [
+      { type: 'bar', label: 'Pareja', data: parejaData,
+        backgroundColor: FEM_AXIS_YEARS.map((_, i) => provisional[i] ? fadeAlpha(PALETTE[0], provFactor) : PALETTE[0] + 'cc'),
+        borderColor: PALETTE[0], borderWidth: 1, stack: 's' },
+      { type: 'bar', label: 'Expareja', data: exparejaData,
+        backgroundColor: FEM_AXIS_YEARS.map((_, i) => provisional[i] ? fadeAlpha(PALETTE[4], provFactor) : PALETTE[4] + 'cc'),
+        borderColor: PALETTE[4], borderWidth: 1, stack: 's' },
+    ];
+    const cohabLine = {
+      type: 'line', label: 'No convivían (%, right axis)', data: noConviviaPct,
+      borderColor: '#fff', backgroundColor: 'transparent', borderDash: [5, 4], borderWidth: 2,
+      pointRadius: 2, pointHoverRadius: 4, tension: 0.2, yAxisID: 'y1', spanGaps: false,
+    };
+
+    return new Chart(cv, {
+      type: 'bar',
+      data: { labels: FEM_AXIS_YEARS.map(String), datasets: [...bars, cohabLine] },
+      options: baseOpts({
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true },
+        scales: {
+          y1: { position: 'right', beginAtZero: true, max: 100, grid: { drawOnChartArea: false },
+            ticks: { color: TICK, font: { size: 11 }, callback: (v) => v + '%' } },
+        },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations: { covid: yearBand(FEM_AXIS_YEARS, 2020) } },
+        },
+      }),
+    });
+  });
 }
 
 function buildSexual() {
@@ -608,6 +666,87 @@ function buildSexual() {
         label: g.replace(/_/g, ' '), data: c.series[g], backgroundColor: PALETTE[i % PALETTE.length] + 'cc', stack: 's' })) },
       options: baseOpts({ x: { stacked: true, grid: { color: GRID }, ticks: { color: TICK } }, y: { stacked: true, beginAtZero: true, grid: { color: GRID }, ticks: { color: TICK } },
         plugins: { annotation: { annotations: { covid: yearBand(c.years, 2020) } } } }),
+    });
+  });
+
+  // T-sx-rel: victim-perpetrator relationship, 4 mutually-exclusive groups
+  // stacked to 100% per year — the "unknown" band is the largest slice
+  // every year (~65-75%), shown as-is rather than hidden, since that gap
+  // is itself the finding (see cav-sexual for what would close it).
+  const REL_GROUP_COLOR = {
+    violencia_genero_pareja: PALETTE[4], violencia_domestica: PALETTE[2],
+    otras_relaciones: PALETTE[0], relacion_desconocida: '#4b5163',
+  };
+  register('sx-relationship', (cv) => {
+    const rel = d.relationship;
+    const datasets = rel.groups.map((g) => ({
+      type: 'bar', label: rel.group_labels[g], data: rel.group_pct[g],
+      backgroundColor: REL_GROUP_COLOR[g] + 'cc', borderColor: REL_GROUP_COLOR[g], borderWidth: 1, stack: 's',
+    }));
+    return new Chart(cv, {
+      type: 'bar',
+      data: { labels: rel.years.map(String), datasets },
+      options: baseOpts({
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 9 } } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+        },
+      }),
+    });
+  });
+
+  // Same 3 non-unknown groups, renormalized to sum to 100% of *known-
+  // relationship* cases only — surfaces the compositional trend (pareja/
+  // expareja's rising share of known cases) that the raw chart's dominant
+  // grey band otherwise flattens visually.
+  register('sx-relationship-known', (cv) => {
+    const rel = d.relationship;
+    const knownGroups = rel.groups.filter((g) => g !== 'relacion_desconocida');
+    const datasets = knownGroups.map((g) => line(rel.group_labels[g], rel.known_pct[g], REL_GROUP_COLOR[g]));
+    return new Chart(cv, {
+      type: 'line',
+      data: { labels: rel.years.map(String), datasets },
+      options: baseOpts({
+        y: { beginAtZero: true, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          annotation: { annotations: { lo: vline(String(2022), 'LO 10/2022', CONF.low) } },
+        },
+      }),
+    });
+  });
+
+  // T-sx-rel-survey: MIR police-record "unknown" share vs. Macroencuesta
+  // victims' own account, both restricted to non-partner sexual violence so
+  // the comparison is apples-to-apples (survey chapter 16 explicitly
+  // excludes intimate partner; MIR's comparison bar is renormalized the
+  // same way in build_dashboard_data.py). Bars ordered lowest-to-highest
+  // severity so the "unknown share falls as severity rises" pattern reads
+  // left-to-right, with the MIR bar last for contrast.
+  register('sx-relationship-survey', (cv) => {
+    const sc = d.survey_comparison;
+    const barLabels = [...sc.types.map((t) => sc.type_labels[t]), `MIR police records (${sc.mir_comparison_point.year})`];
+    const seriesFor = (cat) => [...sc.series[cat], sc.mir_comparison_point[cat]];
+    const catColor = { familiar: REL_GROUP_COLOR.violencia_domestica, conocido: REL_GROUP_COLOR.otras_relaciones, desconocido: REL_GROUP_COLOR.relacion_desconocida };
+    const catLabel = { familiar: 'Familiar (no pareja)', conocido: 'Conocido (amigo/vecino/laboral/etc.)', desconocido: 'Desconocido' };
+    const datasets = sc.categories.map((c) => ({
+      type: 'bar', label: catLabel[c], data: seriesFor(c),
+      backgroundColor: barLabels.map((_, i) => i === barLabels.length - 1 ? catColor[c] + '55' : catColor[c] + 'cc'),
+      borderColor: catColor[c], borderWidth: 1, stack: 's',
+    }));
+    return new Chart(cv, {
+      type: 'bar',
+      data: { labels: barLabels, datasets },
+      options: baseOpts({
+        x: { stacked: true, ticks: { color: TICK, font: { size: 10 } } },
+        y: { stacked: true, beginAtZero: true, max: 100, ticks: { color: TICK, callback: (v) => v + '%' } },
+        plugins: {
+          legend: { display: true, labels: { color: TICK, boxWidth: 10, font: { size: 10 } } },
+          tooltip: { callbacks: { footer: (items) => items[0]?.label.startsWith('MIR') ? 'Police-recorded, all reported cases — structurally lower "known" share than a survey that asks victims directly' : 'Victim-reported, Macroencuesta survey' } },
+        },
+      }),
     });
   });
 }
