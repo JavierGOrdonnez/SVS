@@ -4,6 +4,12 @@ Part of the SVS spec. Top-level goal/shared constraints/invariants/roadmap/bug
 log live in [`SPEC.md`](../../SPEC.md); this file owns §T tasks T3, T21, T22,
 T42, T55, T73, T74, T75, T98, T99 and this module's domain-specific §V/§I content only.
 
+Planned (not yet started) follow-on work extending T98/T99's Macroencuesta
+parser to chapters beyond the one it currently covers (partner-violence
+prevalence/nationality, reporting behavior, outside-partner sociodemographics/
+context/consequences) lives in a separate file, not here:
+[`SPEC-macroencuesta-expansion.md`](SPEC-macroencuesta-expansion.md) (T100-T106).
+
 ---
 
 ## §I — Interfaces (sexual_crimes-specific)
