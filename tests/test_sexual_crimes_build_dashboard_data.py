@@ -126,3 +126,18 @@ def test_survey_comparison_types_have_matching_series_length():
 
     for cat in result["categories"]:
         assert len(result["series"][cat]) == len(result["types"])
+
+
+def test_survey_comparison_pins_the_headline_rape_vs_mir_contrast():
+    """Regression pin for the dashboard's central finding (T99): survey
+    victims report rape as overwhelmingly by a known perpetrator, MIR's own
+    police-recorded figure (once fairly restricted to the same partner-
+    excluded scope) says the opposite. Guards against a future data refresh
+    or refactor silently flattening this gap."""
+    informe = read_json(INFORME_JSON)["reports"]
+    relationship = _relationship_breakdown(informe)
+    result = _survey_comparison(relationship)
+
+    rape_idx = result["types"].index("rape")
+    assert result["series"]["desconocido"][rape_idx] == 12.0
+    assert result["mir_comparison_point"]["desconocido"] == 78.5

@@ -17,7 +17,10 @@ MIGRATION_CSV = "data/raw/migration_spain.csv"
 # the total-minus-foreign-stock derivation this file used to compute for
 # the peligrosidad Spanish male 15-59 denominator.
 POPULATION_NATIONALITY_CSV = "data/processed/population_spain_nationality.csv"
-MACROENCUESTA_RELATIONSHIP_CSV = "data/raw/macroencuesta_relationship_2015-2024.csv"
+# T99: parser-generated (src/parsers/macroencuesta_parser.py), replacing the
+# earlier hand-transcribed macroencuesta_relationship_2015-2024.csv -- every
+# figure here is independently re-derivable from the source PDF.
+MACROENCUESTA_JSON = "data/raw/macroencuesta_2019-2024.json"
 
 # LO 10/2022 renamed categories mid-series (V24) — pre/post variants unified
 # into one continuous series each; every other category name is stable
@@ -589,20 +592,30 @@ def _relationship_breakdown(informe):
 # waves are pooled across all sexual-violence-outside-partner severities.
 SURVEY_TYPE_LABEL = {
     "rape": "Violación (2024)", "attempted_rape": "Intento de violación (2024)",
-    "other_sexual_violence": "Otras formas (2024)",
-    "sexual_violence_outside_partner_all": "Todas (2019, pooled)",
+    "other": "Otras formas (2024)",
+    "any": "Todas (2019, pooled)",
 }
-SURVEY_TYPE_ORDER = ["rape", "attempted_rape", "other_sexual_violence", "sexual_violence_outside_partner_all"]
+SURVEY_TYPE_ORDER = ["rape", "attempted_rape", "other", "any"]
 SURVEY_REL_CATEGORIES = ["familiar", "conocido", "desconocido"]
 
 
 def _survey_comparison(relationship):
-    rows = read_csv(MACROENCUESTA_RELATIONSHIP_CSV)
-    by_type = defaultdict(dict)
-    for r in rows:
-        if r["wave_year"] != "2024" and r["violence_type"] != "sexual_violence_outside_partner_all":
-            continue  # skip the 2015 footnote-only rows (desconocido-only, no full breakdown)
-        by_type[r["violence_type"]][r["relationship_category"]] = num(r["pct"])
+    reports = read_json(MACROENCUESTA_JSON)["reports"]
+    # relationship rows carry separate 'familiar_hombre'/'familiar_mujer'
+    # sub-keys (the source table breaks perpetrator sex out too); summed
+    # here into the 3 canonical categories to match MIR's own coarser
+    # familiar/conocido/desconocido grouping. The 'mujer' sub-rows are
+    # mostly None (suppressed, sample <6) for rape/attempted-rape but real
+    # for the 'other' severity tier -- None entries just don't add anything,
+    # so this picks up the small female-perpetrator share wherever the
+    # source actually reports one, rather than a fixed hombre-only slice.
+    by_type = defaultdict(lambda: defaultdict(float))
+    for report in reports:
+        for row in report["relationship"]:
+            if row["pct_within_severity"] is None:
+                continue
+            category = row["key"].rsplit("_", 1)[0]  # 'familiar_hombre' -> 'familiar'
+            by_type[row["violence_type"]][category] += row["pct_within_severity"]
 
     types = [t for t in SURVEY_TYPE_ORDER if t in by_type]
 
