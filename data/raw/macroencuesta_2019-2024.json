@@ -1,0 +1,409 @@
+{
+  "reports": [
+    {
+      "wave_year": 2019,
+      "sample_size": 9568,
+      "prevalence": [
+        {
+          "violence_type": "any",
+          "timeframe": "lifetime",
+          "pct": 6.5,
+          "population_estimate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "sample_n": 620
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "last_4_years",
+          "pct": 1.4,
+          "population_estimate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "sample_n": 134
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "last_12_months",
+          "pct": 0.5,
+          "population_estimate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "sample_n": 49
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "childhood",
+          "pct": 3.4,
+          "population_estimate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "sample_n": 330
+        },
+        {
+          "violence_type": "rape",
+          "timeframe": "lifetime",
+          "pct": 2.2,
+          "population_estimate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "sample_n": 213
+        }
+      ],
+      "relationship": [
+        {
+          "key": "familiar_hombre",
+          "violence_type": "any",
+          "pct_within_severity": 21.6,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 134
+        },
+        {
+          "key": "familiar_mujer",
+          "violence_type": "any",
+          "pct_within_severity": 0.0,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 1
+        },
+        {
+          "key": "conocido_hombre",
+          "violence_type": "any",
+          "pct_within_severity": 49.0,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 304
+        },
+        {
+          "key": "conocido_mujer",
+          "violence_type": "any",
+          "pct_within_severity": 1.5,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 9
+        },
+        {
+          "key": "desconocido_hombre",
+          "violence_type": "any",
+          "pct_within_severity": 39.1,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 242
+        },
+        {
+          "key": "desconocido_mujer",
+          "violence_type": "any",
+          "pct_within_severity": 0.0,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": 0
+        }
+      ],
+      "source_document": "Macroencuesta_2019.pdf",
+      "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II)",
+      "verified": false,
+      "notes": "Relationship-to-perpetrator pooled across all severities (rape through non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity tier, unlike 2024 (see report's own text, p.158)."
+    },
+    {
+      "wave_year": 2024,
+      "sample_size": null,
+      "prevalence": [
+        {
+          "violence_type": "any",
+          "timeframe": "lifetime",
+          "pct": 14.5,
+          "population_estimate": 3076748,
+          "ci_low": 13.8,
+          "ci_high": 15.2,
+          "sample_n": null
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "last_4_years",
+          "pct": 3.4,
+          "population_estimate": 725595,
+          "ci_low": 3.1,
+          "ci_high": 3.8,
+          "sample_n": null
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "last_12_months",
+          "pct": 2.0,
+          "population_estimate": 416112,
+          "ci_low": 1.7,
+          "ci_high": 2.2,
+          "sample_n": null
+        },
+        {
+          "violence_type": "any",
+          "timeframe": "childhood",
+          "pct": 7.4,
+          "population_estimate": 1582380,
+          "ci_low": 6.9,
+          "ci_high": 8.0,
+          "sample_n": null
+        },
+        {
+          "violence_type": "rape",
+          "timeframe": "lifetime",
+          "pct": 3.1,
+          "population_estimate": 665811,
+          "ci_low": 2.8,
+          "ci_high": 3.5,
+          "sample_n": null
+        },
+        {
+          "violence_type": "rape",
+          "timeframe": "last_4_years",
+          "pct": 0.9,
+          "population_estimate": 191484,
+          "ci_low": 0.7,
+          "ci_high": 1.1,
+          "sample_n": null
+        },
+        {
+          "violence_type": "rape",
+          "timeframe": "last_12_months",
+          "pct": 0.5,
+          "population_estimate": 105542,
+          "ci_low": 0.4,
+          "ci_high": 0.6,
+          "sample_n": null
+        },
+        {
+          "violence_type": "rape",
+          "timeframe": "childhood",
+          "pct": 1.2,
+          "population_estimate": 251358,
+          "ci_low": 1.0,
+          "ci_high": 1.4,
+          "sample_n": null
+        },
+        {
+          "violence_type": "attempted_rape",
+          "timeframe": "lifetime",
+          "pct": 3.2,
+          "population_estimate": 680942,
+          "ci_low": 2.9,
+          "ci_high": 3.6,
+          "sample_n": null
+        },
+        {
+          "violence_type": "attempted_rape",
+          "timeframe": "last_4_years",
+          "pct": 0.7,
+          "population_estimate": 157137,
+          "ci_low": 0.6,
+          "ci_high": 0.9,
+          "sample_n": null
+        },
+        {
+          "violence_type": "attempted_rape",
+          "timeframe": "last_12_months",
+          "pct": 0.3,
+          "population_estimate": 74488,
+          "ci_low": 0.2,
+          "ci_high": 0.5,
+          "sample_n": null
+        },
+        {
+          "violence_type": "attempted_rape",
+          "timeframe": "childhood",
+          "pct": 1.3,
+          "population_estimate": 266280,
+          "ci_low": 1.0,
+          "ci_high": 1.5,
+          "sample_n": null
+        },
+        {
+          "violence_type": "other",
+          "timeframe": "lifetime",
+          "pct": 12.7,
+          "population_estimate": 2693342,
+          "ci_low": 12.0,
+          "ci_high": 13.3,
+          "sample_n": null
+        },
+        {
+          "violence_type": "other",
+          "timeframe": "last_4_years",
+          "pct": 2.6,
+          "population_estimate": 555273,
+          "ci_low": 2.3,
+          "ci_high": 2.9,
+          "sample_n": null
+        },
+        {
+          "violence_type": "other",
+          "timeframe": "last_12_months",
+          "pct": 1.4,
+          "population_estimate": 304034,
+          "ci_low": 1.2,
+          "ci_high": 1.7,
+          "sample_n": null
+        },
+        {
+          "violence_type": "other",
+          "timeframe": "childhood",
+          "pct": 6.6,
+          "population_estimate": 1410076,
+          "ci_low": 6.2,
+          "ci_high": 7.1,
+          "sample_n": null
+        }
+      ],
+      "relationship": [
+        {
+          "key": "familiar_hombre",
+          "violence_type": "rape",
+          "pct_within_severity": 23.1,
+          "pct_of_all_women": 0.7,
+          "population_estimate": 151898,
+          "sample_n": null
+        },
+        {
+          "key": "familiar_hombre",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": 17.9,
+          "pct_of_all_women": 0.6,
+          "population_estimate": 118162,
+          "sample_n": null
+        },
+        {
+          "key": "familiar_hombre",
+          "violence_type": "other",
+          "pct_within_severity": 18.6,
+          "pct_of_all_women": 2.3,
+          "population_estimate": 495613,
+          "sample_n": null
+        },
+        {
+          "key": "familiar_mujer",
+          "violence_type": "rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "familiar_mujer",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "familiar_mujer",
+          "violence_type": "other",
+          "pct_within_severity": 1.0,
+          "pct_of_all_women": 0.1,
+          "population_estimate": 26747,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_hombre",
+          "violence_type": "rape",
+          "pct_within_severity": 62.7,
+          "pct_of_all_women": 1.9,
+          "population_estimate": 412660,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_hombre",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": 66.0,
+          "pct_of_all_women": 2.0,
+          "population_estimate": 435469,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_hombre",
+          "violence_type": "other",
+          "pct_within_severity": 48.5,
+          "pct_of_all_women": 6.1,
+          "population_estimate": 1294160,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_mujer",
+          "violence_type": "rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_mujer",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "conocido_mujer",
+          "violence_type": "other",
+          "pct_within_severity": 1.9,
+          "pct_of_all_women": 0.2,
+          "population_estimate": 51497,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_hombre",
+          "violence_type": "rape",
+          "pct_within_severity": 12.0,
+          "pct_of_all_women": 0.4,
+          "population_estimate": 78730,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_hombre",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": 21.7,
+          "pct_of_all_women": 0.7,
+          "population_estimate": 143482,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_hombre",
+          "violence_type": "other",
+          "pct_within_severity": 46.5,
+          "pct_of_all_women": 5.8,
+          "population_estimate": 1238686,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_mujer",
+          "violence_type": "rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_mujer",
+          "violence_type": "attempted_rape",
+          "pct_within_severity": null,
+          "pct_of_all_women": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "key": "desconocido_mujer",
+          "violence_type": "other",
+          "pct_within_severity": 0.8,
+          "pct_of_all_women": 0.1,
+          "population_estimate": 21162,
+          "sample_n": null
+        }
+      ],
+      "source_document": "Macroencuesta_2024.pdf",
+      "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor)",
+      "verified": false,
+      "notes": ""
+    }
+  ]
+}
