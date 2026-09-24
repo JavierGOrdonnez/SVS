@@ -31,9 +31,9 @@ doc:  `data/sources/ine_causas_muerte.md`               → INE ECM table 7947 s
 
 | id | status | track | task | cites |
 |---|---|---|---|---|
-| T2 | ~ | A,B | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). INE ECM 2000–2024 full series now in `data/processed/mortality_spain_ine_ecm.csv` via T49. PENDING: MIR Anuario tables with sex breakdown. Source file: `data/sources/homicidio_espana.md` | V1,V2,V8 |
-| T7 | x | A,B | Age-specific annual incidence rates per 100k → `data/processed/mortality_rates.csv` (198k rows, full deaths × pop join). Plus subsets: `mortality_rates_key.csv` (key causes), `mortality_rates_all_cause_by_age.csv` (concise). Script: `src/mortality/compute_mortality_rates.py` | V3,V6 |
-| T49 | x | infra | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/mortality/parse_ine_mortality.py`, `src/mortality/summarize_mortality.py` | V1,V2,V6 |
+| T2 | ~ | A,B | Populate `violence_spain.csv` — all-cause homicide by sex: EIGE 2022 (rows 107–113), INE ECM 2023 rates+counts (rows 114–121), MIR Informe perp-sex breakdown (rows 122–124), feminicidio.net (125–126). INE ECM 2000–2024 full series now in `data/processed/mortality_spain_ine_ecm.csv` via T49. PENDING: MIR Anuario tables with sex breakdown. Source file: `data/sources/homicidio_espana.md` | V1,V2,V8; SIA:MOR-T2 |
+| T7 | x | A,B | Age-specific annual incidence rates per 100k → `data/processed/mortality_rates.csv` (198k rows, full deaths × pop join). Plus subsets: `mortality_rates_key.csv` (key causes), `mortality_rates_all_cause_by_age.csv` (concise). Script: `src/mortality/compute_mortality_rates.py` | V3,V6; SIA:MOR-T7 |
+| T49 | x | infra | All-cause mortality by age × sex × cause 2000–2024 from INE ECM table 7947 → `data/processed/mortality_spain_ine_ecm.csv` (198k rows) + summary CSVs. Source doc: `data/sources/ine_causas_muerte.md`. Scripts: `src/mortality/parse_ine_mortality.py`, `src/mortality/summarize_mortality.py` | V1,V2,V6; SIA:MOR-T49 |
 
 ## Related bugs
 
