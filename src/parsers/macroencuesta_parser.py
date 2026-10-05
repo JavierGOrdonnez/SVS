@@ -93,12 +93,26 @@ class ContextStat(BaseModel):
     sample_n: int | None = None             # 2019 only
 
 
+class NonReportingReason(BaseModel):
+    """One cell of a "motivos para no denunciar" table (multiple-response
+    question: columns don't sum to 100). `scope` is 'partner' (Cap. 9) or
+    'outside_partner' (Cap. 16.8.1.5); `group` is the table's column."""
+    scope: str                   # 'partner' | 'outside_partner'
+    group: str                   # 'current_partner' | 'past_partners' | 'any_partner' |
+                                 # 'any_sexual' | 'rape' | 'attempted_rape' | 'other'
+    reason: str                  # canonical key, comparable across waves (see _REASON_PATTERNS)
+    pct: float | None = None     # None = suppressed ('.', sample <6) or not asked ('-')
+    n: int | None = None         # 2019: raw sample count; 2024: population estimate (partner only)
+    low_n: bool = False          # 2024 '¨' flag: 6-19 observations, use with caution
+
+
 class MacroencuestaReport(BaseModel):
     wave_year: int
     sample_size: int | None = None
     prevalence: list[PrevalenceStat] = []
     relationship: list[RelationshipStat] = []
     context: list[ContextStat] = []
+    non_reporting_reasons: list[NonReportingReason] = []
     source_document: str
     source_table: str = ""
     verified: bool = False
@@ -406,6 +420,110 @@ def parse_online_prior_2024(text: str) -> list[ContextStat]:
 
 
 # ──────────────────────────────────────────────────────────────
+# Reasons for not reporting (T102) -- Cap. 9 (partner) + Cap. 16.8.1.5
+# ──────────────────────────────────────────────────────────────
+
+# Canonical reason key -> accent-stripped, lowercased regex. First match wins,
+# so order matters where one label's words appear in another's.
+_REASON_PATTERNS = [
+    ("resolved_alone", r"resolvio sola"),
+    ("low_importance", r"poca importancia"),
+    ("fear_of_aggressor", r"miedo al agresor"),
+    ("shame", r"verguenza"),
+    ("not_believed", r"no la creyeran"),
+    ("own_fault", r"su culpa"),
+    ("unaware", r"desconocimiento"),
+    ("no_resources", r"recursos"),
+    ("relationship_ended", r"separo"),
+    ("problem_ended", r"problema se termino"),
+    ("prevented_by_other", r"pareja u otra persona|otra persona la disuadio"),
+    ("not_physical", r"no ser algo fisico"),
+    ("went_elsewhere", r"otro lugar"),
+    ("in_love", r"enamorada"),
+    ("fear_losing_children", r"perder a sus hijos"),
+    ("children_father", r"pierdan a su padre"),
+    ("avoid_arrest", r"arresten|arrestaran"),
+    ("other_times", r"otros tiempos"),
+    ("other_country", r"otro pais"),
+    ("was_minor", r"era menor"),
+    ("other", r"otros motivos"),
+    ("nc", r"^n\.?c\.?$"),
+]
+
+_VAL = r"(?:¨?\d{1,3}(?:\.\d{3})*(?:,\d+)?|[.\-])"
+
+
+def _reason_key(context: str) -> str | None:
+    norm = strip_accents(context).lower().strip()
+    for key, pat in _REASON_PATTERNS:
+        if re.search(pat, norm):
+            return key
+    return None
+
+
+def _reason_cells(tokens: list[str], layout) -> list[tuple[str, float | None, int | None, bool]]:
+    """Map a data row's value tokens to (group, pct, n, low_n) per `layout`
+    (kind, groups): 'n_pct' = (N, %) pairs, 'pct_n' = (%, N) pairs,
+    'pct' = % only."""
+    def num(t):
+        t = t.lstrip("¨")
+        return None if t in (".", "-") else parse_es_number(t)
+    kind, groups = layout
+    step = 1 if kind == "pct" else 2
+    out = []
+    for i, g in enumerate(groups):
+        chunk = tokens[i * step:(i + 1) * step]
+        if kind == "n_pct":
+            n, pct = num(chunk[0]), num(chunk[1])
+        elif kind == "pct_n":
+            pct, n = num(chunk[0]), num(chunk[1])
+        else:
+            pct, n = num(chunk[0]), None
+        pct_tok = chunk[1] if kind == "n_pct" else chunk[0]
+        out.append((g, pct, int(n) if n is not None else None, pct_tok.startswith("¨")))
+    return out
+
+
+def parse_non_reporting_reasons(text: str, scope: str, title_anchor: str, layout) -> list[NonReportingReason]:
+    """Parse a "Motivos para no denunciar" table from `page.extract_text()`.
+
+    Row labels wrap unpredictably (the number cells can sit on the first, a
+    middle, or the last label line), so a row's reason key is matched against
+    the non-numeric lines pending since the previous data row plus the data
+    line's own label text; rows no key matches (headers, footnotes) are
+    skipped. `layout` is (kind, groups) -- see `_reason_cells`."""
+    lines = text.splitlines()
+    start = next((i for i, l in enumerate(lines) if title_anchor in l), None)
+    if start is None:
+        return []
+    kind, groups = layout
+    n_vals = len(groups) * (1 if kind == "pct" else 2)
+    row_re = re.compile(rf"^(.*?)\s*((?:{_VAL}\s+){{{n_vals - 1}}}{_VAL})$")
+    out, pending = [], []
+    for line in lines[start + 1:]:
+        line = line.strip()
+        if line.startswith(("1. Porcentaje", "* Pregunta", "Pregunta de respuesta")):
+            break
+        m = row_re.match(line)
+        if not m:
+            pending.append(line)
+            continue
+        key = _reason_key(" ".join(pending + [m.group(1)]))
+        pending = []
+        if key is None:
+            continue
+        for g, pct, n, low in _reason_cells(m.group(2).split(), layout):
+            out.append(NonReportingReason(scope=scope, group=g, reason=key, pct=pct, n=n, low_n=low))
+    return out
+
+
+_LAYOUT_2019_PARTNER = ("n_pct", ["current_partner", "past_partners"])
+_LAYOUT_2019_SEXUAL = ("n_pct", ["any_sexual", "rape"])
+_LAYOUT_2024_PARTNER = ("pct_n", ["current_partner", "past_partners", "any_partner"])
+_LAYOUT_2024_SEXUAL = ("pct", ["rape", "attempted_rape", "other"])
+
+
+# ──────────────────────────────────────────────────────────────
 # 2019 wave
 # ──────────────────────────────────────────────────────────────
 
@@ -444,9 +562,11 @@ class Macroencuesta2019Parser:
             prevalence = self._parse_prevalence(pdf, chapter_start)
             relationship = self._parse_relationship(pdf, chapter_start)
             context = self._parse_location(pdf, chapter_start)
+            reasons = self._parse_reasons(pdf, chapter_start)
         return MacroencuestaReport(
             wave_year=2019, sample_size=self.SAMPLE_SIZE,
             prevalence=prevalence, relationship=relationship, context=context,
+            non_reporting_reasons=reasons,
             source_document=self.source,
             source_table="p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.161 (lugar)",
             notes=(
@@ -494,6 +614,24 @@ class Macroencuesta2019Parser:
             print(f"  ⚠ 2019: lugar table only found {len(out) // 2}/12 rows", file=sys.stderr)
         return out
 
+    def _parse_reasons(self, pdf, chapter_start: int) -> list[NonReportingReason]:
+        out = []
+        # The partner table (2019's "capítulo 10") precedes chapter 16.
+        located = _locate_page(pdf, ["MOTIVOS PARA NO DENUNCIAR LA VFSEM DE LA PAREJA", "LO RESOLVIO SOLA"])
+        if located:
+            out += parse_non_reporting_reasons(
+                located[1], "partner", "Motivos para no denunciar la VFSEM", _LAYOUT_2019_PARTNER)
+        else:
+            print("  ⚠ 2019: could not locate partner non-reporting reasons table", file=sys.stderr)
+        located = _locate_page(pdf, ["MOTIVOS PARA NO DENUNCIAR LA VIOLENCIA SEXUAL FUERA DE LA PAREJA", "ERA MENOR"],
+                               start=chapter_start)
+        if located:
+            out += parse_non_reporting_reasons(
+                located[1], "outside_partner", "Motivos para no denunciar la violencia sexual", _LAYOUT_2019_SEXUAL)
+        else:
+            print("  ⚠ 2019: could not locate outside-partner non-reporting reasons table", file=sys.stderr)
+        return out
+
 
 # ──────────────────────────────────────────────────────────────
 # 2024 wave
@@ -513,9 +651,11 @@ class Macroencuesta2024Parser:
             prevalence = self._parse_prevalence(pdf)
             relationship = self._parse_relationship(pdf)
             context = self._parse_context(pdf)
+            reasons = self._parse_reasons(pdf)
         return MacroencuestaReport(
             wave_year=2024, sample_size=sample_size,
             prevalence=prevalence, relationship=relationship, context=context,
+            non_reporting_reasons=reasons,
             source_document=self.source,
             source_table=("Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor), "
                           "Tabla 16.22 (lugar), Tabla 16.23 (interacción online previa)"),
@@ -583,6 +723,21 @@ class Macroencuesta2024Parser:
             print("  ⚠ 2024: could not locate Tabla 16.23 (interacción online previa)", file=sys.stderr)
         else:
             out += parse_online_prior_2024(located[1])
+        return out
+
+    def _parse_reasons(self, pdf) -> list[NonReportingReason]:
+        out = []
+        for scope, kws, anchor, layout in (
+            ("partner", ["TABLA 9.7 MOTIVOS PARA NO DENUNCIAR", "LO RESOLVIO SOLA"],
+             "Tabla 9.7", _LAYOUT_2024_PARTNER),
+            ("outside_partner", ["TABLA 16.30 MOTIVOS PARA NO DENUNCIAR", "ERA MENOR"],
+             "Tabla 16.30 Motivos", _LAYOUT_2024_SEXUAL),
+        ):
+            located = _locate_page(pdf, kws)
+            if located is None:
+                print(f"  ⚠ 2024: could not locate {anchor} (non-reporting reasons)", file=sys.stderr)
+                continue
+            out += parse_non_reporting_reasons(located[1], scope, anchor, layout)
         return out
 
 
