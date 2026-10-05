@@ -57,6 +57,10 @@
       title="Rate per 100k by origin — victims & perpetrators" subtitle="Spanish-born vs foreign-born, 2003–2025 (data available 2006–2024). Dashed lines: perpetrators.">
       <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género" note="Age composition confound: the foreign-resident population skews younger, and victimization/perpetration risk has its own age profile (visible in the timeline) — part of the Spanish-vs-foreign rate gap may be compositional, not age-standardized. No general-origin age×sex population data exists yet for all migrant populations."></svs-source-cite>
     </svs-chart-panel>
+    <svs-chart-panel id="fem-relationship" size="full" height="280" confidence="high"
+      title="Victim-perpetrator relationship & cohabitation" subtitle="Stacked bars: pareja vs. expareja, % of victims (every year has both fields — no 'unknown' category here). Dashed line: share of couples not living together (right axis).">
+      <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/" label="Delegación del Gobierno contra la Violencia de Género — Tabla 2.4 of each annual report"></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-fem" heading="Feminicides — caveats"></svs-caveat-list>
@@ -93,6 +97,17 @@
     </svs-chart-panel>
     <svs-chart-panel id="sx-convictions" size="half" confidence="high"
       title="Convictions by nationality group" subtitle="INE Condenados t.28716, sexual-crime categories aggregated. Stacked counts."></svs-chart-panel>
+    <svs-chart-panel id="sx-relationship" size="half" height="320" confidence="medium"
+      title="Victim-perpetrator relationship, 2017–2024" subtitle="% of all victimizations. The grey 'unknown' band dominates every year — see caveat below.">
+      <svs-source-cite slot="source" href="https://estadisticasdecriminalidad.ses.mir.es/" label="MIR Informe — Perfil de la VÍCTIMA: relación víctima/autor"></svs-source-cite>
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-relationship-known" size="half" height="320" confidence="low"
+      title="Relationship composition — known cases only" subtitle="Same 3 groups, renormalized to exclude the 'unknown' share so the trend within what IS recorded isn't visually flattened by it.">
+    </svs-chart-panel>
+    <svs-chart-panel id="sx-relationship-survey" size="full" height="320" confidence="high"
+      title="Police records vs. victimization survey — who victims actually say the perpetrator was" subtitle="Macroencuesta asks victims directly instead of relying on what police recorded — its 'unknown' share is far lower, and falls sharply with severity: rape is overwhelmingly by someone known, unlike lower-severity contact.">
+      <svs-source-cite slot="source" href="https://violenciagenero.igualdad.gob.es/violenciaencifras/macroencuesta-de-violencia-contra-la-mujer-2024/" label="Macroencuesta de Violencia contra la Mujer, 2019 + 2024 waves" note="Parser-generated (src/parsers/macroencuesta_parser.py, T99) from Tabla 16.21 (2024) and Tabla II (2019, p.159) of the primary PDFs (data/sources/Macroencuesta_2024.pdf, Macroencuesta_2019.pdf) — re-derivable from source, not a manual transcription; see data/raw/macroencuesta_2019-2024.json. 2019 pools all severities (questionnaire couldn't ask relationship per severity tier that wave); 2024 breaks out rape/attempted-rape/other separately. MIR bar uses each report's own 'Relación desconocida' %, latest year 2024."></svs-source-cite>
+    </svs-chart-panel>
   </div>
   <div class="caveat-row">
     <svs-caveat-list id="cav-sexual" heading="Sexual crime — caveats"></svs-caveat-list>
@@ -236,6 +251,7 @@
       { label: '2020 data gap', text: 'The 2020 Informe’s own victim-nationality table sums to 429 people — about 30x too small for that year’s 13,174 reported crimes, confirmed as a defect in the source PDF itself (not a parsing error). That year is shown as a gap, not a fake near-zero dip, in the victim-nationality panel only (perpetrator nationality that year is unaffected).' },
       { label: 'Peligrosidad — Nigeria & Senegal only in 2024', text: 'MIR did not itemize Nigeria or Senegal separately before 2024 — they were hidden inside a residual "RESTO" category. Their high 2024 rates reflect MIR expanding its country-level reporting, not a sudden crime surge. Same issue affects smaller American countries (Paraguay, Argentina, Rep. Dominicana) that drift in and out of MIR\'s itemized list, producing artifact dips/spikes in the America "Other" category.' },
       { label: 'Peligrosidad — tourist bias (European rates)', text: 'Denominators (Eurostat migr_pop1ctz) count usual residents only (≥12 months). Tourists, holidaymakers, and short-term visitors who commit crimes appear in the numerator but not the denominator, inflating rates for nationalities with high tourist-to-resident ratios (UK, Germany, France — especially when many residents are older retirees unlikely to be perpetrators). Cannot be corrected with current data; would need a visitor-adjusted denominator or a tourist-crime flag in MIR reporting.' },
+      { label: 'Relationship — the "unknown" band is a police-recording ceiling, not a fact about offenders', text: 'MIR can only record a victim-perpetrator relationship it identifies during the case — "Relación desconocida" (~65-75% every year) mixes genuine strangers with unresolved/unrecorded cases, and the two aren\'t distinguishable in this table. This is why the "known cases only" panel exists (renormalized over the 3 non-unknown groups), but it doesn\'t fix the underlying gap: police records structurally undercount close-relationship assaults, since intimate-partner/family victims report at far lower rates than stranger assaults (see the GEAV/MIR 2020 synthesis report\'s 90.1% non-report rate outside partner vs. 88.7% within partner — data/sources/mir_informes_delitos_sexuales.md → GEAV citation). Closing this gap needs victimization-survey data (Macroencuesta de Violencia contra la Mujer, EEVG 2022), which asks victims directly rather than relying on what police records captured — not yet integrated into this dashboard, tracked as a follow-up.' },
     ],
     'cav-fem': [
       { label: 'Scope', text: 'Delegación counts intimate-partner / ex-partner homicides only — narrower than all female homicides (INE MNP) or judicial records (CGPJ).' },

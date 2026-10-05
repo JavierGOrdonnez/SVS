@@ -17,8 +17,11 @@ from src.sexual_crimes.build_dashboard_data import (
     MIGRATION_CSV,
     PELIGROSITY_AGE_BANDS,
     POPULATION_NATIONALITY_CSV,
+    REL_GROUPS,
     _coverage_factor,
     _peligrosity,
+    _relationship_breakdown,
+    _survey_comparison,
     read_csv,
     read_json,
     INFORME_JSON,
@@ -78,3 +81,63 @@ def test_peligrosity_runs_end_to_end_and_carries_spain_series():
 
     assert "spain" in result
     assert len(result["spain"]) == len(result["years"])
+
+
+# ── T98: victim-perpetrator relationship ──────────────────────────
+
+def test_relationship_breakdown_group_pct_sums_to_100_every_year():
+    informe = read_json(INFORME_JSON)["reports"]
+    result = _relationship_breakdown(informe)
+
+    for i, year in enumerate(result["years"]):
+        total = sum(result["group_pct"][g][i] for g in REL_GROUPS if result["group_pct"][g][i] is not None)
+        assert abs(total - 100.0) < 0.1, f"{year}: group_pct sums to {total}, not ~100"
+
+
+def test_relationship_breakdown_known_pct_excludes_unknown_group_and_sums_to_100():
+    informe = read_json(INFORME_JSON)["reports"]
+    result = _relationship_breakdown(informe)
+
+    assert "relacion_desconocida" not in result["known_pct"]
+    for i in range(len(result["years"])):
+        total = sum(result["known_pct"][g][i] for g in result["known_pct"] if result["known_pct"][g][i] is not None)
+        assert abs(total - 100.0) < 0.1
+
+
+def test_survey_comparison_mir_point_excludes_partner_and_matches_relationship_data():
+    informe = read_json(INFORME_JSON)["reports"]
+    relationship = _relationship_breakdown(informe)
+    result = _survey_comparison(relationship)
+
+    point = result["mir_comparison_point"]
+    assert point is not None
+    assert abs(sum(point[c] for c in result["categories"]) - 100.0) < 0.1
+    # partner-excluded renormalization must raise the "unknown" share above
+    # the raw (partner-included) relacion_desconocida figure for the same year
+    latest = relationship["years"].index(point["year"])
+    raw_unknown = relationship["group_pct"]["relacion_desconocida"][latest]
+    assert point["desconocido"] > raw_unknown
+
+
+def test_survey_comparison_types_have_matching_series_length():
+    informe = read_json(INFORME_JSON)["reports"]
+    relationship = _relationship_breakdown(informe)
+    result = _survey_comparison(relationship)
+
+    for cat in result["categories"]:
+        assert len(result["series"][cat]) == len(result["types"])
+
+
+def test_survey_comparison_pins_the_headline_rape_vs_mir_contrast():
+    """Regression pin for the dashboard's central finding (T99): survey
+    victims report rape as overwhelmingly by a known perpetrator, MIR's own
+    police-recorded figure (once fairly restricted to the same partner-
+    excluded scope) says the opposite. Guards against a future data refresh
+    or refactor silently flattening this gap."""
+    informe = read_json(INFORME_JSON)["reports"]
+    relationship = _relationship_breakdown(informe)
+    result = _survey_comparison(relationship)
+
+    rape_idx = result["types"].index("rape")
+    assert result["series"]["desconocido"][rape_idx] == 12.0
+    assert result["mir_comparison_point"]["desconocido"] == 78.5
