@@ -17,6 +17,10 @@ MIGRATION_CSV = "data/raw/migration_spain.csv"
 # the total-minus-foreign-stock derivation this file used to compute for
 # the peligrosidad Spanish male 15-59 denominator.
 POPULATION_NATIONALITY_CSV = "data/processed/population_spain_nationality.csv"
+# T99: parser-generated (src/parsers/macroencuesta_parser.py), replacing the
+# earlier hand-transcribed macroencuesta_relationship_2015-2024.csv -- every
+# figure here is independently re-derivable from the source PDF.
+MACROENCUESTA_JSON = "data/raw/macroencuesta_2019-2024.json"
 
 # LO 10/2022 renamed categories mid-series (V24) — pre/post variants unified
 # into one continuous series each; every other category name is stable
@@ -513,6 +517,141 @@ def _peligrosity(informe, migration_rows):
     }
 
 
+# T-sx-rel: the 4 mutually-exclusive top-level groups the relationship
+# table's own charts use (see mir_parser.py's _REL_ROWS) -- fixed display
+# order (closest relationship first, unknown last) rather than the source's
+# insertion order.
+REL_GROUPS = ["violencia_genero_pareja", "violencia_domestica", "otras_relaciones", "relacion_desconocida"]
+REL_GROUP_LABEL = {
+    "violencia_genero_pareja": "Pareja/expareja",
+    "violencia_domestica": "Ámbito doméstico (no pareja)",
+    "otras_relaciones": "Conocido (amistad/laboral/vecindad/escolar)",
+    "relacion_desconocida": "Desconocida",
+}
+REL_LEAF_LABEL = {
+    "conyuge": "Cónyuge", "pareja": "Pareja", "expareja": "Expareja",
+    "separado_divorciado": "Separado/divorciado",
+    "progenitores": "Progenitores", "hijos": "Hijo/hija", "resto_familiar": "Resto familiar",
+    "conocido_vecindad": "Conocido/vecindad", "amistad": "Amistad",
+    "laboral_comercial": "Laboral/comercial", "escolar": "Escolar", "otra_relacion": "Otra relación",
+}
+
+
+def _relationship_breakdown(informe):
+    """T-sx-rel: victim-perpetrator relationship, 2017-2024. Returns both
+    the raw share of all victimizations (dominated by "unknown" -- the
+    police can only record a relationship it identifies) and a `known_pct`
+    series renormalized over the 3 non-unknown groups only, so the shape of
+    what IS known isn't visually flattened by the ~70-75%-unknown bar every
+    year. Leaf-level rows (pareja vs. expareja, etc.) are carried too for a
+    detail table, again both raw and known-relative."""
+    years = sorted(r["year"] for r in informe if r.get("relationship"))
+    by_year = {r["year"]: {row["key"]: row for row in r["relationship"]} for r in informe if r.get("relationship")}
+
+    group_pct = {g: [by_year[y].get(g, {}).get("pct") for y in years] for g in REL_GROUPS}
+    known_total = [
+        sum(group_pct[g][i] for g in REL_GROUPS if g != "relacion_desconocida" and group_pct[g][i] is not None) or None
+        for i in range(len(years))
+    ]
+    known_pct = {
+        g: [
+            None if group_pct[g][i] is None or not known_total[i] else round(group_pct[g][i] / known_total[i] * 100, 2)
+            for i in range(len(years))
+        ]
+        for g in REL_GROUPS if g != "relacion_desconocida"
+    }
+
+    leaf_keys = [k for k in REL_LEAF_LABEL]
+    leaf_pct = {k: [by_year[y].get(k, {}).get("pct") for y in years] for k in leaf_keys}
+    leaf_known_pct = {
+        k: [
+            None if leaf_pct[k][i] is None or not known_total[i] else round(leaf_pct[k][i] / known_total[i] * 100, 2)
+            for i in range(len(years))
+        ]
+        for k in leaf_keys
+    }
+
+    return {
+        "years": years,
+        "groups": REL_GROUPS,
+        "group_labels": REL_GROUP_LABEL,
+        "group_pct": group_pct,
+        "known_pct": known_pct,
+        "leaf_labels": REL_LEAF_LABEL,
+        "leaf_pct": leaf_pct,
+        "leaf_known_pct": leaf_known_pct,
+    }
+
+
+# T-sx-rel-survey: hand-curated (not parser-generated -- see
+# MACROENCUESTA_RELATIONSHIP_CSV's own notes column for per-row page/table
+# citations) victim-perpetrator relationship data from the Macroencuesta de
+# Violencia contra la Mujer, the only source that asks *victims* directly
+# rather than relying on what police records captured. Only the 2024 wave
+# breaks this down by severity tier (rape / attempted rape / other); earlier
+# waves are pooled across all sexual-violence-outside-partner severities.
+SURVEY_TYPE_LABEL = {
+    "rape": "Violación (2024)", "attempted_rape": "Intento de violación (2024)",
+    "other": "Otras formas (2024)",
+    "any": "Todas (2019, pooled)",
+}
+SURVEY_TYPE_ORDER = ["rape", "attempted_rape", "other", "any"]
+SURVEY_REL_CATEGORIES = ["familiar", "conocido", "desconocido"]
+
+
+def _survey_comparison(relationship):
+    reports = read_json(MACROENCUESTA_JSON)["reports"]
+    # relationship rows carry separate 'familiar_hombre'/'familiar_mujer'
+    # sub-keys (the source table breaks perpetrator sex out too); summed
+    # here into the 3 canonical categories to match MIR's own coarser
+    # familiar/conocido/desconocido grouping. The 'mujer' sub-rows are
+    # mostly None (suppressed, sample <6) for rape/attempted-rape but real
+    # for the 'other' severity tier -- None entries just don't add anything,
+    # so this picks up the small female-perpetrator share wherever the
+    # source actually reports one, rather than a fixed hombre-only slice.
+    by_type = defaultdict(lambda: defaultdict(float))
+    for report in reports:
+        for row in report["relationship"]:
+            if row["pct_within_severity"] is None:
+                continue
+            category = row["key"].rsplit("_", 1)[0]  # 'familiar_hombre' -> 'familiar'
+            by_type[row["violence_type"]][category] += row["pct_within_severity"]
+
+    types = [t for t in SURVEY_TYPE_ORDER if t in by_type]
+
+    # MIR comparison point: the survey chapter this data comes from explicitly
+    # excludes intimate partner ("fuera de la pareja"), so the fair MIR
+    # comparator drops MIR's own violencia_genero_pareja group too and
+    # renormalizes the remaining 3 groups to 100 -- mapping domestica->familiar,
+    # otras_relaciones->conocido, desconocida->desconocido -- rather than
+    # comparing the survey's partner-excluded figures against MIR's
+    # partner-included ones, which would inflate the apparent "unknown" gap
+    # even further than the real, already-large one.
+    years = relationship["years"]
+    latest = len(years) - 1
+    non_partner_total = sum(
+        relationship["group_pct"][g][latest] for g in ("violencia_domestica", "otras_relaciones", "relacion_desconocida")
+        if relationship["group_pct"][g][latest] is not None
+    )
+    mir_point = None
+    if non_partner_total:
+        mir_point = {
+            "year": years[latest],
+            "familiar": round(relationship["group_pct"]["violencia_domestica"][latest] / non_partner_total * 100, 1),
+            "conocido": round(relationship["group_pct"]["otras_relaciones"][latest] / non_partner_total * 100, 1),
+            "desconocido": round(relationship["group_pct"]["relacion_desconocida"][latest] / non_partner_total * 100, 1),
+        }
+
+    return {
+        "wave_source": "Macroencuesta de Violencia contra la Mujer (Ministerio de Igualdad), 2019 + 2024 waves",
+        "types": types,
+        "type_labels": SURVEY_TYPE_LABEL,
+        "categories": SURVEY_REL_CATEGORIES,
+        "series": {c: [by_type[t].get(c) for t in types] for c in SURVEY_REL_CATEGORIES},
+        "mir_comparison_point": mir_point,
+    }
+
+
 COUNTRY_LABEL = {
     "ES": "España", "MA": "Marruecos", "RO": "Rumanía", "CO": "Colombia",
     "VE": "Venezuela", "EC": "Ecuador", "DZ": "Argelia", "PE": "Perú",
@@ -536,6 +675,8 @@ def build():
     categories = _unified_categories(informe)
     nationality_victims = _nationality_breakdown(informe, "victims")
     nationality_perpetrators = _nationality_breakdown(informe, "perpetrators")
+    relationship = _relationship_breakdown(informe)
+    survey_comparison = _survey_comparison(relationship)
 
     # Convictions by nationality group (INE table 28716), aggregated across
     # sexual-crime categories per (year, nationality).
@@ -564,6 +705,8 @@ def build():
         "categories": categories,
         "nationality_victims": nationality_victims,
         "nationality_perpetrators": nationality_perpetrators,
+        "relationship": relationship,
+        "survey_comparison": survey_comparison,
         "convictions": convictions,
         "peligrosidad": peligrosidad,
     }
