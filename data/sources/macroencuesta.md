@@ -30,6 +30,18 @@
 |---|---|
 | Landing page | https://violenciagenero.igualdad.gob.es/violenciaencifras/estudios/colecciones/libro-22-macroencuesta/ |
 | Data tables | https://violenciagenero.igualdad.gob.es/macroencuesta2015/tablasviolencia/ |
+| Full report (PDF) | https://violenciagenero.igualdad.gob.es/wp-content/uploads/Libro_22_Macroencuesta2015.pdf |
+
+Full report (474pp) downloaded to `data/sources/Macroencuesta_2015.pdf` (T5).
+
+## Access — 2011 wave
+
+| Document | URL |
+|---|---|
+| Análisis report (PDF) | https://violenciagenero.igualdad.gob.es/wp-content/uploads/IV_Macroencuesta_2011.pdf |
+| Avance de Resultados (PDF, preliminary) | https://violenciagenero.igualdad.gob.es/wp-content/uploads/AvanceMacroencuesta2011.pdf |
+
+Both downloaded to `data/sources/Macroencuesta_2011_analisis.pdf` (126pp, Meil Landwerlin 2012) and `data/sources/Macroencuesta_2011_avance.pdf` (29pp) (T5). The 2011 wave predates the "violencia sexual fuera del ámbito de la pareja" module (introduced 2015) and used a 12-month recall rather than lifetime for its one sexual-violence item — see the 2011 key figures note below and `violence_spain.csv` row 28/179 for why this means no figure comparable to later waves exists for 2011.
 
 ## Access — all waves index
 
@@ -64,11 +76,24 @@ https://www.inmujeres.gob.es/MujerCifras/Violencia/Macroencuestas.htm
 | Reporting rate (denuncia) for sexual violence outside partner | 8% | 89–92% did NOT report |
 
 ### 2015 wave
-| Metric | Value |
-|---|---|
-| Sexual violence outside partner (lifetime) | 12.5% |
-| Sexual violence by partner (lifetime) | 8.4% |
-| Physical and/or sexual by partner (lifetime) | 13.8% |
+Verified directly against the full report (`data/sources/Macroencuesta_2015.pdf`, T5) — see `violence_spain.csv` rows 175-178 for exact table/page citations.
+
+| Metric | Value | Note |
+|---|---|---|
+| Sexual violence outside partner (lifetime) | **7.2%** | Corrected from 12.5% (Tabla 14.3, p.289) — 12.5% does not appear anywhere in the report for this metric; it was an unrelated psychological-control item (Tabla 3.1) |
+| Sexual violence by partner (lifetime) | 8.4% | Confirmed (Figura 2.2, p.36) |
+| Sexual violence by ANY perpetrator (lifetime) | 13.7% | New (Tabla 15.1/Resumen cap.15, p.310-311) — identical to the 2019 wave's any-perpetrator figure |
+| Physical violence by partner (lifetime) | 10.7% | New (Figura 1.2, p.13-14); corrects an earlier unverified "10.3%" in `violence_spain.csv` row 30 |
+| ~~Physical and/or sexual by partner (lifetime) 13.8%~~ | removed | Could not be located anywhere in the 474-page report after targeted search; likely a transcription error from an earlier pass. Not replaced — no equivalent combined figure was found to cite instead. |
+
+### 2011 wave
+The 2011 wave published only ONE sexual-violence item, and it is **not comparable** to any other wave's lifetime/any-perpetrator figures — see `violence_spain.csv` row 179 for the full citation and caveats.
+
+| Metric | Value | Note |
+|---|---|---|
+| Sexual violence by current partner (last 12 months) | 4.1% | Tabla 1.2, p.13 of `Macroencuesta_2011_analisis.pdf`. Women 18+ with a current partner; single item ("insiste en tener relaciones sexuales..."); no outside-partner question existed yet (module introduced 2015, row 175) |
+
+The shorter "Avance de Resultados" PDF (`Macroencuesta_2011_avance.pdf`, 29pp preliminary results) does not add a separate sexual-violence breakdown; its only sexual-related mention is an "inapetencia sexual" (loss of sexual desire) row in a health-symptoms table (p.16), unrelated to victimisation prevalence.
 
 ## Critical caveats
 
@@ -95,7 +120,7 @@ The report's own framing: *"el 88% de las mujeres víctimas de una violación me
 
 **Contrast with MIR's police-recorded table** (`mir_informes_delitos_sexuales.md`): once MIR's own relationship data is restricted the same way (partner-excluded, renormalized over its 3 non-pareja groups — `_survey_comparison()` in `src/sexual_crimes/build_dashboard_data.py`), MIR's 2024 "unknown" share is **78.5%** — 6-7x the survey's rape-specific 12.0%, and still nearly double the survey's lowest-severity 46.5%. This is the expected direction (police records structurally undercount known-perpetrator assaults, since victims report those at far lower rates — see the GEAV/MIR 2020 synthesis's 90.1% non-report rate outside partner vs. 88.7% within partner, cited in `mir_informes_delitos_sexuales.md`), but the *size* of the gap is itself a finding: most of what MIR's "unknown" bucket actually represents is not stranger assault, but assault where the police never determined (or the case was never resolved enough to record) the relationship — folding in an unknown mix of real strangers and unresolved-but-known cases. Visualized directly in the dashboard's `sx-relationship-survey` panel.
 
-**Done (T99)**: `src/parsers/macroencuesta_parser.py` parses both waves' prevalence (lifetime/4yr/12mo/childhood, overall + by severity tier in 2024) and relationship tables, `python src/parsers/macroencuesta_parser.py --pdf-dir data/sources/` regenerates `data/raw/macroencuesta_2019-2024.json`. Text-regex against `page.extract_text()`, same strategy as MIR's own relación table (`mir_parser.py`) — both waves' Tabla 16.1/16.2/16.21 print as clean text. Only 2019 and 2024 are implemented (the only two waves this repo has a full-report PDF for); the 2015 wave's figures stay as the footnote-derived prose above, not parser output. **Not yet done**: earlier waves (1999/2002/2006/2011/2015) would each need their own full-report PDF pulled and likely their own page-location/table-format tuning per edition, the same way MIR's Anuario parser needed per-era handling — not attempted this round given the survey's low (~4-5yr) cadence.
+**Done (T99)**: `src/parsers/macroencuesta_parser.py` parses both waves' prevalence (lifetime/4yr/12mo/childhood, overall + by severity tier in 2024) and relationship tables, `python src/parsers/macroencuesta_parser.py --pdf-dir data/sources/` regenerates `data/raw/macroencuesta_2019-2024.json`. Text-regex against `page.extract_text()`, same strategy as MIR's own relación table (`mir_parser.py`) — both waves' Tabla 16.1/16.2/16.21 print as clean text. Only 2019 and 2024 are implemented. The 2015 and 2011 full-report/avance PDFs are now present in `data/sources/` (T5), and their headline sexual/physical-violence figures above were hand-verified by direct PDF text search rather than via the parser — extending `macroencuesta_parser.py` to these older editions (different table formats/numbering per edition, same per-era tuning MIR's Anuario parser needed) is still **not done**. **Not yet done**: 1999/2002/2006 waves have no PDF in this repo at all.
 
 **Beyond relationship/prevalence**: both wave PDFs are ~340-400 pages covering ~20 chapters; T98/T99 only ever mined chapter 16 (sexual violence outside partner). A systematic pass over the rest — partner-violence prevalence and, notably, a **partner-perpetrator nationality table** ("País de nacimiento de la pareja actual", found live in Tabla 1.18/3.16 of the 2024 wave), plus reporting/non-reporting behavior, sociodemographic breakdowns, assault context, and consequences — is planned but not started; see [`src/sexual_crimes/SPEC-macroencuesta-expansion.md`](../../src/sexual_crimes/SPEC-macroencuesta-expansion.md) (T100-T106) for the full catalogue with exact table/page citations.
 
