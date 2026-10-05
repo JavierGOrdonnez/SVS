@@ -51,7 +51,7 @@ V36: ∀ Spain-vs-other-EU-country comparison using EIGE/FRA/Eurostat GBV data �
 
 | id | status | track | task | cites |
 |---|---|---|---|---|
-| T5 | ~ | A,B | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2011 & methodology-change caveats pending | V1,V3,V11; SIA:ANA-T5 |
+| T5 | ~ | A,B | Populate `violence_spain.csv` — Macroencuesta: 2015 & 2019 rows done (medium); 2024 wave rows 94–99 done (high; published 3 Dec 2025); 2019 rows cross-verified against full study (rows 169-174 correct mislabelled outside-partner vs any-perpetrator figures); methodology-change caveat recorded on 2024 rows and in `macroencuesta.md`; PENDING: 2011 wave value (row 28 blank, no primary source in repo) and 2015 cross-check (no 2015 PDF in `data/sources/`) | V1,V3,V11; SIA:ANA-T5 |
 | T6 | x | A,B | Female (& male, total) population by 5-yr age group & year 2000–2025 (mid-year July 1) from INE table 56934 (Estimaciones de Población Actual) → `data/processed/population_spain_midyear_5yr.csv`. Source: 56934 also gives Jan/Apr/Jul/Oct 1971–2025 in `population_spain_estimates.csv`. Cross-check 2024 female: bin sum 24,881,624 = INE all-ages exact match. Script: `src/analysis/parse_ine_population.py` | V6,V10; SIA:ANA-T6 |
 | T8 | . | A | Build competing-risks life-table → `data/processed/lifetable.csv` — 1-yr, 5-yr, lifetime cumulative P for 2000-born cohort | V7,V9; SIA:ANA-T8 |
 | T9 | . | A | Dark-figure estimation: cross-validate police counts vs macroencuesta; compute multipliers per violence type | V11; SIA:ANA-T9 |
