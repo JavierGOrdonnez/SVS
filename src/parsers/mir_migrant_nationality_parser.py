@@ -9,6 +9,11 @@ demographics from the MIR PDFs available locally.
 Currently handles:
   - MIR_GroupSexualViolence_2023.pdf  (study covers 2013-2017 cases)
   - MIR_ViolenceWomen_2015-2019.pdf   (annual data 2015-2019)
+  - data/raw/mir_anuario_general_crime_2015-2023.csv (T84's already-parsed
+    Anuario homicide/robbery/sexual_assault detenciones, reshaped into
+    foreign/spanish numerator rows here rather than re-parsed from PDF --
+    see load_general_crime_anuario_rows() for why no finer per-country
+    breakdown is possible for this source, T27/T83)
 
 Output rows go to data/raw/migrant_crime_numerator.csv (per SPEC §I).
 """
@@ -25,6 +30,7 @@ from utils import extract_text, write_csv_rows
 
 REFERENCE_DIR = Path("data/sources/reference")
 OUTPUT_CSV = Path("data/raw/migrant_crime_numerator.csv")
+GENERAL_CRIME_ANUARIO_CSV = Path("data/raw/mir_anuario_general_crime_2015-2023.csv")
 
 FIELDNAMES = [
     "row_id", "report", "report_year", "data_year_start", "data_year_end",
@@ -485,6 +491,84 @@ def manual_entries_mir_informe_2023_2024() -> List[Dict]:
 
 
 # ---------------------------------------------------------------------------
+# General crime (non-sexual-violence) perpetrator nationality -- T27's
+# original "broader than sexual violence" scope.
+#
+# Source: data/raw/mir_anuario_general_crime_2015-2023.csv (T84), which
+# already parsed MIR Anuario Estadístico 2016-2023 editions' "DETENCIONES E
+# INVESTIGADOS EXTRANJEROS" table (chapter 3.1.4) -- homicide/robbery/
+# sexual_assault, foreign-only detenciones, vs. the same chapter's
+# all-nationality detenciones total. Reshaped here into this file's
+# foreign/spanish row-pair schema rather than re-parsed from PDF: T83
+# already hand-checked every page of the Anuario's EXTRANJEROS section and
+# confirmed it splits Spanish-vs-foreign only, never by country of origin --
+# so a per-country numerator for general crime does not exist in this
+# source (nor in Balance de Criminalidad, per T76's dead-end check), and
+# Spanish-vs-foreign is the finest breakdown this task can deliver.
+# ---------------------------------------------------------------------------
+
+def load_general_crime_anuario_rows(csv_path: Path = GENERAL_CRIME_ANUARIO_CSV) -> List[Dict]:
+    """Reshape T84's Anuario general-crime CSV into foreign/spanish numerator rows."""
+    if not csv_path.exists():
+        return []
+
+    foreign_by_key: Dict[Tuple[int, str], Dict] = {}
+    total_by_key: Dict[Tuple[int, str], Dict] = {}
+    with open(csv_path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["sex"] != "all":
+                continue
+            key = (int(r["year"]), r["category"])
+            if r["metric"] == "detenciones_foreign":
+                foreign_by_key[key] = r
+            elif r["metric"] == "detenciones_total":
+                total_by_key[key] = r
+
+    rows = []
+    for key in sorted(foreign_by_key.keys() & total_by_key.keys()):
+        year, category = key
+        foreign_r = foreign_by_key[key]
+        total_r = total_by_key[key]
+        n_foreign = int(foreign_r["count"])
+        n_total = int(total_r["count"])
+        n_spanish = n_total - n_foreign
+        pct_foreign = round(100 * n_foreign / n_total, 1)
+        report = f"MIR_AnuarioEstadistico_{foreign_r['source_edition']}"
+        note = (
+            f"General crime (non-sexual-violence-specific), category={category}. "
+            f"Source: Anuario Estadístico {foreign_r['source_edition']} ed., "
+            f"\"DETENCIONES E INVESTIGADOS EXTRANJEROS\" table (p.{foreign_r['source_page']}), "
+            "cross-referenced against the same edition's all-nationality total. "
+            "Spanish-vs-foreign split ONLY -- no per-country breakdown exists in "
+            "this source (confirmed T83); full sex-split detail in "
+            f"{GENERAL_CRIME_ANUARIO_CSV}, per-100k rates in "
+            "data/processed/general_crime_trends.csv (T84)."
+        )
+        for nat, iso, count in [("foreign", "ALL_FOREIGN", n_foreign), ("spanish", "ES", n_spanish)]:
+            rows.append({
+                "row_id": None,
+                "report": report,
+                "report_year": int(foreign_r["source_edition"]),
+                "data_year_start": year,
+                "data_year_end": year,
+                "crime_type": f"general_crime_{category}",
+                "actor_role": "perpetrator",
+                "nationality_group": nat,
+                "iso2": iso,
+                "count": count,
+                "pct": pct_foreign if nat == "foreign" else round(100 - pct_foreign, 1),
+                "denominator": "detenciones_total_all_nationalities",
+                "denominator_value": n_total,
+                "unit": "count_detained",
+                "source_table": "anuario_seguridad_ciudadana_extranjeros",
+                "confidence": "medium",
+                "notes": note,
+            })
+
+    return rows
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -536,6 +620,11 @@ def main():
     manual = manual_entries_mir_informe_2023_2024()
     all_rows.extend(manual)
     print(f"  → {len(manual)} manual entries added (MIR Informes 2023/2024)", file=sys.stderr)
+
+    # Add general-crime (non-sexual-violence) rows from T84's Anuario extraction (T27)
+    general_crime = load_general_crime_anuario_rows()
+    all_rows.extend(general_crime)
+    print(f"  → {len(general_crime)} general-crime rows added (MIR Anuario, T27/T84)", file=sys.stderr)
 
     # Validate
     valid, errors = validate_rows(all_rows)
