@@ -81,11 +81,24 @@ class RelationshipStat(BaseModel):
     sample_n: int | None = None                # 2019 only -- raw survey N
 
 
+class ContextStat(BaseModel):
+    """Assault-context row (T104): where it happened (`dimension='location'`,
+    Cap. 16.5) or whether the victim had interacted with the aggressor online
+    beforehand (`dimension='online_prior'`, Cap. 16.6, 2024 only)."""
+    dimension: str               # 'location' | 'online_prior'
+    key: str                     # e.g. 'own_home', 'open_areas'; 'yes' | 'no' | 'nc' for online_prior
+    violence_type: str           # 'any' (2019, pooled) | 'rape' | 'attempted_rape' | 'other'
+    pct: float | None = None     # None = suppressed ('.') or not collected ('-')
+    population_estimate: int | None = None  # 2024 only
+    sample_n: int | None = None             # 2019 only
+
+
 class MacroencuestaReport(BaseModel):
     wave_year: int
     sample_size: int | None = None
     prevalence: list[PrevalenceStat] = []
     relationship: list[RelationshipStat] = []
+    context: list[ContextStat] = []
     source_document: str
     source_table: str = ""
     verified: bool = False
@@ -280,6 +293,118 @@ def parse_relationship_2024(text: str) -> list[RelationshipStat]:
     return out
 
 
+# ── Assault context (T104): location + prior online interaction ──
+
+_LOCATION_LABELS_2019 = [
+    ("own_home", r"^En la casa donde vivía"), ("aggressor_home", r"^En la casa de la persona agresora"),
+    ("other_home", r"^En la casa de otra persona"), ("educational", r"^En un centro educativo"),
+    ("public_transport", r"^En el transporte público"), ("workplace", r"^En el lugar de trabajo"),
+    ("shops_hotels_etc", r"^En tiendas, hoteles"), ("nightlife", r"^En discotecas, bares"),
+    ("sports", r"^En eventos deportivos"), ("open_areas", r"^En zonas abiertas"),
+    ("other", r"^En otros lugares"), ("nc", r"^N\.C\."),
+]
+_NUM_TAIL_RE = re.compile(r"^(?:¨?\d{1,3}(?:\.\d{3})*(?:,\d+)?|\.|-)$")
+
+
+def _split_label_and_tail(line: str, n_tail: int) -> tuple[str, list[str]] | None:
+    """Split a table row into (label, last `n_tail` value tokens), or None if
+    the row doesn't end in `n_tail` numeric/'.'/'-' tokens."""
+    toks = line.split()
+    if len(toks) < n_tail:
+        return None
+    tail = toks[-n_tail:]
+    if not all(_NUM_TAIL_RE.match(t) for t in tail):
+        return None
+    return " ".join(toks[:-n_tail]), tail
+
+
+def _tok_value(tok: str) -> float | None:
+    if tok in (".", "-"):
+        return None
+    return parse_es_number(tok.lstrip("¨"))
+
+
+def parse_location_2019(text: str) -> list[ContextStat]:
+    """Parse 2019's Cap. 16.7 location table. Four numeric columns:
+    N/% among all victims of outside-partner sexual violence (pooled
+    severities, N=620), then N/% among women who suffered a rape. NOTE (per
+    the report's own footnote 128): the rape column means "some assault of
+    theirs happened there", not "the rape happened there" -- 2019 could not
+    ask location per severity. Labels wrap across lines, so a numbers-only
+    row takes its label from the preceding line."""
+    lines = [l.strip() for l in text.splitlines()]
+    out = []
+    for i, line in enumerate(lines):
+        split = _split_label_and_tail(line, 4)
+        if split is None:
+            continue
+        label = split[0] or (lines[i - 1] if i else "")
+        for key, pat in _LOCATION_LABELS_2019:
+            if re.search(pat, label):
+                n_any, pct_any, n_rape, pct_rape = (_tok_value(t) for t in split[1])
+                out.append(ContextStat(dimension="location", key=key, violence_type="any",
+                                       pct=pct_any, sample_n=int(n_any) if n_any is not None else None))
+                out.append(ContextStat(dimension="location", key=key, violence_type="rape",
+                                       pct=pct_rape, sample_n=int(n_rape) if n_rape is not None else None))
+                break
+    return out
+
+
+_LOCATION_KEYS_2024 = {
+    "1.": "any_house", "1.1.": "own_home", "1.2.": "aggressor_home", "1.3.": "other_home",
+    "2.": "educational", "3.": "public_transport", "4.": "workplace", "5.": "shops_hotels_etc",
+    "6.": "official_places", "7.": "festive_any", "7.1.": "nightlife", "7.2.": "festive_outdoor",
+    "8.": "sports", "9.": "open_areas", "10.": "online", "11.": "other",
+}
+
+
+def parse_location_2024(text: str) -> list[ContextStat]:
+    """Parse Tabla 16.22: numbered rows ('1. En una casa', '1.1. ...'), six
+    value tokens = (%, N) x (rape, attempted_rape, other). Parent rows
+    ('1.' any house, '7.' any festive) overlap their '.x' children -- keep
+    both, keyed distinctly, rather than picking one."""
+    out = []
+    for line in text.splitlines():
+        split = _split_label_and_tail(line.strip(), 6)
+        if split is None:
+            continue
+        label, tail = split
+        key = _LOCATION_KEYS_2024.get(label.split(" ", 1)[0])
+        if key is None:
+            continue
+        for i, violence_type in enumerate(_SEVERITY_ORDER_2024):
+            pct, n = _tok_value(tail[2 * i]), _tok_value(tail[2 * i + 1])
+            out.append(ContextStat(dimension="location", key=key, violence_type=violence_type,
+                                   pct=pct, population_estimate=int(n) if n is not None else None))
+    return out
+
+
+def parse_online_prior_2024(text: str) -> list[ContextStat]:
+    """Parse Tabla 16.23: Sí / No / NC rows, three % columns
+    (rape, attempted_rape, other). The Sí/No labels wrap, so the numbers sit
+    on the middle line of each label; NC is single-line."""
+    out = []
+    for line in text.splitlines():
+        if line.startswith("Total "):
+            break  # the page also carries the next table (16.24), which has its own NC row
+        split = _split_label_and_tail(line.strip(), 3)
+        if split is None:
+            continue
+        label = split[0]
+        if label.startswith("Sí, algunos o todos") or label.endswith("online de"):
+            key = "yes"
+        elif label.startswith("haber conocido o interactuado online"):
+            key = "no"
+        elif label == "NC":
+            key = "nc"
+        else:
+            continue
+        for violence_type, tok in zip(_SEVERITY_ORDER_2024, split[1]):
+            out.append(ContextStat(dimension="online_prior", key=key, violence_type=violence_type,
+                                   pct=_tok_value(tok)))
+    return out
+
+
 # ──────────────────────────────────────────────────────────────
 # 2019 wave
 # ──────────────────────────────────────────────────────────────
@@ -318,12 +443,16 @@ class Macroencuesta2019Parser:
                       "matching chapter 15's near-identical table instead)", file=sys.stderr)
             prevalence = self._parse_prevalence(pdf, chapter_start)
             relationship = self._parse_relationship(pdf, chapter_start)
+            context = self._parse_location(pdf, chapter_start)
         return MacroencuestaReport(
             wave_year=2019, sample_size=self.SAMPLE_SIZE,
-            prevalence=prevalence, relationship=relationship,
+            prevalence=prevalence, relationship=relationship, context=context,
             source_document=self.source,
-            source_table="p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II)",
+            source_table="p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.161 (lugar)",
             notes=(
+                "Location (Cap. 16.7) is likewise pooled across severities; its 'rape' rows mean "
+                "'some assault of theirs happened there', not 'the rape happened there' (report fn. 128). "
+                "No prior-online-interaction question in this wave. "
                 "Relationship-to-perpetrator pooled across all severities (rape through "
                 "non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity "
                 "tier, unlike 2024 (see report's own text, p.158)."
@@ -355,6 +484,16 @@ class Macroencuesta2019Parser:
             print(f"  ⚠ 2019: vínculo table only found {len(out)}/6 rows", file=sys.stderr)
         return out
 
+    def _parse_location(self, pdf, chapter_start: int) -> list[ContextStat]:
+        located = _locate_page(pdf, ["EN LA CASA DONDE VIVIA", "EN ZONAS ABIERTAS"], start=chapter_start)
+        if located is None:
+            print("  ⚠ 2019: could not locate lugar table (Cap. 16.7)", file=sys.stderr)
+            return []
+        out = parse_location_2019(located[1])
+        if len(out) < 24:
+            print(f"  ⚠ 2019: lugar table only found {len(out) // 2}/12 rows", file=sys.stderr)
+        return out
+
 
 # ──────────────────────────────────────────────────────────────
 # 2024 wave
@@ -373,11 +512,13 @@ class Macroencuesta2024Parser:
             sample_size = self._parse_sample_size(pdf)
             prevalence = self._parse_prevalence(pdf)
             relationship = self._parse_relationship(pdf)
+            context = self._parse_context(pdf)
         return MacroencuestaReport(
             wave_year=2024, sample_size=sample_size,
-            prevalence=prevalence, relationship=relationship,
+            prevalence=prevalence, relationship=relationship, context=context,
             source_document=self.source,
-            source_table="Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor)",
+            source_table=("Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor), "
+                          "Tabla 16.22 (lugar), Tabla 16.23 (interacción online previa)"),
         )
 
     @staticmethod
@@ -428,6 +569,20 @@ class Macroencuesta2024Parser:
         rows_found = len({r.key for r in out})
         if rows_found < 6:
             print(f"  ⚠ 2024: vínculo table only found {rows_found}/6 label rows", file=sys.stderr)
+        return out
+
+    def _parse_context(self, pdf) -> list[ContextStat]:
+        out: list[ContextStat] = []
+        located = _locate_page(pdf, ["TABLA 16.22 MUJERES", "ONLINE (SOLO PARA"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 16.22 (lugar)", file=sys.stderr)
+        else:
+            out += parse_location_2024(located[1])
+        located = _locate_page(pdf, ["TABLA 16.23 DISTRIBUCION", "INTERACTUADO ONLINE"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 16.23 (interacción online previa)", file=sys.stderr)
+        else:
+            out += parse_online_prior_2024(located[1])
         return out
 
 

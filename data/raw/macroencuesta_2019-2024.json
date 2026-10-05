@@ -100,10 +100,204 @@
           "sample_n": 0
         }
       ],
+      "context": [
+        {
+          "dimension": "location",
+          "key": "own_home",
+          "violence_type": "any",
+          "pct": 18.5,
+          "population_estimate": null,
+          "sample_n": 114
+        },
+        {
+          "dimension": "location",
+          "key": "own_home",
+          "violence_type": "rape",
+          "pct": 25.7,
+          "population_estimate": null,
+          "sample_n": 55
+        },
+        {
+          "dimension": "location",
+          "key": "aggressor_home",
+          "violence_type": "any",
+          "pct": 20.1,
+          "population_estimate": null,
+          "sample_n": 125
+        },
+        {
+          "dimension": "location",
+          "key": "aggressor_home",
+          "violence_type": "rape",
+          "pct": 28.6,
+          "population_estimate": null,
+          "sample_n": 61
+        },
+        {
+          "dimension": "location",
+          "key": "other_home",
+          "violence_type": "any",
+          "pct": 9.7,
+          "population_estimate": null,
+          "sample_n": 60
+        },
+        {
+          "dimension": "location",
+          "key": "other_home",
+          "violence_type": "rape",
+          "pct": 11.1,
+          "population_estimate": null,
+          "sample_n": 24
+        },
+        {
+          "dimension": "location",
+          "key": "educational",
+          "violence_type": "any",
+          "pct": 5.2,
+          "population_estimate": null,
+          "sample_n": 32
+        },
+        {
+          "dimension": "location",
+          "key": "educational",
+          "violence_type": "rape",
+          "pct": 5.0,
+          "population_estimate": null,
+          "sample_n": 11
+        },
+        {
+          "dimension": "location",
+          "key": "public_transport",
+          "violence_type": "any",
+          "pct": 8.0,
+          "population_estimate": null,
+          "sample_n": 49
+        },
+        {
+          "dimension": "location",
+          "key": "public_transport",
+          "violence_type": "rape",
+          "pct": 2.2,
+          "population_estimate": null,
+          "sample_n": 5
+        },
+        {
+          "dimension": "location",
+          "key": "workplace",
+          "violence_type": "any",
+          "pct": 6.6,
+          "population_estimate": null,
+          "sample_n": 41
+        },
+        {
+          "dimension": "location",
+          "key": "workplace",
+          "violence_type": "rape",
+          "pct": 7.1,
+          "population_estimate": null,
+          "sample_n": 15
+        },
+        {
+          "dimension": "location",
+          "key": "shops_hotels_etc",
+          "violence_type": "any",
+          "pct": 2.9,
+          "population_estimate": null,
+          "sample_n": 18
+        },
+        {
+          "dimension": "location",
+          "key": "shops_hotels_etc",
+          "violence_type": "rape",
+          "pct": 3.4,
+          "population_estimate": null,
+          "sample_n": 7
+        },
+        {
+          "dimension": "location",
+          "key": "nightlife",
+          "violence_type": "any",
+          "pct": 17.8,
+          "population_estimate": null,
+          "sample_n": 111
+        },
+        {
+          "dimension": "location",
+          "key": "nightlife",
+          "violence_type": "rape",
+          "pct": 12.2,
+          "population_estimate": null,
+          "sample_n": 26
+        },
+        {
+          "dimension": "location",
+          "key": "sports",
+          "violence_type": "any",
+          "pct": 0.6,
+          "population_estimate": null,
+          "sample_n": 3
+        },
+        {
+          "dimension": "location",
+          "key": "sports",
+          "violence_type": "rape",
+          "pct": 1.2,
+          "population_estimate": null,
+          "sample_n": 3
+        },
+        {
+          "dimension": "location",
+          "key": "open_areas",
+          "violence_type": "any",
+          "pct": 32.0,
+          "population_estimate": null,
+          "sample_n": 198
+        },
+        {
+          "dimension": "location",
+          "key": "open_areas",
+          "violence_type": "rape",
+          "pct": 34.1,
+          "population_estimate": null,
+          "sample_n": 72
+        },
+        {
+          "dimension": "location",
+          "key": "other",
+          "violence_type": "any",
+          "pct": 10.6,
+          "population_estimate": null,
+          "sample_n": 66
+        },
+        {
+          "dimension": "location",
+          "key": "other",
+          "violence_type": "rape",
+          "pct": 11.4,
+          "population_estimate": null,
+          "sample_n": 24
+        },
+        {
+          "dimension": "location",
+          "key": "nc",
+          "violence_type": "any",
+          "pct": 0.1,
+          "population_estimate": null,
+          "sample_n": 1
+        },
+        {
+          "dimension": "location",
+          "key": "nc",
+          "violence_type": "rape",
+          "pct": 0.3,
+          "population_estimate": null,
+          "sample_n": 1
+        }
+      ],
       "source_document": "Macroencuesta_2019.pdf",
-      "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II)",
+      "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.161 (lugar)",
       "verified": false,
-      "notes": "Relationship-to-perpetrator pooled across all severities (rape through non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity tier, unlike 2024 (see report's own text, p.158)."
+      "notes": "Location (Cap. 16.7) is likewise pooled across severities; its 'rape' rows mean 'some assault of theirs happened there', not 'the rape happened there' (report fn. 128). No prior-online-interaction question in this wave. Relationship-to-perpetrator pooled across all severities (rape through non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity tier, unlike 2024 (see report's own text, p.158)."
     },
     {
       "wave_year": 2024,
@@ -400,8 +594,466 @@
           "sample_n": null
         }
       ],
+      "context": [
+        {
+          "dimension": "location",
+          "key": "any_house",
+          "violence_type": "rape",
+          "pct": 68.5,
+          "population_estimate": 455912,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "any_house",
+          "violence_type": "attempted_rape",
+          "pct": 51.6,
+          "population_estimate": 342426,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "any_house",
+          "violence_type": "other",
+          "pct": 33.7,
+          "population_estimate": 905313,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "own_home",
+          "violence_type": "rape",
+          "pct": 31.6,
+          "population_estimate": 210690,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "own_home",
+          "violence_type": "attempted_rape",
+          "pct": 23.3,
+          "population_estimate": 154227,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "own_home",
+          "violence_type": "other",
+          "pct": 14.1,
+          "population_estimate": 377701,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "aggressor_home",
+          "violence_type": "rape",
+          "pct": 33.1,
+          "population_estimate": 220376,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "aggressor_home",
+          "violence_type": "attempted_rape",
+          "pct": 23.3,
+          "population_estimate": 154354,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "aggressor_home",
+          "violence_type": "other",
+          "pct": 16.4,
+          "population_estimate": 440096,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other_home",
+          "violence_type": "rape",
+          "pct": 14.1,
+          "population_estimate": 93630,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other_home",
+          "violence_type": "attempted_rape",
+          "pct": 11.9,
+          "population_estimate": 79227,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other_home",
+          "violence_type": "other",
+          "pct": 7.7,
+          "population_estimate": 206617,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "educational",
+          "violence_type": "rape",
+          "pct": 3.7,
+          "population_estimate": 24517,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "educational",
+          "violence_type": "attempted_rape",
+          "pct": 3.9,
+          "population_estimate": 26153,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "educational",
+          "violence_type": "other",
+          "pct": 10.3,
+          "population_estimate": 276670,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "public_transport",
+          "violence_type": "rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "public_transport",
+          "violence_type": "attempted_rape",
+          "pct": 2.1,
+          "population_estimate": 13680,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "public_transport",
+          "violence_type": "other",
+          "pct": 16.8,
+          "population_estimate": 451588,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "workplace",
+          "violence_type": "rape",
+          "pct": 1.7,
+          "population_estimate": 11494,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "workplace",
+          "violence_type": "attempted_rape",
+          "pct": 4.8,
+          "population_estimate": 31811,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "workplace",
+          "violence_type": "other",
+          "pct": 5.1,
+          "population_estimate": 135904,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "shops_hotels_etc",
+          "violence_type": "rape",
+          "pct": 2.8,
+          "population_estimate": 18652,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "shops_hotels_etc",
+          "violence_type": "attempted_rape",
+          "pct": 2.4,
+          "population_estimate": 16140,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "shops_hotels_etc",
+          "violence_type": "other",
+          "pct": 3.3,
+          "population_estimate": 88542,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "official_places",
+          "violence_type": "rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "official_places",
+          "violence_type": "attempted_rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "official_places",
+          "violence_type": "other",
+          "pct": 1.3,
+          "population_estimate": 35487,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_any",
+          "violence_type": "rape",
+          "pct": 11.0,
+          "population_estimate": 72912,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_any",
+          "violence_type": "attempted_rape",
+          "pct": 18.5,
+          "population_estimate": 122767,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_any",
+          "violence_type": "other",
+          "pct": 36.1,
+          "population_estimate": 968922,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "nightlife",
+          "violence_type": "rape",
+          "pct": 7.3,
+          "population_estimate": 48389,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "nightlife",
+          "violence_type": "attempted_rape",
+          "pct": 12.3,
+          "population_estimate": 81381,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "nightlife",
+          "violence_type": "other",
+          "pct": 31.4,
+          "population_estimate": 842009,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_outdoor",
+          "violence_type": "rape",
+          "pct": 5.9,
+          "population_estimate": 39032,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_outdoor",
+          "violence_type": "attempted_rape",
+          "pct": 10.0,
+          "population_estimate": 66466,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "festive_outdoor",
+          "violence_type": "other",
+          "pct": 16.6,
+          "population_estimate": 446315,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "sports",
+          "violence_type": "rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "sports",
+          "violence_type": "attempted_rape",
+          "pct": 1.8,
+          "population_estimate": 11662,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "sports",
+          "violence_type": "other",
+          "pct": 3.0,
+          "population_estimate": 81534,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "open_areas",
+          "violence_type": "rape",
+          "pct": 16.3,
+          "population_estimate": 108701,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "open_areas",
+          "violence_type": "attempted_rape",
+          "pct": 23.8,
+          "population_estimate": 158091,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "open_areas",
+          "violence_type": "other",
+          "pct": 22.9,
+          "population_estimate": 614194,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "online",
+          "violence_type": "rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "online",
+          "violence_type": "attempted_rape",
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "online",
+          "violence_type": "other",
+          "pct": 2.6,
+          "population_estimate": 70245,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other",
+          "violence_type": "rape",
+          "pct": 11.5,
+          "population_estimate": 76667,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other",
+          "violence_type": "attempted_rape",
+          "pct": 14.2,
+          "population_estimate": 94299,
+          "sample_n": null
+        },
+        {
+          "dimension": "location",
+          "key": "other",
+          "violence_type": "other",
+          "pct": 8.3,
+          "population_estimate": 221761,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "yes",
+          "violence_type": "rape",
+          "pct": 13.1,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "yes",
+          "violence_type": "attempted_rape",
+          "pct": 8.9,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "yes",
+          "violence_type": "other",
+          "pct": 5.7,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "no",
+          "violence_type": "rape",
+          "pct": 83.7,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "no",
+          "violence_type": "attempted_rape",
+          "pct": 87.0,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "no",
+          "violence_type": "other",
+          "pct": 92.2,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "nc",
+          "violence_type": "rape",
+          "pct": 3.2,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "nc",
+          "violence_type": "attempted_rape",
+          "pct": 4.1,
+          "population_estimate": null,
+          "sample_n": null
+        },
+        {
+          "dimension": "online_prior",
+          "key": "nc",
+          "violence_type": "other",
+          "pct": 2.1,
+          "population_estimate": null,
+          "sample_n": null
+        }
+      ],
       "source_document": "Macroencuesta_2024.pdf",
-      "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor)",
+      "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor), Tabla 16.22 (lugar), Tabla 16.23 (interacción online previa)",
       "verified": false,
       "notes": ""
     }
