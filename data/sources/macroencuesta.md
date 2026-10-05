@@ -54,12 +54,13 @@ https://www.inmujeres.gob.es/MujerCifras/Violencia/Macroencuestas.htm
 
 | Metric | Value | Absolute |
 |---|---|---|
-| Sexual violence outside partner (lifetime) | 13.7% | 2,802,914 women |
-| Sexual violence by partner (lifetime) | 9.2% | 1,876,850 women |
+| Sexual violence by ANY perpetrator (lifetime) | 13.7% | 2,802,914 women |
+| Sexual violence outside partner (lifetime) | 6.5% | 1,322,052 women (full study p.153; 4 yrs 1.4%, 12 mo 0.5%) |
+| Sexual violence by partner (lifetime) | 9.2% of women with partner history (8.9% of all women 16+) | 1,876,850 women |
 | Rape outside partner (lifetime) | 2.2% | ~453,371 women |
 | Physical and/or sexual by partner (lifetime) | 14.2% | ~2,897,896 women |
 | Any machista violence, any perpetrator (lifetime) | 57.3% | 11,688,411 women |
-| Sexual violence outside partner (last 12 months) | 1.8% | ~359,095 women |
+| Sexual violence by ANY perpetrator (last 12 months) | 1.8% | ~359,095 women (p.311; outside-partner 12 mo is 0.5%) |
 | Reporting rate (denuncia) for sexual violence outside partner | 8% | 89–92% did NOT report |
 
 ### 2015 wave
@@ -73,7 +74,7 @@ https://www.inmujeres.gob.es/MujerCifras/Violencia/Macroencuestas.htm
 
 1. **Not comparable 2024 vs 2019**: The 2024 methodology improvement means some changes in prevalence figures may reflect measurement change, not real change.
 2. **Survey vs police data**: Macroencuesta captures ACTUAL prevalence; police data captures REPORTED crimes. They cannot be compared as ratios to derive dark-figure multipliers without careful denominator alignment (avoid the "62× ratio" error — see SPEC B5).
-3. **Annual prevalence (12-month reference)**: Only 2019 provides a clean 12-month estimate (1.8% for sexual violence outside partner). The 2024 wave should have a comparable figure — verify in full report.
+3. **Annual prevalence (12-month reference)**: 2019: 0.5% outside partner, 1.8% any perpetrator (an earlier version of this file mislabelled 1.8% as outside-partner; corrected under T5, rows 169-174 of `violence_spain.csv`). 2024 outside-partner 12 mo: 2.0% (CI 1.7-2.2), widened item list so not comparable. The 2024 wave should have a comparable figure — verify in full report.
 4. **Definition comparability across waves**: Pre-2015 waves used different question wording; 2015 and 2019 are comparable to each other; 2024 is not fully comparable to 2019.
 
 ## Victim-perpetrator relationship (T98)
