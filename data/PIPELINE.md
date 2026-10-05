@@ -50,6 +50,7 @@ were left untouched at the paths above.
 | `src/migration/parse_eurostat_migration_cohort.py` | Eurostat bulk TSV `migr_imm1ctz`/`migr_pop1ctz` (manual download, not in `data/raw/`) | appends to `data/raw/migration_spain.csv` | T11,T43,T44 | ~ |
 | `src/crime/analyze_cohort_crime_rate.py` | `migration_spain.csv`, `sexual_crimes_mir_2017-2024.json`, `population_spain_midyear_5yr.csv` | `data/processed/cohort_tenure_*.csv` (4 files) + 2 PNGs | T41 | x |
 | `src/crime/analyze_mir_migration_correlation.py` | hardcoded MIR/migration constants (documented inline; not read from a live CSV) | `data/processed/mir_migration_rates.csv` | T50 | x |
+| `src/crime/analyze_hate_crime_correlates.py` | `hate_crimes_mir_2014-2025.json`, `migration_spain.csv`, hardcoded Vox general/EP election vote-share constants (documented inline, sourced `es.wikipedia.org`) | `data/processed/hate_crime_correlates.csv` + 1 chart | T38 | ~ |
 | `src/crime/analyze_rape_trend_nationality.py` | `violence_spain.csv`, `ine_condenados_28716_sexual_crimes.csv`, `population_spain_midyear_5yr.csv` | stdout report only (no file) | T51 | x |
 | `src/crime/parse_ine_tabla28857.py` | INE table 28857 CSV, fetched live from `ine.es` | `data/processed/ine_condenados_28857_age_nationality.csv` | T77 | x |
 | `src/crime/compute_age_standardized_rate.py` | `ine_condenados_28857_age_nationality.csv`, `population_spain_estimates.csv`, `migration_spain.csv`, `sexual_crimes_mir_2017-2024.json` | `data/processed/age_standardized_rate_test.csv`, `age_standardized_dz_ma_ratio.csv` | T78 | x |
@@ -67,7 +68,7 @@ were left untouched at the paths above.
 | `src/crime/build_dashboard_data.py` | `hate_crimes_mir_2014-2025.json`, `hate_crimes_ses_nacionalidad_{detenidos,victimas}_summary_2021-2024.csv`, `cohort_tenure_period_test.csv`, `cohort_share_test.csv`, `victim_vulnerability_rates.csv`, `regularization_sensitivity_test.csv`, `general_crime_trends.csv` | `build_hate_crimes()`/`build_cohort_tenure()`/`build_victim_vulnerability()`/`build_regularization_sensitivity()`/`build_general_crime()` consumed by `src/analysis/build_dashboard.py` → `docs/data/hate_crimes.json`, `docs/data/cohort_tenure.json`, `docs/data/victim_vulnerability.json`, `docs/data/regularization_sensitivity.json`, `docs/data/general_crime.json` | T41,T59,T76,T82,T85,T88 | x |
 | `src/analysis/build_dashboard.py` | calls each domain's `build_dashboard_data.build()` (feminicides, sexual_crimes, crime, migration, mortality) via `importlib` (all 5 modules share the filename `build_dashboard_data.py`, so a plain `import` would only bind the first one loaded) | `docs/data/*.json` (9 files) | T17,T23,T-mig-tab,T82,T88 | x |
 
-32 scripts total (6 parsers + 26 analysis), zero missing a `§T` reference.
+33 scripts total (6 parsers + 27 analysis), zero missing a `§T` reference.
 
 ## Script-level flow
 
@@ -132,6 +133,10 @@ flowchart LR
   CSV_VIOL --> analyze_aggression_profile.py --> TXT_AGG[(aggression_profile_summary.txt)]
 
   analyze_mir_migration_correlation.py -. hardcoded MIR/migration<br/>constants .-> CSV_CORR[(mir_migration_rates.csv)]
+
+  JSON_MIR --> analyze_hate_crime_correlates.py
+  CSV_MIGR --> analyze_hate_crime_correlates.py
+  analyze_hate_crime_correlates.py -. hardcoded Vox<br/>vote-share constants .-> CSV_HATECORR[(hate_crime_correlates.csv)]
 ```
 
 ## Not yet wired into §T
