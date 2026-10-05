@@ -67,11 +67,11 @@ NATIONAL_ROW = "TOTAL NACIONAL"
 # 2021+ ambito labels not yet in mir_parser.classify_odio_category's
 # vocabulary. DISFOBIA is the current label for the disability-hate-crime
 # ambito (renamed again, same lineage as DISCAPACIDAD -> DIVERSIDAD
-# FUNCIONAL -> PERSONA CON DISCAPACIDAD tracked there); ISLAMOFOBIA is a
-# genuinely new category (first broken out in the 2024 report).
+# FUNCIONAL -> PERSONA CON DISCAPACIDAD tracked there); ISLAMOFOBIA is
+# folded into racismo/xenofobia to keep the hate-crime series simpler.
 NEW_AMBITO_LABELS = {
     "DISFOBIA": "discapacidad",
-    "ISLAMOFOBIA": "islamofobia",
+    "ISLAMOFOBIA": "racismo_xenofobia",
 }
 
 

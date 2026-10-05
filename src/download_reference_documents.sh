@@ -3,7 +3,7 @@
 
 set -e
 
-OUTPUT_DIR="data/sources/reference_documents"
+OUTPUT_DIR="data/sources/reference"
 mkdir -p "$OUTPUT_DIR"
 
 echo "Downloading reference documents..."

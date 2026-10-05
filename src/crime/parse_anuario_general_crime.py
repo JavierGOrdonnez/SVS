@@ -9,8 +9,8 @@ nationality-specific source -- explicitly scoped down to Spanish-vs-foreign
 only (no per-country breakdown), per the user's own "it is ok if we only
 have spanish vs foreign for that plot" framing.
 
-Two source tables per Anuario edition (`data/sources/MIR_AnuarioEstadistico_
-{year}.pdf`, 2016-2023), both in chapter "3 SEGURIDAD CIUDADANA":
+Two source tables per Anuario edition (`data/sources/anuario-estadistico/
+MIR_AnuarioEstadistico_{year}.pdf`, 2016-2023), both in chapter "3 SEGURIDAD CIUDADANA":
 
   (a) "INFRACCIONES PENALES. HECHOS CONOCIDOS/DETENCIONES E INVESTIGADOS.
       TOTAL NACIONAL. SERIE HISTORICA <y-4>-<y>" -- ALL-nationality totals,
@@ -65,7 +65,7 @@ from pathlib import Path
 import pdfplumber
 
 ROOT = Path(__file__).parent.parent.parent
-SOURCES_DIR = ROOT / "data" / "sources"
+SOURCES_DIR = ROOT / "data" / "sources" / "anuario-estadistico"
 OUT_CSV = ROOT / "data" / "raw" / "mir_anuario_general_crime_2015-2023.csv"
 
 EDITIONS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
