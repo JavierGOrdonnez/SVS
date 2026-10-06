@@ -8,6 +8,9 @@ victimization survey — the two data points this repo needs from it:
      rape / other sexual violence).
   2. Victim-perpetrator relationship (familiar / conocido / desconocido),
      overall (2019, pooled across severities) or by severity tier (2024).
+  3. (T105) Frequency -- once vs. more than once, and cadence of repeats
+     among those victimized more than once -- plus whether more than one
+     perpetrator took part in at least one incident, both outside-partner.
 
 Replaces the hand-transcribed `data/raw/macroencuesta_relationship_2015-2024.csv`
 with a parser-generated, re-runnable `data/raw/macroencuesta_2019-2024.json` —
@@ -81,11 +84,28 @@ class RelationshipStat(BaseModel):
     sample_n: int | None = None                # 2019 only -- raw survey N
 
 
+class FrequencyStat(BaseModel):
+    measure: str                 # 'episodes' (once vs. more than once) | 'cadence' (among repeat victims)
+    category: str                # episodes: 'once'|'multiple'|'nc'; cadence: 'daily'|'weekly'|'monthly'|'yearly'|'less_than_yearly'|'particular_periods'|'nc'
+    violence_type: str           # 'any' (2019, pooled) | 'rape' | 'attempted_rape' | 'other' (2024)
+    pct: float | None = None     # % of victims of that violence_type (cadence: of those victimized more than once)
+    sample_n: int | None = None  # 2019 only -- raw survey N
+
+
+class ParticipantStat(BaseModel):
+    category: str                # 'single' | 'multiple' (>1 perpetrator in at least one incident) | 'nc'
+    violence_type: str           # 'any' | 'rape' | 'attempted_rape' | 'other'
+    pct: float | None = None     # % of victims of that violence_type
+    sample_n: int | None = None  # 2019 only -- raw survey N
+
+
 class MacroencuestaReport(BaseModel):
     wave_year: int
     sample_size: int | None = None
     prevalence: list[PrevalenceStat] = []
     relationship: list[RelationshipStat] = []
+    frequency: list[FrequencyStat] = []
+    participants: list[ParticipantStat] = []
     source_document: str
     source_table: str = ""
     verified: bool = False
@@ -281,6 +301,151 @@ def parse_relationship_2024(text: str) -> list[RelationshipStat]:
 
 
 # ──────────────────────────────────────────────────────────────
+# T105: frequency (once vs. repeated, cadence) + single-vs-multiple
+# perpetrators, outside-partner. Both waves' tables sit right after the
+# relationship table in reading order (2019: "16.5 Frecuencia..." /
+# "16.8 Agresiones sexuales... grupo"; 2024: Tabla 16.16-16.18, right before
+# Tabla 16.21's vínculo table) -- same text-regex strategy as the functions
+# above, just keyed off each table's own title/prose rather than a "Sí"
+# block (these tables don't use that shape).
+# ──────────────────────────────────────────────────────────────
+
+_EPISODE_LABELS = [("once", r"^Una vez"), ("multiple", r"^Más de una vez"), ("nc", r"^NC\b")]
+_CADENCE_LABELS_2024 = [
+    ("daily", r"^Diariamente"), ("weekly", r"^Semanalmente"), ("monthly", r"^Mensualmente"),
+    ("yearly", r"^Anualmente"), ("less_than_yearly", r"^Menos de una vez al año"),
+    ("particular_periods", r"^Solo en períodos particulares"), ("nc", r"^NC\b"),
+]
+_CADENCE_LABELS_2019 = [
+    ("daily", r"^Todos los días"), ("weekly", r"^Al menos una o más veces por semana"),
+    ("monthly", r"^Al menos una o más veces al mes"), ("yearly", r"^Al menos una o más veces al año"),
+    ("less_than_yearly", r"^Menos de una vez al año"),
+    ("particular_periods", r"^Solo en períodos particulares"), ("nc", r"^NC\b"),
+]
+_PARTICIPANT_LABELS_2024 = [
+    ("single", r"^Solo una persona"), ("multiple", r"^Al menos en una ocasión"), ("nc", r"^NC\b"),
+]
+_PARTICIPANT_LABELS_2019 = [
+    ("single", r"^No, en todos los incidentes"), ("multiple", r"^Sí, en al menos un incidente"), ("nc", r"^NC\b"),
+]
+# Tabla 16.18's row for "multiple" wraps onto 3 printed lines ("Al menos en
+# una ocasión" / "participó más de una" / "persona (varias personas)") with
+# the data row's own numbers printed on the *second* of those lines, not
+# the first where the label regex matches -- same wrapped-cell shape as
+# Tabla 16.17's "Solo en períodos particulares" row. `_row_tokens` below
+# handles both by looking at the following line when the match line itself
+# has no numbers.
+_SEVERITY_ORDER_2024_PARTICIPANTS = ["rape", "attempted_rape", "other", "any"]  # Tabla 16.18 adds an all-severities 4th column
+
+
+def _section(text: str, start: str, end: str | None = None) -> str:
+    """Slice of `text` from the first `start` marker to the next `end`
+    marker after it (or EOF). Needed because short row labels like 'NC' or
+    'Una vez' repeat across the several small tables sharing a page."""
+    i = text.find(start)
+    if i == -1:
+        return ""
+    j = text.find(end, i + len(start)) if end else -1
+    return text[i:j if j != -1 else None]
+
+
+def _row_tokens(text: str, label_pat: str) -> list[float | None] | None:
+    """Numbers for the first row whose label matches `label_pat`. Falls
+    through to the next few lines when the label line itself carries no
+    numbers -- a wrapped multi-line label cell, as above. Tabla 16.18's
+    "multiple" row wraps across *three* printed lines with the data row's
+    numbers landing on the middle one, mixed in with more label text
+    ("participó más de una 11,3 7,6 10,0 10,4"), not a line starting
+    cleanly with a digit -- `_split_tokens_2024` already discards
+    non-numeric words, so applying it to each candidate line and taking the
+    first that yields anything handles that shape too."""
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        m = re.match(label_pat, line.strip())
+        if not m:
+            continue
+        toks = _split_tokens_2024(line.strip()[m.end():])
+        if toks:
+            return toks
+        for j in range(i + 1, min(i + 4, len(lines))):
+            toks = _split_tokens_2024(lines[j])
+            if toks:
+                return toks
+    return None
+
+
+def _rows_2024(text: str, labels: list[tuple[str, str]], severities: list[str]) -> list[tuple[str, str, float | None]]:
+    out = []
+    for category, pat in labels:
+        toks = _row_tokens(text, pat)
+        if toks is None:
+            continue
+        for violence_type, pct in zip(severities, toks):
+            out.append((category, violence_type, pct))
+    return out
+
+
+def parse_frequency_2024(text: str) -> list[FrequencyStat]:
+    """Tabla 16.16 (once vs. more than once) + Tabla 16.17 (cadence among
+    those victimized more than once) -- both have the same three severity
+    columns (rape / attempted rape / other)."""
+    episodes = _section(text, "Tabla 16.16 Distribución", "Tabla 16.17 Distribución")
+    cadence = _section(text, "Tabla 16.17 Distribución", "El símbolo")
+    out = [FrequencyStat(measure="episodes", category=c, violence_type=v, pct=pct)
+           for c, v, pct in _rows_2024(episodes, _EPISODE_LABELS, _SEVERITY_ORDER_2024)]
+    out += [FrequencyStat(measure="cadence", category=c, violence_type=v, pct=pct)
+            for c, v, pct in _rows_2024(cadence, _CADENCE_LABELS_2024, _SEVERITY_ORDER_2024)]
+    return out
+
+
+def parse_participants_2024(text: str) -> list[ParticipantStat]:
+    """Tabla 16.18: three severity columns plus a 4th all-severities total."""
+    table = _section(text, "Tabla 16.18 Distribución", "1. Porcentaje")
+    return [ParticipantStat(category=c, violence_type=v, pct=pct)
+            for c, v, pct in _rows_2024(table, _PARTICIPANT_LABELS_2024, _SEVERITY_ORDER_2024_PARTICIPANTS)]
+
+
+def _rows_2019(text: str, labels: list[tuple[str, str]], severities: list[str]) -> list[tuple[str, str, int | None, float | None]]:
+    """2019 rows are (N, %) pairs, one pair per column (no severity split
+    beyond what `severities` lists -- pooled 'any', or 'any'+'rape' for the
+    group-aggression table, which does break out rape alone)."""
+    out = []
+    for category, pat in labels:
+        toks = _row_tokens(text, pat)
+        if toks is None:
+            continue
+        for i, violence_type in enumerate(severities):
+            if 2 * i + 1 >= len(toks):
+                break
+            n, pct = toks[2 * i], toks[2 * i + 1]
+            out.append((category, violence_type, int(n) if n is not None else None, pct))
+    return out
+
+
+def parse_frequency_2019(text: str) -> list[FrequencyStat]:
+    """'Frecuencia (1)' (once vs. more than once) and 'Frecuencia (2)'
+    (cadence among repeat victims) -- pooled across severities only (2019's
+    questionnaire-length constraint, same as its relationship table)."""
+    episodes = _section(text, "Frecuencia (1)", "Frecuencia (2)")
+    cadence = _section(text, "Frecuencia (2)", "16.6")
+    out = [FrequencyStat(measure="episodes", category=c, violence_type=v, sample_n=n, pct=pct)
+           for c, v, n, pct in _rows_2019(episodes, _EPISODE_LABELS, ["any"])]
+    out += [FrequencyStat(measure="cadence", category=c, violence_type=v, sample_n=n, pct=pct)
+            for c, v, n, pct in _rows_2019(cadence, _CADENCE_LABELS_2019, ["any"])]
+    return out
+
+
+def parse_participants_2019(text: str) -> list[ParticipantStat]:
+    """'Agresiones sexuales en grupo': columns are all-violence victims
+    (N=620) then rape victims alone (N=213) -- no attempted-rape/other
+    split (2019 can't distinguish which episode was the group one, see the
+    table's own prose caveat)."""
+    table = _section(text, "Agresiones sexuales en grupo", "Total")
+    return [ParticipantStat(category=c, violence_type=v, sample_n=n, pct=pct)
+            for c, v, n, pct in _rows_2019(table, _PARTICIPANT_LABELS_2019, ["any", "rape"])]
+
+
+# ──────────────────────────────────────────────────────────────
 # 2019 wave
 # ──────────────────────────────────────────────────────────────
 
@@ -318,11 +483,15 @@ class Macroencuesta2019Parser:
                       "matching chapter 15's near-identical table instead)", file=sys.stderr)
             prevalence = self._parse_prevalence(pdf, chapter_start)
             relationship = self._parse_relationship(pdf, chapter_start)
+            frequency = self._parse_frequency(pdf, chapter_start)
+            participants = self._parse_participants(pdf, chapter_start)
         return MacroencuestaReport(
             wave_year=2019, sample_size=self.SAMPLE_SIZE,
             prevalence=prevalence, relationship=relationship,
+            frequency=frequency, participants=participants,
             source_document=self.source,
-            source_table="p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II)",
+            source_table=("p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), "
+                          "p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo)"),
             notes=(
                 "Relationship-to-perpetrator pooled across all severities (rape through "
                 "non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity "
@@ -355,6 +524,28 @@ class Macroencuesta2019Parser:
             print(f"  ⚠ 2019: vínculo table only found {len(out)}/6 rows", file=sys.stderr)
         return out
 
+    def _parse_frequency(self, pdf, chapter_start: int) -> list[FrequencyStat]:
+        located = _locate_page(pdf, ["FRECUENCIA (1) DE LA VIOLENCIA SEXUAL"], start=chapter_start)
+        if located is None:
+            print("  ⚠ 2019: could not locate frequency tables (16.5)", file=sys.stderr)
+            return []
+        idx, _ = located
+        out = parse_frequency_2019(_page_window_text(pdf, idx, n_pages=1))
+        if len(out) < 10:
+            print(f"  ⚠ 2019: frequency tables only found {len(out)}/10 rows", file=sys.stderr)
+        return out
+
+    def _parse_participants(self, pdf, chapter_start: int) -> list[ParticipantStat]:
+        located = _locate_page(pdf, ["AGRESIONES SEXUALES EN GRUPO"], start=chapter_start)
+        if located is None:
+            print("  ⚠ 2019: could not locate group-aggression table (16.8)", file=sys.stderr)
+            return []
+        idx, _ = located
+        out = parse_participants_2019(_page_window_text(pdf, idx, n_pages=1))
+        if len(out) < 6:
+            print(f"  ⚠ 2019: group-aggression table only found {len(out)}/6 cells", file=sys.stderr)
+        return out
+
 
 # ──────────────────────────────────────────────────────────────
 # 2024 wave
@@ -373,11 +564,15 @@ class Macroencuesta2024Parser:
             sample_size = self._parse_sample_size(pdf)
             prevalence = self._parse_prevalence(pdf)
             relationship = self._parse_relationship(pdf)
+            frequency = self._parse_frequency(pdf)
+            participants = self._parse_participants(pdf)
         return MacroencuestaReport(
             wave_year=2024, sample_size=sample_size,
             prevalence=prevalence, relationship=relationship,
+            frequency=frequency, participants=participants,
             source_document=self.source,
-            source_table="Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor)",
+            source_table=("Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), "
+                          "Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor)"),
         )
 
     @staticmethod
@@ -428,6 +623,28 @@ class Macroencuesta2024Parser:
         rows_found = len({r.key for r in out})
         if rows_found < 6:
             print(f"  ⚠ 2024: vínculo table only found {rows_found}/6 label rows", file=sys.stderr)
+        return out
+
+    def _parse_frequency(self, pdf) -> list[FrequencyStat]:
+        located = _locate_page(pdf, ["TABLA 16.16 DISTRIBUCION"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 16.16 (frequency)", file=sys.stderr)
+            return []
+        idx, _ = located
+        out = parse_frequency_2024(_page_window_text(pdf, idx, n_pages=2))
+        if len(out) < 30:
+            print(f"  ⚠ 2024: Tabla 16.16/16.17 only found {len(out)}/30 cells", file=sys.stderr)
+        return out
+
+    def _parse_participants(self, pdf) -> list[ParticipantStat]:
+        located = _locate_page(pdf, ["TABLA 16.18 DISTRIBUCION"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 16.18 (more than one perpetrator)", file=sys.stderr)
+            return []
+        idx, _ = located
+        out = parse_participants_2024(_page_window_text(pdf, idx, n_pages=1))
+        if len(out) < 12:
+            print(f"  ⚠ 2024: Tabla 16.18 only found {len(out)}/12 cells", file=sys.stderr)
         return out
 
 
