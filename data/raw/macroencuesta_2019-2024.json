@@ -100,8 +100,118 @@
           "sample_n": 0
         }
       ],
+      "frequency": [
+        {
+          "measure": "episodes",
+          "category": "once",
+          "violence_type": "any",
+          "pct": 50.4,
+          "sample_n": 312
+        },
+        {
+          "measure": "episodes",
+          "category": "multiple",
+          "violence_type": "any",
+          "pct": 49.6,
+          "sample_n": 308
+        },
+        {
+          "measure": "episodes",
+          "category": "nc",
+          "violence_type": "any",
+          "pct": 0.0,
+          "sample_n": 0
+        },
+        {
+          "measure": "cadence",
+          "category": "daily",
+          "violence_type": "any",
+          "pct": 5.8,
+          "sample_n": 18
+        },
+        {
+          "measure": "cadence",
+          "category": "weekly",
+          "violence_type": "any",
+          "pct": 16.9,
+          "sample_n": 52
+        },
+        {
+          "measure": "cadence",
+          "category": "monthly",
+          "violence_type": "any",
+          "pct": 18.3,
+          "sample_n": 56
+        },
+        {
+          "measure": "cadence",
+          "category": "yearly",
+          "violence_type": "any",
+          "pct": 21.1,
+          "sample_n": 65
+        },
+        {
+          "measure": "cadence",
+          "category": "less_than_yearly",
+          "violence_type": "any",
+          "pct": 26.4,
+          "sample_n": 81
+        },
+        {
+          "measure": "cadence",
+          "category": "particular_periods",
+          "violence_type": "any",
+          "pct": 7.6,
+          "sample_n": 23
+        },
+        {
+          "measure": "cadence",
+          "category": "nc",
+          "violence_type": "any",
+          "pct": 3.9,
+          "sample_n": 13
+        }
+      ],
+      "participants": [
+        {
+          "category": "single",
+          "violence_type": "any",
+          "pct": 87.3,
+          "sample_n": 541
+        },
+        {
+          "category": "single",
+          "violence_type": "rape",
+          "pct": 82.7,
+          "sample_n": 176
+        },
+        {
+          "category": "multiple",
+          "violence_type": "any",
+          "pct": 12.4,
+          "sample_n": 77
+        },
+        {
+          "category": "multiple",
+          "violence_type": "rape",
+          "pct": 17.3,
+          "sample_n": 37
+        },
+        {
+          "category": "nc",
+          "violence_type": "any",
+          "pct": 0.3,
+          "sample_n": 2
+        },
+        {
+          "category": "nc",
+          "violence_type": "rape",
+          "pct": 0.0,
+          "sample_n": 0
+        }
+      ],
       "source_document": "Macroencuesta_2019.pdf",
-      "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II)",
+      "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo)",
       "verified": false,
       "notes": "Relationship-to-perpetrator pooled across all severities (rape through non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity tier, unlike 2024 (see report's own text, p.158)."
     },
@@ -400,8 +510,294 @@
           "sample_n": null
         }
       ],
+      "frequency": [
+        {
+          "measure": "episodes",
+          "category": "once",
+          "violence_type": "rape",
+          "pct": 42.4,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "once",
+          "violence_type": "attempted_rape",
+          "pct": 48.9,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "once",
+          "violence_type": "other",
+          "pct": 43.2,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "multiple",
+          "violence_type": "rape",
+          "pct": 53.9,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "multiple",
+          "violence_type": "attempted_rape",
+          "pct": 47.5,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "multiple",
+          "violence_type": "other",
+          "pct": 55.0,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "nc",
+          "violence_type": "rape",
+          "pct": 3.8,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "nc",
+          "violence_type": "attempted_rape",
+          "pct": 3.7,
+          "sample_n": null
+        },
+        {
+          "measure": "episodes",
+          "category": "nc",
+          "violence_type": "other",
+          "pct": 1.8,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "daily",
+          "violence_type": "rape",
+          "pct": 3.9,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "daily",
+          "violence_type": "attempted_rape",
+          "pct": 4.6,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "daily",
+          "violence_type": "other",
+          "pct": 3.4,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "weekly",
+          "violence_type": "rape",
+          "pct": 23.3,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "weekly",
+          "violence_type": "attempted_rape",
+          "pct": 10.6,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "weekly",
+          "violence_type": "other",
+          "pct": 11.0,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "monthly",
+          "violence_type": "rape",
+          "pct": 29.0,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "monthly",
+          "violence_type": "attempted_rape",
+          "pct": 18.4,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "monthly",
+          "violence_type": "other",
+          "pct": 17.2,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "yearly",
+          "violence_type": "rape",
+          "pct": 11.0,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "yearly",
+          "violence_type": "attempted_rape",
+          "pct": 21.5,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "yearly",
+          "violence_type": "other",
+          "pct": 23.3,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "less_than_yearly",
+          "violence_type": "rape",
+          "pct": 18.1,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "less_than_yearly",
+          "violence_type": "attempted_rape",
+          "pct": 28.2,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "less_than_yearly",
+          "violence_type": "other",
+          "pct": 32.4,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "particular_periods",
+          "violence_type": "rape",
+          "pct": 9.1,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "particular_periods",
+          "violence_type": "attempted_rape",
+          "pct": 8.8,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "particular_periods",
+          "violence_type": "other",
+          "pct": 8.9,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "nc",
+          "violence_type": "rape",
+          "pct": 5.6,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "nc",
+          "violence_type": "attempted_rape",
+          "pct": 8.0,
+          "sample_n": null
+        },
+        {
+          "measure": "cadence",
+          "category": "nc",
+          "violence_type": "other",
+          "pct": 3.9,
+          "sample_n": null
+        }
+      ],
+      "participants": [
+        {
+          "category": "single",
+          "violence_type": "rape",
+          "pct": 86.3,
+          "sample_n": null
+        },
+        {
+          "category": "single",
+          "violence_type": "attempted_rape",
+          "pct": 89.5,
+          "sample_n": null
+        },
+        {
+          "category": "single",
+          "violence_type": "other",
+          "pct": 88.0,
+          "sample_n": null
+        },
+        {
+          "category": "single",
+          "violence_type": "any",
+          "pct": 87.9,
+          "sample_n": null
+        },
+        {
+          "category": "multiple",
+          "violence_type": "rape",
+          "pct": 11.3,
+          "sample_n": null
+        },
+        {
+          "category": "multiple",
+          "violence_type": "attempted_rape",
+          "pct": 7.6,
+          "sample_n": null
+        },
+        {
+          "category": "multiple",
+          "violence_type": "other",
+          "pct": 10.0,
+          "sample_n": null
+        },
+        {
+          "category": "multiple",
+          "violence_type": "any",
+          "pct": 10.4,
+          "sample_n": null
+        },
+        {
+          "category": "nc",
+          "violence_type": "rape",
+          "pct": 2.4,
+          "sample_n": null
+        },
+        {
+          "category": "nc",
+          "violence_type": "attempted_rape",
+          "pct": 2.9,
+          "sample_n": null
+        },
+        {
+          "category": "nc",
+          "violence_type": "other",
+          "pct": 1.9,
+          "sample_n": null
+        },
+        {
+          "category": "nc",
+          "violence_type": "any",
+          "pct": 1.7,
+          "sample_n": null
+        }
+      ],
       "source_document": "Macroencuesta_2024.pdf",
-      "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.21 (vínculo con el agresor)",
+      "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor)",
       "verified": false,
       "notes": ""
     }

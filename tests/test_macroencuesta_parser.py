@@ -33,6 +33,10 @@ from src.parsers.macroencuesta_parser import (
     parse_prevalence_block_2024,
     parse_relationship_2019,
     parse_relationship_2024,
+    parse_frequency_2019,
+    parse_frequency_2024,
+    parse_participants_2019,
+    parse_participants_2024,
 )
 
 
@@ -253,3 +257,191 @@ def test_empty_text_produces_no_rows():
     assert parse_relationship_2019("") == []
     assert parse_prevalence_block_2024("", "any", "Tabla 16.1") == []
     assert parse_relationship_2024("") == []
+    assert parse_frequency_2019("") == []
+    assert parse_frequency_2024("") == []
+    assert parse_participants_2019("") == []
+    assert parse_participants_2024("") == []
+
+
+# ── T105: frequency + single-vs-multiple perpetrators ──
+
+# ── 2019: "16.5 Frecuencia..." (p.159 of Macroencuesta_2019.pdf) ──
+TEXT_2019_FREQUENCY = """16.5 Frecuencia de la violencia sexual fuera de la pareja a lo largo de la vida
+El 50,4% de las mujeres que han sufrido violencia sexual fuera de la pareja afirman que esta
+violencia ha tenido lugar solo una vez frente al 49,6% que dicen que ha sucedido en más de una
+ocasión. De las que responden que tuvo lugar más de una vez, el 41% dicen que la violencia
+sexual tenía lugar al menos una vez al mes (5,8% todos o casi todos los días, 16,9% al menos una
+vez por semana, y 18,3% al menos una vez al mes).
+Frecuencia (1) de la violencia sexual fuera de la pareja a lo largo de la vida (N=frecuencia
+muestral, %=porcentaje)
+% sobre el total de mujeres residentes en España de 16 o más años
+N
+que han sufrido violencia sexual fuera de la pareja (N=620 mujeres)
+Una vez 312 50,4
+Más de una vez 308 49,6
+NC 0 0,0
+Total 620 100
+Frecuencia (2) de la violencia sexual fuera de la pareja a lo largo de la vida (N=frecuencia
+muestral, %=porcentaje)
+% sobre mujeres que han sufrido violencia
+N sexual fuera de la pareja más de una vez
+(N=308)
+Todos los días o casi todos los días 18 5,8
+Al menos una o más veces por semana 52 16,9
+Al menos una o más veces al mes 56 18,3
+Al menos una o más veces al año 65 21,1
+Menos de una vez al año, rara vez, de forma aislada 81 26,4
+Solo en períodos particulares (navidades, vacaciones de
+23 7,6
+verano, curso escolar, etc.)
+NC 13 3,9
+Total 308 100
+16.6 País en el que sucedió la violencia sexual fuera de la pareja a lo largo de la vida"""
+
+# ── 2019: "16.8 Agresiones sexuales... en grupo" (p.161) ──
+TEXT_2019_PARTICIPANTS = """16.8 Agresiones sexuales sufridas a lo largo de la vida en las que participó más de una
+persona
+El 12,4% de las mujeres que han sufrido violencia sexual fuera de la pareja manifiesta que en
+alguna de las agresiones sexuales participó más de una persona, porcentaje que asciende al
+17,3% entre las mujeres que han sufrido una violación. Se reitera que no es posible saber si la
+agresión colectiva sucedió en la violación o en otro episodio de violencia sexual porque la
+pregunta se hace de forma global y no para cada ítem de violencia sexual.
+Agresiones sexuales en grupo (N=frecuencia muestral, %=porcentaje)
+% sobre el total de % sobre el total de
+mujeres que han mujeres que han
+N sufrido violencia N sufrido una
+sexual fuera de la violación fuera de
+pareja (N=620) la pareja (N=213)
+No, en todos los incidentes
+541 87,3 176 82,7
+participó una sola persona
+Sí, en al menos un incidente
+77 12,4 37 17,3
+participaron varias personas
+NC 2 0,3 0 0
+Total 620 100 213 100"""
+
+# ── 2024: Tabla 16.16/16.17 (frecuencia, p.249) ──
+TEXT_2024_FREQUENCY = """Tabla 16.16 Distribución de las mujeres víctimas de cada tipo de violencia sexual (violaciones, intentos de violación,
+otras formas de violencia sexual) fuera del ámbito de la pareja a lo largo de la vida, según si la violencia ha sucedido
+una vez o más de una vez
+Intentos de Otras formas de
+Violaciones
+violación violencia sexual
+%¹ %² %³
+Una vez 42,4 48,9 43,2
+Más de una vez 53,9 47,5 55,0
+NC 3,8 3,7 1,8
+Total 100,0 100,0 100,0
+1. Porcentaje sobre el total de mujeres que han sufrido una violación fuera de la pareja; 2. Porcentaje sobre el total de mujeres que
+han sufrido un intento de violación fuera de la pareja; 3. Porcentaje sobre el total de mujeres que han sufrido otras formas de
+violencia sexual fuera de la pareja distintas de la violación y de los intentos de violación.
+Tabla 16.17 Distribución de las mujeres que han sufrido en más de una ocasión cada tipo de violencia sexual
+(violaciones, intentos de violación, otras formas de violencia sexual) fuera del ámbito de la pareja a lo largo de la vida,
+según la frecuencia de la violencia
+Intentos de Otras formas de
+Violaciones
+violación violencia sexual
+%¹ %² %³
+Diariamente (todos los días o casi todos los días) ¨3,9 ¨4,6 3,4
+Semanalmente (al menos una o más veces por semana) 23,3 ¨10,6 11,0
+Mensualmente (al menos una o más veces al mes) 29,0 18,4 17,2
+Anualmente (al menos una o más veces al año) 11,0 21,5 23,3
+Menos de una vez al año, rara vez, de forma aislada 18,1 28,2 32,4
+Solo en períodos particulares (navidades, vacaciones de
+¨9,1 ¨8,8 8,9
+verano, curso escolar, etc.)
+NC ¨5,6 ¨8,0 3,9
+Total 100,0 100,0 100,0
+El símbolo '¨' debe interpretarse como "dato con un número de observaciones muestrales de entre 6 y 19" por lo que ha de ser
+tomado con precaución, ya que puede estar afectado de un elevado error de muestreo."""
+
+# ── 2024: Tabla 16.18 (más de una persona agresora, p.249-250) ──
+TEXT_2024_PARTICIPANTS = """de una persona (Tabla 16.18). Por tipo de violencia sexual, el 11,3% de las mujeres que han
+sufrido una violación fuera de la pareja a lo largo de la vida manifiesta que en la violación o en
+alguna de las violaciones (si hubo más de una) participó más de una persona.
+Tabla 16.18 Distribución de las mujeres que han sufrido cada tipo de violencia sexual (violaciones, intentos de violación,
+otras formas de violencia sexual) fuera del ámbito de la pareja a lo largo de la vida, según si en alguna de las agresiones
+participó más de una persona
+Intentos de Otras formas de Violencia sexual
+Violaciones
+violación violencia sexual (total)
+%¹ %² %³ %⁴
+Solo una persona 86,3 89,5 88,0 87,9
+Al menos en una ocasión
+participó más de una 11,3 7,6 10,0 10,4
+persona (varias personas)
+NC ¨2,4 ¨2,9 1,9 1,7
+Total 100,0 100,0 100,0 100,0
+1. Porcentaje sobre el total de mujeres que han sufrido una violación fuera de la pareja; 2. Porcentaje sobre el total de mujeres que
+han sufrido un intento de violación fuera de la pareja."""
+
+
+def test_2019_frequency_episodes():
+    rows = parse_frequency_2019(TEXT_2019_FREQUENCY)
+    once = next(r for r in rows if r.measure == "episodes" and r.category == "once")
+    multiple = next(r for r in rows if r.measure == "episodes" and r.category == "multiple")
+    assert (once.sample_n, once.pct) == (312, 50.4)
+    assert (multiple.sample_n, multiple.pct) == (308, 49.6)
+    assert all(r.violence_type == "any" for r in rows if r.measure == "episodes")
+
+
+def test_2019_frequency_cadence_wrapped_label_row():
+    # "Solo en períodos particulares..." wraps its label onto its own line,
+    # with the data row's numbers printed on the following line.
+    rows = parse_frequency_2019(TEXT_2019_FREQUENCY)
+    particular = next(r for r in rows if r.measure == "cadence" and r.category == "particular_periods")
+    assert (particular.sample_n, particular.pct) == (23, 7.6)
+
+
+def test_2019_frequency_all_rows_present():
+    rows = parse_frequency_2019(TEXT_2019_FREQUENCY)
+    assert {r.category for r in rows if r.measure == "episodes"} == {"once", "multiple", "nc"}
+    assert {r.category for r in rows if r.measure == "cadence"} == {
+        "daily", "weekly", "monthly", "yearly", "less_than_yearly", "particular_periods", "nc"}
+
+
+def test_2019_participants_rape_column():
+    rows = parse_participants_2019(TEXT_2019_PARTICIPANTS)
+    single_rape = next(r for r in rows if r.category == "single" and r.violence_type == "rape")
+    multiple_rape = next(r for r in rows if r.category == "multiple" and r.violence_type == "rape")
+    assert (single_rape.sample_n, single_rape.pct) == (176, 82.7)
+    assert (multiple_rape.sample_n, multiple_rape.pct) == (37, 17.3)
+
+
+def test_2019_participants_any_column():
+    rows = parse_participants_2019(TEXT_2019_PARTICIPANTS)
+    multiple_any = next(r for r in rows if r.category == "multiple" and r.violence_type == "any")
+    assert (multiple_any.sample_n, multiple_any.pct) == (77, 12.4)
+
+
+def test_2024_frequency_episodes_by_severity():
+    rows = parse_frequency_2024(TEXT_2024_FREQUENCY)
+    multiple_rape = next(r for r in rows if r.measure == "episodes" and r.category == "multiple" and r.violence_type == "rape")
+    assert multiple_rape.pct == 53.9
+
+
+def test_2024_frequency_cadence_small_sample_flag_kept():
+    # '¨3,9' (6-19 observations) must parse to 3.9, not be dropped.
+    rows = parse_frequency_2024(TEXT_2024_FREQUENCY)
+    daily_rape = next(r for r in rows if r.measure == "cadence" and r.category == "daily" and r.violence_type == "rape")
+    assert daily_rape.pct == 3.9
+
+
+def test_2024_participants_wrapped_multiple_row():
+    # The "multiple" row's label wraps onto three lines ("Al menos en una
+    # ocasión" / "participó más de una ... <numbers>" / "persona (varias
+    # personas)") with the numbers on the middle line, mixed with more
+    # label text -- the real bug this parser had to handle (8/12 cells
+    # found instead of 12/12 before the fix).
+    rows = parse_participants_2024(TEXT_2024_PARTICIPANTS)
+    multiple = {r.violence_type: r.pct for r in rows if r.category == "multiple"}
+    assert multiple == {"rape": 11.3, "attempted_rape": 7.6, "other": 10.0, "any": 10.4}
+
+
+def test_2024_participants_all_four_severity_columns():
+    # Tabla 16.18 has a 4th "Violencia sexual (total)" column the other
+    # chapter-16 tables don't.
+    rows = parse_participants_2024(TEXT_2024_PARTICIPANTS)
+    single = {r.violence_type: r.pct for r in rows if r.category == "single"}
+    assert single == {"rape": 86.3, "attempted_rape": 89.5, "other": 88.0, "any": 87.9}
