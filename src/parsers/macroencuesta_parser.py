@@ -99,6 +99,31 @@ class ParticipantStat(BaseModel):
     sample_n: int | None = None  # 2019 only -- raw survey N
 
 
+class ConsequenceStat(BaseModel):
+    """Cap. 16.9-equivalent consequences of the violence (T106): injuries,
+    medical care, psychological consequences, substance use to cope,
+    disability, work absence, self-perceived health, suicidal ideation, and
+    (2024 only) insecurity perception. One generic shape covers all of
+    these -- the categories differ in which fields they populate, not in
+    structure."""
+    category: str                # 'injury' | 'injury_type' | 'medical_care' | 'psychological'
+                                  # | 'psychological_type' | 'substance_use' | 'substance_use_type'
+                                  # | 'disability' | 'work_absence' | 'self_perceived_health'
+                                  # | 'suicidal_ideation' | 'insecurity'
+    item: str | None = None      # sub-label within category, e.g. injury/psychological/substance
+                                  # type, health-rating label, or insecurity item -- None for
+                                  # single-item categories (disability, work_absence, suicidal_ideation)
+    violence_type: str = "any"   # 'any' | 'rape' | 'attempted_rape' | 'other' | 'no_violence'
+                                  # ('no_violence' is the 2024 comparison column on health/suicidal-
+                                  # ideation/insecurity tables only)
+    timeframe: str = "lifetime"
+    pct: float | None = None
+    population_estimate: int | None = None
+    sample_n: int | None = None  # 2019 only -- raw survey N
+    ci_low: float | None = None
+    ci_high: float | None = None
+
+
 class MacroencuestaReport(BaseModel):
     wave_year: int
     sample_size: int | None = None
@@ -106,6 +131,7 @@ class MacroencuestaReport(BaseModel):
     relationship: list[RelationshipStat] = []
     frequency: list[FrequencyStat] = []
     participants: list[ParticipantStat] = []
+    consequences: list[ConsequenceStat] = []
     source_document: str
     source_table: str = ""
     verified: bool = False
@@ -177,6 +203,53 @@ def _find_si_ic_block(text: str, start_after: str | None = None) -> tuple[list[f
                 ]
             return si_nums, ic_pairs
     return None, None
+
+
+def _section(text: str, start_marker: str, end_marker: str | None = None) -> str:
+    """Slice `text` from `start_marker` (inclusive) to the next occurrence of
+    `end_marker` (exclusive -- or end of text if `end_marker` is None or not
+    found). Used to scope a multi-table page blob down to just one table
+    before handing it to `_ordered_rows`/`_find_si_ic_block`, so a
+    neighboring table's rows can't leak in. Markers should include enough of
+    a table's own title text (not just "Tabla 16.NN") to avoid matching an
+    earlier parenthetical citation like "(Tabla 16.NN)," in prose -- that
+    citation is always followed by punctuation, never by the title's own
+    next word, so e.g. "Tabla 16.50 Consecuencias" only matches the real
+    table heading."""
+    start = text.find(start_marker)
+    if start == -1:
+        return text
+    end = text.find(end_marker, start + len(start_marker)) if end_marker else -1
+    return text[start:end] if end != -1 else text[start:]
+
+
+def _ordered_rows(text: str, n_numbers: int) -> list[list[float | None]]:
+    """Every line in `text` whose extracted numeric-token count is exactly
+    `n_numbers`, in document order. For wrapped-label tables (2019's, and
+    some of 2024's) where a row's label spans several physical lines but its
+    numbers land on one line at a fixed count -- label-only continuation
+    lines yield 0 numbers and are skipped automatically, whether the numbers
+    sit at the end of the label's own line or alone on a line in the middle
+    of a wrapped label. Caller zips the result to a static, position-based
+    label list -- wrapped labels can't be regex-matched directly."""
+    out = []
+    for line in text.splitlines():
+        nums = _numbers_in(line)
+        if len(nums) == n_numbers:
+            out.append(nums)
+    return out
+
+
+def _line_numbers(text: str, pattern: str) -> list[float] | None:
+    """First line (regex `pattern` anchored at line start, after stripping)
+    -> its numeric tokens. For single-line 'Label ... numbers' rows that
+    `_find_si_ic_block` doesn't fit -- that helper only matches a bare 'Sí'
+    or 'Sí ' line (expecting a separate IC-95% line below), not an
+    item-labeled line like 'Sí, alguna lesión 100 16,2 ...'."""
+    for line in text.splitlines():
+        if re.match(pattern, line.strip()):
+            return _numbers_in(line)
+    return None
 
 
 TIMEFRAMES = ["lifetime", "last_4_years", "last_12_months", "childhood"]
@@ -443,6 +516,354 @@ def parse_participants_2019(text: str) -> list[ParticipantStat]:
     table = _section(text, "Agresiones sexuales en grupo", "Total")
     return [ParticipantStat(category=c, violence_type=v, sample_n=n, pct=pct)
             for c, v, n, pct in _rows_2019(table, _PARTICIPANT_LABELS_2019, ["any", "rape"])]
+# Consequences (T106, Cap. 16.9-equivalent): injuries, medical care,
+# psychological consequences, substance use to cope, disability, work
+# absence, self-perceived health, suicidal ideation, insecurity perception
+# (2024 only). Item-type label lists are shared across waves where the
+# underlying question is the same -- 2024 adds one extra injury-type item
+# ("other_physical_injury") that 2019 doesn't ask, noted where relevant.
+# ──────────────────────────────────────────────────────────────
+
+_INJURY_TYPES = [
+    "cuts_bruises_pain", "eye_ear_sprain_burn", "deep_wounds_fractures_internal",
+    "involuntary_abortion", "genital_injuries", "std", "permanent_physical_damage",
+]
+_INJURY_TYPES_2024 = _INJURY_TYPES + ["other_physical_injury"]
+_MEDICAL_CARE_LABELS = ["hospital_stay", "medical_attention_no_hospital", "not_needed", "should_have_received"]
+_PSYCH_TYPES = [
+    "depression", "loss_of_self_esteem", "anxiety_phobia_panic", "despair_helplessness",
+    "concentration_memory", "sleep_eating_problems", "recurrent_pain", "self_harm_suicidal_thoughts",
+]
+_SUBSTANCE_TYPES = ["medication", "alcohol", "drugs"]
+_HEALTH_LABELS = ["very_good", "good", "fair", "bad", "very_bad"]
+
+
+# -- 2019 --
+
+def parse_injuries_2019(text: str) -> list[ConsequenceStat]:
+    out = []
+    headline = _line_numbers(text, r"^S[ií], alguna lesi[oó]n")
+    if headline and len(headline) >= 8:
+        labels = ["lifetime", "last_4_years", "last_12_months", "rape_lifetime"]
+        for i, label in enumerate(labels):
+            n, pct = headline[2 * i], headline[2 * i + 1]
+            out.append(ConsequenceStat(
+                category="injury", violence_type="rape" if label == "rape_lifetime" else "any",
+                timeframe="lifetime" if label == "rape_lifetime" else label,
+                pct=pct, sample_n=int(n) if n is not None else None,
+            ))
+    rows = _ordered_rows(_section(text, "Tipos de lesiones", "Asistencia sanitaria"), 4)
+    for label, row in zip(_INJURY_TYPES, rows):
+        n_any, pct_any, n_rape, pct_rape = row
+        out.append(ConsequenceStat(category="injury_type", item=label, violence_type="any",
+                                    pct=pct_any, sample_n=int(n_any) if n_any is not None else None))
+        out.append(ConsequenceStat(category="injury_type", item=label, violence_type="rape",
+                                    pct=pct_rape, sample_n=int(n_rape) if n_rape is not None else None))
+    return out
+
+
+def parse_medical_care_2019(text: str) -> list[ConsequenceStat]:
+    section = _section(text, "Asistencia sanitaria como consecuencia", "Consecuencias psicol")
+    rows = _ordered_rows(section, 4)
+    out = []
+    for label, row in zip(_MEDICAL_CARE_LABELS, rows):
+        n_any, pct_any, n_rape, pct_rape = row
+        out.append(ConsequenceStat(category="medical_care", item=label, violence_type="any",
+                                    pct=pct_any, sample_n=int(n_any) if n_any is not None else None))
+        out.append(ConsequenceStat(category="medical_care", item=label, violence_type="rape",
+                                    pct=pct_rape, sample_n=int(n_rape) if n_rape is not None else None))
+    return out
+
+
+def _derived_headline_from_excluyente_tail(rows: list[list[float | None]], n_items: int, category: str) -> list[ConsequenceStat] | None:
+    """2019's psychological/substance-use tables don't print a separate
+    overall Sí/No headline -- only the itemized multiple-choice table, ending
+    in 'Ninguno/No, nada (excluyente)' + 'NC (excluyente)' rows. The overall
+    % having *any* consequence is the complement of those two tail rows;
+    both waves' prose headline figures (e.g. '53%', '78,9%', '12,7%',
+    '26,6%') match this complement exactly."""
+    tail = rows[n_items:n_items + 2]
+    if len(tail) != 2:
+        return None
+    none_any, nc_any = tail[0][1], tail[1][1]
+    none_rape, nc_rape = tail[0][3], tail[1][3]
+    if None in (none_any, nc_any, none_rape, nc_rape):
+        return None
+    return [
+        ConsequenceStat(category=category, violence_type="any", pct=round(100 - none_any - nc_any, 1)),
+        ConsequenceStat(category=category, violence_type="rape", pct=round(100 - none_rape - nc_rape, 1)),
+    ]
+
+
+def parse_psychological_2019(text: str) -> list[ConsequenceStat]:
+    # Starting the section at the chapter heading ("Consecuencias psicológicas
+    # derivadas...") would let a stray prose line with exactly 4 numeric
+    # tokens ("57,4% pérdida de autoestima, 55,9% ansiedad o fobias, 49,6%
+    # desesperación o fobias, 16%") get picked up by `_ordered_rows` as a
+    # spurious row ahead of the real table -- start at the first real row
+    # label instead, which is unique in the document.
+    section = _section(text, "Depresión", "Discapacidad como consecuencia")
+    rows = _ordered_rows(section, 4)
+    out = []
+    for label, row in zip(_PSYCH_TYPES, rows[:8]):
+        n_any, pct_any, n_rape, pct_rape = row
+        out.append(ConsequenceStat(category="psychological_type", item=label, violence_type="any",
+                                    pct=pct_any, sample_n=int(n_any) if n_any is not None else None))
+        out.append(ConsequenceStat(category="psychological_type", item=label, violence_type="rape",
+                                    pct=pct_rape, sample_n=int(n_rape) if n_rape is not None else None))
+    out += _derived_headline_from_excluyente_tail(rows, 8, "psychological") or []
+    return out
+
+
+def parse_substance_use_2019(text: str) -> list[ConsequenceStat]:
+    section = _section(text, "Consumo de sustancias como consecuencia", "Denuncia de la violencia sexual")
+    rows = _ordered_rows(section, 4)
+    out = []
+    for label, row in zip(_SUBSTANCE_TYPES, rows[:3]):
+        n_any, pct_any, n_rape, pct_rape = row
+        out.append(ConsequenceStat(category="substance_use_type", item=label, violence_type="any",
+                                    pct=pct_any, sample_n=int(n_any) if n_any is not None else None))
+        out.append(ConsequenceStat(category="substance_use_type", item=label, violence_type="rape",
+                                    pct=pct_rape, sample_n=int(n_rape) if n_rape is not None else None))
+    out += _derived_headline_from_excluyente_tail(rows, 3, "substance_use") or []
+    return out
+
+
+def parse_disability_2019(text: str) -> list[ConsequenceStat]:
+    section = _section(text, "Discapacidad como consecuencia", "Absentismo laboral")
+    nums = _line_numbers(section, r"^S[ií]\b")
+    if not nums or len(nums) < 2:
+        return []
+    n, pct = nums[0], nums[1]
+    return [ConsequenceStat(category="disability", violence_type="any", pct=pct,
+                             sample_n=int(n) if n is not None else None)]
+
+
+def parse_work_absence_2019(text: str) -> list[ConsequenceStat]:
+    section = _section(text, "Absentismo laboral o estudiantil", "Consumo de sustancias")
+    nums = _line_numbers(section, r"^S[ií]\b")
+    if not nums or len(nums) < 2:
+        return []
+    n, pct = nums[0], nums[1]
+    return [ConsequenceStat(category="work_absence", violence_type="any", pct=pct,
+                             sample_n=int(n) if n is not None else None)]
+
+
+def parse_self_perceived_health_2019(text: str) -> list[ConsequenceStat]:
+    section = _section(text, "Estado de salud autopercibido en los 12 meses", "Síntomas de mala salud")
+    rows = _ordered_rows(section, 6)
+    out = []
+    for label, row in zip(_HEALTH_LABELS, rows[:5]):
+        n_any, pct_any, n_rape, pct_rape, n_no, pct_no = row
+        for vt, n, pct in (("any", n_any, pct_any), ("rape", n_rape, pct_rape), ("no_violence", n_no, pct_no)):
+            out.append(ConsequenceStat(category="self_perceived_health", item=label, violence_type=vt,
+                                        pct=pct, sample_n=int(n) if n is not None else None))
+    return out
+
+
+def parse_suicidal_ideation_2019(text: str) -> list[ConsequenceStat]:
+    nums = _line_numbers(text, r"^Tenencia\s+S[ií]")
+    if not nums or len(nums) < 6:
+        return []
+    n_any, pct_any, n_rape, pct_rape, n_no, pct_no = nums[:6]
+    return [
+        ConsequenceStat(category="suicidal_ideation", violence_type="any", pct=pct_any,
+                         sample_n=int(n_any) if n_any is not None else None),
+        ConsequenceStat(category="suicidal_ideation", violence_type="rape", pct=pct_rape,
+                         sample_n=int(n_rape) if n_rape is not None else None),
+        ConsequenceStat(category="suicidal_ideation", violence_type="no_violence", pct=pct_no,
+                         sample_n=int(n_no) if n_no is not None else None),
+    ]
+
+
+# -- 2024 --
+
+def parse_injuries_2024(text: str) -> list[ConsequenceStat]:
+    """Tabla 16.46 (headline, by timeframe) + Tabla 16.47 (by severity tier
+    x timeframe) -- `text` should be scoped to just those two tables (see
+    `Macroencuesta2024Parser._parse_consequences`), since `start_after`
+    below matches the *first* 'Violaciones'/... occurrence in `text`."""
+    out = []
+    si, ic = _find_si_ic_block(text)
+    if si and len(si) >= 9:
+        for i, timeframe in enumerate(["lifetime", "last_4_years", "last_12_months"]):
+            pct, _pct_all, n = si[3 * i], si[3 * i + 1], si[3 * i + 2]
+            stat = ConsequenceStat(category="injury", violence_type="any", timeframe=timeframe,
+                                    pct=pct, population_estimate=int(n) if n is not None else None)
+            if ic and 2 * i < len(ic):
+                stat.ci_low, stat.ci_high = ic[2 * i]
+            out.append(stat)
+    for violence_type, label in (
+        ("rape", "Violaciones"), ("attempted_rape", "Intentos de violación"),
+        ("other", "Otras formas de violencia sexual"),
+    ):
+        si2, ic2 = _find_si_ic_block(text, start_after=label)
+        if not si2:
+            continue
+        for i, timeframe in enumerate(["lifetime", "last_4_years", "last_12_months"]):
+            base = 2 * i
+            if base + 1 >= len(si2):
+                continue
+            pct, n = si2[base], si2[base + 1]
+            stat = ConsequenceStat(category="injury", violence_type=violence_type, timeframe=timeframe,
+                                    pct=pct, population_estimate=int(n) if n is not None else None)
+            if ic2 and i < len(ic2):
+                stat.ci_low, stat.ci_high = ic2[i]
+            out.append(stat)
+    return out
+
+
+def parse_injury_types_2024(text: str) -> list[ConsequenceStat]:
+    rows = _ordered_rows(text, 6)
+    out = []
+    for label, row in zip(_INJURY_TYPES_2024, rows):
+        for i, vt in enumerate(_SEVERITY_ORDER_2024):
+            pct, n = row[2 * i], row[2 * i + 1]
+            out.append(ConsequenceStat(category="injury_type", item=label, violence_type=vt,
+                                        pct=pct, population_estimate=int(n) if n is not None else None))
+    return out
+
+
+def parse_medical_care_2024(text: str) -> list[ConsequenceStat]:
+    rows = _ordered_rows(text, 6)
+    out = []
+    for label, row in zip(_MEDICAL_CARE_LABELS, rows[:4]):
+        for i, vt in enumerate(_SEVERITY_ORDER_2024):
+            pct, n = row[2 * i], row[2 * i + 1]
+            out.append(ConsequenceStat(category="medical_care", item=label, violence_type=vt,
+                                        pct=pct, population_estimate=int(n) if n is not None else None))
+    return out
+
+
+def parse_psychological_2024(text: str) -> list[ConsequenceStat]:
+    si, ic = _find_si_ic_block(text)
+    if not si or len(si) < 3:
+        return []
+    pct, n = si[0], si[2]
+    stat = ConsequenceStat(category="psychological", violence_type="any", pct=pct,
+                            population_estimate=int(n) if n is not None else None)
+    if ic:
+        stat.ci_low, stat.ci_high = ic[0]
+    return [stat]
+
+
+def parse_psychological_by_severity_2024(text: str) -> list[ConsequenceStat]:
+    si, ic = _find_si_ic_block(text)
+    if not si or len(si) < 6:
+        return []
+    out = []
+    for i, vt in enumerate(_SEVERITY_ORDER_2024):
+        pct, n = si[2 * i], si[2 * i + 1]
+        stat = ConsequenceStat(category="psychological", violence_type=vt, pct=pct,
+                                population_estimate=int(n) if n is not None else None)
+        if ic and i < len(ic):
+            stat.ci_low, stat.ci_high = ic[i]
+        out.append(stat)
+    return out
+
+
+def parse_psychological_types_2024(text: str) -> list[ConsequenceStat]:
+    rows = _ordered_rows(text, 6)
+    out = []
+    for label, row in zip(_PSYCH_TYPES, rows):
+        for i, vt in enumerate(_SEVERITY_ORDER_2024):
+            pct, n = row[2 * i], row[2 * i + 1]
+            out.append(ConsequenceStat(category="psychological_type", item=label, violence_type=vt,
+                                        pct=pct, population_estimate=int(n) if n is not None else None))
+    return out
+
+
+def parse_substance_use_2024(text: str) -> list[ConsequenceStat]:
+    si, ic = _find_si_ic_block(text)
+    if not si or len(si) < 6:
+        return []
+    out = []
+    for i, vt in enumerate(_SEVERITY_ORDER_2024 + ["any"]):
+        pct = si[i]
+        n = int(si[5]) if vt == "any" and si[5] is not None else None
+        stat = ConsequenceStat(category="substance_use", violence_type=vt, pct=pct, population_estimate=n)
+        if ic and i < len(ic):
+            stat.ci_low, stat.ci_high = ic[i]
+        out.append(stat)
+    return out
+
+
+def parse_substance_use_types_2024(text: str) -> list[ConsequenceStat]:
+    rows = _ordered_rows(text, 8)
+    out = []
+    for label, row in zip(_SUBSTANCE_TYPES, rows):
+        for i, vt in enumerate(_SEVERITY_ORDER_2024 + ["any"]):
+            pct, n = row[2 * i], row[2 * i + 1]
+            out.append(ConsequenceStat(category="substance_use_type", item=label, violence_type=vt,
+                                        pct=pct, population_estimate=int(n) if n is not None else None))
+    return out
+
+
+def _parse_si_by_severity_and_total(text: str, category: str) -> list[ConsequenceStat]:
+    """Shared shape for Tabla 16.55 (disability) and Tabla 16.56 (work
+    absence): one 'Sí' line with (pct, N) per severity tier + total, one
+    'IC 95%' line with one CI pair per group."""
+    si, ic = _find_si_ic_block(text)
+    if not si or len(si) < 8:
+        return []
+    out = []
+    for i, vt in enumerate(_SEVERITY_ORDER_2024 + ["any"]):
+        pct, n = si[2 * i], si[2 * i + 1]
+        stat = ConsequenceStat(category=category, violence_type=vt, pct=pct,
+                                population_estimate=int(n) if n is not None else None)
+        if ic and i < len(ic):
+            stat.ci_low, stat.ci_high = ic[i]
+        out.append(stat)
+    return out
+
+
+def parse_disability_2024(text: str) -> list[ConsequenceStat]:
+    return _parse_si_by_severity_and_total(text, "disability")
+
+
+def parse_work_absence_2024(text: str) -> list[ConsequenceStat]:
+    return _parse_si_by_severity_and_total(text, "work_absence")
+
+
+def parse_self_perceived_health_2024(text: str) -> list[ConsequenceStat]:
+    rows = _ordered_rows(text, 5)
+    out = []
+    types = _SEVERITY_ORDER_2024 + ["any", "no_violence"]
+    for label, row in zip(_HEALTH_LABELS, rows):
+        for i, vt in enumerate(types):
+            out.append(ConsequenceStat(category="self_perceived_health", item=label, violence_type=vt, pct=row[i]))
+    return out
+
+
+def _parse_si_severity_any_novi(text: str, category: str, item: str | None = None) -> list[ConsequenceStat]:
+    """Shared shape for Tabla 16.62 (suicidal ideation) and Tabla 16.71/16.72
+    (insecurity perception): one 'Sí' line with pct per severity tier, then
+    pct + population_estimate for 'any', then pct for the no-violence
+    comparison group -- no IC line on these three tables."""
+    nums = _line_numbers(text, r"^S[ií]\b")
+    if not nums or len(nums) < 6:
+        return []
+    pct_rape, pct_attempt, pct_other, pct_any, n_any, pct_no = nums[:6]
+    return [
+        ConsequenceStat(category=category, item=item, violence_type="rape", pct=pct_rape),
+        ConsequenceStat(category=category, item=item, violence_type="attempted_rape", pct=pct_attempt),
+        ConsequenceStat(category=category, item=item, violence_type="other", pct=pct_other),
+        ConsequenceStat(category=category, item=item, violence_type="any", pct=pct_any,
+                         population_estimate=int(n_any) if n_any is not None else None),
+        ConsequenceStat(category=category, item=item, violence_type="no_violence", pct=pct_no),
+    ]
+
+
+def parse_suicidal_ideation_2024(text: str) -> list[ConsequenceStat]:
+    return _parse_si_severity_any_novi(text, "suicidal_ideation")
+
+
+def parse_insecurity_streets_2024(text: str) -> list[ConsequenceStat]:
+    return _parse_si_severity_any_novi(text, "insecurity", item="avoided_streets_areas")
+
+
+def parse_insecurity_known_person_2024(text: str) -> list[ConsequenceStat]:
+    return _parse_si_severity_any_novi(text, "insecurity", item="avoided_being_alone_with_known_person")
 
 
 # ──────────────────────────────────────────────────────────────
@@ -485,17 +906,23 @@ class Macroencuesta2019Parser:
             relationship = self._parse_relationship(pdf, chapter_start)
             frequency = self._parse_frequency(pdf, chapter_start)
             participants = self._parse_participants(pdf, chapter_start)
+            consequences = self._parse_consequences(pdf, chapter_start)
         return MacroencuestaReport(
             wave_year=2019, sample_size=self.SAMPLE_SIZE,
             prevalence=prevalence, relationship=relationship,
-            frequency=frequency, participants=participants,
+            frequency=frequency, participants=participants, consequences=consequences,
             source_document=self.source,
             source_table=("p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), "
-                          "p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo)"),
+                          "p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo), "
+                          "p.162-166 y 175-178 (consecuencias, T106)"),
             notes=(
                 "Relationship-to-perpetrator pooled across all severities (rape through "
                 "non-penetrative touching) -- 2019 questionnaire couldn't ask it per severity "
-                "tier, unlike 2024 (see report's own text, p.158)."
+                "tier, unlike 2024 (see report's own text, p.158). Consequences (T106): 2019 "
+                "only distinguishes 'any severity' vs. 'rape' (no attempted-rape/other tier, "
+                "unlike 2024's full breakout) -- comparisons across waves should use the "
+                "'any'/'rape' columns only. No published confidence intervals (added starting "
+                "2024, see V47)."
             ),
         )
 
@@ -546,6 +973,35 @@ class Macroencuesta2019Parser:
             print(f"  ⚠ 2019: group-aggression table only found {len(out)}/6 cells", file=sys.stderr)
         return out
 
+    def _parse_consequences(self, pdf, chapter_start: int) -> list[ConsequenceStat]:
+        out = []
+        # "Sí, alguna lesión" (the injuries headline row) is unique in the
+        # document and anchors the 5-page run (injuries through substance
+        # use) that follows it -- each parse_*_2019 function below does its
+        # own internal _section() scoping within that shared block.
+        located = _locate_page(pdf, ["ALGUNA LESION"], start=chapter_start)
+        if located is None:
+            print("  ⚠ 2019: could not locate injuries-through-substance-use consequence tables", file=sys.stderr)
+        else:
+            idx, _ = located
+            block = _page_window_text(pdf, idx, n_pages=5)
+            out += parse_injuries_2019(block)
+            out += parse_medical_care_2019(block)
+            out += parse_psychological_2019(block)
+            out += parse_disability_2019(block)
+            out += parse_work_absence_2019(block)
+            out += parse_substance_use_2019(block)
+
+        located2 = _locate_page(pdf, ["ESTADO DE SALUD AUTOPERCIBIDO EN LOS 12 MESES"], start=chapter_start)
+        if located2 is None:
+            print("  ⚠ 2019: could not locate self-perceived-health/suicidal-ideation tables", file=sys.stderr)
+        else:
+            idx2, _ = located2
+            block2 = _page_window_text(pdf, idx2, n_pages=4)
+            out += parse_self_perceived_health_2019(block2)
+            out += parse_suicidal_ideation_2019(block2)
+        return out
+
 
 # ──────────────────────────────────────────────────────────────
 # 2024 wave
@@ -566,13 +1022,26 @@ class Macroencuesta2024Parser:
             relationship = self._parse_relationship(pdf)
             frequency = self._parse_frequency(pdf)
             participants = self._parse_participants(pdf)
+            consequences = self._parse_consequences(pdf)
         return MacroencuestaReport(
             wave_year=2024, sample_size=sample_size,
             prevalence=prevalence, relationship=relationship,
-            frequency=frequency, participants=participants,
+            frequency=frequency, participants=participants, consequences=consequences,
             source_document=self.source,
             source_table=("Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), "
-                          "Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor)"),
+                          "Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor), "
+                          "Tabla 16.46-16.56/16.59/16.62/16.71-16.72 (consecuencias, T106)"),
+            notes=(
+                "Consequences (T106): first wave to break every category out by severity tier "
+                "(rape/attempted_rape/other), not just any/rape like 2019 -- see V47 on wave-"
+                "comparability. Adds one injury-type item ('other_physical_injury') with no 2019 "
+                "equivalent. Insecurity perception (avoided streets/avoided being alone with a "
+                "known person) is 2024-only -- no 2019 equivalent question. Suicidal-ideation and "
+                "self-perceived-health tables both carry a 'no_violence' comparison column "
+                "(women who reported no sexual violence), asked before the violence questions to "
+                "avoid priming -- 2019 has the same comparison column for self-perceived health "
+                "but not for suicidal ideation."
+            ),
         )
 
     @staticmethod
@@ -645,6 +1114,52 @@ class Macroencuesta2024Parser:
         out = parse_participants_2024(_page_window_text(pdf, idx, n_pages=1))
         if len(out) < 12:
             print(f"  ⚠ 2024: Tabla 16.18 only found {len(out)}/12 cells", file=sys.stderr)
+        return out
+
+    def _parse_consequences(self, pdf) -> list[ConsequenceStat]:
+        out = []
+        located = _locate_page(pdf, ["TABLA 16.46"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 16.46 (consequences block, injuries-work_absence)", file=sys.stderr)
+        else:
+            idx, _ = located
+            # Tabla 16.46 through Tabla 16.56 (plus the start of the 16.9.7
+            # section used as 16.56's end marker) span pages 290-300 of the
+            # 2024 report -- an 11-page window covers all of them, each
+            # scoped to its own table via _section() so a neighboring
+            # table's rows can't leak in (see _section's own docstring on
+            # why markers include a table's title text, not just "Tabla
+            # 16.NN" -- that bare form collides with a parenthetical prose
+            # citation like "(Tabla 16.46)." appearing earlier on the page).
+            # A 9-page window cut off before Tabla 16.56's actual table (only
+            # its prose citation fit), so parse_work_absence_2024's _section
+            # call couldn't find its start marker, fell back to the
+            # unscoped full block, and _find_si_ic_block silently picked up
+            # Tabla 16.46's (injuries) Sí/IC numbers instead.
+            block = _page_window_text(pdf, idx, n_pages=11)
+            out += parse_injuries_2024(_section(block, "Tabla 16.46 Lesiones a lo largo", "Tabla 16.48 Tipos de lesiones"))
+            out += parse_injury_types_2024(_section(block, "Tabla 16.48 Tipos de lesiones", "Tabla 16.49 Asistencia sanitaria"))
+            out += parse_medical_care_2024(_section(block, "Tabla 16.49 Asistencia sanitaria", "Tabla 16.50 Consecuencias"))
+            out += parse_psychological_2024(_section(block, "Tabla 16.50 Consecuencias", "Tabla 16.51 Consecuencias"))
+            out += parse_psychological_by_severity_2024(_section(block, "Tabla 16.51 Consecuencias", "Tabla 16.52 Consecuencias"))
+            out += parse_psychological_types_2024(_section(block, "Tabla 16.52 Consecuencias", "Tabla 16.53 Consumo"))
+            out += parse_substance_use_2024(_section(block, "Tabla 16.53 Consumo", "Tabla 16.54 Consumo"))
+            out += parse_substance_use_types_2024(_section(block, "Tabla 16.54 Consumo", "Tabla 16.55 Discapacidad"))
+            out += parse_disability_2024(_section(block, "Tabla 16.55 Discapacidad", "Tabla 16.56 Absentismo"))
+            out += parse_work_absence_2024(_section(block, "Tabla 16.56 Absentismo", "16.9.7"))
+
+        for keywords, parser, label in (
+            (["TABLA 16.59"], parse_self_perceived_health_2024, "Tabla 16.59 (self-perceived health)"),
+            (["TABLA 16.62"], parse_suicidal_ideation_2024, "Tabla 16.62 (suicidal ideation)"),
+            (["TABLA 16.71"], parse_insecurity_streets_2024, "Tabla 16.71 (insecurity: avoided streets)"),
+            (["TABLA 16.72"], parse_insecurity_known_person_2024, "Tabla 16.72 (insecurity: avoided known person)"),
+        ):
+            located_t = _locate_page(pdf, keywords)
+            if located_t is None:
+                print(f"  ⚠ 2024: could not locate {label}", file=sys.stderr)
+                continue
+            idx_t, _ = located_t
+            out += parser(_page_window_text(pdf, idx_t, n_pages=2))
         return out
 
 
