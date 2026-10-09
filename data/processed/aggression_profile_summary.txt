@@ -121,7 +121,7 @@ Datos: violence_spain.csv  |  Último año principal: 2024
   Cifras absolutas 2024 (MIR Informe / Geo Violencia Sexual)
 ------------------------------------------------------------------------
   Total delitos sexuales 2024                          22,846  [MIR Informe 2024]
-    Del cual violaciones (con penetración)             5,223  [MIR Informe 2024]
+    Del cual violaciones (con penetración)             5,222  [MIR Informe 2024]
 
   Agresiones grupales TOTAL (≥2 agresores)             552  [MIR/GeoVS 2024]
     Con penetración                                    194  (35.1% de grupales)
@@ -177,6 +177,6 @@ Datos: violence_spain.csv  |  Último año principal: 2024
      entre la tasa general (8%) y la de acoso sexual (~2.5%).
 
 ========================================================================
-  Generado por: src/analyze_aggression_profile.py
-  Fuente de datos: /home/user/SVS/data/raw/violence_spain.csv
+  Generado por: src/analysis/analyze_aggression_profile.py
+  Fuente de datos: data/raw/violence_spain.csv
 ========================================================================

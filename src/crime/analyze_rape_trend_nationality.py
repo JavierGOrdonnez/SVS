@@ -152,34 +152,37 @@ def build_report(sv_rows, conv):
     lines.append("    • 2015: brecha por Reforma Código Penal")
     lines.append("    • 2022: LO 10/2022 redefinió 'abuso' como 'agresión' → series no comparables")
     lines.append("    • 2021: datos no publicados en el Anuario")
-    lines.append("    • B6: dos series incompatibles (Anuario ~5K/año vs Informe ~1-2K/año)")
+    lines.append("    • B6/B23: Anuario y Informe coinciden exactamente 2019-2023 una vez")
+    lines.append("      comparados en la misma subcategoría (Art.179); ya no incompatibles.")
+    lines.append("      2016-2018 solo tiene parse del Anuario (Informe no desglosa categorías")
+    lines.append("      tan atrás)")
     lines.append("")
 
     rape_series = {
-        # year: (count, source, confidence, note)
+        # year: (count, source, confidence, note) — pre-2012 estimates only, no primary
+        # parse available; 2016+ comes entirely from violence_spain.csv (InformeParser/
+        # AnuarioParser direct parses, see B23) via the enrichment loop below.
         2000: (2300, "Anuario MIR (estimado)", "low", "territorio limitado"),
         2002: (2400, "Anuario MIR (estimado)", "low", "territorio limitado"),
         2005: (2500, "Anuario MIR (estimado)", "low", "territorio limitado"),
         2007: (3000, "Anuario MIR (estimado)", "low", "territorio limitado"),
         2010: (3000, "Anuario MIR (estimado)", "low", "territorio limitado"),
         2012: (3500, "Anuario MIR", "medium", "primer año cobertura nacional 100%"),
-        2017: (3716, "Anuario MIR", "medium", "verified"),
-        2018: (4141, "Anuario MIR", "medium", "verified"),
-        2019: (5453, "Anuario MIR", "medium", "verified; pico pre-LO10/2022"),
-        2022: (4270, "Anuario MIR", "medium", "post-LO10/2022 partial year"),
-        2023: (4875, "Anuario MIR", "medium", "verified"),
-        2024: (5223, "MIR Informe 2024", "medium", "22.86% of 22846 total; ver B6"),
-        2025: (5363, "MIR Balance Q4 2025", "medium", "+2.8% vs 2024"),
+        2025: (5363, "MIR Balance Q4 2025", "medium", "+2.8% vs 2024; provisional, sin Informe/Anuario aun"),
     }
 
-    # Enrich with CSV data
-    for y, count in get_all(sv_rows, "rape_with_penetration_reported").items():
-        if y in rape_series:
-            existing = rape_series[y]
-            if existing[2] in ("low",):
-                rape_series[y] = (count, existing[1], "medium", existing[3])
-        else:
-            rape_series[y] = (count, "violence_spain.csv", "medium", "")
+    # Enrich with CSV data (confidence taken from the CSV, not hardcoded)
+    for r in sv_rows:
+        if r["violence_type"] != "rape_with_penetration_reported":
+            continue
+        y = int(r["year"])
+        try:
+            count = int(float(r["value"]))
+        except (ValueError, KeyError):
+            continue
+        if y in rape_series and rape_series[y][2] not in ("low",):
+            continue
+        rape_series[y] = (count, "violence_spain.csv", r["confidence"], "")
 
     lines.append(f"  {'Año':>4}  {'Violaciones':>12}  {'Conf':>6}  Nota")
     lines.append("  " + "-" * 65)
@@ -196,22 +199,27 @@ def build_report(sv_rows, conv):
 
     lines.append("")
     lines.append("  INDICADORES CLAVE:")
-    lines.append("    • 2019 fue el pico histórico reciente (5,453 — máximo pre-reforma)")
-    lines.append("    • 2024 = 5,223 violaciones (+66% vs 2018 en 6 años)")
-    lines.append("    • Incremento 2017→2024: +41% (comparable con cobertura nacional completa)")
+    lines.append("    • 2021 fue el techo de la serie pre-reforma (2,143 — bajo la definición")
+    lines.append("      Art.179 vigente hasta oct-2022)")
+    lines.append("    • 2024 = 5,222 violaciones bajo la definición post-LO10/2022 (+143.7% vs 2021)")
+    lines.append("    • Incremento 2017→2024: +55.1% (2017→2021, misma definición) seguido de un")
+    lines.append("      salto adicional en 2022 por el cambio legal — ambos tramos no son")
+    lines.append("      directamente comparables entre sí (V24)")
     lines.append("    • Parte del aumento post-2022 = artefacto legal (LO 10/2022)")
     lines.append("    • Parte restante = probable incremento denuncias (mayor conciencia social)")
 
-    # Also agresiones sin penetración
+    # Also agresiones sin penetración (true "sin penetración" subset: categoria total
+    # Art.178-179 menos la subcategoria con_penetracion — ver violence_spain.csv fila 47)
     s("Agresiones sin penetración (2022–2024)")
     aspen_data = {
-        2022: (11426, "Anuario MIR 2022"),
-        2024: (13673, "MIR Informe 2024"),
+        2022: (7156, "Informe/Anuario 2022"),
+        2023: (7837, "Informe 2023"),
+        2024: (8452, "Informe 2024"),
     }
     for y, (cnt, src) in sorted(aspen_data.items()):
         v = get_val(sv_rows, "sexual_assault_without_penetration_reported", y)
         cnt = v or cnt
-        lines.append(f"  {y}: {cnt:,}  ({src})")
+        lines.append(f"  {y}: {cnt:,.0f}  ({src})")
     lines.append("  Nota: estas cifras son post-LO10/2022; categorías anteriores no comparables.")
 
     # ── SECTION 2: Nationality in convictions ────────────────────────────────
@@ -497,7 +505,8 @@ def build_report(sv_rows, conv):
     h("FUENTES Y CONFIANZA")
     lines.append("""
   Policiales (denuncias): MIR Anuarios + Informes (2017-2024)
-    → confidence medium; B6 no resuelto (dos series violación incompatibles)
+    → confidence medium/high 2019-2024 (B6 resuelto, ver nota metodológica);
+      confidence medium 2016-2018 (solo Anuario, sin cruce con Informe)
   Condenados por nacionalidad: INE Tabla 28716 (2017-2024)
     → confidence high (fuente primaria oficial, verificada)
   Prevalencia real: Macroencuesta 2019 + 2024
