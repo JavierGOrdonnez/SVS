@@ -1,0 +1,268 @@
+{
+  "reports": [
+    {
+      "wave_year": 2024,
+      "nationality_stats": [
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "españa",
+          "pct": 71.8,
+          "population_estimate": 146656,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "españa",
+          "pct": 83.9,
+          "population_estimate": 11217154,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "otro_país",
+          "pct": 24.2,
+          "population_estimate": 49351,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "otro_país",
+          "pct": 15.0,
+          "population_estimate": 2007347,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "nc",
+          "pct": 4.0,
+          "population_estimate": 8255,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": "small_sample"
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "nc",
+          "pct": 1.1,
+          "population_estimate": 140805,
+          "sample_n": null,
+          "significance": "p<0,001",
+          "note": null
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": true,
+          "nationality": "españa",
+          "pct": 74.0,
+          "population_estimate": 304541,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": null
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": false,
+          "nationality": "españa",
+          "pct": 84.0,
+          "population_estimate": 10924955,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": null
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": true,
+          "nationality": "otro_país",
+          "pct": 22.7,
+          "population_estimate": 93281,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": null
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": false,
+          "nationality": "otro_país",
+          "pct": 15.0,
+          "population_estimate": 1953678,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": null
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": true,
+          "nationality": "nc",
+          "pct": 3.3,
+          "population_estimate": 13634,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": "small_sample"
+        },
+        {
+          "violence_type": "physical_and_or_sexual",
+          "violence_perpetrated": false,
+          "nationality": "nc",
+          "pct": 0.9,
+          "population_estimate": 123486,
+          "sample_n": null,
+          "significance": "p<0,01",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": null,
+          "nationality": null,
+          "pct": null,
+          "population_estimate": null,
+          "sample_n": null,
+          "significance": null,
+          "note": "unavailable - no table published in 2024"
+        }
+      ],
+      "source_document": "Macroencuesta_2024.pdf",
+      "notes": ""
+    },
+    {
+      "wave_year": 2019,
+      "nationality_stats": [
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "españa",
+          "pct": 75.6,
+          "population_estimate": null,
+          "sample_n": 80,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "españa",
+          "pct": 7.0,
+          "population_estimate": null,
+          "sample_n": 564,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "otro_país",
+          "pct": 24.4,
+          "population_estimate": null,
+          "sample_n": 26,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "otro_país",
+          "pct": 11.6,
+          "population_estimate": null,
+          "sample_n": 745,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": true,
+          "nationality": "nc",
+          "pct": 0.0,
+          "population_estimate": null,
+          "sample_n": 0,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "physical",
+          "violence_perpetrated": false,
+          "nationality": "nc",
+          "pct": 0.1,
+          "population_estimate": null,
+          "sample_n": 6,
+          "significance": null,
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": true,
+          "nationality": "españa",
+          "pct": 1.8,
+          "population_estimate": null,
+          "sample_n": 102,
+          "significance": "p<0.001",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": false,
+          "nationality": "españa",
+          "pct": 12.4,
+          "population_estimate": null,
+          "sample_n": 586,
+          "significance": "p<0.001",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": true,
+          "nationality": "otro_país",
+          "pct": 2.7,
+          "population_estimate": null,
+          "sample_n": 23,
+          "significance": "p<0.001",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": false,
+          "nationality": "otro_país",
+          "pct": 18.2,
+          "population_estimate": null,
+          "sample_n": 156,
+          "significance": "p<0.001",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": true,
+          "nationality": "nc",
+          "pct": 0.0,
+          "population_estimate": null,
+          "sample_n": 0,
+          "significance": "p<0.001",
+          "note": null
+        },
+        {
+          "violence_type": "sexual",
+          "violence_perpetrated": false,
+          "nationality": "nc",
+          "pct": 0.0,
+          "population_estimate": null,
+          "sample_n": 0,
+          "significance": "p<0.001",
+          "note": null
+        }
+      ],
+      "source_document": "Macroencuesta_2019.pdf",
+      "notes": ""
+    }
+  ]
+}
