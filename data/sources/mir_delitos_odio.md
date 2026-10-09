@@ -166,6 +166,16 @@ surfaces this breakdown; it only exists in this raw portal table.
   checked directly: the only justice-adjacent ones are Juzgados de Paz,
   Población Condenada Adulta/Menor, and Violencia Doméstica/Género — **no
   dedicated hate-crime operation exists at INE.**
+- **INE's 14 Jul 2026 Población Condenada Adulta/Menor release (T107 lead)**:
+  the headline "4,531 adults in the Registro Central de Delincuentes
+  Sexuales" (+15.1%, 97.6% men) splits only by sex — it is a sexual-offence
+  registry total, not a hate-crime figure. The release's full 2025 table
+  set (26014 "Delitos según nacionalidad", 28716 "Delitos sexuales según
+  nacionalidad", 25698 "Personas condenadas según sexo, nacionalidad y
+  número de delitos", 25997, 25998, 26024 provincias) was checked against
+  table 26014 above: no new category for Título XXI CP / Art. 510 hate
+  speech was added. Same dead end as the existing 26014 check; this lead is
+  now closed too.
 
 ### No official conviction (condenados) series exists for hate crimes
 
