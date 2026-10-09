@@ -336,7 +336,7 @@ def build_report(rows):
     lines.append("")
     lines.append(DIVIDER)
     lines.append("  Generado por: src/analysis/analyze_aggression_profile.py")
-    lines.append(f"  Fuente de datos: {CSV_PATH}")
+    lines.append(f"  Fuente de datos: {CSV_PATH.relative_to(ROOT)}")
     lines.append(DIVIDER)
     lines.append("")
 

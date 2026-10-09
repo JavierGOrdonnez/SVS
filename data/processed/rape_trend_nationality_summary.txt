@@ -11,7 +11,10 @@ Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta I
     • 2015: brecha por Reforma Código Penal
     • 2022: LO 10/2022 redefinió 'abuso' como 'agresión' → series no comparables
     • 2021: datos no publicados en el Anuario
-    • B6: dos series incompatibles (Anuario ~5K/año vs Informe ~1-2K/año)
+    • B6/B23: Anuario y Informe coinciden exactamente 2019-2023 una vez
+      comparados en la misma subcategoría (Art.179); ya no incompatibles.
+      2016-2018 solo tiene parse del Anuario (Informe no desglosa categorías
+      tan atrás)
 
    Año   Violaciones    Conf  Nota
   -----------------------------------------------------------------
@@ -21,28 +24,33 @@ Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta I
   2007         3,000     low  territorio limitado  (+500)
   2010         3,000     low  territorio limitado
   2012         3,500  medium  primer año cobertura nacional 100%  (+500)
-  2013       1,684.0  medium  
-  2017         3,716  medium  verified  (+2,032.0)
-  2018         4,141  medium  verified  (+425)
-  2019         5,453  medium  verified; pico pre-LO10/2022  (+1,312)
-  2020       1,593.0  medium  
-  2021       2,143.0  medium    (+550.0)
-  2022         4,270  medium  post-LO10/2022 partial year  (+2,127.0)
-  2023         4,875  medium  verified  (+605)
-  2024         5,223  medium  22.86% of 22846 total; ver B6  (+348)
-  2025         5,363  medium  +2.8% vs 2024  (+140)
+  2013         1,684     low  
+  2016         1,249  medium  
+  2017         1,382  medium    (+133)
+  2018         1,700  medium    (+318)
+  2019         1,873  medium    (+173)
+  2020         1,596  medium  
+  2021         2,143  medium    (+547)
+  2022         4,270    high    (+2,127)
+  2023         4,890    high    (+620)
+  2024         5,222    high    (+332)
+  2025         5,363  medium  +2.8% vs 2024; provisional, sin Informe/Anuario aun  (+141)
 
   INDICADORES CLAVE:
-    • 2019 fue el pico histórico reciente (5,453 — máximo pre-reforma)
-    • 2024 = 5,223 violaciones (+66% vs 2018 en 6 años)
-    • Incremento 2017→2024: +41% (comparable con cobertura nacional completa)
+    • 2021 fue el techo de la serie pre-reforma (2,143 — bajo la definición
+      Art.179 vigente hasta oct-2022)
+    • 2024 = 5,222 violaciones bajo la definición post-LO10/2022 (+143.7% vs 2021)
+    • Incremento 2017→2024: +55.1% (2017→2021, misma definición) seguido de un
+      salto adicional en 2022 por el cambio legal — ambos tramos no son
+      directamente comparables entre sí (V24)
     • Parte del aumento post-2022 = artefacto legal (LO 10/2022)
     • Parte restante = probable incremento denuncias (mayor conciencia social)
 
   Agresiones sin penetración (2022–2024)
 ------------------------------------------------------------------------
-  2022: 11,426.0  (Anuario MIR 2022)
-  2024: 13,673.0  (MIR Informe 2024)
+  2022: 7,156  (Informe/Anuario 2022)
+  2023: 7,837  (Informe 2023)
+  2024: 8,452  (Informe 2024)
   Nota: estas cifras son post-LO10/2022; categorías anteriores no comparables.
 
 ========================================================================
@@ -249,7 +257,8 @@ Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta I
 ========================================================================
 
   Policiales (denuncias): MIR Anuarios + Informes (2017-2024)
-    → confidence medium; B6 no resuelto (dos series violación incompatibles)
+    → confidence medium/high 2019-2024 (B6 resuelto, ver nota metodológica);
+      confidence medium 2016-2018 (solo Anuario, sin cruce con Informe)
   Condenados por nacionalidad: INE Tabla 28716 (2017-2024)
     → confidence high (fuente primaria oficial, verificada)
   Prevalencia real: Macroencuesta 2019 + 2024
@@ -260,11 +269,11 @@ Fuentes: Anuarios MIR (denuncias), INE Tabla 28716 (condenados), Macroencuesta I
     → confidence low (denominadores de población estimados)
     → NO publicar sin verificar con datos INE Padrón por nacionalidad
 
-  PASO SIGUIENTE: ejecutar src/parse_ine_tabla28716.py para datos INE.
+  PASO SIGUIENTE: ejecutar src/crime/parse_ine_tabla28716.py para datos INE.
   PASO SIGUIENTE: descargar PDFs MIR y ejecutar src/parsers/mir_parser.py
     para extraer historial completo 2019-2024 incluyendo % perpetrador extranjero.
 
 ========================================================================
-  Generado: src/analyze_rape_trend_nationality.py
+  Generado: src/crime/analyze_rape_trend_nationality.py
   Datos: violence_spain.csv + INE Tabla 28716
 ========================================================================
