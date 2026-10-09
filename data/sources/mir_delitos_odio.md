@@ -221,3 +221,75 @@ prioritize established watchdog organizations. See T108 (remaining
 fetch/read pass) and T109 (reporting-rate-hypothesis test against the 2024
 dip) in
 `SPEC-crime.md`.
+
+## T110 — testing Interior's reporting-suppression claim against racism/xenophobia-specific victimization surveys
+
+T109 established that Interior's own explanation for the 2024 dip is a
+*reporting-rate* claim (fewer victims denouncing), not an incidence claim.
+Felgtbi+ (T108/T109) corroborates a reporting-suppression pattern but only
+for LGTBI+ victimization — not racism/xenophobia. This section tests the
+claim against racism/xenophobia-specific survey data.
+
+**Primary finding — Ministerio de Igualdad/CEDRE, "El impacto del racismo en
+España" (Feb 2025, covers fieldwork through 2024).** Five editions exist
+(2010, 2011, 2013, 2020, 2024); this is a genuine, racism/xenophobia-specific
+*victimization* survey independent of police records, with a reporting-rate
+question — exactly the candidate T110 asked for. Key 2020→2024 figures:
+
+| Metric | 2020 | 2024 | Direction |
+|---|---|---|---|
+| Self-reported racial/ethnic-discrimination victimization or witnessing | 30.7% | 32.8% | flat/up |
+| Hate-crime-specific complaint rate among victims (denuncia a policía/juzgado) | 10.2% | 12.2% | up |
+| Overall discrimination-complaint rate (2013/2020/2024, 3 comparable editions) | 10.6% (2013) → 18.6% (2020) → 22.6% (2024) | up |
+
+**This is the opposite of Interior's reporting-suppression hypothesis for
+racism/xenophobia specifically**: self-reported victimization held flat or
+rose, and the self-reported complaint/reporting rate also rose across every
+comparable wave. If anything, this survey suggests racism/xenophobia victims
+are reporting *more*, not less, even as MIR's police-recorded racismo/
+xenofobia count fell a milder −6% in 2024 (804 vs 856 in 2023 — smaller than
+the −13.8% aggregate dip across all ámbitos). Source:
+https://www.igualdad.gob.es (CEDRE research team; PDF title "El_impacto_del_racismo_en_Espana_Accesible.pdf").
+
+**Second data point — ONDOD "Informe de la encuesta sobre delitos de odio",
+2021 vs 2024 editions (both already staged in-repo, `data/sources/odio/encuesta/`).**
+This is the Ministry's own cross-ámbito victim/witness survey, now with two
+waves allowing a direct comparison (Tabla 24 in the 2024 report). The
+cross-ámbito self-reported-to-authorities rate fell 2021→2024 (10.76% → 6.8%
+overall; 6.11% for the 2022–2024-only subset) — this *does* align directionally
+with Interior's reporting-suppression hypothesis. **However**, grep of the
+full extracted text confirms the survey does **not** cross-tabulate this
+reporting-rate decline by motivación/ámbito — there is no racismo/xenofobia-
+specific breakout of Tabla 24. It cannot be used to confirm or refute the
+hypothesis for racism/xenophobia specifically; it only shows the pattern
+exists in aggregate, same caveat the dip itself already carries.
+
+**Third data point — SOS Racismo, "Informe Anual sobre el estado del
+racismo en el Estado español" (June 2024 edition, covers 2023 case intake).**
+NGO case-intake fell 23% in 2023 (569 complaints, down from the prior year).
+This moves in the same direction as MIR's police-recorded fall, but it is
+NGO self-selected case intake, not a probability survey, and SOS Racismo's
+own report explicitly cautions against reading the fall as "progress" or a
+real decline in racism. Weak corroborating context only, not independent
+confirmation either way.
+
+**Gap explicitly documented, per task instruction**: no CIS barometer or
+Eurobarometer racism/xenophobia-specific *reporting-rate* time series was
+found. CIS's long-running tolerance/attitude series (1993–2014) measures
+attitudes, not victimization or reporting behavior. EU-MIDIS II's Spain
+country sheet (see `eige_fra_comparative.md` §3) has a single-point (2015–16),
+Roma-focused reporting-rate figure (12%), not a time series, and is not
+racism/xenophobia-general. No further racism-specific reporting-rate series
+beyond the three above was located.
+
+**Net read**: the evidence is genuinely mixed, not a clean confirmation of
+Interior's claim. The one survey that is both racism/xenophobia-specific
+*and* a real victimization measure (Igualdad/CEDRE) directly contradicts the
+reporting-suppression hypothesis — victimization and self-reported complaint
+rates both rose. The cross-ámbito ONDOD wave-to-wave comparison supports the
+hypothesis in aggregate but cannot be isolated to racism/xenophobia. SOS
+Racismo's NGO intake is directionally aligned with the police dip but is a
+different, non-probability measurement stream. Unlike Felgtbi+'s clean
+LGTBI+-specific confirmation (T109), racism/xenophobia-specific survey
+evidence does not corroborate Interior's reporting-suppression explanation —
+if anything, the best available racism-specific survey points the other way.
