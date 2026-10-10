@@ -1072,6 +1072,28 @@
           "small_sample": false
         },
         {
+          "reason": "el problema se termino",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 9.0,
+          "population_estimate": null,
+          "sample_n": 51,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "el problema se termino",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 7.5,
+          "population_estimate": null,
+          "sample_n": 113,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
           "reason": "temor a que no la creyeran",
           "reason_key": null,
           "violence_type": null,
@@ -1094,24 +1116,24 @@
           "small_sample": false
         },
         {
-          "reason": "carece de recursos economicos",
+          "reason": "por no ser algo fisico",
           "reason_key": null,
           "violence_type": null,
           "partner_status": "current",
-          "pct": 2.6,
+          "pct": 5.3,
           "population_estimate": null,
-          "sample_n": 15,
+          "sample_n": 30,
           "suppressed": false,
           "small_sample": false
         },
         {
-          "reason": "carece de recursos economicos",
+          "reason": "por no ser algo fisico",
           "reason_key": null,
           "violence_type": null,
           "partner_status": "past",
-          "pct": 3.1,
+          "pct": 7.2,
           "population_estimate": null,
-          "sample_n": 47,
+          "sample_n": 110,
           "suppressed": false,
           "small_sample": false
         },
@@ -1200,6 +1222,28 @@
           "pct": 6.6,
           "population_estimate": null,
           "sample_n": 100,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "sucedio cuando vivia en otro pais",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 0.4,
+          "population_estimate": null,
+          "sample_n": 3,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "sucedio cuando vivia en otro pais",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 3.3,
+          "population_estimate": null,
+          "sample_n": 50,
           "suppressed": false,
           "small_sample": false
         }
