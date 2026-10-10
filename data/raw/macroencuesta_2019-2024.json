@@ -938,6 +938,7 @@
           "ci_high": null
         }
       ],
+      "reporting": [],
       "source_document": "Macroencuesta_2019.pdf",
       "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo), p.162-166 y 175-178 (consecuencias, T106)",
       "verified": false,
@@ -3055,6 +3056,7 @@
           "ci_high": null
         }
       ],
+      "reporting": [],
       "source_document": "Macroencuesta_2024.pdf",
       "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor), Tabla 16.46-16.56/16.59/16.62/16.71-16.72 (consecuencias, T106)",
       "verified": false,

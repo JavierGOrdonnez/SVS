@@ -124,6 +124,26 @@ class ConsequenceStat(BaseModel):
     ci_high: float | None = None
 
 
+class ReportingStat(BaseModel):
+    """Cap. 9.1.4 / 16.8.1.5 reporting behavior: reasons for not reporting
+    sexual violence (T102). Covers both partner and outside-partner violence."""
+    reason: str                  # specific reason text, e.g. "vergüenza"
+    reason_key: str | None = None # normalized key for joining across waves
+
+    # Context: which population this applies to
+    violence_type: str | None = None  # outside-partner: 'any'|'rape'|'attempted_rape'|'other'
+    partner_status: str | None = None # partner: 'current'|'past'|'any'
+
+    # Data
+    pct: float | None = None
+    population_estimate: int | None = None  # 2024 only
+    sample_n: int | None = None  # 2019 only
+
+    # Data quality flags
+    suppressed: bool = False     # 2024 only: '.' marker
+    small_sample: bool = False   # 2024 only: '¨' marker
+
+
 class MacroencuestaReport(BaseModel):
     wave_year: int
     sample_size: int | None = None
@@ -132,6 +152,7 @@ class MacroencuestaReport(BaseModel):
     frequency: list[FrequencyStat] = []
     participants: list[ParticipantStat] = []
     consequences: list[ConsequenceStat] = []
+    reporting: list[ReportingStat] = []
     source_document: str
     source_table: str = ""
     verified: bool = False
@@ -867,6 +888,204 @@ def parse_insecurity_known_person_2024(text: str) -> list[ConsequenceStat]:
 
 
 # ──────────────────────────────────────────────────────────────
+# T102: Reporting behavior (reasons for not reporting)
+# ──────────────────────────────────────────────────────────────
+
+_REPORTING_LABELS_2019_PARTNER = [
+    "lo resolvio sola",
+    "tuvo muy poca importancia",
+    "por miedo al agresor",
+    "por verguenza",
+    "piensa que era su culpa",
+    "por desconocimiento",
+    "el problema se termino",
+    "se separo termino la relacion",
+    "temor a que no la creyeran",
+    "carece de recursos economicos",
+    "la pareja u otra persona se lo impidio",
+    "por no ser algo fisico",
+    "ha acudido a otro lugar",
+    "por estar enamorada",
+    "por miedo a perder a sus hijos",
+    "para que sus hijos no pierdan a su padre",
+    "por no querer que arrestaran",
+    "eran otros tiempos",
+    "sucedio cuando vivia en otro pais",
+    "otros motivos",
+    "nc"
+]
+
+_REPORTING_LABELS_2019_OUTSIDE = [
+    "tuvo muy poca importancia",
+    "por miedo al agresor",
+    "por verguenza",
+    "piensa que era su culpa",
+    "temor a que no la creyeran",
+    "por desconocimiento",
+    "otra persona la disuadio",
+    "el problema se termino",
+    "carece de recursos economicos",
+    "fue a otro lugar",
+    "era menor era una nina",
+    "eran otros tiempos",
+    "sucedio en otro pais",
+    "otros motivos",
+    "nc"
+]
+
+_REPORTING_LABELS_2024_PARTNER = [
+    "lo resolvio sola",
+    "le dio muy poca importancia",
+    "por miedo al agresor",
+    "por verguenza",
+    "temor a que no la creyeran",
+    "piensa que era su culpa",
+    "por desconocimiento",
+    "carece de recursos economicos",
+    "se separo termino la relacion",
+    "el problema se termino",
+    "la pareja u otra persona se lo impidio",
+    "por no ser algo fisico",
+    "acudio a otro lugar",
+    "por estar enamorada",
+    "por miedo a perder a sus hijos",
+    "para que sus hijos no pierdan a su padre",
+    "por no querer que arrestaran",
+    "eran otros tiempos",
+    "sucedio cuando vivia en otro pais",
+    "otros motivos",
+    "nc"
+]
+
+_REPORTING_LABELS_2024_OUTSIDE = [
+    "le dio muy poca importancia",
+    "por miedo al agresor",
+    "por verguenza",
+    "penso que era su culpa",
+    "temor a que no la creyeran",
+    "era menor era una nina",
+    "por desconocimiento",
+    "carecia de recursos economicos",
+    "fue a otro lugar",
+    "otra persona la disuadio",
+    "eran otros tiempos",
+    "sucedio en otro pais",
+    "otros motivos"
+]
+
+
+def parse_reporting_reasons_2019_partner(text: str) -> list[ReportingStat]:
+    """Partner violence (Cap. 9): reasons for not reporting.
+    Table: Motivos para no denunciar VFSEM de la pareja.
+    Structure: N, % for pareja actual and parejas pasadas."""
+    rows = _ordered_rows(text, 4)
+    if len(rows) < len(_REPORTING_LABELS_2019_PARTNER):
+        return []
+    out = []
+    for label, row in zip(_REPORTING_LABELS_2019_PARTNER, rows):
+        # pareja actual: n, pct
+        out.append(ReportingStat(
+            reason=label, partner_status="current",
+            sample_n=int(row[0]) if row[0] is not None else None,
+            pct=row[1]
+        ))
+        # parejas pasadas: n, pct
+        out.append(ReportingStat(
+            reason=label, partner_status="past",
+            sample_n=int(row[2]) if row[2] is not None else None,
+            pct=row[3]
+        ))
+    return out
+
+
+def parse_reporting_reasons_2019_outside_partner(text: str) -> list[ReportingStat]:
+    """Outside-partner sexual violence (Cap. 16.8.1.5): reasons for not reporting.
+    Table: Motivos para no denunciar.
+    Structure: N, % for 'violencia sexual' and 'violacion' columns."""
+    rows = _ordered_rows(text, 4)
+    if len(rows) < len(_REPORTING_LABELS_2019_OUTSIDE):
+        return []
+    out = []
+    for label, row in zip(_REPORTING_LABELS_2019_OUTSIDE, rows):
+        # all sexual violence: n, pct
+        out.append(ReportingStat(
+            reason=label, violence_type="any",
+            sample_n=int(row[0]) if row[0] is not None else None,
+            pct=row[1]
+        ))
+        # rape only: n, pct
+        out.append(ReportingStat(
+            reason=label, violence_type="rape",
+            sample_n=int(row[2]) if row[2] is not None else None,
+            pct=row[3]
+        ))
+    return out
+
+
+def parse_reporting_reasons_2024_partner(text: str) -> list[ReportingStat]:
+    """Partner violence (Cap. 9.1.4): reasons for not reporting.
+    Tabla 9.7: Motivos para no denunciar VFSEM de la pareja.
+    Structure: %, N (population estimate) for pareja actual, parejas pasadas, cualquier pareja."""
+    rows = _ordered_rows(text, 6)
+    if len(rows) < len(_REPORTING_LABELS_2024_PARTNER):
+        return []
+    out = []
+    for label, row in zip(_REPORTING_LABELS_2024_PARTNER, rows):
+        # pareja actual: pct, n
+        suppressed, small_sample = row[0] is None, False
+        if row[0] == 0.0 and str(row[0]).startswith("None"):
+            suppressed = True
+        out.append(ReportingStat(
+            reason=label, partner_status="current",
+            pct=row[0], population_estimate=int(row[1]) if row[1] is not None else None,
+            suppressed=suppressed, small_sample=small_sample
+        ))
+        # parejas pasadas: pct, n
+        suppressed, small_sample = row[2] is None, False
+        out.append(ReportingStat(
+            reason=label, partner_status="past",
+            pct=row[2], population_estimate=int(row[3]) if row[3] is not None else None,
+            suppressed=suppressed, small_sample=small_sample
+        ))
+        # cualquier pareja: pct, n
+        suppressed, small_sample = row[4] is None, False
+        out.append(ReportingStat(
+            reason=label, partner_status="any",
+            pct=row[4], population_estimate=int(row[5]) if row[5] is not None else None,
+            suppressed=suppressed, small_sample=small_sample
+        ))
+    return out
+
+
+def parse_reporting_reasons_2024_outside_partner(text: str) -> list[ReportingStat]:
+    """Outside-partner sexual violence (Cap. 16.8.1.5): reasons for not reporting.
+    Tabla 16.30: Motivos para no denunciar.
+    Structure: % only for violaciones, intentos, otras formas (no N column).
+    Uses suppression (.) and small-sample (¨) markers."""
+    rows = _ordered_rows(text, 3)
+    if len(rows) < len(_REPORTING_LABELS_2024_OUTSIDE):
+        return []
+    out = []
+    for label, row in zip(_REPORTING_LABELS_2024_OUTSIDE, rows):
+        # violaciones: %
+        out.append(ReportingStat(
+            reason=label, violence_type="rape",
+            pct=row[0], suppressed=row[0] is None, small_sample=False
+        ))
+        # intentos: %
+        out.append(ReportingStat(
+            reason=label, violence_type="attempted_rape",
+            pct=row[1], suppressed=row[1] is None, small_sample=False
+        ))
+        # otras formas: %
+        out.append(ReportingStat(
+            reason=label, violence_type="other",
+            pct=row[2], suppressed=row[2] is None, small_sample=False
+        ))
+    return out
+
+
+# ──────────────────────────────────────────────────────────────
 # 2019 wave
 # ──────────────────────────────────────────────────────────────
 
@@ -907,10 +1126,12 @@ class Macroencuesta2019Parser:
             frequency = self._parse_frequency(pdf, chapter_start)
             participants = self._parse_participants(pdf, chapter_start)
             consequences = self._parse_consequences(pdf, chapter_start)
+            reporting = self._parse_reporting(pdf, chapter_start)
         return MacroencuestaReport(
             wave_year=2019, sample_size=self.SAMPLE_SIZE,
             prevalence=prevalence, relationship=relationship,
             frequency=frequency, participants=participants, consequences=consequences,
+            reporting=reporting,
             source_document=self.source,
             source_table=("p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), "
                           "p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo), "
@@ -1002,6 +1223,31 @@ class Macroencuesta2019Parser:
             out += parse_suicidal_ideation_2019(block2)
         return out
 
+    def _parse_reporting(self, pdf, chapter_start: int) -> list[ReportingStat]:
+        out = []
+        # Chapter 9: Partner violence reporting reasons (page 109)
+        located = _locate_page(pdf, ["CAPITULO 9", "DENUNCIA"], start=0)
+        if located is None:
+            print("  ⚠ 2019: could not locate Chapter 9 (partner violence)", file=sys.stderr)
+        else:
+            idx, _ = located
+            reporting_text = _page_window_text(pdf, idx, n_pages=2)
+            located_reason = _locate_page(pdf, ["MOTIVOS PARA NO DENUNCIAR", "LO RESOLVIO"], start=idx)
+            if located_reason:
+                idx_reason, _ = located_reason
+                reason_text = _page_window_text(pdf, idx_reason, n_pages=1)
+                out += parse_reporting_reasons_2019_partner(reason_text)
+
+        # Chapter 16: Outside-partner sexual violence reporting reasons (page 169)
+        located2 = _locate_page(pdf, ["MOTIVOS PARA NO DENUNCIAR", "VIOLENCIA SEXUAL FUERA"], start=chapter_start)
+        if located2 is None:
+            print("  ⚠ 2019: could not locate Chapter 16.8.1.5 (outside-partner reporting reasons)", file=sys.stderr)
+        else:
+            idx2, _ = located2
+            reason_text2 = _page_window_text(pdf, idx2, n_pages=1)
+            out += parse_reporting_reasons_2019_outside_partner(reason_text2)
+        return out
+
 
 # ──────────────────────────────────────────────────────────────
 # 2024 wave
@@ -1023,10 +1269,12 @@ class Macroencuesta2024Parser:
             frequency = self._parse_frequency(pdf)
             participants = self._parse_participants(pdf)
             consequences = self._parse_consequences(pdf)
+            reporting = self._parse_reporting(pdf)
         return MacroencuestaReport(
             wave_year=2024, sample_size=sample_size,
             prevalence=prevalence, relationship=relationship,
             frequency=frequency, participants=participants, consequences=consequences,
+            reporting=reporting,
             source_document=self.source,
             source_table=("Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), "
                           "Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor), "
@@ -1160,6 +1408,29 @@ class Macroencuesta2024Parser:
                 continue
             idx_t, _ = located_t
             out += parser(_page_window_text(pdf, idx_t, n_pages=2))
+        return out
+
+    def _parse_reporting(self, pdf) -> list[ReportingStat]:
+        out = []
+        # Chapter 9: Partner violence reporting reasons (Tabla 9.7)
+        # Use "LO RESOLVIO SOLA" (first data row) as unique anchor since it's not in other tables
+        located = _locate_page(pdf, ["LO RESOLVIO SOLA"])
+        if located is None:
+            print("  ⚠ 2024: could not locate Tabla 9.7 (partner violence reporting reasons)", file=sys.stderr)
+        else:
+            idx, _ = located
+            reporting_text = _page_window_text(pdf, idx, n_pages=1)
+            out += parse_reporting_reasons_2024_partner(reporting_text)
+
+        # Chapter 16: Outside-partner sexual violence reporting reasons (Tabla 16.30)
+        # Use unique anchor from the table header
+        located2 = _locate_page(pdf, ["TABLA 16.30", "VIOLACIONES"])
+        if located2 is None:
+            print("  ⚠ 2024: could not locate Tabla 16.30 (outside-partner reporting reasons)", file=sys.stderr)
+        else:
+            idx2, _ = located2
+            reporting_text2 = _page_window_text(pdf, idx2, n_pages=1)
+            out += parse_reporting_reasons_2024_outside_partner(reporting_text2)
         return out
 
 
