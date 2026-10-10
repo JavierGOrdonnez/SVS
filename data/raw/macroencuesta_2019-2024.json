@@ -938,7 +938,272 @@
           "ci_high": null
         }
       ],
-      "reporting": [],
+      "reporting": [
+        {
+          "reason": "lo resolvio sola",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 49.1,
+          "population_estimate": null,
+          "sample_n": 277,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "lo resolvio sola",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 53.4,
+          "population_estimate": null,
+          "sample_n": 811,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "tuvo muy poca importancia",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 46.4,
+          "population_estimate": null,
+          "sample_n": 262,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "tuvo muy poca importancia",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 23.7,
+          "population_estimate": null,
+          "sample_n": 361,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por miedo al agresor",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 4.7,
+          "population_estimate": null,
+          "sample_n": 26,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por miedo al agresor",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 9.0,
+          "population_estimate": null,
+          "sample_n": 137,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por verguenza",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 5.7,
+          "population_estimate": null,
+          "sample_n": 32,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por verguenza",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 10.5,
+          "population_estimate": null,
+          "sample_n": 160,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "piensa que era su culpa",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 2.4,
+          "population_estimate": null,
+          "sample_n": 14,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "piensa que era su culpa",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 4.8,
+          "population_estimate": null,
+          "sample_n": 73,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por desconocimiento",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 1.2,
+          "population_estimate": null,
+          "sample_n": 7,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por desconocimiento",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 4.9,
+          "population_estimate": null,
+          "sample_n": 74,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "temor a que no la creyeran",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 1.7,
+          "population_estimate": null,
+          "sample_n": 10,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "temor a que no la creyeran",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 4.7,
+          "population_estimate": null,
+          "sample_n": 72,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "carece de recursos economicos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 2.6,
+          "population_estimate": null,
+          "sample_n": 15,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "carece de recursos economicos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 3.1,
+          "population_estimate": null,
+          "sample_n": 47,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "ha acudido a otro lugar",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 1.7,
+          "population_estimate": null,
+          "sample_n": 10,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "ha acudido a otro lugar",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 2.9,
+          "population_estimate": null,
+          "sample_n": 43,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por estar enamorada",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 2.2,
+          "population_estimate": null,
+          "sample_n": 13,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por estar enamorada",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 5.6,
+          "population_estimate": null,
+          "sample_n": 85,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por miedo a perder a sus hijos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 1.2,
+          "population_estimate": null,
+          "sample_n": 7,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "por miedo a perder a sus hijos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 1.7,
+          "population_estimate": null,
+          "sample_n": 26,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "eran otros tiempos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 4.8,
+          "population_estimate": null,
+          "sample_n": 27,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "eran otros tiempos",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 6.6,
+          "population_estimate": null,
+          "sample_n": 100,
+          "suppressed": false,
+          "small_sample": false
+        }
+      ],
       "source_document": "Macroencuesta_2019.pdf",
       "source_table": "p.154 (prevalencia), p.159 (vínculo con el agresor, Tabla II), p.159-160 (frecuencia), p.161 (agresiones sexuales en grupo), p.162-166 y 175-178 (consecuencias, T106)",
       "verified": false,
@@ -3056,7 +3321,74 @@
           "ci_high": null
         }
       ],
-      "reporting": [],
+      "reporting": [
+        {
+          "reason": "lo resolvio sola",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 53.7,
+          "population_estimate": 670688,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "lo resolvio sola",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 47.9,
+          "population_estimate": 1599074,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "lo resolvio sola",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "any",
+          "pct": 50.3,
+          "population_estimate": 2114825,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "nc",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "current",
+          "pct": 6.7,
+          "population_estimate": 83237,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "nc",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "past",
+          "pct": 3.1,
+          "population_estimate": 103484,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        },
+        {
+          "reason": "nc",
+          "reason_key": null,
+          "violence_type": null,
+          "partner_status": "any",
+          "pct": 4.4,
+          "population_estimate": 183056,
+          "sample_n": null,
+          "suppressed": false,
+          "small_sample": false
+        }
+      ],
       "source_document": "Macroencuesta_2024.pdf",
       "source_table": "Tabla 16.1/16.2 (prevalencia), Tabla 16.16/16.17 (frecuencia), Tabla 16.18 (más de una persona agresora), Tabla 16.21 (vínculo con el agresor), Tabla 16.46-16.56/16.59/16.62/16.71-16.72 (consecuencias, T106)",
       "verified": false,

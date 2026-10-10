@@ -977,23 +977,47 @@ _REPORTING_LABELS_2024_OUTSIDE = [
 def parse_reporting_reasons_2019_partner(text: str) -> list[ReportingStat]:
     """Partner violence (Cap. 9): reasons for not reporting.
     Table: Motivos para no denunciar VFSEM de la pareja.
-    Structure: N, % for pareja actual and parejas pasadas."""
-    rows = _ordered_rows(text, 4)
-    if len(rows) < len(_REPORTING_LABELS_2019_PARTNER):
-        return []
+    Structure: N, % for pareja actual and parejas pasadas. Handles wrapped labels."""
+    patterns = [
+        r"^Lo resolvio sola|^Lo resolvió sola",
+        r"Tuvo muy poca importancia",
+        r"Por miedo al agresor",
+        r"Por verguenza|Por vergüenza",
+        r"Piensa.*que era su culpa",
+        r"Por desconocimiento",
+        r"El problema se termino",
+        r"Se separo.*termino la relacion",
+        r"Temor a que no la creyeran",
+        r"Carece.*de recursos",
+        r"La pareja u otra persona se lo impidio",
+        r"Por no ser algo fisico",
+        r"Ha acudido a otro lugar",
+        r"Por estar enamorada",
+        r"Por miedo a perder a sus hijos",
+        r"Para que sus hijos no pierdan a su padre",
+        r"Por no querer que arrestaran",
+        r"Eran otros tiempos",
+        r"Sucedio cuando vivia en otro pais",
+        r"Otros motivos",
+        r"^NC"
+    ]
+
     out = []
-    for label, row in zip(_REPORTING_LABELS_2019_PARTNER, rows):
+    for label_key, pattern in zip(_REPORTING_LABELS_2019_PARTNER, patterns):
+        toks = _row_tokens(text, pattern)
+        if not toks or len(toks) < 4:
+            continue
         # pareja actual: n, pct
         out.append(ReportingStat(
-            reason=label, partner_status="current",
-            sample_n=int(row[0]) if row[0] is not None else None,
-            pct=row[1]
+            reason=label_key, partner_status="current",
+            sample_n=int(toks[0]) if toks[0] is not None else None,
+            pct=toks[1]
         ))
         # parejas pasadas: n, pct
         out.append(ReportingStat(
-            reason=label, partner_status="past",
-            sample_n=int(row[2]) if row[2] is not None else None,
-            pct=row[3]
+            reason=label_key, partner_status="past",
+            sample_n=int(toks[2]) if toks[2] is not None else None,
+            pct=toks[3]
         ))
     return out
 
@@ -1001,23 +1025,41 @@ def parse_reporting_reasons_2019_partner(text: str) -> list[ReportingStat]:
 def parse_reporting_reasons_2019_outside_partner(text: str) -> list[ReportingStat]:
     """Outside-partner sexual violence (Cap. 16.8.1.5): reasons for not reporting.
     Table: Motivos para no denunciar.
-    Structure: N, % for 'violencia sexual' and 'violacion' columns."""
-    rows = _ordered_rows(text, 4)
-    if len(rows) < len(_REPORTING_LABELS_2019_OUTSIDE):
-        return []
+    Structure: N, % for 'violencia sexual' and 'violacion' columns. Handles wrapped labels."""
+    patterns = [
+        r"Tuvo muy poca importancia",
+        r"Por miedo al agresor",
+        r"Por verguenza|Por vergüenza",
+        r"Piensa.*que era su culpa",
+        r"Temor a que no la creyeran",
+        r"Por desconocimiento",
+        r"Otra persona la disuadio",
+        r"El problema se termino",
+        r"Carece.*de recursos",
+        r"Fue a otro lugar",
+        r"Era menor.*nina",
+        r"Eran otros tiempos",
+        r"Sucedio en otro pais",
+        r"Otros motivos",
+        r"^NC"
+    ]
+
     out = []
-    for label, row in zip(_REPORTING_LABELS_2019_OUTSIDE, rows):
+    for label_key, pattern in zip(_REPORTING_LABELS_2019_OUTSIDE, patterns):
+        toks = _row_tokens(text, pattern)
+        if not toks or len(toks) < 4:
+            continue
         # all sexual violence: n, pct
         out.append(ReportingStat(
-            reason=label, violence_type="any",
-            sample_n=int(row[0]) if row[0] is not None else None,
-            pct=row[1]
+            reason=label_key, violence_type="any",
+            sample_n=int(toks[0]) if toks[0] is not None else None,
+            pct=toks[1]
         ))
         # rape only: n, pct
         out.append(ReportingStat(
-            reason=label, violence_type="rape",
-            sample_n=int(row[2]) if row[2] is not None else None,
-            pct=row[3]
+            reason=label_key, violence_type="rape",
+            sample_n=int(toks[2]) if toks[2] is not None else None,
+            pct=toks[3]
         ))
     return out
 
@@ -1025,34 +1067,53 @@ def parse_reporting_reasons_2019_outside_partner(text: str) -> list[ReportingSta
 def parse_reporting_reasons_2024_partner(text: str) -> list[ReportingStat]:
     """Partner violence (Cap. 9.1.4): reasons for not reporting.
     Tabla 9.7: Motivos para no denunciar VFSEM de la pareja.
-    Structure: %, N (population estimate) for pareja actual, parejas pasadas, cualquier pareja."""
-    rows = _ordered_rows(text, 6)
-    if len(rows) < len(_REPORTING_LABELS_2024_PARTNER):
-        return []
+    Structure: %, N (population estimate) for pareja actual, parejas pasadas, cualquier pareja.
+    Handles wrapped labels using _row_tokens pattern from T105."""
+    # Row label patterns matching lines in the table
+    patterns = [
+        r"^1\.\s*Lo resolvio sola|^1\.\s*Lo resolvió sola",
+        r"Le dio muy poca importancia",
+        r"Por miedo al agresor",
+        r"Por verguenza|Por vergüenza",
+        r"Temor a que no la creyeran",
+        r"Piensa.*que era su culpa",
+        r"Por desconocimiento",
+        r"Carece.*de recursos economicos",
+        r"Se separo.*termino la relacion",
+        r"El problema se termino",
+        r"La pareja u otra persona se lo impidio",
+        r"Por no ser algo fisico",
+        r"Acudio a otro lugar",
+        r"Por estar enamorada",
+        r"Por miedo a perder a sus hijos",
+        r"Para que sus hijos no pierdan a su padre",
+        r"Por no querer que arrestaran",
+        r"Eran otros tiempos",
+        r"Sucedio cuando vivia en otro pais",
+        r"Otros motivos",
+        r"^NC"
+    ]
+
     out = []
-    for label, row in zip(_REPORTING_LABELS_2024_PARTNER, rows):
-        # pareja actual: pct, n
-        suppressed, small_sample = row[0] is None, False
-        if row[0] == 0.0 and str(row[0]).startswith("None"):
-            suppressed = True
+    for label_key, pattern in zip(_REPORTING_LABELS_2024_PARTNER, patterns):
+        toks = _row_tokens(text, pattern)
+        if not toks or len(toks) < 6:
+            continue
+        # Structure: pct_current, n_current, pct_past, n_past, pct_any, n_any
         out.append(ReportingStat(
-            reason=label, partner_status="current",
-            pct=row[0], population_estimate=int(row[1]) if row[1] is not None else None,
-            suppressed=suppressed, small_sample=small_sample
+            reason=label_key, partner_status="current",
+            pct=toks[0], population_estimate=int(toks[1]) if toks[1] is not None else None,
+            suppressed=toks[0] is None, small_sample=False
         ))
-        # parejas pasadas: pct, n
-        suppressed, small_sample = row[2] is None, False
         out.append(ReportingStat(
-            reason=label, partner_status="past",
-            pct=row[2], population_estimate=int(row[3]) if row[3] is not None else None,
-            suppressed=suppressed, small_sample=small_sample
+            reason=label_key, partner_status="past",
+            pct=toks[2], population_estimate=int(toks[3]) if toks[3] is not None else None,
+            suppressed=toks[2] is None, small_sample=False
         ))
-        # cualquier pareja: pct, n
-        suppressed, small_sample = row[4] is None, False
         out.append(ReportingStat(
-            reason=label, partner_status="any",
-            pct=row[4], population_estimate=int(row[5]) if row[5] is not None else None,
-            suppressed=suppressed, small_sample=small_sample
+            reason=label_key, partner_status="any",
+            pct=toks[4], population_estimate=int(toks[5]) if toks[5] is not None else None,
+            suppressed=toks[4] is None, small_sample=False
         ))
     return out
 
@@ -1061,26 +1122,42 @@ def parse_reporting_reasons_2024_outside_partner(text: str) -> list[ReportingSta
     """Outside-partner sexual violence (Cap. 16.8.1.5): reasons for not reporting.
     Tabla 16.30: Motivos para no denunciar.
     Structure: % only for violaciones, intentos, otras formas (no N column).
-    Uses suppression (.) and small-sample (¨) markers."""
-    rows = _ordered_rows(text, 3)
-    if len(rows) < len(_REPORTING_LABELS_2024_OUTSIDE):
-        return []
+    Uses suppression (.) and small-sample (¨) markers. Handles wrapped labels."""
+    patterns = [
+        r"Le dio muy poca importancia",
+        r"Por miedo al agresor",
+        r"Por verguenza|Por vergüenza",
+        r"Penso que era su culpa|Pensó que era su culpa",
+        r"Temor a que no la creyeran",
+        r"Era menor",
+        r"Por desconocimiento",
+        r"Carecia de recursos|Carecía de recursos",
+        r"Fue a otro lugar",
+        r"Otra persona la disuadio",
+        r"Eran otros tiempos",
+        r"Sucedio en otro pais|Sucedió en otro país",
+        r"Otros motivos"
+    ]
+
     out = []
-    for label, row in zip(_REPORTING_LABELS_2024_OUTSIDE, rows):
+    for label_key, pattern in zip(_REPORTING_LABELS_2024_OUTSIDE, patterns):
+        toks = _row_tokens(text, pattern)
+        if not toks or len(toks) < 3:
+            continue
         # violaciones: %
         out.append(ReportingStat(
-            reason=label, violence_type="rape",
-            pct=row[0], suppressed=row[0] is None, small_sample=False
+            reason=label_key, violence_type="rape",
+            pct=toks[0], suppressed=toks[0] is None, small_sample=False
         ))
         # intentos: %
         out.append(ReportingStat(
-            reason=label, violence_type="attempted_rape",
-            pct=row[1], suppressed=row[1] is None, small_sample=False
+            reason=label_key, violence_type="attempted_rape",
+            pct=toks[1], suppressed=toks[1] is None, small_sample=False
         ))
         # otras formas: %
         out.append(ReportingStat(
-            reason=label, violence_type="other",
-            pct=row[2], suppressed=row[2] is None, small_sample=False
+            reason=label_key, violence_type="other",
+            pct=toks[2], suppressed=toks[2] is None, small_sample=False
         ))
     return out
 
